@@ -13,6 +13,15 @@ const eslintConfig = defineConfig([
     "build/**",
     "next-env.d.ts",
   ]),
+  // Aspas duplas em todos os arquivos
+  {
+    rules: {
+      quotes: ["error", "double"],
+      semi: ["error", "always"],
+      "comma-dangle": ["error", "always-multiline"],
+      "no-console": "warn",
+    },
+  },
 ]);
 
 export default eslintConfig;

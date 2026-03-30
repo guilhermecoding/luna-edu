@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "prepare": "node -e \"if (process.env.NODE_ENV !== 'production' && !process.env.CI) { require('child_process').execSync('husky', { stdio: 'inherit' }) }\""
   },
   "dependencies": {
     "next": "16.2.1",
@@ -21,7 +22,14 @@
     "babel-plugin-react-compiler": "1.0.0",
     "eslint": "^9",
     "eslint-config-next": "16.2.1",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.4.0",
     "tailwindcss": "^4",
     "typescript": "^5"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "eslint --fix"
+    ]
   }
 }

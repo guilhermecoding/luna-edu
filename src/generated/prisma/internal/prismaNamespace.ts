@@ -391,7 +391,7 @@ export const ModelName = {
   Program: 'Program',
   Campus: 'Campus',
   Room: 'Room',
-  Term: 'Term',
+  Period: 'Period',
   Course: 'Course',
   Student: 'Student',
   Enrollment: 'Enrollment',
@@ -415,7 +415,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "session" | "account" | "verification" | "program" | "campus" | "room" | "term" | "course" | "student" | "enrollment" | "lesson" | "attendance" | "activity" | "activityGrade" | "courseAssistant"
+    modelProps: "user" | "session" | "account" | "verification" | "program" | "campus" | "room" | "period" | "course" | "student" | "enrollment" | "lesson" | "attendance" | "activity" | "activityGrade" | "courseAssistant"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -937,77 +937,77 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
-    Term: {
-      payload: Prisma.$TermPayload<ExtArgs>
-      fields: Prisma.TermFieldRefs
+    Period: {
+      payload: Prisma.$PeriodPayload<ExtArgs>
+      fields: Prisma.PeriodFieldRefs
       operations: {
         findUnique: {
-          args: Prisma.TermFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$TermPayload> | null
+          args: Prisma.PeriodFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PeriodPayload> | null
         }
         findUniqueOrThrow: {
-          args: Prisma.TermFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$TermPayload>
+          args: Prisma.PeriodFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PeriodPayload>
         }
         findFirst: {
-          args: Prisma.TermFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$TermPayload> | null
+          args: Prisma.PeriodFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PeriodPayload> | null
         }
         findFirstOrThrow: {
-          args: Prisma.TermFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$TermPayload>
+          args: Prisma.PeriodFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PeriodPayload>
         }
         findMany: {
-          args: Prisma.TermFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$TermPayload>[]
+          args: Prisma.PeriodFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PeriodPayload>[]
         }
         create: {
-          args: Prisma.TermCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$TermPayload>
+          args: Prisma.PeriodCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PeriodPayload>
         }
         createMany: {
-          args: Prisma.TermCreateManyArgs<ExtArgs>
+          args: Prisma.PeriodCreateManyArgs<ExtArgs>
           result: BatchPayload
         }
         createManyAndReturn: {
-          args: Prisma.TermCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$TermPayload>[]
+          args: Prisma.PeriodCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PeriodPayload>[]
         }
         delete: {
-          args: Prisma.TermDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$TermPayload>
+          args: Prisma.PeriodDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PeriodPayload>
         }
         update: {
-          args: Prisma.TermUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$TermPayload>
+          args: Prisma.PeriodUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PeriodPayload>
         }
         deleteMany: {
-          args: Prisma.TermDeleteManyArgs<ExtArgs>
+          args: Prisma.PeriodDeleteManyArgs<ExtArgs>
           result: BatchPayload
         }
         updateMany: {
-          args: Prisma.TermUpdateManyArgs<ExtArgs>
+          args: Prisma.PeriodUpdateManyArgs<ExtArgs>
           result: BatchPayload
         }
         updateManyAndReturn: {
-          args: Prisma.TermUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$TermPayload>[]
+          args: Prisma.PeriodUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PeriodPayload>[]
         }
         upsert: {
-          args: Prisma.TermUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$TermPayload>
+          args: Prisma.PeriodUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PeriodPayload>
         }
         aggregate: {
-          args: Prisma.TermAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateTerm>
+          args: Prisma.PeriodAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePeriod>
         }
         groupBy: {
-          args: Prisma.TermGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.TermGroupByOutputType>[]
+          args: Prisma.PeriodGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PeriodGroupByOutputType>[]
         }
         count: {
-          args: Prisma.TermCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.TermCountAggregateOutputType> | number
+          args: Prisma.PeriodCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PeriodCountAggregateOutputType> | number
         }
       }
     }
@@ -1740,7 +1740,7 @@ export const RoomScalarFieldEnum = {
 export type RoomScalarFieldEnum = (typeof RoomScalarFieldEnum)[keyof typeof RoomScalarFieldEnum]
 
 
-export const TermScalarFieldEnum = {
+export const PeriodScalarFieldEnum = {
   id: 'id',
   createdAt: 'createdAt',
   name: 'name',
@@ -1749,7 +1749,7 @@ export const TermScalarFieldEnum = {
   programId: 'programId'
 } as const
 
-export type TermScalarFieldEnum = (typeof TermScalarFieldEnum)[keyof typeof TermScalarFieldEnum]
+export type PeriodScalarFieldEnum = (typeof PeriodScalarFieldEnum)[keyof typeof PeriodScalarFieldEnum]
 
 
 export const CourseScalarFieldEnum = {
@@ -1757,7 +1757,7 @@ export const CourseScalarFieldEnum = {
   createdAt: 'createdAt',
   name: 'name',
   code: 'code',
-  termId: 'termId',
+  periodId: 'periodId',
   roomId: 'roomId',
   shift: 'shift'
 } as const
@@ -2098,7 +2098,7 @@ export type GlobalOmitConfig = {
   program?: Prisma.ProgramOmit
   campus?: Prisma.CampusOmit
   room?: Prisma.RoomOmit
-  term?: Prisma.TermOmit
+  period?: Prisma.PeriodOmit
   course?: Prisma.CourseOmit
   student?: Prisma.StudentOmit
   enrollment?: Prisma.EnrollmentOmit

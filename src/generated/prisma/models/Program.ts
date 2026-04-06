@@ -174,7 +174,7 @@ export type ProgramWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"Program"> | Date | string
   name?: Prisma.StringFilter<"Program"> | string
   description?: Prisma.StringNullableFilter<"Program"> | string | null
-  terms?: Prisma.TermListRelationFilter
+  periods?: Prisma.PeriodListRelationFilter
 }
 
 export type ProgramOrderByWithRelationInput = {
@@ -182,7 +182,7 @@ export type ProgramOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
-  terms?: Prisma.TermOrderByRelationAggregateInput
+  periods?: Prisma.PeriodOrderByRelationAggregateInput
 }
 
 export type ProgramWhereUniqueInput = Prisma.AtLeast<{
@@ -193,7 +193,7 @@ export type ProgramWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"Program"> | Date | string
   name?: Prisma.StringFilter<"Program"> | string
   description?: Prisma.StringNullableFilter<"Program"> | string | null
-  terms?: Prisma.TermListRelationFilter
+  periods?: Prisma.PeriodListRelationFilter
 }, "id">
 
 export type ProgramOrderByWithAggregationInput = {
@@ -221,7 +221,7 @@ export type ProgramCreateInput = {
   createdAt?: Date | string
   name: string
   description?: string | null
-  terms?: Prisma.TermCreateNestedManyWithoutProgramInput
+  periods?: Prisma.PeriodCreateNestedManyWithoutProgramInput
 }
 
 export type ProgramUncheckedCreateInput = {
@@ -229,7 +229,7 @@ export type ProgramUncheckedCreateInput = {
   createdAt?: Date | string
   name: string
   description?: string | null
-  terms?: Prisma.TermUncheckedCreateNestedManyWithoutProgramInput
+  periods?: Prisma.PeriodUncheckedCreateNestedManyWithoutProgramInput
 }
 
 export type ProgramUpdateInput = {
@@ -237,7 +237,7 @@ export type ProgramUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  terms?: Prisma.TermUpdateManyWithoutProgramNestedInput
+  periods?: Prisma.PeriodUpdateManyWithoutProgramNestedInput
 }
 
 export type ProgramUncheckedUpdateInput = {
@@ -245,7 +245,7 @@ export type ProgramUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  terms?: Prisma.TermUncheckedUpdateManyWithoutProgramNestedInput
+  periods?: Prisma.PeriodUncheckedUpdateManyWithoutProgramNestedInput
 }
 
 export type ProgramCreateManyInput = {
@@ -295,58 +295,58 @@ export type ProgramScalarRelationFilter = {
   isNot?: Prisma.ProgramWhereInput
 }
 
-export type ProgramCreateNestedOneWithoutTermsInput = {
-  create?: Prisma.XOR<Prisma.ProgramCreateWithoutTermsInput, Prisma.ProgramUncheckedCreateWithoutTermsInput>
-  connectOrCreate?: Prisma.ProgramCreateOrConnectWithoutTermsInput
+export type ProgramCreateNestedOneWithoutPeriodsInput = {
+  create?: Prisma.XOR<Prisma.ProgramCreateWithoutPeriodsInput, Prisma.ProgramUncheckedCreateWithoutPeriodsInput>
+  connectOrCreate?: Prisma.ProgramCreateOrConnectWithoutPeriodsInput
   connect?: Prisma.ProgramWhereUniqueInput
 }
 
-export type ProgramUpdateOneRequiredWithoutTermsNestedInput = {
-  create?: Prisma.XOR<Prisma.ProgramCreateWithoutTermsInput, Prisma.ProgramUncheckedCreateWithoutTermsInput>
-  connectOrCreate?: Prisma.ProgramCreateOrConnectWithoutTermsInput
-  upsert?: Prisma.ProgramUpsertWithoutTermsInput
+export type ProgramUpdateOneRequiredWithoutPeriodsNestedInput = {
+  create?: Prisma.XOR<Prisma.ProgramCreateWithoutPeriodsInput, Prisma.ProgramUncheckedCreateWithoutPeriodsInput>
+  connectOrCreate?: Prisma.ProgramCreateOrConnectWithoutPeriodsInput
+  upsert?: Prisma.ProgramUpsertWithoutPeriodsInput
   connect?: Prisma.ProgramWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.ProgramUpdateToOneWithWhereWithoutTermsInput, Prisma.ProgramUpdateWithoutTermsInput>, Prisma.ProgramUncheckedUpdateWithoutTermsInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ProgramUpdateToOneWithWhereWithoutPeriodsInput, Prisma.ProgramUpdateWithoutPeriodsInput>, Prisma.ProgramUncheckedUpdateWithoutPeriodsInput>
 }
 
-export type ProgramCreateWithoutTermsInput = {
+export type ProgramCreateWithoutPeriodsInput = {
   id?: string
   createdAt?: Date | string
   name: string
   description?: string | null
 }
 
-export type ProgramUncheckedCreateWithoutTermsInput = {
+export type ProgramUncheckedCreateWithoutPeriodsInput = {
   id?: string
   createdAt?: Date | string
   name: string
   description?: string | null
 }
 
-export type ProgramCreateOrConnectWithoutTermsInput = {
+export type ProgramCreateOrConnectWithoutPeriodsInput = {
   where: Prisma.ProgramWhereUniqueInput
-  create: Prisma.XOR<Prisma.ProgramCreateWithoutTermsInput, Prisma.ProgramUncheckedCreateWithoutTermsInput>
+  create: Prisma.XOR<Prisma.ProgramCreateWithoutPeriodsInput, Prisma.ProgramUncheckedCreateWithoutPeriodsInput>
 }
 
-export type ProgramUpsertWithoutTermsInput = {
-  update: Prisma.XOR<Prisma.ProgramUpdateWithoutTermsInput, Prisma.ProgramUncheckedUpdateWithoutTermsInput>
-  create: Prisma.XOR<Prisma.ProgramCreateWithoutTermsInput, Prisma.ProgramUncheckedCreateWithoutTermsInput>
+export type ProgramUpsertWithoutPeriodsInput = {
+  update: Prisma.XOR<Prisma.ProgramUpdateWithoutPeriodsInput, Prisma.ProgramUncheckedUpdateWithoutPeriodsInput>
+  create: Prisma.XOR<Prisma.ProgramCreateWithoutPeriodsInput, Prisma.ProgramUncheckedCreateWithoutPeriodsInput>
   where?: Prisma.ProgramWhereInput
 }
 
-export type ProgramUpdateToOneWithWhereWithoutTermsInput = {
+export type ProgramUpdateToOneWithWhereWithoutPeriodsInput = {
   where?: Prisma.ProgramWhereInput
-  data: Prisma.XOR<Prisma.ProgramUpdateWithoutTermsInput, Prisma.ProgramUncheckedUpdateWithoutTermsInput>
+  data: Prisma.XOR<Prisma.ProgramUpdateWithoutPeriodsInput, Prisma.ProgramUncheckedUpdateWithoutPeriodsInput>
 }
 
-export type ProgramUpdateWithoutTermsInput = {
+export type ProgramUpdateWithoutPeriodsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
-export type ProgramUncheckedUpdateWithoutTermsInput = {
+export type ProgramUncheckedUpdateWithoutPeriodsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
@@ -359,11 +359,11 @@ export type ProgramUncheckedUpdateWithoutTermsInput = {
  */
 
 export type ProgramCountOutputType = {
-  terms: number
+  periods: number
 }
 
 export type ProgramCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  terms?: boolean | ProgramCountOutputTypeCountTermsArgs
+  periods?: boolean | ProgramCountOutputTypeCountPeriodsArgs
 }
 
 /**
@@ -379,8 +379,8 @@ export type ProgramCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Exte
 /**
  * ProgramCountOutputType without action
  */
-export type ProgramCountOutputTypeCountTermsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.TermWhereInput
+export type ProgramCountOutputTypeCountPeriodsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PeriodWhereInput
 }
 
 
@@ -389,7 +389,7 @@ export type ProgramSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   createdAt?: boolean
   name?: boolean
   description?: boolean
-  terms?: boolean | Prisma.Program$termsArgs<ExtArgs>
+  periods?: boolean | Prisma.Program$periodsArgs<ExtArgs>
   _count?: boolean | Prisma.ProgramCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["program"]>
 
@@ -416,7 +416,7 @@ export type ProgramSelectScalar = {
 
 export type ProgramOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "name" | "description", ExtArgs["result"]["program"]>
 export type ProgramInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  terms?: boolean | Prisma.Program$termsArgs<ExtArgs>
+  periods?: boolean | Prisma.Program$periodsArgs<ExtArgs>
   _count?: boolean | Prisma.ProgramCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type ProgramIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -425,7 +425,7 @@ export type ProgramIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
 export type $ProgramPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Program"
   objects: {
-    terms: Prisma.$TermPayload<ExtArgs>[]
+    periods: Prisma.$PeriodPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -826,7 +826,7 @@ readonly fields: ProgramFieldRefs;
  */
 export interface Prisma__ProgramClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  terms<T extends Prisma.Program$termsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Program$termsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TermPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  periods<T extends Prisma.Program$periodsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Program$periodsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PeriodPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1253,27 +1253,27 @@ export type ProgramDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Inter
 }
 
 /**
- * Program.terms
+ * Program.periods
  */
-export type Program$termsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type Program$periodsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the Term
+   * Select specific fields to fetch from the Period
    */
-  select?: Prisma.TermSelect<ExtArgs> | null
+  select?: Prisma.PeriodSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the Term
+   * Omit specific fields from the Period
    */
-  omit?: Prisma.TermOmit<ExtArgs> | null
+  omit?: Prisma.PeriodOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.TermInclude<ExtArgs> | null
-  where?: Prisma.TermWhereInput
-  orderBy?: Prisma.TermOrderByWithRelationInput | Prisma.TermOrderByWithRelationInput[]
-  cursor?: Prisma.TermWhereUniqueInput
+  include?: Prisma.PeriodInclude<ExtArgs> | null
+  where?: Prisma.PeriodWhereInput
+  orderBy?: Prisma.PeriodOrderByWithRelationInput | Prisma.PeriodOrderByWithRelationInput[]
+  cursor?: Prisma.PeriodWhereUniqueInput
   take?: number
   skip?: number
-  distinct?: Prisma.TermScalarFieldEnum | Prisma.TermScalarFieldEnum[]
+  distinct?: Prisma.PeriodScalarFieldEnum | Prisma.PeriodScalarFieldEnum[]
 }
 
 /**

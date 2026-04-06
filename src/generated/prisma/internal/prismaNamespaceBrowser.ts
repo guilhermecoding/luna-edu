@@ -58,7 +58,7 @@ export const ModelName = {
   Program: 'Program',
   Campus: 'Campus',
   Room: 'Room',
-  Term: 'Term',
+  Period: 'Period',
   Course: 'Course',
   Student: 'Student',
   Enrollment: 'Enrollment',
@@ -183,7 +183,7 @@ export const RoomScalarFieldEnum = {
 export type RoomScalarFieldEnum = (typeof RoomScalarFieldEnum)[keyof typeof RoomScalarFieldEnum]
 
 
-export const TermScalarFieldEnum = {
+export const PeriodScalarFieldEnum = {
   id: 'id',
   createdAt: 'createdAt',
   name: 'name',
@@ -192,7 +192,7 @@ export const TermScalarFieldEnum = {
   programId: 'programId'
 } as const
 
-export type TermScalarFieldEnum = (typeof TermScalarFieldEnum)[keyof typeof TermScalarFieldEnum]
+export type PeriodScalarFieldEnum = (typeof PeriodScalarFieldEnum)[keyof typeof PeriodScalarFieldEnum]
 
 
 export const CourseScalarFieldEnum = {
@@ -200,7 +200,7 @@ export const CourseScalarFieldEnum = {
   createdAt: 'createdAt',
   name: 'name',
   code: 'code',
-  termId: 'termId',
+  periodId: 'periodId',
   roomId: 'roomId',
   shift: 'shift'
 } as const

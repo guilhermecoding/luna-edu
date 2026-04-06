@@ -53,10 +53,10 @@ export type Campus = Prisma.CampusModel
  */
 export type Room = Prisma.RoomModel
 /**
- * Model Term
+ * Model Period
  * 
  */
-export type Term = Prisma.TermModel
+export type Period = Prisma.PeriodModel
 /**
  * Model Course
  * 

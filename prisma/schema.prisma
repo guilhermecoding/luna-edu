@@ -137,7 +137,7 @@ model Program {
   name        String
   description String?
 
-  terms Term[]
+  periods Period[]
 
   @@map("programs")
   @@schema("public")
@@ -169,7 +169,7 @@ model Room {
   @@schema("public")
 }
 
-model Term {
+model Period {
   id        String   @id @default(uuid()) @db.Uuid
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
   name      String
@@ -180,7 +180,7 @@ model Term {
   program Program  @relation(fields: [programId], references: [id])
   courses Course[]
 
-  @@map("terms")
+  @@map("periods")
   @@schema("public")
 }
 
@@ -189,12 +189,12 @@ model Course {
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
   name      String
   code      String?  @unique @default(uuid()) @db.Uuid
-  termId    String   @map("term_id") @db.Uuid
+  periodId  String   @map("period_id") @db.Uuid
   roomId    String?  @map("room_id") @db.Uuid
   shift     Shift
 
-  term Term  @relation(fields: [termId], references: [id])
-  room Room? @relation(fields: [roomId], references: [id])
+  period Period @relation(fields: [periodId], references: [id])
+  room   Room?  @relation(fields: [roomId], references: [id])
 
   enrollments      Enrollment[]
   lessons          Lesson[]

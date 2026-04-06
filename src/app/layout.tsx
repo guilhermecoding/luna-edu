@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Poppins, Silkscreen } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -32,7 +33,9 @@ export default function RootLayout({
       className={cn("h-full", "antialiased", poppins.variable, silkscreen.variable)}
     >
       <body>
-        {children}
+        <TooltipProvider>
+          {children}
+        </TooltipProvider>
       </body>
     </html>
   );

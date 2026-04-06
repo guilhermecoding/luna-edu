@@ -18,17 +18,28 @@ datasource db {
 // ==========================================
 
 model User {
-  id            String    @id
+  id            String   @id
   name          String
   email         String
-  emailVerified Boolean   @default(false) @map("email_verified")
+  emailVerified Boolean  @default(false) @map("email_verified")
   image         String?
-  createdAt     DateTime  @default(now()) @map("created_at")
-  updatedAt     DateTime  @updatedAt @map("updated_at")
-  sessions      Session[]
-  accounts      Account[]
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
 
-  @@unique([email])
+  // Custom fields
+  cpf        String
+  phone      String
+  birthDate  DateTime   @map("birth_date")
+  bio        String?
+  systemRole SystemRole @default(FULL_ACCESS) @map("system_role")
+  isAdmin    Boolean    @default(false) @map("is_admin")
+  isTeacher  Boolean    @default(false) @map("is_teacher")
+  isActive   Boolean    @default(true) @map("is_active")
+
+  sessions Session[]
+  accounts Account[]
+
+  @@unique([email, cpf])
   @@map("user")
   @@schema("auth")
 }
@@ -82,5 +93,13 @@ model Verification {
 
   @@index([identifier])
   @@map("verification")
+  @@schema("auth")
+}
+
+enum SystemRole {
+  FULL_ACCESS
+  READ_ONLY
+
+  @@map("system_role")
   @@schema("auth")
 }

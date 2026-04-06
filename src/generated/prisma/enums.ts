@@ -9,7 +9,9 @@
 * 🟢 You can import this file directly.
 */
 
+export const SystemRole = {
+  FULL_ACCESS: 'FULL_ACCESS',
+  READ_ONLY: 'READ_ONLY'
+} as const
 
-
-// This file is empty because there are no enums in the schema.
-export {}
+export type SystemRole = (typeof SystemRole)[keyof typeof SystemRole]

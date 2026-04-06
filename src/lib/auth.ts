@@ -9,4 +9,38 @@ export const auth = betterAuth({
     emailAndPassword: {
         enabled: true,
     },
+    user: {
+        additionalFields: {
+            cpf: {
+                type: "string",
+                unique: true,
+            },
+            phone: {
+                type: "string",
+            },
+            birthDate: {
+                type: "date",
+            },
+            bio: {
+                type: "string",
+            },
+            systemRole: {
+                type: "string",
+                values: ["FULL_ACCESS", "READ_ONLY"],
+                default: "FULL_ACCESS",
+            },
+            isAdmin: {
+                type: "boolean",
+                default: false,
+            },
+            isTeacher: {
+                type: "boolean",
+                default: false,
+            },
+            isActive: {
+                type: "boolean",
+                default: true,
+            },
+        },
+    },
 });

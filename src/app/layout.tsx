@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 
 
 export const metadata: Metadata = {
-  title: "Luna - Sistema de Gestão Educacional e Acompanhamento de Alunos",
+  title: "LUNA - Sistema de Gestão Educacional e Acompanhamento de Alunos",
   description: "Gerencie, acompanhe e otimize o desempenho dos seus alunos com o Luna, a plataforma de gestão educacional definitiva.",
 };
 

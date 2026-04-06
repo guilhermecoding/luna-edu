@@ -15,3 +15,21 @@ export const SystemRole = {
 } as const
 
 export type SystemRole = (typeof SystemRole)[keyof typeof SystemRole]
+
+
+export const GradingType = {
+  NONE: 'NONE',
+  POINTS: 'POINTS',
+  HITS: 'HITS'
+} as const
+
+export type GradingType = (typeof GradingType)[keyof typeof GradingType]
+
+
+export const Shift = {
+  MORNING: 'MORNING',
+  AFTERNOON: 'AFTERNOON',
+  EVENING: 'EVENING'
+} as const
+
+export type Shift = (typeof Shift)[keyof typeof Shift]

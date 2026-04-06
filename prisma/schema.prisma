@@ -13,31 +13,61 @@ datasource db {
   schemas  = ["public", "auth"]
 }
 
+enum SystemRole {
+  FULL_ACCESS
+  READ_ONLY
+
+  @@map("system_role")
+  @@schema("auth")
+}
+
+enum GradingType {
+  NONE
+  POINTS
+  HITS
+
+  @@map("grading_type")
+  @@schema("public")
+}
+
+enum Shift {
+  MORNING
+  AFTERNOON
+  EVENING
+
+  @@map("shift")
+  @@schema("public")
+}
+
 // ==========================================
-// SCHEMA AUTH (Autenticação do Better Auth))
+// SCHEMA AUTH (Autenticação e Perfis)
 // ==========================================
 
 model User {
-  id            String   @id
+  id            String   @id @default(uuid())
   name          String
   email         String
   emailVerified Boolean  @default(false) @map("email_verified")
   image         String?
-  createdAt     DateTime @default(now()) @map("created_at")
-  updatedAt     DateTime @updatedAt @map("updated_at")
+  createdAt     DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt     DateTime @updatedAt @map("updated_at") @db.Timestamptz
 
-  // Custom fields
+  // Custom fields (LUNA EDU)
   cpf        String
   phone      String
-  birthDate  DateTime   @map("birth_date")
+  birthDate  DateTime   @map("birth_date") @db.Date
   bio        String?
   systemRole SystemRole @default(FULL_ACCESS) @map("system_role")
   isAdmin    Boolean    @default(false) @map("is_admin")
   isTeacher  Boolean    @default(false) @map("is_teacher")
   isActive   Boolean    @default(true) @map("is_active")
 
+  // Relacionamentos Auth
   sessions Session[]
   accounts Account[]
+
+  // Relacionamento com o Sistema Escolar
+  courseAssistants CourseAssistant[]
 
   @@unique([email, cpf])
   @@map("user")
@@ -45,29 +75,28 @@ model User {
 }
 
 model Session {
-  id        String   @id
+  id        String   @id @default(uuid())
   expiresAt DateTime @map("expires_at")
-  token     String
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  token     String   @unique
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz
   ipAddress String?  @map("ip_address")
   userAgent String?  @map("user_agent")
   userId    String   @map("user_id")
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@unique([token])
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
   @@index([userId])
   @@map("session")
   @@schema("auth")
 }
 
 model Account {
-  id                    String    @id
+  id                    String    @id @default(uuid())
   accountId             String    @map("account_id")
   providerId            String    @map("provider_id")
   providerType          String    @map("provider_type")
   userId                String    @map("user_id")
-  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   accessToken           String?   @map("access_token")
   refreshToken          String?   @map("refresh_token")
   idToken               String?   @map("id_token")
@@ -75,8 +104,10 @@ model Account {
   refreshTokenExpiresAt DateTime? @map("refresh_token_expires_at")
   scope                 String?
   password              String?
-  createdAt             DateTime  @default(now()) @map("created_at")
-  updatedAt             DateTime  @updatedAt @map("updated_at")
+  createdAt             DateTime  @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt             DateTime  @updatedAt @map("updated_at") @db.Timestamptz
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
   @@map("account")
@@ -84,22 +115,198 @@ model Account {
 }
 
 model Verification {
-  id         String   @id
+  id         String   @id @default(uuid())
   identifier String
   value      String
   expiresAt  DateTime @map("expires_at")
-  createdAt  DateTime @default(now()) @map("created_at")
-  updatedAt  DateTime @updatedAt @map("updated_at")
+  createdAt  DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt  DateTime @updatedAt @map("updated_at") @db.Timestamptz
 
   @@index([identifier])
   @@map("verification")
   @@schema("auth")
 }
 
-enum SystemRole {
-  FULL_ACCESS
-  READ_ONLY
+// ==========================================
+// SCHEMA PUBLIC (O Sistema Escolar LUNA EDU)
+// ==========================================
 
-  @@map("system_role")
-  @@schema("auth")
+model Program {
+  id          String   @id @default(uuid()) @db.Uuid
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz
+  name        String
+  description String?
+
+  terms Term[]
+
+  @@map("programs")
+  @@schema("public")
+}
+
+model Campus {
+  id        String   @id @default(uuid()) @db.Uuid
+  name      String
+  block     String?
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+
+  rooms Room[]
+
+  @@map("campuses")
+  @@schema("public")
+}
+
+model Room {
+  id        String   @id @default(uuid()) @db.Uuid
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+  name      String
+  capacity  BigInt
+  campusId  String?  @map("campus_id") @db.Uuid
+
+  campus  Campus?  @relation(fields: [campusId], references: [id])
+  courses Course[]
+
+  @@map("rooms")
+  @@schema("public")
+}
+
+model Term {
+  id        String   @id @default(uuid()) @db.Uuid
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+  name      String
+  startDate DateTime @map("start_date") @db.Date
+  endDate   DateTime @map("end_date") @db.Date
+  programId String   @map("id_program") @db.Uuid
+
+  program Program  @relation(fields: [programId], references: [id])
+  courses Course[]
+
+  @@map("terms")
+  @@schema("public")
+}
+
+model Course {
+  id        String   @id @default(uuid()) @db.Uuid
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+  name      String
+  code      String?  @unique @default(uuid()) @db.Uuid
+  termId    String   @map("term_id") @db.Uuid
+  roomId    String?  @map("room_id") @db.Uuid
+  shift     Shift
+
+  term Term  @relation(fields: [termId], references: [id])
+  room Room? @relation(fields: [roomId], references: [id])
+
+  enrollments      Enrollment[]
+  lessons          Lesson[]
+  activities       Activity[]
+  courseAssistants CourseAssistant[]
+
+  @@map("courses")
+  @@schema("public")
+}
+
+model Student {
+  id           String   @id @default(uuid()) @db.Uuid
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz
+  name         String
+  age          Int      @db.SmallInt
+  studentPhone String   @map("student_phone")
+  parentPhone  String?  @map("parent_phone")
+  cpf          String
+  email        String
+  school       String
+  genre        String
+
+  enrollments    Enrollment[]
+  attendances    Attendance[]
+  activityGrades ActivityGrade[]
+
+  @@map("students")
+  @@schema("public")
+}
+
+model Enrollment {
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+  courseId  String   @map("course_id") @db.Uuid
+  studentId String   @map("student_id") @db.Uuid
+
+  course  Course  @relation(fields: [courseId], references: [id])
+  student Student @relation(fields: [studentId], references: [id])
+
+  @@id([courseId, studentId])
+  @@map("enrollments")
+  @@schema("public")
+}
+
+model Lesson {
+  id        String   @id @default(uuid()) @db.Uuid
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+  courseId  String   @map("course_id") @db.Uuid
+  date      DateTime @db.Date
+  topic     String
+
+  course      Course       @relation(fields: [courseId], references: [id])
+  attendances Attendance[]
+
+  @@map("lessons")
+  @@schema("public")
+}
+
+model Attendance {
+  id          String   @id @default(uuid()) @db.Uuid
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz
+  lessonId    String   @map("lesson_id") @db.Uuid
+  studentId   String   @map("student_id") @db.Uuid
+  isPresent   Boolean  @default(false) @map("is_present")
+  observation String?
+
+  lesson  Lesson  @relation(fields: [lessonId], references: [id])
+  student Student @relation(fields: [studentId], references: [id])
+
+  @@map("attendances")
+  @@schema("public")
+}
+
+model Activity {
+  id          String      @id @default(uuid()) @db.Uuid
+  createdAt   DateTime    @default(now()) @map("created_at") @db.Timestamptz
+  courseId    String      @map("course_id") @db.Uuid
+  title       String
+  gradingType GradingType @default(NONE) @map("granding_type")
+  minValue    Float?      @map("min_value")
+  maxValue    Float?      @map("max_value")
+
+  course         Course          @relation(fields: [courseId], references: [id])
+  activityGrades ActivityGrade[]
+
+  @@map("activities")
+  @@schema("public")
+}
+
+model ActivityGrade {
+  id           String   @id @default(uuid()) @db.Uuid
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz
+  activityId   String   @map("activity_id") @db.Uuid
+  studentId    String   @map("student_id") @db.Uuid
+  earnedPoints Float?   @map("earned_points")
+  earnedHits   Float?   @map("earned_hits")
+
+  activity Activity @relation(fields: [activityId], references: [id])
+  student  Student  @relation(fields: [studentId], references: [id])
+
+  @@map("activity_grades")
+  @@schema("public")
+}
+
+model CourseAssistant {
+  id          String   @id @default(uuid()) @db.Uuid
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz
+  courseId    String   @map("course_id") @db.Uuid
+  assistantId String   @map("assistant_id")
+
+  course    Course @relation(fields: [courseId], references: [id])
+  assistant User   @relation(fields: [assistantId], references: [id])
+
+  @@map("course_assistants")
+  @@schema("public")
 }

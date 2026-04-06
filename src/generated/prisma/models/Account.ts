@@ -337,7 +337,7 @@ export type AccountScalarWhereWithAggregatesInput = {
 }
 
 export type AccountCreateInput = {
-  id: string
+  id?: string
   accountId: string
   providerId: string
   providerType: string
@@ -354,7 +354,7 @@ export type AccountCreateInput = {
 }
 
 export type AccountUncheckedCreateInput = {
-  id: string
+  id?: string
   accountId: string
   providerId: string
   providerType: string
@@ -405,7 +405,7 @@ export type AccountUncheckedUpdateInput = {
 }
 
 export type AccountCreateManyInput = {
-  id: string
+  id?: string
   accountId: string
   providerId: string
   providerType: string
@@ -562,7 +562,7 @@ export type NullableDateTimeFieldUpdateOperationsInput = {
 }
 
 export type AccountCreateWithoutUserInput = {
-  id: string
+  id?: string
   accountId: string
   providerId: string
   providerType: string
@@ -578,7 +578,7 @@ export type AccountCreateWithoutUserInput = {
 }
 
 export type AccountUncheckedCreateWithoutUserInput = {
-  id: string
+  id?: string
   accountId: string
   providerId: string
   providerType: string
@@ -640,7 +640,7 @@ export type AccountScalarWhereInput = {
 }
 
 export type AccountCreateManyUserInput = {
-  id: string
+  id?: string
   accountId: string
   providerId: string
   providerType: string

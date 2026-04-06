@@ -1,7 +1,7 @@
 
 export default function PeriodsPage() {
     return (
-        <div>
+        <div className="font-poppins">
             Hello, world!
         </div>
     );

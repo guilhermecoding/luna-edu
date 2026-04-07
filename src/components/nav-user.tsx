@@ -20,7 +20,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { IconHomeFilled } from "@tabler/icons-react";
+import { IconHomeFilled, IconLogout, IconSelector } from "@tabler/icons-react";
 
 export function NavUser({
   user,
@@ -50,7 +50,7 @@ export function NavUser({
                 <span className="truncate font-medium">{user.name}</span>
                 <span className="truncate text-xs">{user.email}</span>
               </div>
-              <IconHomeFilled />
+              <IconSelector />
             </SidebarMenuButton>
           </DropdownMenuTrigger>
           <DropdownMenuContent
@@ -94,9 +94,9 @@ export function NavUser({
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
-              <IconHomeFilled />
-              Log out
+            <DropdownMenuItem className="flex text-red-600 hover:bg-red-50 data-[state=open]:bg-red-50 cursor-pointer">
+              <IconLogout className="mt-0.5" />
+              Sair
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

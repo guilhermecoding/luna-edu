@@ -20,7 +20,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { IconHomeFilled, IconLogout, IconSelector } from "@tabler/icons-react";
+import { IconUser, IconLogout, IconSelector } from "@tabler/icons-react";
 
 export function NavUser({
   user,
@@ -74,27 +74,12 @@ export function NavUser({
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
               <DropdownMenuItem>
-                <IconHomeFilled />
-                Upgrade to Pro
+                <IconUser />
+                Perfil
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <IconHomeFilled />
-                Account
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <IconHomeFilled />
-                Billing
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <IconHomeFilled />
-                Notifications
-              </DropdownMenuItem>
-            </DropdownMenuGroup>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem className="flex text-red-600 hover:bg-red-50 data-[state=open]:bg-red-50 cursor-pointer">
+            <DropdownMenuItem className="flex text-red-600 hover:text-red-600! hover:bg-red-50! dark:hover:text-red-50! dark:hover:bg-red-900! data-[state=open]:bg-red-50 cursor-pointer">
               <IconLogout className="mt-0.5" />
               Sair
             </DropdownMenuItem>

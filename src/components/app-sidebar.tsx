@@ -16,6 +16,9 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { IconHomeFilled } from "@tabler/icons-react";
+import { ProgramSwitcher } from "./program-switcher";
+import Image from "next/image";
+import Link from "next/link";
 
 const data = {
   user: {
@@ -157,24 +160,42 @@ const data = {
       ),
     },
   ],
+  programs: [
+    {
+      name: "Acme Inc",
+      plan: "Enterprise",
+    },
+    {
+      name: "Acme Corp.",
+      plan: "Startup",
+    },
+    {
+      name: "Evil Corp.",
+      plan: "Free",
+    },
+  ],
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar variant="inset" {...props}>
       <SidebarHeader>
+        <Link href="/" className="flex justify-center items-center gap-2">
+          <Image
+            src="/gibby-normal-icon.svg"
+            alt="Logo"
+            width={32}
+            height={32}
+            className="pointer-events-none"
+          />
+          <span className="font-silkscreen text-primary-theme text-3xl">
+            LUNA
+          </span>
+        </Link>
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
-              <a href="#">
-                <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-                  <IconHomeFilled />
-                </div>
-                <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-medium">Acme Inc</span>
-                  <span className="truncate text-xs">Enterprise</span>
-                </div>
-              </a>
+              <ProgramSwitcher programs={data.programs} />
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>

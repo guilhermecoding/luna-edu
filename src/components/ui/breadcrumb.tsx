@@ -2,7 +2,7 @@ import * as React from "react";
 import { Slot } from "radix-ui";
 
 import { cn } from "@/lib/utils";
-import { IconHomeFilled } from "@tabler/icons-react";
+import { IconArrowBadgeRightFilled } from "@tabler/icons-react";
 
 function Breadcrumb({ className, ...props }: React.ComponentProps<"nav">) {
   return (
@@ -83,7 +83,7 @@ function BreadcrumbSeparator({
       {...props}
     >
       {children ?? (
-        <IconHomeFilled />
+        <IconArrowBadgeRightFilled />
       )}
     </li>
   );
@@ -104,7 +104,7 @@ function BreadcrumbEllipsis({
       )}
       {...props}
     >
-      <IconHomeFilled />
+      <IconArrowBadgeRightFilled />
       <span className="sr-only">More</span>
     </span>
   );

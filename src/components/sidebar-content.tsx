@@ -1,7 +1,19 @@
+"use client";
+
 import { ItemMenuSidebarAdmin } from "@/@types/item-menu-sidebar.type";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { SidebarGroup, SidebarGroupLabel, SidebarMenu, SidebarMenuAction, SidebarMenuButton, SidebarMenuItem, SidebarMenuSub, SidebarMenuSubButton, SidebarMenuSubItem } from "@/components/ui/sidebar";
-import { IconChevronRightFilled } from "@tabler/icons-react";
+import { IconChevronRightFilled, IconHome, IconUsers, IconBook, IconCalendar, IconSettings, IconChartArcs, IconFileText } from "@tabler/icons-react";
+
+const iconMap: { [key: string]: React.ReactNode } = {
+    IconHome: <IconHome size={20} />,
+    IconUsers: <IconUsers size={20} />,
+    IconBook: <IconBook size={20} />,
+    IconCalendar: <IconCalendar size={20} />,
+    IconSettings: <IconSettings size={20} />,
+    IconChartArcs: <IconChartArcs size={20} />,
+    IconFileText: <IconFileText size={20} />,
+};
 
 /**
  * Renderiza o conteúdo do sidebar com base nos menus fornecidos.
@@ -24,7 +36,7 @@ export function SideBarContentMenus({
                                     <SidebarMenuButton asChild tooltip={item.title}>
                                         <a href={item.url}>
                                             <div className="w-5 h-5 flex items-center justify-center">
-                                                {item.icon}
+                                                {iconMap[item.icon as string]}
                                             </div>
                                             <span>{item.title}</span>
                                         </a>

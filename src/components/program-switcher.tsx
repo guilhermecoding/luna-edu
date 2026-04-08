@@ -17,14 +17,12 @@ import {
     SidebarMenuItem,
     useSidebar,
 } from "@/components/ui/sidebar";
+import { ProgramSwitch } from "@/@types/programs-switch.type";
 
 export function ProgramSwitcher({
     programs,
 }: {
-    programs: {
-        name: string
-        plan: string
-    }[]
+    programs: ProgramSwitch[]
 }) {
     const { isMobile } = useSidebar();
     const [activeProgram, setActiveProgram] = React.useState(programs[0]);
@@ -32,6 +30,9 @@ export function ProgramSwitcher({
     if (!activeProgram) {
         return null;
     }
+
+    // Obtém o nome da corporação a partir da variável de ambiente, ou usa um valor padrão se não estiver definida
+    const corporation = process.env.NEXT_PUBLIC_NAME_CORPORATION || "Luna Edu";
 
     return (
         <SidebarMenu>
@@ -47,7 +48,7 @@ export function ProgramSwitcher({
                             </div>
                             <div className="grid flex-1 text-left text-sm leading-tight">
                                 <span className="truncate font-medium">{activeProgram.name}</span>
-                                <span className="truncate text-xs">{activeProgram.plan}</span>
+                                <span className="truncate text-xs">{corporation}</span>
                             </div>
                             <IconSelector className="ml-auto" />
                         </SidebarMenuButton>

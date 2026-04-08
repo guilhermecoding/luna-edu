@@ -3,13 +3,11 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/component
 import { SidebarGroup, SidebarGroupLabel, SidebarMenu, SidebarMenuAction, SidebarMenuButton, SidebarMenuItem, SidebarMenuSub, SidebarMenuSubButton, SidebarMenuSubItem } from "@/components/ui/sidebar";
 import { IconChevronRightFilled } from "@tabler/icons-react";
 
-export function SideBarHeaderAdmin() {
-    return (
-        <div className="px-4 py-2 text-sm font-medium">Admin Menu</div>
-    );
-}
-
-export function SideBarContentAdmin({
+/**
+ * Renderiza o conteúdo do sidebar com base nos menus fornecidos.
+ * @param menus - Array de objetos representando os grupos de menu e seus itens.
+ */
+export function SideBarContentMenus({
     menus,
 }: {
     menus: ItemMenuSidebarAdmin[]
@@ -25,7 +23,9 @@ export function SideBarContentAdmin({
                                 <SidebarMenuItem>
                                     <SidebarMenuButton asChild tooltip={item.title}>
                                         <a href={item.url}>
-                                            {item.icon}
+                                            <div className="w-5 h-5 flex items-center justify-center">
+                                                {item.icon}
+                                            </div>
                                             <span>{item.title}</span>
                                         </a>
                                     </SidebarMenuButton>

@@ -1,4 +1,3 @@
-import { IconHome, IconUsers, IconBook, IconCalendar, IconSettings, IconChartArcs, IconFileText } from "@tabler/icons-react";
 import { ItemMenuSidebarAdmin } from "@/@types/item-menu-sidebar.type";
 
 export const adminMenus: ItemMenuSidebarAdmin[] = [
@@ -8,7 +7,7 @@ export const adminMenus: ItemMenuSidebarAdmin[] = [
             {
                 title: "Dashboard",
                 url: "/admin",
-                icon: <IconHome size={20} />,
+                icon: "home",
                 isActive: true,
             },
         ],
@@ -19,8 +18,8 @@ export const adminMenus: ItemMenuSidebarAdmin[] = [
             {
                 title: "Usuários",
                 url: "/admin/usuarios",
-                icon: <IconUsers size={20} />,
-                isActive: false,
+                icon: "users",
+                isActive: true,
                 items: [
                     { title: "Listar Usuários", url: "/admin/usuarios" },
                     { title: "Adicionar Usuário", url: "/admin/usuarios/novo" },
@@ -30,7 +29,7 @@ export const adminMenus: ItemMenuSidebarAdmin[] = [
             {
                 title: "Períodos",
                 url: "/admin/periodos",
-                icon: <IconCalendar size={20} />,
+                icon: "calendar",
                 isActive: false,
                 items: [
                     { title: "Listar Períodos", url: "/admin/periodos" },
@@ -40,7 +39,7 @@ export const adminMenus: ItemMenuSidebarAdmin[] = [
             {
                 title: "Cursos",
                 url: "/admin/cursos",
-                icon: <IconBook size={20} />,
+                icon: "book",
                 isActive: false,
                 items: [
                     { title: "Listar Cursos", url: "/admin/cursos" },
@@ -55,13 +54,13 @@ export const adminMenus: ItemMenuSidebarAdmin[] = [
             {
                 title: "Estatísticas",
                 url: "/admin/estatisticas",
-                icon: <IconChartArcs size={20} />,
+                icon: "chart-arcs",
                 isActive: false,
             },
             {
                 title: "Relatórios",
                 url: "/admin/relatorios",
-                icon: <IconFileText size={20} />,
+                icon: "file-text",
                 isActive: false,
             },
         ],
@@ -72,7 +71,7 @@ export const adminMenus: ItemMenuSidebarAdmin[] = [
             {
                 title: "Configurações",
                 url: "/admin/configuracoes",
-                icon: <IconSettings size={20} />,
+                icon: "settings",
                 isActive: false,
                 items: [
                     { title: "Geral", url: "/admin/configuracoes" },

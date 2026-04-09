@@ -27,10 +27,9 @@ export function AppSidebar({ sideBarHeader, sideBarContent, sideBarFooter, ...pr
                         alt="Logo"
                         width={32}
                         height={32}
-                        className="pointer-events-none"
-                        style={{ height: "auto" }}
+                        className="pointer-events-none w-10 h-10"
                     />
-                    <span className="font-silkscreen text-primary-theme text-3xl">
+                    <span className="font-silkscreen text-primary-theme text-4xl">
                         LUNA
                     </span>
                 </Link>

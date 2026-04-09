@@ -33,3 +33,23 @@ export const Shift = {
 } as const
 
 export type Shift = (typeof Shift)[keyof typeof Shift]
+
+
+export const ActivityType = {
+  HOMEWORK: 'HOMEWORK',
+  EXAM: 'EXAM',
+  PROJECT: 'PROJECT',
+  QUIZ: 'QUIZ',
+  PARTICIPATION: 'PARTICIPATION'
+} as const
+
+export type ActivityType = (typeof ActivityType)[keyof typeof ActivityType]
+
+
+export const NotificationType = {
+  INFO: 'INFO',
+  WARNING: 'WARNING',
+  ALERT: 'ALERT'
+} as const
+
+export type NotificationType = (typeof NotificationType)[keyof typeof NotificationType]

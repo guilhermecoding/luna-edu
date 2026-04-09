@@ -36,6 +36,26 @@ enum Shift {
   @@schema("public")
 }
 
+enum ActivityType {
+  HOMEWORK
+  EXAM
+  PROJECT
+  QUIZ
+  PARTICIPATION
+
+  @@map("activity_type")
+  @@schema("public")
+}
+
+enum NotificationType {
+  INFO
+  WARNING
+  ALERT
+
+  @@map("notification_type")
+  @@schema("public")
+}
+
 // ================= AUTH =================
 
 model User {
@@ -60,6 +80,7 @@ model User {
   accounts Account[]
 
   courseAssistants CourseAssistant[]
+  notifications    Notification[]
 
   @@unique([email, cpf])
   @@map("user")
@@ -192,6 +213,8 @@ model Course {
   lessons          Lesson[]
   activities       Activity[]
   courseAssistants CourseAssistant[]
+  finalGrades      FinalGrade[]
+  stats            StudentCourseStats[]
 
   @@map("courses")
   @@schema("public")
@@ -212,6 +235,9 @@ model Student {
   enrollments    Enrollment[]
   attendances    Attendance[]
   activityGrades ActivityGrade[]
+  finalGrades    FinalGrade[]
+  stats          StudentCourseStats[]
+  notifications  Notification[]
 
   @@map("students")
   @@schema("public")
@@ -260,13 +286,16 @@ model Attendance {
 }
 
 model Activity {
-  id          String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  createdAt   DateTime    @default(now()) @map("created_at") @db.Timestamptz
-  courseId    String      @map("course_id") @db.Uuid
+  id          String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt   DateTime     @default(now()) @map("created_at") @db.Timestamptz
+  courseId    String       @map("course_id") @db.Uuid
   title       String
-  gradingType GradingType @default(NONE) @map("grading_type")
-  minValue    Float?      @map("min_value")
-  maxValue    Float?      @map("max_value")
+  gradingType GradingType  @default(NONE) @map("grading_type")
+  minValue    Float?       @map("min_value")
+  maxValue    Float?       @map("max_value")
+  type        ActivityType @default(HOMEWORK)
+  weight      Float        @default(1.0)
+  dueDate     DateTime?    @map("due_date") @db.Timestamptz
 
   course         Course          @relation(fields: [courseId], references: [id])
   activityGrades ActivityGrade[]
@@ -287,6 +316,64 @@ model ActivityGrade {
   student  Student  @relation(fields: [studentId], references: [id])
 
   @@map("activity_grades")
+  @@schema("public")
+}
+
+model FinalGrade {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+  courseId  String   @map("course_id") @db.Uuid
+  studentId String   @map("student_id") @db.Uuid
+
+  average    Float?
+  concept    String?
+  isApproved Boolean? @map("is_approved")
+
+  course  Course  @relation(fields: [courseId], references: [id])
+  student Student @relation(fields: [studentId], references: [id])
+
+  @@unique([courseId, studentId])
+  @@map("final_grades")
+  @@schema("public")
+}
+
+model StudentCourseStats {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+  courseId  String   @map("course_id") @db.Uuid
+  studentId String   @map("student_id") @db.Uuid
+
+  attendanceRate Float? @map("attendance_rate")
+  averageGrade   Float? @map("average_grade")
+
+  totalLessons Int? @map("total_lessons")
+  presentCount Int? @map("present_count")
+
+  course  Course  @relation(fields: [courseId], references: [id])
+  student Student @relation(fields: [studentId], references: [id])
+
+  @@unique([courseId, studentId])
+  @@map("student_course_stats")
+  @@schema("public")
+}
+
+model Notification {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+
+  title   String
+  message String
+  type    NotificationType @default(INFO)
+
+  userId    String? @map("user_id") @db.Uuid
+  studentId String? @map("student_id") @db.Uuid
+
+  isRead Boolean @default(false) @map("is_read")
+
+  user    User?    @relation(fields: [userId], references: [id])
+  student Student? @relation(fields: [studentId], references: [id])
+
+  @@map("notifications")
   @@schema("public")
 }
 

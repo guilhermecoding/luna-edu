@@ -93,6 +93,21 @@ export type Activity = Prisma.ActivityModel
  */
 export type ActivityGrade = Prisma.ActivityGradeModel
 /**
+ * Model FinalGrade
+ * 
+ */
+export type FinalGrade = Prisma.FinalGradeModel
+/**
+ * Model StudentCourseStats
+ * 
+ */
+export type StudentCourseStats = Prisma.StudentCourseStatsModel
+/**
+ * Model Notification
+ * 
+ */
+export type Notification = Prisma.NotificationModel
+/**
  * Model CourseAssistant
  * 
  */

@@ -3,7 +3,7 @@ export type ItemMenuSidebarAdmin = {
     items: {
         title: string;
         url: string;
-        icon: React.ReactNode;
+        icon: string;
         isActive?: boolean;
         items?: {
             title: string;

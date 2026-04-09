@@ -15,6 +15,8 @@ const user = {
     avatar: "/avatars/shadcn.jpg",
 };
 
+// Verifica se há programas cadastrados
+
 export default function AdminLayout({
     children,
 }: Readonly<{

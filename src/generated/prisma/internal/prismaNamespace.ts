@@ -80,11 +80,11 @@ export type PrismaVersion = {
 }
 
 /**
- * Prisma Client JS version: 7.6.0
+ * Prisma Client JS version: 7.7.0
  * Query Engine version: 75cbdc1eb7150937890ad5465d861175c6624711
  */
 export const prismaVersion: PrismaVersion = {
-  client: "7.6.0",
+  client: "7.7.0",
   engine: "75cbdc1eb7150937890ad5465d861175c6624711"
 }
 
@@ -399,6 +399,9 @@ export const ModelName = {
   Attendance: 'Attendance',
   Activity: 'Activity',
   ActivityGrade: 'ActivityGrade',
+  FinalGrade: 'FinalGrade',
+  StudentCourseStats: 'StudentCourseStats',
+  Notification: 'Notification',
   CourseAssistant: 'CourseAssistant'
 } as const
 
@@ -415,7 +418,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "session" | "account" | "verification" | "program" | "campus" | "room" | "period" | "course" | "student" | "enrollment" | "lesson" | "attendance" | "activity" | "activityGrade" | "courseAssistant"
+    modelProps: "user" | "session" | "account" | "verification" | "program" | "campus" | "room" | "period" | "course" | "student" | "enrollment" | "lesson" | "attendance" | "activity" | "activityGrade" | "finalGrade" | "studentCourseStats" | "notification" | "courseAssistant"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1529,6 +1532,228 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    FinalGrade: {
+      payload: Prisma.$FinalGradePayload<ExtArgs>
+      fields: Prisma.FinalGradeFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.FinalGradeFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FinalGradePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.FinalGradeFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FinalGradePayload>
+        }
+        findFirst: {
+          args: Prisma.FinalGradeFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FinalGradePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.FinalGradeFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FinalGradePayload>
+        }
+        findMany: {
+          args: Prisma.FinalGradeFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FinalGradePayload>[]
+        }
+        create: {
+          args: Prisma.FinalGradeCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FinalGradePayload>
+        }
+        createMany: {
+          args: Prisma.FinalGradeCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.FinalGradeCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FinalGradePayload>[]
+        }
+        delete: {
+          args: Prisma.FinalGradeDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FinalGradePayload>
+        }
+        update: {
+          args: Prisma.FinalGradeUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FinalGradePayload>
+        }
+        deleteMany: {
+          args: Prisma.FinalGradeDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.FinalGradeUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.FinalGradeUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FinalGradePayload>[]
+        }
+        upsert: {
+          args: Prisma.FinalGradeUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FinalGradePayload>
+        }
+        aggregate: {
+          args: Prisma.FinalGradeAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateFinalGrade>
+        }
+        groupBy: {
+          args: Prisma.FinalGradeGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.FinalGradeGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.FinalGradeCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.FinalGradeCountAggregateOutputType> | number
+        }
+      }
+    }
+    StudentCourseStats: {
+      payload: Prisma.$StudentCourseStatsPayload<ExtArgs>
+      fields: Prisma.StudentCourseStatsFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.StudentCourseStatsFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StudentCourseStatsPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.StudentCourseStatsFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StudentCourseStatsPayload>
+        }
+        findFirst: {
+          args: Prisma.StudentCourseStatsFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StudentCourseStatsPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.StudentCourseStatsFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StudentCourseStatsPayload>
+        }
+        findMany: {
+          args: Prisma.StudentCourseStatsFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StudentCourseStatsPayload>[]
+        }
+        create: {
+          args: Prisma.StudentCourseStatsCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StudentCourseStatsPayload>
+        }
+        createMany: {
+          args: Prisma.StudentCourseStatsCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.StudentCourseStatsCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StudentCourseStatsPayload>[]
+        }
+        delete: {
+          args: Prisma.StudentCourseStatsDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StudentCourseStatsPayload>
+        }
+        update: {
+          args: Prisma.StudentCourseStatsUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StudentCourseStatsPayload>
+        }
+        deleteMany: {
+          args: Prisma.StudentCourseStatsDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.StudentCourseStatsUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.StudentCourseStatsUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StudentCourseStatsPayload>[]
+        }
+        upsert: {
+          args: Prisma.StudentCourseStatsUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StudentCourseStatsPayload>
+        }
+        aggregate: {
+          args: Prisma.StudentCourseStatsAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateStudentCourseStats>
+        }
+        groupBy: {
+          args: Prisma.StudentCourseStatsGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.StudentCourseStatsGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.StudentCourseStatsCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.StudentCourseStatsCountAggregateOutputType> | number
+        }
+      }
+    }
+    Notification: {
+      payload: Prisma.$NotificationPayload<ExtArgs>
+      fields: Prisma.NotificationFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.NotificationFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NotificationPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.NotificationFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NotificationPayload>
+        }
+        findFirst: {
+          args: Prisma.NotificationFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NotificationPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.NotificationFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NotificationPayload>
+        }
+        findMany: {
+          args: Prisma.NotificationFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NotificationPayload>[]
+        }
+        create: {
+          args: Prisma.NotificationCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NotificationPayload>
+        }
+        createMany: {
+          args: Prisma.NotificationCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.NotificationCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NotificationPayload>[]
+        }
+        delete: {
+          args: Prisma.NotificationDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NotificationPayload>
+        }
+        update: {
+          args: Prisma.NotificationUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NotificationPayload>
+        }
+        deleteMany: {
+          args: Prisma.NotificationDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.NotificationUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.NotificationUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NotificationPayload>[]
+        }
+        upsert: {
+          args: Prisma.NotificationUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NotificationPayload>
+        }
+        aggregate: {
+          args: Prisma.NotificationAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateNotification>
+        }
+        groupBy: {
+          args: Prisma.NotificationGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NotificationGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.NotificationCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NotificationCountAggregateOutputType> | number
+        }
+      }
+    }
     CourseAssistant: {
       payload: Prisma.$CourseAssistantPayload<ExtArgs>
       fields: Prisma.CourseAssistantFieldRefs
@@ -1713,7 +1938,8 @@ export const ProgramScalarFieldEnum = {
   id: 'id',
   createdAt: 'createdAt',
   name: 'name',
-  description: 'description'
+  description: 'description',
+  slug: 'slug'
 } as const
 
 export type ProgramScalarFieldEnum = (typeof ProgramScalarFieldEnum)[keyof typeof ProgramScalarFieldEnum]
@@ -1820,7 +2046,10 @@ export const ActivityScalarFieldEnum = {
   title: 'title',
   gradingType: 'gradingType',
   minValue: 'minValue',
-  maxValue: 'maxValue'
+  maxValue: 'maxValue',
+  type: 'type',
+  weight: 'weight',
+  dueDate: 'dueDate'
 } as const
 
 export type ActivityScalarFieldEnum = (typeof ActivityScalarFieldEnum)[keyof typeof ActivityScalarFieldEnum]
@@ -1836,6 +2065,47 @@ export const ActivityGradeScalarFieldEnum = {
 } as const
 
 export type ActivityGradeScalarFieldEnum = (typeof ActivityGradeScalarFieldEnum)[keyof typeof ActivityGradeScalarFieldEnum]
+
+
+export const FinalGradeScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  courseId: 'courseId',
+  studentId: 'studentId',
+  average: 'average',
+  concept: 'concept',
+  isApproved: 'isApproved'
+} as const
+
+export type FinalGradeScalarFieldEnum = (typeof FinalGradeScalarFieldEnum)[keyof typeof FinalGradeScalarFieldEnum]
+
+
+export const StudentCourseStatsScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  courseId: 'courseId',
+  studentId: 'studentId',
+  attendanceRate: 'attendanceRate',
+  averageGrade: 'averageGrade',
+  totalLessons: 'totalLessons',
+  presentCount: 'presentCount'
+} as const
+
+export type StudentCourseStatsScalarFieldEnum = (typeof StudentCourseStatsScalarFieldEnum)[keyof typeof StudentCourseStatsScalarFieldEnum]
+
+
+export const NotificationScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  title: 'title',
+  message: 'message',
+  type: 'type',
+  userId: 'userId',
+  studentId: 'studentId',
+  isRead: 'isRead'
+} as const
+
+export type NotificationScalarFieldEnum = (typeof NotificationScalarFieldEnum)[keyof typeof NotificationScalarFieldEnum]
 
 
 export const CourseAssistantScalarFieldEnum = {
@@ -1996,6 +2266,34 @@ export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, '
 export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
     
 
+
+/**
+ * Reference to a field of type 'ActivityType'
+ */
+export type EnumActivityTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ActivityType'>
+    
+
+
+/**
+ * Reference to a field of type 'ActivityType[]'
+ */
+export type ListEnumActivityTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ActivityType[]'>
+    
+
+
+/**
+ * Reference to a field of type 'NotificationType'
+ */
+export type EnumNotificationTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'NotificationType'>
+    
+
+
+/**
+ * Reference to a field of type 'NotificationType[]'
+ */
+export type ListEnumNotificationTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'NotificationType[]'>
+    
+
 /**
  * Batch Payload for updateMany & deleteMany & createMany
  */
@@ -2106,6 +2404,9 @@ export type GlobalOmitConfig = {
   attendance?: Prisma.AttendanceOmit
   activity?: Prisma.ActivityOmit
   activityGrade?: Prisma.ActivityGradeOmit
+  finalGrade?: Prisma.FinalGradeOmit
+  studentCourseStats?: Prisma.StudentCourseStatsOmit
+  notification?: Prisma.NotificationOmit
   courseAssistant?: Prisma.CourseAssistantOmit
 }
 

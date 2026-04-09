@@ -173,7 +173,7 @@ export type CourseAssistantWhereInput = {
   id?: Prisma.UuidFilter<"CourseAssistant"> | string
   createdAt?: Prisma.DateTimeFilter<"CourseAssistant"> | Date | string
   courseId?: Prisma.UuidFilter<"CourseAssistant"> | string
-  assistantId?: Prisma.StringFilter<"CourseAssistant"> | string
+  assistantId?: Prisma.UuidFilter<"CourseAssistant"> | string
   course?: Prisma.XOR<Prisma.CourseScalarRelationFilter, Prisma.CourseWhereInput>
   assistant?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }
@@ -194,7 +194,7 @@ export type CourseAssistantWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.CourseAssistantWhereInput | Prisma.CourseAssistantWhereInput[]
   createdAt?: Prisma.DateTimeFilter<"CourseAssistant"> | Date | string
   courseId?: Prisma.UuidFilter<"CourseAssistant"> | string
-  assistantId?: Prisma.StringFilter<"CourseAssistant"> | string
+  assistantId?: Prisma.UuidFilter<"CourseAssistant"> | string
   course?: Prisma.XOR<Prisma.CourseScalarRelationFilter, Prisma.CourseWhereInput>
   assistant?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }, "id">
@@ -216,7 +216,7 @@ export type CourseAssistantScalarWhereWithAggregatesInput = {
   id?: Prisma.UuidWithAggregatesFilter<"CourseAssistant"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"CourseAssistant"> | Date | string
   courseId?: Prisma.UuidWithAggregatesFilter<"CourseAssistant"> | string
-  assistantId?: Prisma.StringWithAggregatesFilter<"CourseAssistant"> | string
+  assistantId?: Prisma.UuidWithAggregatesFilter<"CourseAssistant"> | string
 }
 
 export type CourseAssistantCreateInput = {
@@ -426,7 +426,7 @@ export type CourseAssistantScalarWhereInput = {
   id?: Prisma.UuidFilter<"CourseAssistant"> | string
   createdAt?: Prisma.DateTimeFilter<"CourseAssistant"> | Date | string
   courseId?: Prisma.UuidFilter<"CourseAssistant"> | string
-  assistantId?: Prisma.StringFilter<"CourseAssistant"> | string
+  assistantId?: Prisma.UuidFilter<"CourseAssistant"> | string
 }
 
 export type CourseAssistantCreateWithoutCourseInput = {

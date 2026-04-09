@@ -29,11 +29,13 @@ export type AggregateActivity = {
 export type ActivityAvgAggregateOutputType = {
   minValue: number | null
   maxValue: number | null
+  weight: number | null
 }
 
 export type ActivitySumAggregateOutputType = {
   minValue: number | null
   maxValue: number | null
+  weight: number | null
 }
 
 export type ActivityMinAggregateOutputType = {
@@ -44,6 +46,9 @@ export type ActivityMinAggregateOutputType = {
   gradingType: $Enums.GradingType | null
   minValue: number | null
   maxValue: number | null
+  type: $Enums.ActivityType | null
+  weight: number | null
+  dueDate: Date | null
 }
 
 export type ActivityMaxAggregateOutputType = {
@@ -54,6 +59,9 @@ export type ActivityMaxAggregateOutputType = {
   gradingType: $Enums.GradingType | null
   minValue: number | null
   maxValue: number | null
+  type: $Enums.ActivityType | null
+  weight: number | null
+  dueDate: Date | null
 }
 
 export type ActivityCountAggregateOutputType = {
@@ -64,6 +72,9 @@ export type ActivityCountAggregateOutputType = {
   gradingType: number
   minValue: number
   maxValue: number
+  type: number
+  weight: number
+  dueDate: number
   _all: number
 }
 
@@ -71,11 +82,13 @@ export type ActivityCountAggregateOutputType = {
 export type ActivityAvgAggregateInputType = {
   minValue?: true
   maxValue?: true
+  weight?: true
 }
 
 export type ActivitySumAggregateInputType = {
   minValue?: true
   maxValue?: true
+  weight?: true
 }
 
 export type ActivityMinAggregateInputType = {
@@ -86,6 +99,9 @@ export type ActivityMinAggregateInputType = {
   gradingType?: true
   minValue?: true
   maxValue?: true
+  type?: true
+  weight?: true
+  dueDate?: true
 }
 
 export type ActivityMaxAggregateInputType = {
@@ -96,6 +112,9 @@ export type ActivityMaxAggregateInputType = {
   gradingType?: true
   minValue?: true
   maxValue?: true
+  type?: true
+  weight?: true
+  dueDate?: true
 }
 
 export type ActivityCountAggregateInputType = {
@@ -106,6 +125,9 @@ export type ActivityCountAggregateInputType = {
   gradingType?: true
   minValue?: true
   maxValue?: true
+  type?: true
+  weight?: true
+  dueDate?: true
   _all?: true
 }
 
@@ -203,6 +225,9 @@ export type ActivityGroupByOutputType = {
   gradingType: $Enums.GradingType
   minValue: number | null
   maxValue: number | null
+  type: $Enums.ActivityType
+  weight: number
+  dueDate: Date | null
   _count: ActivityCountAggregateOutputType | null
   _avg: ActivityAvgAggregateOutputType | null
   _sum: ActivitySumAggregateOutputType | null
@@ -236,6 +261,9 @@ export type ActivityWhereInput = {
   gradingType?: Prisma.EnumGradingTypeFilter<"Activity"> | $Enums.GradingType
   minValue?: Prisma.FloatNullableFilter<"Activity"> | number | null
   maxValue?: Prisma.FloatNullableFilter<"Activity"> | number | null
+  type?: Prisma.EnumActivityTypeFilter<"Activity"> | $Enums.ActivityType
+  weight?: Prisma.FloatFilter<"Activity"> | number
+  dueDate?: Prisma.DateTimeNullableFilter<"Activity"> | Date | string | null
   course?: Prisma.XOR<Prisma.CourseScalarRelationFilter, Prisma.CourseWhereInput>
   activityGrades?: Prisma.ActivityGradeListRelationFilter
 }
@@ -248,6 +276,9 @@ export type ActivityOrderByWithRelationInput = {
   gradingType?: Prisma.SortOrder
   minValue?: Prisma.SortOrderInput | Prisma.SortOrder
   maxValue?: Prisma.SortOrderInput | Prisma.SortOrder
+  type?: Prisma.SortOrder
+  weight?: Prisma.SortOrder
+  dueDate?: Prisma.SortOrderInput | Prisma.SortOrder
   course?: Prisma.CourseOrderByWithRelationInput
   activityGrades?: Prisma.ActivityGradeOrderByRelationAggregateInput
 }
@@ -263,6 +294,9 @@ export type ActivityWhereUniqueInput = Prisma.AtLeast<{
   gradingType?: Prisma.EnumGradingTypeFilter<"Activity"> | $Enums.GradingType
   minValue?: Prisma.FloatNullableFilter<"Activity"> | number | null
   maxValue?: Prisma.FloatNullableFilter<"Activity"> | number | null
+  type?: Prisma.EnumActivityTypeFilter<"Activity"> | $Enums.ActivityType
+  weight?: Prisma.FloatFilter<"Activity"> | number
+  dueDate?: Prisma.DateTimeNullableFilter<"Activity"> | Date | string | null
   course?: Prisma.XOR<Prisma.CourseScalarRelationFilter, Prisma.CourseWhereInput>
   activityGrades?: Prisma.ActivityGradeListRelationFilter
 }, "id">
@@ -275,6 +309,9 @@ export type ActivityOrderByWithAggregationInput = {
   gradingType?: Prisma.SortOrder
   minValue?: Prisma.SortOrderInput | Prisma.SortOrder
   maxValue?: Prisma.SortOrderInput | Prisma.SortOrder
+  type?: Prisma.SortOrder
+  weight?: Prisma.SortOrder
+  dueDate?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.ActivityCountOrderByAggregateInput
   _avg?: Prisma.ActivityAvgOrderByAggregateInput
   _max?: Prisma.ActivityMaxOrderByAggregateInput
@@ -293,6 +330,9 @@ export type ActivityScalarWhereWithAggregatesInput = {
   gradingType?: Prisma.EnumGradingTypeWithAggregatesFilter<"Activity"> | $Enums.GradingType
   minValue?: Prisma.FloatNullableWithAggregatesFilter<"Activity"> | number | null
   maxValue?: Prisma.FloatNullableWithAggregatesFilter<"Activity"> | number | null
+  type?: Prisma.EnumActivityTypeWithAggregatesFilter<"Activity"> | $Enums.ActivityType
+  weight?: Prisma.FloatWithAggregatesFilter<"Activity"> | number
+  dueDate?: Prisma.DateTimeNullableWithAggregatesFilter<"Activity"> | Date | string | null
 }
 
 export type ActivityCreateInput = {
@@ -302,6 +342,9 @@ export type ActivityCreateInput = {
   gradingType?: $Enums.GradingType
   minValue?: number | null
   maxValue?: number | null
+  type?: $Enums.ActivityType
+  weight?: number
+  dueDate?: Date | string | null
   course: Prisma.CourseCreateNestedOneWithoutActivitiesInput
   activityGrades?: Prisma.ActivityGradeCreateNestedManyWithoutActivityInput
 }
@@ -314,6 +357,9 @@ export type ActivityUncheckedCreateInput = {
   gradingType?: $Enums.GradingType
   minValue?: number | null
   maxValue?: number | null
+  type?: $Enums.ActivityType
+  weight?: number
+  dueDate?: Date | string | null
   activityGrades?: Prisma.ActivityGradeUncheckedCreateNestedManyWithoutActivityInput
 }
 
@@ -324,6 +370,9 @@ export type ActivityUpdateInput = {
   gradingType?: Prisma.EnumGradingTypeFieldUpdateOperationsInput | $Enums.GradingType
   minValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   maxValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  type?: Prisma.EnumActivityTypeFieldUpdateOperationsInput | $Enums.ActivityType
+  weight?: Prisma.FloatFieldUpdateOperationsInput | number
+  dueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   course?: Prisma.CourseUpdateOneRequiredWithoutActivitiesNestedInput
   activityGrades?: Prisma.ActivityGradeUpdateManyWithoutActivityNestedInput
 }
@@ -336,6 +385,9 @@ export type ActivityUncheckedUpdateInput = {
   gradingType?: Prisma.EnumGradingTypeFieldUpdateOperationsInput | $Enums.GradingType
   minValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   maxValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  type?: Prisma.EnumActivityTypeFieldUpdateOperationsInput | $Enums.ActivityType
+  weight?: Prisma.FloatFieldUpdateOperationsInput | number
+  dueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   activityGrades?: Prisma.ActivityGradeUncheckedUpdateManyWithoutActivityNestedInput
 }
 
@@ -347,6 +399,9 @@ export type ActivityCreateManyInput = {
   gradingType?: $Enums.GradingType
   minValue?: number | null
   maxValue?: number | null
+  type?: $Enums.ActivityType
+  weight?: number
+  dueDate?: Date | string | null
 }
 
 export type ActivityUpdateManyMutationInput = {
@@ -356,6 +411,9 @@ export type ActivityUpdateManyMutationInput = {
   gradingType?: Prisma.EnumGradingTypeFieldUpdateOperationsInput | $Enums.GradingType
   minValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   maxValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  type?: Prisma.EnumActivityTypeFieldUpdateOperationsInput | $Enums.ActivityType
+  weight?: Prisma.FloatFieldUpdateOperationsInput | number
+  dueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type ActivityUncheckedUpdateManyInput = {
@@ -366,6 +424,9 @@ export type ActivityUncheckedUpdateManyInput = {
   gradingType?: Prisma.EnumGradingTypeFieldUpdateOperationsInput | $Enums.GradingType
   minValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   maxValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  type?: Prisma.EnumActivityTypeFieldUpdateOperationsInput | $Enums.ActivityType
+  weight?: Prisma.FloatFieldUpdateOperationsInput | number
+  dueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type ActivityListRelationFilter = {
@@ -386,11 +447,15 @@ export type ActivityCountOrderByAggregateInput = {
   gradingType?: Prisma.SortOrder
   minValue?: Prisma.SortOrder
   maxValue?: Prisma.SortOrder
+  type?: Prisma.SortOrder
+  weight?: Prisma.SortOrder
+  dueDate?: Prisma.SortOrder
 }
 
 export type ActivityAvgOrderByAggregateInput = {
   minValue?: Prisma.SortOrder
   maxValue?: Prisma.SortOrder
+  weight?: Prisma.SortOrder
 }
 
 export type ActivityMaxOrderByAggregateInput = {
@@ -401,6 +466,9 @@ export type ActivityMaxOrderByAggregateInput = {
   gradingType?: Prisma.SortOrder
   minValue?: Prisma.SortOrder
   maxValue?: Prisma.SortOrder
+  type?: Prisma.SortOrder
+  weight?: Prisma.SortOrder
+  dueDate?: Prisma.SortOrder
 }
 
 export type ActivityMinOrderByAggregateInput = {
@@ -411,11 +479,15 @@ export type ActivityMinOrderByAggregateInput = {
   gradingType?: Prisma.SortOrder
   minValue?: Prisma.SortOrder
   maxValue?: Prisma.SortOrder
+  type?: Prisma.SortOrder
+  weight?: Prisma.SortOrder
+  dueDate?: Prisma.SortOrder
 }
 
 export type ActivitySumOrderByAggregateInput = {
   minValue?: Prisma.SortOrder
   maxValue?: Prisma.SortOrder
+  weight?: Prisma.SortOrder
 }
 
 export type ActivityScalarRelationFilter = {
@@ -477,6 +549,18 @@ export type NullableFloatFieldUpdateOperationsInput = {
   divide?: number
 }
 
+export type EnumActivityTypeFieldUpdateOperationsInput = {
+  set?: $Enums.ActivityType
+}
+
+export type FloatFieldUpdateOperationsInput = {
+  set?: number
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
+}
+
 export type ActivityCreateNestedOneWithoutActivityGradesInput = {
   create?: Prisma.XOR<Prisma.ActivityCreateWithoutActivityGradesInput, Prisma.ActivityUncheckedCreateWithoutActivityGradesInput>
   connectOrCreate?: Prisma.ActivityCreateOrConnectWithoutActivityGradesInput
@@ -498,6 +582,9 @@ export type ActivityCreateWithoutCourseInput = {
   gradingType?: $Enums.GradingType
   minValue?: number | null
   maxValue?: number | null
+  type?: $Enums.ActivityType
+  weight?: number
+  dueDate?: Date | string | null
   activityGrades?: Prisma.ActivityGradeCreateNestedManyWithoutActivityInput
 }
 
@@ -508,6 +595,9 @@ export type ActivityUncheckedCreateWithoutCourseInput = {
   gradingType?: $Enums.GradingType
   minValue?: number | null
   maxValue?: number | null
+  type?: $Enums.ActivityType
+  weight?: number
+  dueDate?: Date | string | null
   activityGrades?: Prisma.ActivityGradeUncheckedCreateNestedManyWithoutActivityInput
 }
 
@@ -548,6 +638,9 @@ export type ActivityScalarWhereInput = {
   gradingType?: Prisma.EnumGradingTypeFilter<"Activity"> | $Enums.GradingType
   minValue?: Prisma.FloatNullableFilter<"Activity"> | number | null
   maxValue?: Prisma.FloatNullableFilter<"Activity"> | number | null
+  type?: Prisma.EnumActivityTypeFilter<"Activity"> | $Enums.ActivityType
+  weight?: Prisma.FloatFilter<"Activity"> | number
+  dueDate?: Prisma.DateTimeNullableFilter<"Activity"> | Date | string | null
 }
 
 export type ActivityCreateWithoutActivityGradesInput = {
@@ -557,6 +650,9 @@ export type ActivityCreateWithoutActivityGradesInput = {
   gradingType?: $Enums.GradingType
   minValue?: number | null
   maxValue?: number | null
+  type?: $Enums.ActivityType
+  weight?: number
+  dueDate?: Date | string | null
   course: Prisma.CourseCreateNestedOneWithoutActivitiesInput
 }
 
@@ -568,6 +664,9 @@ export type ActivityUncheckedCreateWithoutActivityGradesInput = {
   gradingType?: $Enums.GradingType
   minValue?: number | null
   maxValue?: number | null
+  type?: $Enums.ActivityType
+  weight?: number
+  dueDate?: Date | string | null
 }
 
 export type ActivityCreateOrConnectWithoutActivityGradesInput = {
@@ -593,6 +692,9 @@ export type ActivityUpdateWithoutActivityGradesInput = {
   gradingType?: Prisma.EnumGradingTypeFieldUpdateOperationsInput | $Enums.GradingType
   minValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   maxValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  type?: Prisma.EnumActivityTypeFieldUpdateOperationsInput | $Enums.ActivityType
+  weight?: Prisma.FloatFieldUpdateOperationsInput | number
+  dueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   course?: Prisma.CourseUpdateOneRequiredWithoutActivitiesNestedInput
 }
 
@@ -604,6 +706,9 @@ export type ActivityUncheckedUpdateWithoutActivityGradesInput = {
   gradingType?: Prisma.EnumGradingTypeFieldUpdateOperationsInput | $Enums.GradingType
   minValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   maxValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  type?: Prisma.EnumActivityTypeFieldUpdateOperationsInput | $Enums.ActivityType
+  weight?: Prisma.FloatFieldUpdateOperationsInput | number
+  dueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type ActivityCreateManyCourseInput = {
@@ -613,6 +718,9 @@ export type ActivityCreateManyCourseInput = {
   gradingType?: $Enums.GradingType
   minValue?: number | null
   maxValue?: number | null
+  type?: $Enums.ActivityType
+  weight?: number
+  dueDate?: Date | string | null
 }
 
 export type ActivityUpdateWithoutCourseInput = {
@@ -622,6 +730,9 @@ export type ActivityUpdateWithoutCourseInput = {
   gradingType?: Prisma.EnumGradingTypeFieldUpdateOperationsInput | $Enums.GradingType
   minValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   maxValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  type?: Prisma.EnumActivityTypeFieldUpdateOperationsInput | $Enums.ActivityType
+  weight?: Prisma.FloatFieldUpdateOperationsInput | number
+  dueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   activityGrades?: Prisma.ActivityGradeUpdateManyWithoutActivityNestedInput
 }
 
@@ -632,6 +743,9 @@ export type ActivityUncheckedUpdateWithoutCourseInput = {
   gradingType?: Prisma.EnumGradingTypeFieldUpdateOperationsInput | $Enums.GradingType
   minValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   maxValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  type?: Prisma.EnumActivityTypeFieldUpdateOperationsInput | $Enums.ActivityType
+  weight?: Prisma.FloatFieldUpdateOperationsInput | number
+  dueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   activityGrades?: Prisma.ActivityGradeUncheckedUpdateManyWithoutActivityNestedInput
 }
 
@@ -642,6 +756,9 @@ export type ActivityUncheckedUpdateManyWithoutCourseInput = {
   gradingType?: Prisma.EnumGradingTypeFieldUpdateOperationsInput | $Enums.GradingType
   minValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   maxValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  type?: Prisma.EnumActivityTypeFieldUpdateOperationsInput | $Enums.ActivityType
+  weight?: Prisma.FloatFieldUpdateOperationsInput | number
+  dueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 
@@ -683,6 +800,9 @@ export type ActivitySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   gradingType?: boolean
   minValue?: boolean
   maxValue?: boolean
+  type?: boolean
+  weight?: boolean
+  dueDate?: boolean
   course?: boolean | Prisma.CourseDefaultArgs<ExtArgs>
   activityGrades?: boolean | Prisma.Activity$activityGradesArgs<ExtArgs>
   _count?: boolean | Prisma.ActivityCountOutputTypeDefaultArgs<ExtArgs>
@@ -696,6 +816,9 @@ export type ActivitySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   gradingType?: boolean
   minValue?: boolean
   maxValue?: boolean
+  type?: boolean
+  weight?: boolean
+  dueDate?: boolean
   course?: boolean | Prisma.CourseDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["activity"]>
 
@@ -707,6 +830,9 @@ export type ActivitySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   gradingType?: boolean
   minValue?: boolean
   maxValue?: boolean
+  type?: boolean
+  weight?: boolean
+  dueDate?: boolean
   course?: boolean | Prisma.CourseDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["activity"]>
 
@@ -718,9 +844,12 @@ export type ActivitySelectScalar = {
   gradingType?: boolean
   minValue?: boolean
   maxValue?: boolean
+  type?: boolean
+  weight?: boolean
+  dueDate?: boolean
 }
 
-export type ActivityOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "courseId" | "title" | "gradingType" | "minValue" | "maxValue", ExtArgs["result"]["activity"]>
+export type ActivityOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "courseId" | "title" | "gradingType" | "minValue" | "maxValue" | "type" | "weight" | "dueDate", ExtArgs["result"]["activity"]>
 export type ActivityInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   course?: boolean | Prisma.CourseDefaultArgs<ExtArgs>
   activityGrades?: boolean | Prisma.Activity$activityGradesArgs<ExtArgs>
@@ -747,6 +876,9 @@ export type $ActivityPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     gradingType: $Enums.GradingType
     minValue: number | null
     maxValue: number | null
+    type: $Enums.ActivityType
+    weight: number
+    dueDate: Date | null
   }, ExtArgs["result"]["activity"]>
   composites: {}
 }
@@ -1179,6 +1311,9 @@ export interface ActivityFieldRefs {
   readonly gradingType: Prisma.FieldRef<"Activity", 'GradingType'>
   readonly minValue: Prisma.FieldRef<"Activity", 'Float'>
   readonly maxValue: Prisma.FieldRef<"Activity", 'Float'>
+  readonly type: Prisma.FieldRef<"Activity", 'ActivityType'>
+  readonly weight: Prisma.FieldRef<"Activity", 'Float'>
+  readonly dueDate: Prisma.FieldRef<"Activity", 'DateTime'>
 }
     
 

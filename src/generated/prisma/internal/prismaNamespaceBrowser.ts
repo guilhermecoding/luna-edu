@@ -66,6 +66,9 @@ export const ModelName = {
   Attendance: 'Attendance',
   Activity: 'Activity',
   ActivityGrade: 'ActivityGrade',
+  FinalGrade: 'FinalGrade',
+  StudentCourseStats: 'StudentCourseStats',
+  Notification: 'Notification',
   CourseAssistant: 'CourseAssistant'
 } as const
 
@@ -156,7 +159,8 @@ export const ProgramScalarFieldEnum = {
   id: 'id',
   createdAt: 'createdAt',
   name: 'name',
-  description: 'description'
+  description: 'description',
+  slug: 'slug'
 } as const
 
 export type ProgramScalarFieldEnum = (typeof ProgramScalarFieldEnum)[keyof typeof ProgramScalarFieldEnum]
@@ -263,7 +267,10 @@ export const ActivityScalarFieldEnum = {
   title: 'title',
   gradingType: 'gradingType',
   minValue: 'minValue',
-  maxValue: 'maxValue'
+  maxValue: 'maxValue',
+  type: 'type',
+  weight: 'weight',
+  dueDate: 'dueDate'
 } as const
 
 export type ActivityScalarFieldEnum = (typeof ActivityScalarFieldEnum)[keyof typeof ActivityScalarFieldEnum]
@@ -279,6 +286,47 @@ export const ActivityGradeScalarFieldEnum = {
 } as const
 
 export type ActivityGradeScalarFieldEnum = (typeof ActivityGradeScalarFieldEnum)[keyof typeof ActivityGradeScalarFieldEnum]
+
+
+export const FinalGradeScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  courseId: 'courseId',
+  studentId: 'studentId',
+  average: 'average',
+  concept: 'concept',
+  isApproved: 'isApproved'
+} as const
+
+export type FinalGradeScalarFieldEnum = (typeof FinalGradeScalarFieldEnum)[keyof typeof FinalGradeScalarFieldEnum]
+
+
+export const StudentCourseStatsScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  courseId: 'courseId',
+  studentId: 'studentId',
+  attendanceRate: 'attendanceRate',
+  averageGrade: 'averageGrade',
+  totalLessons: 'totalLessons',
+  presentCount: 'presentCount'
+} as const
+
+export type StudentCourseStatsScalarFieldEnum = (typeof StudentCourseStatsScalarFieldEnum)[keyof typeof StudentCourseStatsScalarFieldEnum]
+
+
+export const NotificationScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  title: 'title',
+  message: 'message',
+  type: 'type',
+  userId: 'userId',
+  studentId: 'studentId',
+  isRead: 'isRead'
+} as const
+
+export type NotificationScalarFieldEnum = (typeof NotificationScalarFieldEnum)[keyof typeof NotificationScalarFieldEnum]
 
 
 export const CourseAssistantScalarFieldEnum = {

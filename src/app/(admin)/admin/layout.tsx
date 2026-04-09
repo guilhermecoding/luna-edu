@@ -1,15 +1,14 @@
 import { AppSidebar } from "@/components/app-sidebar";
 import { Separator } from "@/components/ui/separator";
 import {
-    SidebarInset,
-    SidebarProvider,
-    SidebarTrigger,
+    SidebarInset, SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { SideBarContentMenus } from "../../../components/sidebar-content";
 import { NavUser } from "@/app/(admin)/admin/_components/nav-user-admin";
 import { adminMenus } from "@/config/admin-menus";
 import { Suspense } from "react";
-import { SidebarHeaderAdmin, SidebarHeaderAdminSkeleton } from "./_components/sidebar-header-admin";
+import { SidebarHeaderAdmin } from "./_components/sidebar-admin/sidebar-header-admin";
+import { SidebarHeaderAdminSkeleton } from "./_components/sidebar-admin/sidebar-skeletons";
 
 const user = {
     name: "shadcn",
@@ -23,7 +22,7 @@ export default function AdminLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <SidebarProvider>
+        <>
             <AppSidebar
                 sideBarHeader={
                     <Suspense fallback={<SidebarHeaderAdminSkeleton />}>
@@ -44,9 +43,8 @@ export default function AdminLayout({
                         <span>Administrador</span>
                     </div>
                 </header>
-                <SidebarHeaderAdminSkeleton />
                 {children}
             </SidebarInset>
-        </SidebarProvider>
+        </>
     );
 }

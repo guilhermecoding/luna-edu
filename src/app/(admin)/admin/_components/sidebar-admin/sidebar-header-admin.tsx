@@ -3,7 +3,7 @@ import { getPrograms } from "@/services/programs.service";
 
 
 export async function SidebarHeaderAdmin() {
-    await new Promise(resolve => setTimeout(resolve, 5000));
+    // await new Promise(resolve => setTimeout(resolve, 5000));
     const programs = await getPrograms();
     return <SidebarHeaderAdminContent programs={programs} />;
 }

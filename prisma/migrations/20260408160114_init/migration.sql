@@ -1,25 +1,81 @@
+-- CreateSchema
+CREATE SCHEMA IF NOT EXISTS "auth";
+
+-- CreateEnum
+CREATE TYPE "auth"."system_role" AS ENUM ('FULL_ACCESS', 'READ_ONLY');
+
 -- CreateEnum
 CREATE TYPE "grading_type" AS ENUM ('NONE', 'POINTS', 'HITS');
 
 -- CreateEnum
 CREATE TYPE "shift" AS ENUM ('MORNING', 'AFTERNOON', 'EVENING');
 
--- AlterTable
-ALTER TABLE "auth"."account" ALTER COLUMN "created_at" SET DATA TYPE TIMESTAMPTZ,
-ALTER COLUMN "updated_at" SET DATA TYPE TIMESTAMPTZ;
+-- CreateTable
+CREATE TABLE "auth"."user" (
+    "id" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "email" TEXT NOT NULL,
+    "email_verified" BOOLEAN NOT NULL DEFAULT false,
+    "image" TEXT,
+    "created_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMPTZ NOT NULL,
+    "cpf" TEXT NOT NULL,
+    "phone" TEXT NOT NULL,
+    "birth_date" DATE NOT NULL,
+    "bio" TEXT,
+    "system_role" "auth"."system_role" NOT NULL DEFAULT 'FULL_ACCESS',
+    "is_admin" BOOLEAN NOT NULL DEFAULT false,
+    "is_teacher" BOOLEAN NOT NULL DEFAULT false,
+    "is_active" BOOLEAN NOT NULL DEFAULT true,
 
--- AlterTable
-ALTER TABLE "auth"."session" ALTER COLUMN "created_at" SET DATA TYPE TIMESTAMPTZ,
-ALTER COLUMN "updated_at" SET DATA TYPE TIMESTAMPTZ;
+    CONSTRAINT "user_pkey" PRIMARY KEY ("id")
+);
 
--- AlterTable
-ALTER TABLE "auth"."user" ALTER COLUMN "created_at" SET DATA TYPE TIMESTAMPTZ,
-ALTER COLUMN "updated_at" SET DATA TYPE TIMESTAMPTZ,
-ALTER COLUMN "birth_date" SET DATA TYPE DATE;
+-- CreateTable
+CREATE TABLE "auth"."session" (
+    "id" TEXT NOT NULL,
+    "expires_at" TIMESTAMP(3) NOT NULL,
+    "token" TEXT NOT NULL,
+    "created_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMPTZ NOT NULL,
+    "ip_address" TEXT,
+    "user_agent" TEXT,
+    "user_id" TEXT NOT NULL,
 
--- AlterTable
-ALTER TABLE "auth"."verification" ALTER COLUMN "created_at" SET DATA TYPE TIMESTAMPTZ,
-ALTER COLUMN "updated_at" SET DATA TYPE TIMESTAMPTZ;
+    CONSTRAINT "session_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "auth"."account" (
+    "id" TEXT NOT NULL,
+    "account_id" TEXT NOT NULL,
+    "provider_id" TEXT NOT NULL,
+    "provider_type" TEXT NOT NULL,
+    "user_id" TEXT NOT NULL,
+    "access_token" TEXT,
+    "refresh_token" TEXT,
+    "id_token" TEXT,
+    "access_token_expires_at" TIMESTAMP(3),
+    "refresh_token_expires_at" TIMESTAMP(3),
+    "scope" TEXT,
+    "password" TEXT,
+    "created_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMPTZ NOT NULL,
+
+    CONSTRAINT "account_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "auth"."verification" (
+    "id" TEXT NOT NULL,
+    "identifier" TEXT NOT NULL,
+    "value" TEXT NOT NULL,
+    "expires_at" TIMESTAMP(3) NOT NULL,
+    "created_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMPTZ NOT NULL,
+
+    CONSTRAINT "verification_pkey" PRIMARY KEY ("id")
+);
 
 -- CreateTable
 CREATE TABLE "programs" (
@@ -53,7 +109,7 @@ CREATE TABLE "rooms" (
 );
 
 -- CreateTable
-CREATE TABLE "terms" (
+CREATE TABLE "periods" (
     "id" UUID NOT NULL,
     "created_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "name" TEXT NOT NULL,
@@ -61,7 +117,7 @@ CREATE TABLE "terms" (
     "end_date" DATE NOT NULL,
     "id_program" UUID NOT NULL,
 
-    CONSTRAINT "terms_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "periods_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -70,7 +126,7 @@ CREATE TABLE "courses" (
     "created_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "name" TEXT NOT NULL,
     "code" UUID,
-    "term_id" UUID NOT NULL,
+    "period_id" UUID NOT NULL,
     "room_id" UUID,
     "shift" "shift" NOT NULL,
 
@@ -161,16 +217,37 @@ CREATE TABLE "course_assistants" (
 );
 
 -- CreateIndex
+CREATE UNIQUE INDEX "user_email_cpf_key" ON "auth"."user"("email", "cpf");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "session_token_key" ON "auth"."session"("token");
+
+-- CreateIndex
+CREATE INDEX "session_user_id_idx" ON "auth"."session"("user_id");
+
+-- CreateIndex
+CREATE INDEX "account_user_id_idx" ON "auth"."account"("user_id");
+
+-- CreateIndex
+CREATE INDEX "verification_identifier_idx" ON "auth"."verification"("identifier");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "courses_code_key" ON "courses"("code");
+
+-- AddForeignKey
+ALTER TABLE "auth"."session" ADD CONSTRAINT "session_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "auth"."user"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "auth"."account" ADD CONSTRAINT "account_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "auth"."user"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "rooms" ADD CONSTRAINT "rooms_campus_id_fkey" FOREIGN KEY ("campus_id") REFERENCES "campuses"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "terms" ADD CONSTRAINT "terms_id_program_fkey" FOREIGN KEY ("id_program") REFERENCES "programs"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "periods" ADD CONSTRAINT "periods_id_program_fkey" FOREIGN KEY ("id_program") REFERENCES "programs"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "courses" ADD CONSTRAINT "courses_term_id_fkey" FOREIGN KEY ("term_id") REFERENCES "terms"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "courses" ADD CONSTRAINT "courses_period_id_fkey" FOREIGN KEY ("period_id") REFERENCES "periods"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "courses" ADD CONSTRAINT "courses_room_id_fkey" FOREIGN KEY ("room_id") REFERENCES "rooms"("id") ON DELETE SET NULL ON UPDATE CASCADE;

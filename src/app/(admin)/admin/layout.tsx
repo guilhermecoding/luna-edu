@@ -6,22 +6,10 @@ import {
     SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { SideBarContentMenus } from "../../../components/sidebar-content";
-import SidebarHeaderAdmin from "./_components/sidebar-header-admin";
-import { ProgramSwitch } from "@/@types/programs-switch.type";
 import { NavUser } from "@/app/(admin)/admin/_components/nav-user-admin";
 import { adminMenus } from "@/config/admin-menus";
-
-const programs: ProgramSwitch[] = [
-    {
-        name: "Uberhub Code",
-    },
-    {
-        name: "Tech Kids",
-    },
-    {
-        name: "CPP IME  ",
-    },
-];
+import { Suspense } from "react";
+import { SidebarHeaderAdmin, SidebarHeaderAdminSkeleton } from "./_components/sidebar-header-admin";
 
 const user = {
     name: "shadcn",
@@ -37,7 +25,11 @@ export default function AdminLayout({
     return (
         <SidebarProvider>
             <AppSidebar
-                sideBarHeader={<SidebarHeaderAdmin programs={programs} />}
+                sideBarHeader={
+                    <Suspense fallback={<SidebarHeaderAdminSkeleton />}>
+                        <SidebarHeaderAdmin />
+                    </Suspense>
+                }
                 sideBarContent={<SideBarContentMenus menus={adminMenus} />}
                 sideBarFooter={<NavUser user={user} />}
             />
@@ -52,6 +44,7 @@ export default function AdminLayout({
                         <span>Administrador</span>
                     </div>
                 </header>
+                <SidebarHeaderAdminSkeleton />
                 {children}
             </SidebarInset>
         </SidebarProvider>

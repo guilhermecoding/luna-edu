@@ -126,9 +126,11 @@ model Program {
   createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz
   name        String
   description String?
+  slug        String
 
   periods Period[]
 
+  @@unique([slug])
   @@map("programs")
   @@schema("public")
 }

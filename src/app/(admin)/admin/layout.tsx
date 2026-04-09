@@ -37,9 +37,9 @@ export default function AdminLayout({
                         <SidebarTrigger className="-ml-1" />
                         <Separator
                             orientation="vertical"
-                            className="mr-2 mt-2 data-[orientation=vertical]:h-4"
+                            className="mr-2 mt-5 data-[orientation=vertical]:h-4"
                         />
-                        <span>Administrador</span>
+                        <span>Bom dia, <strong>Lucas</strong>!</span>
                     </div>
                 </header>
                 {children}

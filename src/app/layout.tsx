@@ -35,7 +35,7 @@ export default function RootLayout({
   return (
     <html
       lang="pt-BR"
-      className={cn("h-full", "antialiased", poppins.variable, silkscreen.variable)}
+      className={cn("h-full", "dark", "antialiased", poppins.variable, silkscreen.variable)}
     >
       <body>
         <Providers>

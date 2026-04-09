@@ -3,12 +3,11 @@ import { Separator } from "@/components/ui/separator";
 import {
     SidebarInset, SidebarTrigger,
 } from "@/components/ui/sidebar";
-import { SideBarContentMenus } from "../../../components/sidebar-content";
-import { NavUser } from "@/app/(admin)/admin/_components/nav-user-admin";
 import { adminMenus } from "@/config/admin-menus";
 import { Suspense } from "react";
 import { SidebarHeaderAdmin } from "./_components/sidebar-admin/sidebar-header-admin";
 import { SidebarHeaderAdminSkeleton } from "./_components/sidebar-admin/sidebar-skeletons";
+import { AdminSidebarContent, AdminSidebarFooter } from "./_components/admin-sidebar-client";
 
 const user = {
     name: "shadcn",
@@ -29,8 +28,8 @@ export default function AdminLayout({
                         <SidebarHeaderAdmin />
                     </Suspense>
                 }
-                sideBarContent={<SideBarContentMenus menus={adminMenus} />}
-                sideBarFooter={<NavUser user={user} />}
+                sideBarContent={<AdminSidebarContent menus={adminMenus} />}
+                sideBarFooter={<AdminSidebarFooter />}
             />
             <SidebarInset>
                 <header className="flex h-16 shrink-0 items-center gap-2">

@@ -1,5 +1,4 @@
-// src/middleware.ts
-import { getPrograms } from "@/services/programs.service";
+import { getPrograms } from "@/services/programs/programs.service";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 

@@ -1,5 +1,5 @@
 import { SidebarHeaderAdminContent } from "./sidebar-header-admin-content";
-import { getPrograms } from "@/services/programs.service";
+import { getPrograms } from "@/services/programs/programs.service";
 
 
 export async function SidebarHeaderAdmin() {

@@ -1,17 +1,18 @@
 "use server";
 
-import { createProgram } from "@/services/programs/programs.service";
-import { ZodError } from "zod";
-import { createProgramSchema, type CreateProgramInput } from "./schema";
 import { revalidatePath, revalidateTag } from "next/cache";
+import { ZodError } from "zod";
+import { updateProgram } from "@/services/programs/programs.service";
+import { editProgramSchema, type EditProgramInput } from "./schema";
 
-export async function createProgramAction(data: CreateProgramInput) {
+export async function editProgramAction(slug: string, data: EditProgramInput) {
     try {
-        const validatedData = createProgramSchema.parse(data);
-        const program = await createProgram(validatedData);
+        const validatedData = editProgramSchema.parse(data);
+        const program = await updateProgram(slug, validatedData);
 
         revalidateTag("programs", "weeks");
         revalidatePath("/admin/programas");
+        revalidatePath(`/admin/programas/${slug}/editar`);
 
         return { success: true, data: program };
     } catch (error) {
@@ -31,7 +32,7 @@ export async function createProgramAction(data: CreateProgramInput) {
 
         return {
             success: false,
-            error: "Erro ao criar programa",
+            error: "Erro ao atualizar programa",
         };
     }
 }

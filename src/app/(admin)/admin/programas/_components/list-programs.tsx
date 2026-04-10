@@ -1,7 +1,7 @@
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Program } from "@/generated/prisma/client";
-import { getPrograms } from "@/services/programs.service";
+import { getPrograms } from "@/services/programs/programs.service";
 import { IconExternalLinkFilled, IconPencilFilled } from "@tabler/icons-react";
 import Link from "next/link";
 import { Suspense } from "react";
@@ -46,7 +46,7 @@ function ProgramItem({
             </div>
             <Separator className="my-1" />
             <div className="flex flex-row justify-between items-center px-4 shrink-0">
-                <Link href={`/admin/${programa.slug}/editar`} className="flex items-center gap-1 text-sm text-muted-foreground hover:text-primary">
+                <Link href={`/admin/programas/${programa.slug}/editar`} className="flex items-center gap-1 text-sm text-muted-foreground hover:text-primary">
                     <IconPencilFilled className="size-3.5" />
                     <span>Editar</span>
                 </Link>

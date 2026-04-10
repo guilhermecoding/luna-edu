@@ -32,10 +32,12 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const darkModeDev = process.env.NEXT_PRUBLIC_DARK_MODE_DEV; // Testa o modo escuro em desenvolvimento
+
   return (
     <html
       lang="pt-BR"
-      className={cn("h-full", "antialiased", poppins.variable, silkscreen.variable)}
+      className={cn("h-full", "antialiased", poppins.variable, silkscreen.variable, darkModeDev && "dark")}
     >
       <body>
         <Providers>

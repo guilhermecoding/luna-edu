@@ -3,6 +3,7 @@ import Section from "@/components/section";
 import TitlePage from "@/components/title-page";
 import { Button } from "@/components/ui/button";
 import { IconCirclePlusFilled } from "@tabler/icons-react";
+import ListPrograms from "./_components/list-programs";
 
 export default function ProgramsPage() {
     return (
@@ -22,6 +23,10 @@ export default function ProgramsPage() {
                         </Button>
                     </div>
                 </div>
+            </Section>
+
+            <Section className="mt-18">
+                <ListPrograms />
             </Section>
         </Page>
     );

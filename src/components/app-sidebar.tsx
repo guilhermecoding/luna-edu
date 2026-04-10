@@ -21,7 +21,7 @@ export function AppSidebar({ sideBarHeader, sideBarContent, sideBarFooter, ...pr
     return (
         <Sidebar variant="inset" {...props}>
             <SidebarHeader>
-                <Link href="/" className="flex justify-center items-center gap-2">
+                <Link href="/" className="flex justify-center items-center gap-2 my-4">
                     <Image
                         src="/gibby-normal-icon.svg"
                         alt="Logo"

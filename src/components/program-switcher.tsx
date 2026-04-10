@@ -39,7 +39,7 @@ export function ProgramSwitcher({
 }: {
     programs: Pick<Program, "name" | "slug">[]
 }) {
-    const { isMobile } = useSidebar();
+    const { isMobile, setOpenMobile } = useSidebar();
     const pathname = usePathname();
     const [activeProgram, setActiveProgram] = React.useState(programs[0]);
 
@@ -125,6 +125,9 @@ export function ProgramSwitcher({
                                 onClick={() => {
                                     setActiveProgram(program);
                                     persistActiveProgram(program.slug);
+                                    if (isMobile) {
+                                        setOpenMobile(false);
+                                    }
                                 }}
                                 className="gap-2 p-2"
                             >
@@ -139,7 +142,14 @@ export function ProgramSwitcher({
                             </DropdownMenuItem>
                         ))}
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem className="gap-2 p-2">
+                        <DropdownMenuItem
+                            className="gap-2 p-2"
+                            onClick={() => {
+                                if (isMobile) {
+                                    setOpenMobile(false);
+                                }
+                            }}
+                        >
                             <div className="flex size-6 items-center justify-center rounded-md border bg-transparent">
                                 <IconPlus className="size-4" />
                             </div>

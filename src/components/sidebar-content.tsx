@@ -3,7 +3,7 @@
 import { ItemMenuSidebarAdmin } from "@/@types/item-menu-sidebar.type";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { SidebarGroup, SidebarGroupLabel, SidebarMenu, SidebarMenuAction, SidebarMenuButton, SidebarMenuItem, SidebarMenuSub, SidebarMenuSubButton, SidebarMenuSubItem } from "@/components/ui/sidebar";
-import { IconChevronRightFilled, IconHome, IconUsers, IconBook, IconCalendar, IconSettings, IconChartArcs, IconFileText } from "@tabler/icons-react";
+import { IconChevronRightFilled, IconHome, IconUsers, IconBook, IconCalendar, IconSettings, IconChartArcs, IconFileText, IconBackpack } from "@tabler/icons-react";
 
 const iconMap: Record<string, React.ReactNode> = {
     home: <IconHome size={20} />,
@@ -13,6 +13,7 @@ const iconMap: Record<string, React.ReactNode> = {
     settings: <IconSettings size={20} />,
     "chart-arcs": <IconChartArcs size={20} />,
     "file-text": <IconFileText size={20} />,
+    "backpack": <IconBackpack size={20} />,
 };
 
 function getIcon(iconName: string): React.ReactNode {

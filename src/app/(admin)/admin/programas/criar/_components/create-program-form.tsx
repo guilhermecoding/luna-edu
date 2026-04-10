@@ -8,6 +8,7 @@ import { useForm, useWatch, type SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import z from "zod";
 import { toast } from "sonner";
+import { useEffect } from "react";
 import { createProgramAction } from "../actions";
 import { createProgramSchema } from "../schema";
 import { IconLoader2 } from "@tabler/icons-react";
@@ -46,6 +47,7 @@ export function CreateProgramForm() {
 
     const {
         register,
+        reset,
         formState: { errors, isSubmitting, isValid },
         setValue,
         setError,
@@ -56,6 +58,16 @@ export function CreateProgramForm() {
     const nameValue = useWatch({ control, name: "name" });
     const slugValue = useWatch({ control, name: "slug" });
     const canSubmit = isValid && Boolean(nameValue?.trim()) && Boolean(slugValue?.trim()) && !isSubmitting;
+
+    useEffect(() => {
+        return () => {
+            reset({
+                name: "",
+                slug: "",
+                description: "",
+            });
+        };
+    }, [reset]);
 
     const onSubmit: SubmitHandler<FormOutput> = async (data: FormOutput) => {
         clearErrors("root");

@@ -17,6 +17,7 @@ import { useForm, useWatch, type SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import z from "zod";
 import { useState } from "react";
+import { useEffect } from "react";
 import { deleteProgramAction, editProgramAction } from "../actions";
 import { editProgramSchema } from "../schema";
 import { IconAlertTriangle, IconLoader2 } from "@tabler/icons-react";
@@ -52,6 +53,7 @@ export function EditProgramForm({ slug, name, description }: EditProgramFormProp
     const {
         register,
         control,
+        reset,
         formState: { errors, isSubmitting, isValid },
         setError,
         clearErrors,
@@ -60,6 +62,15 @@ export function EditProgramForm({ slug, name, description }: EditProgramFormProp
     const nameValue = useWatch({ control, name: "name" });
     const canSubmit = isValid && Boolean(nameValue?.trim()) && !isSubmitting;
     const canDelete = deleteConfirmationName === name && !isDeleting;
+
+    useEffect(() => {
+        return () => {
+            reset({
+                name,
+                description,
+            });
+        };
+    }, [description, name, reset]);
 
     const onSubmit: SubmitHandler<FormOutput> = async (data) => {
         clearErrors("root");

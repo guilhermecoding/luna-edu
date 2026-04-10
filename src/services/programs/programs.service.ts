@@ -110,3 +110,28 @@ export async function updateProgram(
         throw error;
     }
 }
+
+/**
+ * Remove um programa pelo slug.
+ *
+ * @param slug Slug do programa a ser removido.
+ * @returns Programa removido.
+ * @throws Error Quando o programa não for encontrado.
+ */
+export async function deleteProgram(slug: string): Promise<Program> {
+    try {
+        const program = await prisma.program.delete({
+            where: {
+                slug,
+            },
+        });
+
+        return program;
+    } catch (error) {
+        if (error instanceof Error && error.message.includes("Record to delete does not exist")) {
+            throw new Error("Programa não encontrado");
+        }
+
+        throw error;
+    }
+}

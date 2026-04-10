@@ -41,7 +41,7 @@ async function EditProgramPageContent({ params }: Omit<PageProps<"/admin/program
 // @COMPONENTE PRINCIPAL
 export default function EditProgramPage({ params }: PageProps<"/admin/programas/[slug]/editar">) {
     return (
-        <Suspense fallback={<SkeletonForm />}>
+        <Suspense fallback={<Section><SkeletonForm /></Section>}>
             <EditProgramPageContent params={params} />
         </Suspense>
     );

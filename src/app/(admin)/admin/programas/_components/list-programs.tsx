@@ -1,7 +1,8 @@
+import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Program } from "@/generated/prisma/client";
 import { getPrograms } from "@/services/programs.service";
-import { IconChevronRight } from "@tabler/icons-react";
+import { IconChevronRight, IconDots, IconExternalLinkFilled, IconPencilFilled } from "@tabler/icons-react";
 import Link from "next/link";
 import { Suspense } from "react";
 
@@ -32,9 +33,8 @@ function ProgramItem({
     programas: Program;
 }) {
     return (
-        <Link
-            href={`/admin/${programas.slug}/periodos`}
-            className="flex flex-row border border-muted-foreground/40 cursor-pointer p-4 rounded-4xl gap-2 w-full hover:bg-muted transition-colors sm:w-64"
+        <div
+            className="flex flex-col border border-muted-foreground/40 p-4 rounded-4xl gap-2 w-full hover:bg-muted transition-colors sm:w-64"
         >
             <div className="flex-1 min-w-0">
                 <h1 className="font-bold truncate">
@@ -44,10 +44,19 @@ function ProgramItem({
                     {programas.slug}
                 </p>
             </div>
-            <div className="flex items-center shrink-0">
-                <IconChevronRight className="size-8" />
+            <Separator className="my-1" />
+            <div className="flex flex-row justify-between items-center px-4 shrink-0">
+                <Link href={`/admin/${programas.slug}/editar`} className="flex items-center gap-1 text-sm text-muted-foreground hover:text-primary">
+                    <IconPencilFilled className="size-3.5" />
+                    <span>Editar</span>
+                </Link>
+                <Separator orientation="vertical" />
+                <Link href={`/admin/${programas.slug}/periodos`} className="flex items-center gap-1 text-sm text-muted-foreground hover:text-primary">
+                    <IconExternalLinkFilled className="size-3.5" />
+                    <span>Acessar</span>
+                </Link>
             </div>
-        </Link>
+        </div>
     );
 }
 

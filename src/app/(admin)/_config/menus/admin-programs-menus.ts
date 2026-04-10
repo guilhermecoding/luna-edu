@@ -6,9 +6,14 @@ export const programMenus: ItemMenuSidebarAdmin[] = [
         items: [
             {
                 title: "Programas",
-                url: "/admin",
+                url: "/admin/programas",
                 icon: "backpack",
-                isActive: true,
+                items: [
+                    {
+                        title: "Criar Programa",
+                        url: "/admin/programas/criar",
+                    },
+                ],
             },
         ],
     },

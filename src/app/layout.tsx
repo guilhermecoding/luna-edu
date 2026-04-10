@@ -5,45 +5,50 @@ import { cn } from "@/lib/utils";
 import Providers from "@/provider/providers";
 
 const poppins = Poppins({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-poppins",
+    subsets: ["latin"],
+    weight: ["400", "500", "600", "700"],
+    variable: "--font-poppins",
 });
 
 const silkscreen = Silkscreen({
-  subsets: ["latin"],
-  weight: ["400"],
-  variable: "--font-silkscreen",
+    subsets: ["latin"],
+    weight: ["400"],
+    variable: "--font-silkscreen",
 });
 
 export const viewport: Viewport = {
-  width: "device-width",
-  initialScale: 1,
-  maximumScale: 1,
+    width: "device-width",
+    initialScale: 1,
+    maximumScale: 1,
 };
 
+const APP_NAME = "LUNA";
+
 export const metadata: Metadata = {
-  title: "LUNA - Sistema de Gestão Educacional e Acompanhamento de Alunos",
-  description: "Gerencie, acompanhe e otimize o desempenho dos seus alunos com o Luna, a plataforma de gestão educacional definitiva.",
+    title: {
+        template: `%s | ${APP_NAME}`,
+        default: `${APP_NAME} - Plataforma de Gestão Educacional`,
+    },
+    description: "Gerencie, acompanhe e otimize o desempenho dos seus alunos com o Luna, a plataforma de gestão educacional definitiva.",
 };
 
 export default function RootLayout({
-  children,
+    children,
 }: Readonly<{
-  children: React.ReactNode;
+    children: React.ReactNode;
 }>) {
-  const darkModeDev = process.env.NEXT_PUBLIC_DARK_MODE_DEV; // Testa o modo escuro em desenvolvimento
+    const darkModeDev = process.env.NEXT_PUBLIC_DARK_MODE_DEV; // Testa o modo escuro em desenvolvimento
 
-  return (
-    <html
-      lang="pt-BR"
-      className={cn("h-full", "antialiased", poppins.variable, silkscreen.variable, darkModeDev === "true" ? "dark" : "")}
-    >
-      <body>
-        <Providers>
-          {children}
-        </Providers>
-      </body>
-    </html>
-  );
+    return (
+        <html
+            lang="pt-BR"
+            className={cn("h-full", "antialiased", poppins.variable, silkscreen.variable, darkModeDev === "true" ? "dark" : "")}
+        >
+            <body>
+                <Providers>
+                    {children}
+                </Providers>
+            </body>
+        </html>
+    );
 }

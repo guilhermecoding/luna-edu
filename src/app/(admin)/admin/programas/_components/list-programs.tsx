@@ -32,15 +32,15 @@ function ProgramItem({
 }) {
     return (
         <div className="flex flex-row border border-muted-foreground/40 cursor-pointer p-4 rounded-4xl gap-2 w-full hover:bg-muted transition-colors sm:w-64">
-            <div className="w-full">
-                <h1 className="font-bold">
+            <div className="flex-1 min-w-0">
+                <h1 className="font-bold truncate">
                     {programas.name}
                 </h1>
-                <p className="text-sm text-muted-foreground">
+                <p className="text-sm text-muted-foreground truncate">
                     {programas.slug}
                 </p>
             </div>
-            <div className="flex items-center">
+            <div className="flex items-center shrink-0">
                 <IconChevronRight className="size-8" />
             </div>
         </div>

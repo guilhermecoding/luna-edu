@@ -2,7 +2,7 @@ import BaseForm from "@/components/base-form";
 import Page from "@/components/page";
 import Section from "@/components/section";
 import { Metadata } from "next";
-import { CreateProgramForm } from "./_components/form";
+import { CreateProgramForm } from "./_components/create-program-form";
 
 export const metadata: Metadata = {
     title: "Criar Programa",

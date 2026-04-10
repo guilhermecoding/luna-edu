@@ -4,7 +4,7 @@ import Section from "@/components/section";
 import { getProgramBySlug } from "@/services/programs/programs.service";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { EditProgramForm } from "./_components/form";
+import { EditProgramForm } from "./_components/edit-program-form";
 import SkeletonForm from "./_components/skeleton-form";
 import { Suspense } from "react";
 

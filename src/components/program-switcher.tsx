@@ -19,6 +19,20 @@ import {
 } from "@/components/ui/sidebar";
 import Link from "next/link";
 import { Program } from "@/generated/prisma/client";
+import { usePathname } from "next/navigation";
+
+const ACTIVE_PROGRAM_STORAGE_KEY = "active_program_slug";
+const ACTIVE_PROGRAM_COOKIE_NAME = "active_program_slug";
+const ACTIVE_PROGRAM_COOKIE_MAX_AGE = 60 * 60 * 24 * 365;
+
+function getProgramSlugFromPath(pathname: string) {
+    const [, adminSegment, possibleSlug] = pathname.split("/");
+    if (adminSegment !== "admin" || !possibleSlug || possibleSlug === "programas") {
+        return null;
+    }
+
+    return possibleSlug;
+}
 
 export function ProgramSwitcher({
     programs,
@@ -26,7 +40,49 @@ export function ProgramSwitcher({
     programs: Pick<Program, "name" | "slug">[]
 }) {
     const { isMobile } = useSidebar();
+    const pathname = usePathname();
     const [activeProgram, setActiveProgram] = React.useState(programs[0]);
+
+    const persistActiveProgram = React.useCallback((slug: string) => {
+        if (typeof window === "undefined") {
+            return;
+        }
+
+        localStorage.setItem(ACTIVE_PROGRAM_STORAGE_KEY, slug);
+        document.cookie = `${ACTIVE_PROGRAM_COOKIE_NAME}=${encodeURIComponent(slug)}; path=/; max-age=${ACTIVE_PROGRAM_COOKIE_MAX_AGE}`;
+    }, []);
+
+    React.useEffect(() => {
+        if (!programs.length) {
+            return;
+        }
+
+        const slugFromPath = getProgramSlugFromPath(pathname);
+        const programFromPath = slugFromPath
+            ? programs.find((program) => program.slug === slugFromPath)
+            : undefined;
+
+        if (programFromPath) {
+            setActiveProgram(programFromPath);
+            persistActiveProgram(programFromPath.slug);
+            return;
+        }
+
+        const storedSlug = typeof window === "undefined"
+            ? null
+            : localStorage.getItem(ACTIVE_PROGRAM_STORAGE_KEY);
+        const storedProgram = storedSlug
+            ? programs.find((program) => program.slug === storedSlug)
+            : undefined;
+
+        if (storedProgram) {
+            setActiveProgram(storedProgram);
+            return;
+        }
+
+        setActiveProgram(programs[0]);
+        persistActiveProgram(programs[0].slug);
+    }, [pathname, programs, persistActiveProgram]);
 
     if (!activeProgram) {
         return null;
@@ -65,8 +121,11 @@ export function ProgramSwitcher({
                         </DropdownMenuLabel>
                         {programs.map((program) => (
                             <DropdownMenuItem
-                                key={program.name}
-                                onClick={() => setActiveProgram(program)}
+                                key={program.slug}
+                                onClick={() => {
+                                    setActiveProgram(program);
+                                    persistActiveProgram(program.slug);
+                                }}
                                 className="gap-2 p-2"
                             >
                                 <Link href={`/admin/${program.slug}/periodos`} className="flex flex-row gap-2 w-full">

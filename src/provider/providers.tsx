@@ -1,5 +1,6 @@
 "use client";
 
+import { Toaster } from "@/components/ui/sonner";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { TooltipProvider } from "@/components/ui/tooltip";
 
@@ -17,6 +18,7 @@ export default function Providers({
             <TooltipProvider>
                 {children}
             </TooltipProvider>
+            <Toaster richColors position="top-right" />
         </SidebarProvider>
     );
 }

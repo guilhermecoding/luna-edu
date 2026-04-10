@@ -34,7 +34,7 @@ function ProgramItem({
 }) {
     return (
         <div
-            className="flex flex-col border border-muted-foreground/40 p-4 rounded-4xl gap-2 w-full hover:bg-muted transition-colors sm:w-64"
+            className="flex flex-col border border-muted-foreground/40 p-4 rounded-4xl gap-2 w-full bg-muted transition-colors sm:w-64"
         >
             <div className="flex-1 min-w-0">
                 <h1 className="font-bold truncate">

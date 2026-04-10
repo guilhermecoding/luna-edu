@@ -22,6 +22,7 @@ import { editProgramSchema } from "../schema";
 import { IconAlertTriangle, IconLoader2 } from "@tabler/icons-react";
 import Image from "next/image";
 import imgGibbyDuvida from "@/assets/images/logo-gibby-duvida.svg";
+import { toast } from "sonner";
 
 type FormInput = z.input<typeof editProgramSchema>;
 type FormOutput = z.output<typeof editProgramSchema>;
@@ -66,14 +67,17 @@ export function EditProgramForm({ slug, name, description }: EditProgramFormProp
         try {
             const result = await editProgramAction(slug, data);
             if (result.success) {
+                toast.success("Programa atualizado com sucesso.");
                 router.push("/admin/programas");
             } else {
+                toast.error(result.error || "Erro ao atualizar programa");
                 setError("root", {
                     type: "server",
                     message: result.error || "Erro ao atualizar programa",
                 });
             }
         } catch {
+            toast.error("Erro ao atualizar programa");
             setError("root", {
                 type: "server",
                 message: "Erro ao atualizar programa",
@@ -89,12 +93,15 @@ export function EditProgramForm({ slug, name, description }: EditProgramFormProp
             const result = await deleteProgramAction(slug, deleteConfirmationName);
             if (result.success) {
                 setIsDeleteModalOpen(false);
+                toast.success("Programa apagado com sucesso.");
                 router.push("/admin/programas");
                 return;
             }
 
+            toast.error(result.error || "Erro ao apagar programa");
             setDeleteError(result.error || "Erro ao apagar programa");
         } catch {
+            toast.error("Erro ao apagar programa");
             setDeleteError("Erro ao apagar programa");
         } finally {
             setIsDeleting(false);

@@ -17,12 +17,13 @@ import {
     SidebarMenuItem,
     useSidebar,
 } from "@/components/ui/sidebar";
-import { ProgramSwitch } from "@/@types/programs-switch.type";
+import Link from "next/link";
+import { Program } from "@/generated/prisma/client";
 
 export function ProgramSwitcher({
     programs,
 }: {
-    programs: ProgramSwitch[]
+    programs: Pick<Program, "name" | "slug">[]
 }) {
     const { isMobile } = useSidebar();
     const [activeProgram, setActiveProgram] = React.useState(programs[0]);
@@ -71,7 +72,9 @@ export function ProgramSwitcher({
                                 <div className="flex size-6 items-center justify-center rounded-md border">
                                     {program.name.charAt(0)}
                                 </div>
-                                {program.name}
+                                <Link href={`/admin/${program.slug}/periodos`} className="font-medium">
+                                    {program.name}
+                                </Link>
                             </DropdownMenuItem>
                         ))}
                         <DropdownMenuSeparator />
@@ -79,7 +82,9 @@ export function ProgramSwitcher({
                             <div className="flex size-6 items-center justify-center rounded-md border bg-transparent">
                                 <IconPlus className="size-4" />
                             </div>
-                            <div className="font-medium text-muted-foreground">Adicionar programa</div>
+                            <Link href="/admin/programas/criar" className="font-medium text-muted-foreground">
+                                Adicionar programa
+                            </Link>
                         </DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>

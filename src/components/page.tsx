@@ -10,7 +10,7 @@ export default function Page({
     ...props
 }: React.ComponentPropsWithoutRef<"main">) {
     return (
-        <main className={cn("pt-4", className)} {...props}>
+        <main className={cn("pt-4 pb-12", className)} {...props}>
             {children}
         </main>
     );

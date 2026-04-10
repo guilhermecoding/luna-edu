@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import { useForm, useWatch, type SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import z from "zod";
-import { createProgramAction } from "../action";
+import { createProgramAction } from "../actions";
 import { createProgramSchema } from "../schema";
 
 type FormInput = z.input<typeof createProgramSchema>;
@@ -28,7 +28,7 @@ export function CreateProgramForm() {
 
     const {
         register,
-        formState: { errors, isSubmitting },
+        formState: { errors, isSubmitting, isValid },
         setValue,
         setError,
         clearErrors,
@@ -36,6 +36,8 @@ export function CreateProgramForm() {
     } = form;
 
     const nameValue = useWatch({ control, name: "name" });
+    const slugValue = useWatch({ control, name: "slug" });
+    const canSubmit = isValid && Boolean(nameValue?.trim()) && Boolean(slugValue?.trim()) && !isSubmitting;
 
     const onSubmit: SubmitHandler<FormOutput> = async (data: FormOutput) => {
         clearErrors("root");
@@ -121,7 +123,7 @@ export function CreateProgramForm() {
                 {errors.description && <p className="text-sm text-red-600">{errors.description.message}</p>}
             </div>
 
-            <div className="flex gap-3 justify-end pt-4">
+            <div className="flex flex-col-reverse sm:flex-row gap-3 justify-end pt-4">
                 <Button
                     type="button"
                     variant="outline"
@@ -130,7 +132,7 @@ export function CreateProgramForm() {
                 >
                     Cancelar
                 </Button>
-                <Button type="submit" disabled={isSubmitting}>
+                <Button type="submit" disabled={!canSubmit}>
                     {isSubmitting ? "Criando..." : "Criar Programa"}
                 </Button>
             </div>

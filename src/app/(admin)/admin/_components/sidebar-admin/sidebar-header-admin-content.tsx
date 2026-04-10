@@ -1,10 +1,10 @@
 "use client";
 
-import { ProgramSwitch } from "@/@types/programs-switch.type";
 import { ProgramSwitcher } from "@/components/program-switcher";
+import { Program } from "@/generated/prisma/client";
 
 interface SidebarHeaderAdminProps {
-    programs: ProgramSwitch[];
+    programs: Pick<Program, "name" | "slug">[];
 }
 
 export function SidebarHeaderAdminContent({ programs }: SidebarHeaderAdminProps) {

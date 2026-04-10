@@ -2,9 +2,11 @@
 
 import { ItemMenuSidebarAdmin } from "@/@types/item-menu-sidebar.type";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { SheetClose } from "@/components/ui/sheet";
 import { SidebarGroup, SidebarGroupLabel, SidebarMenu, SidebarMenuAction, SidebarMenuButton, SidebarMenuItem, SidebarMenuSub, SidebarMenuSubButton, SidebarMenuSubItem } from "@/components/ui/sidebar";
 import { IconChevronRightFilled, IconHome, IconUsers, IconBook, IconCalendar, IconSettings, IconChartArcs, IconFileText, IconBackpack } from "@tabler/icons-react";
 import Link from "next/link";
+import { useSidebar } from "@/components/ui/sidebar";
 
 const iconMap: Record<string, React.ReactNode> = {
     home: <IconHome size={20} />,
@@ -30,6 +32,8 @@ export function SideBarContentMenus({
 }: {
     menus: ItemMenuSidebarAdmin[]
 }) {
+    const { isMobile } = useSidebar();
+
     return (
         <>
             {menus.map((menu) => (
@@ -42,10 +46,19 @@ export function SideBarContentMenus({
                                 <Collapsible key={item.title} asChild defaultOpen={item.isActive}>
                                     <SidebarMenuItem>
                                         <SidebarMenuButton asChild tooltip={item.title}>
-                                            <Link href={item.url}>
-                                                {getIcon(item.icon)}
-                                                <span>{item.title}</span>
-                                            </Link>
+                                            {isMobile ? (
+                                                <SheetClose asChild>
+                                                    <Link href={item.url}>
+                                                        {getIcon(item.icon)}
+                                                        <span>{item.title}</span>
+                                                    </Link>
+                                                </SheetClose>
+                                            ) : (
+                                                <Link href={item.url}>
+                                                    {getIcon(item.icon)}
+                                                    <span>{item.title}</span>
+                                                </Link>
+                                            )}
                                         </SidebarMenuButton>
                                         {item.items?.length ? (
                                             <>
@@ -60,9 +73,17 @@ export function SideBarContentMenus({
                                                         {item.items?.map((subItem) => (
                                                             <SidebarMenuSubItem key={subItem.title}>
                                                                 <SidebarMenuSubButton asChild>
-                                                                    <Link href={subItem.url}>
-                                                                        <span>{subItem.title}</span>
-                                                                    </Link>
+                                                                    {isMobile ? (
+                                                                        <SheetClose asChild>
+                                                                            <Link href={subItem.url}>
+                                                                                <span>{subItem.title}</span>
+                                                                            </Link>
+                                                                        </SheetClose>
+                                                                    ) : (
+                                                                        <Link href={subItem.url}>
+                                                                            <span>{subItem.title}</span>
+                                                                        </Link>
+                                                                    )}
                                                                 </SidebarMenuSubButton>
                                                             </SidebarMenuSubItem>
                                                         ))}

@@ -2,6 +2,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Program } from "@/generated/prisma/client";
 import { getPrograms } from "@/services/programs.service";
 import { IconChevronRight } from "@tabler/icons-react";
+import Link from "next/link";
 import { Suspense } from "react";
 
 function ListProgramsSkeleton() {
@@ -31,7 +32,10 @@ function ProgramItem({
     programas: Program;
 }) {
     return (
-        <div className="flex flex-row border border-muted-foreground/40 cursor-pointer p-4 rounded-4xl gap-2 w-full hover:bg-muted transition-colors sm:w-64">
+        <Link
+            href={`/admin/${programas.slug}/periodos`}
+            className="flex flex-row border border-muted-foreground/40 cursor-pointer p-4 rounded-4xl gap-2 w-full hover:bg-muted transition-colors sm:w-64"
+        >
             <div className="flex-1 min-w-0">
                 <h1 className="font-bold truncate">
                     {programas.name}
@@ -43,7 +47,7 @@ function ProgramItem({
             <div className="flex items-center shrink-0">
                 <IconChevronRight className="size-8" />
             </div>
-        </div>
+        </Link>
     );
 }
 

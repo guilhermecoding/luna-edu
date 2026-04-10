@@ -2,7 +2,7 @@ import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Program } from "@/generated/prisma/client";
 import { getPrograms } from "@/services/programs.service";
-import { IconChevronRight, IconDots, IconExternalLinkFilled, IconPencilFilled } from "@tabler/icons-react";
+import { IconExternalLinkFilled, IconPencilFilled } from "@tabler/icons-react";
 import Link from "next/link";
 import { Suspense } from "react";
 
@@ -28,9 +28,9 @@ function EmptyList() {
 }
 
 function ProgramItem({
-    programas,
+    programa,
 }: {
-    programas: Program;
+    programa: Program;
 }) {
     return (
         <div
@@ -38,20 +38,20 @@ function ProgramItem({
         >
             <div className="flex-1 min-w-0">
                 <h1 className="font-bold truncate">
-                    {programas.name}
+                    {programa.name}
                 </h1>
                 <p className="text-sm text-muted-foreground truncate">
-                    {programas.slug}
+                    {programa.slug}
                 </p>
             </div>
             <Separator className="my-1" />
             <div className="flex flex-row justify-between items-center px-4 shrink-0">
-                <Link href={`/admin/${programas.slug}/editar`} className="flex items-center gap-1 text-sm text-muted-foreground hover:text-primary">
+                <Link href={`/admin/${programa.slug}/editar`} className="flex items-center gap-1 text-sm text-muted-foreground hover:text-primary">
                     <IconPencilFilled className="size-3.5" />
                     <span>Editar</span>
                 </Link>
                 <Separator orientation="vertical" />
-                <Link href={`/admin/${programas.slug}/periodos`} className="flex items-center gap-1 text-sm text-muted-foreground hover:text-primary">
+                <Link href={`/admin/${programa.slug}/periodos`} className="flex items-center gap-1 text-sm text-muted-foreground hover:text-primary">
                     <IconExternalLinkFilled className="size-3.5" />
                     <span>Acessar</span>
                 </Link>
@@ -74,7 +74,7 @@ export async function ListProgramsContent() {
             </div>
             <div className="flex flex-wrap gap-4">
                 {programs.map((program) => (
-                    <ProgramItem key={program.id} programas={program} />
+                    <ProgramItem key={program.id} programa={program} />
                 ))}
             </div>
         </div>

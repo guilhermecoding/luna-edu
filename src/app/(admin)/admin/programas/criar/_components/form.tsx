@@ -44,7 +44,6 @@ export function CreateProgramForm() {
             const result = await createProgramAction(data);
             if (result.success) {
                 router.push("/admin/programas");
-                router.refresh();
             } else {
                 setError("root", {
                     type: "server",

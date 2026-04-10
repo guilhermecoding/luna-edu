@@ -120,7 +120,11 @@ export function CreateProgramForm() {
                         onClick={() => {
                             const newSlug = autoSlug(nameValue);
                             if (newSlug) {
-                                setValue("slug", newSlug);
+                                setValue("slug", newSlug, {
+                                    shouldDirty: true,
+                                    shouldTouch: true,
+                                    shouldValidate: true,
+                                });
                             }
                         }}
                         disabled={isSubmitting || !nameValue}

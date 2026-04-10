@@ -69,11 +69,13 @@ export function ProgramSwitcher({
                                 onClick={() => setActiveProgram(program)}
                                 className="gap-2 p-2"
                             >
-                                <div className="flex size-6 items-center justify-center rounded-md border">
-                                    {program.name.charAt(0)}
-                                </div>
-                                <Link href={`/admin/${program.slug}/periodos`} className="font-medium w-full">
-                                    {program.name}
+                                <Link href={`/admin/${program.slug}/periodos`} className="flex flex-row gap-2 w-full">
+                                    <div className="flex size-6 shrink-0 items-center justify-center rounded-md border">
+                                        {program.name.charAt(0)}
+                                    </div>
+                                    <div className="font-medium w-full">
+                                        {program.name}
+                                    </div>
                                 </Link>
                             </DropdownMenuItem>
                         ))}

@@ -46,6 +46,15 @@ export const adminMenus: ItemMenuSidebarAdmin[] = [
                     { title: "Novo Curso", url: "/admin/cursos/novo" },
                 ],
             },
+            {
+                title: "Programas",
+                url: "/admin/programas",
+                icon: "backpack",
+                isActive: false,
+                items: [
+                    { title: "Criar Programa", url: "/admin/programas/criar" },
+                ],
+            },
         ],
     },
     {

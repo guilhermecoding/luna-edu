@@ -1,5 +1,3 @@
-import SidebarAdminBase from "./_components/sidebar-admin/sidebar-admin-base";
-import { programMenus } from "../_config/menus/admin-programs-menus";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -15,8 +13,8 @@ export default function AdminLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <SidebarAdminBase menus={programMenus}>
+        <>
             {children}
-        </SidebarAdminBase>
+        </>
     );
 }

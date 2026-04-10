@@ -9,6 +9,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import z from "zod";
 import { createProgramAction } from "../actions";
 import { createProgramSchema } from "../schema";
+import { IconLoader2 } from "@tabler/icons-react";
 
 type FormInput = z.input<typeof createProgramSchema>;
 type FormOutput = z.output<typeof createProgramSchema>;
@@ -148,7 +149,8 @@ export function CreateProgramForm() {
                 >
                     Cancelar
                 </Button>
-                <Button type="submit" disabled={!canSubmit}>
+                <Button className="flex items-center gap-2" type="submit" disabled={!canSubmit}>
+                    {isSubmitting && <IconLoader2 className="size-5 animate-spin" />}
                     {isSubmitting ? "Criando..." : "Criar Programa"}
                 </Button>
             </div>

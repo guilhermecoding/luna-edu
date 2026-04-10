@@ -4,11 +4,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useRouter } from "next/navigation";
-import { useForm, type SubmitHandler } from "react-hook-form";
+import { useForm, useWatch, type SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import z from "zod";
 import { editProgramAction } from "../actions";
 import { editProgramSchema } from "../schema";
+import { IconLoader2 } from "@tabler/icons-react";
 
 type FormInput = z.input<typeof editProgramSchema>;
 type FormOutput = z.output<typeof editProgramSchema>;
@@ -33,13 +34,13 @@ export function EditProgramForm({ slug, name, description }: EditProgramFormProp
 
     const {
         register,
+        control,
         formState: { errors, isSubmitting, isValid },
         setError,
         clearErrors,
-        watch,
     } = form;
 
-    const nameValue = watch("name");
+    const nameValue = useWatch({ control, name: "name" });
     const canSubmit = isValid && Boolean(nameValue?.trim()) && !isSubmitting;
 
     const onSubmit: SubmitHandler<FormOutput> = async (data) => {
@@ -84,7 +85,7 @@ export function EditProgramForm({ slug, name, description }: EditProgramFormProp
                 {errors.name && <p className="text-sm text-red-600">{errors.name.message}</p>}
             </div>
 
-            <div className="space-y-2">
+            <div className="space-y-2 cursor-not-allowed!">
                 <Label htmlFor="slug">Slug</Label>
                 <Input
                     id="slug"
@@ -118,7 +119,8 @@ export function EditProgramForm({ slug, name, description }: EditProgramFormProp
                 >
                     Cancelar
                 </Button>
-                <Button type="submit" disabled={!canSubmit}>
+                <Button className="flex items-center gap-2" type="submit" disabled={!canSubmit}>
+                    {isSubmitting && <IconLoader2 className="size-5 animate-spin" />}
                     {isSubmitting ? "Salvando..." : "Salvar Alterações"}
                 </Button>
             </div>

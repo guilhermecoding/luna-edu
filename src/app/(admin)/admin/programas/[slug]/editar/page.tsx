@@ -5,18 +5,15 @@ import { getProgramBySlug } from "@/services/programs/programs.service";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { EditProgramForm } from "./_components/form";
+import SkeletonForm from "./_components/skeleton-form";
+import { Suspense } from "react";
 
-type EditProgramPageProps = {
-    params: Promise<{
-        slug: string;
-    }>;
-};
 
 export const metadata: Metadata = {
     title: "Editar Programa",
 };
 
-export default async function EditProgramPage({ params }: EditProgramPageProps) {
+async function EditProgramPageContent({ params }: Omit<PageProps<"/admin/programas/[slug]/editar">, "searchParams">) {
     const { slug } = await params;
     const program = await getProgramBySlug(slug);
 
@@ -38,5 +35,14 @@ export default async function EditProgramPage({ params }: EditProgramPageProps) 
                 </BaseForm>
             </Section>
         </Page>
+    );
+}
+
+// @COMPONENTE PRINCIPAL
+export default function EditProgramPage({ params }: PageProps<"/admin/programas/[slug]/editar">) {
+    return (
+        <Suspense fallback={<SkeletonForm />}>
+            <EditProgramPageContent params={params} />
+        </Suspense>
     );
 }

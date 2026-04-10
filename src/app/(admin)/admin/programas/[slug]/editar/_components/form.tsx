@@ -19,7 +19,7 @@ import z from "zod";
 import { useState } from "react";
 import { deleteProgramAction, editProgramAction } from "../actions";
 import { editProgramSchema } from "../schema";
-import { IconLoader2 } from "@tabler/icons-react";
+import { IconAlertTriangle, IconLoader2 } from "@tabler/icons-react";
 import Image from "next/image";
 import imgGibbyDuvida from "@/assets/images/logo-gibby-duvida.svg";
 
@@ -164,7 +164,10 @@ export function EditProgramForm({ slug, name, description }: EditProgramFormProp
 
             <div className="border border-destructive/25 bg-destructive/5 rounded-2xl p-4 sm:p-5 space-y-4">
                 <div>
-                    <h3 className="text-xl font-semibold text-destructive">Zona de Perigo</h3>
+                    <div className="flex flex-row items-center gap-2">
+                        <IconAlertTriangle className="size-5 text-red-600" />
+                        <h3 className="text-xl font-semibold text-destructive">Zona de Perigo</h3>
+                    </div>
                     <p className="text-sm text-muted-foreground mt-1">
                         Esta ação remove o programa <b>permanentemente</b>, bem como todos os dados associados (exceto os usuários), e não pode ser desfeita.
                     </p>

@@ -1,4 +1,4 @@
-interface TitlePageProps {
+export interface TitlePageProps {
     title: string;
     description?: string;
 }

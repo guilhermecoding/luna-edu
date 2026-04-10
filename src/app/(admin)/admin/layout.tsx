@@ -1,5 +1,13 @@
 import SidebarAdminBase from "./_components/sidebar-admin/sidebar-admin-base";
 import { programMenus } from "../_config/menus/admin-programs-menus";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+    title: {
+        template: "%s | LUNA (Admin)",
+        default: "Administrador",
+    },
+};
 
 export default function AdminLayout({
     children,

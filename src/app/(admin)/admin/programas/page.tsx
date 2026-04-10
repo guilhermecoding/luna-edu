@@ -4,11 +4,12 @@ import TitlePage from "@/components/title-page";
 import { IconCirclePlusFilled } from "@tabler/icons-react";
 import ListPrograms from "./_components/list-programs";
 import { ButtonLink } from "@/components/ui/button-link";
+import { Metadata } from "next";
 
-export const metadata = {
-    title: "Programas - Admin",
-    description: "Gerencie os programas de aprendizado disponíveis na sua instituição.",
+export const metadata: Metadata = {
+    title: "Programas",
 };
+
 export default function ProgramsPage() {
     return (
         <Page>

@@ -15,6 +15,7 @@ export async function editProgramAction(slug: string, data: EditProgramInput) {
         const program = await updateProgram(slug, validatedData);
 
         revalidateTag("programs", "weeks");
+        revalidateTag(`program:${slug}`, "weeks");
         revalidatePath("/admin/programas");
         revalidatePath(`/admin/programas/${slug}/editar`);
 
@@ -63,6 +64,7 @@ export async function deleteProgramAction(slug: string, confirmationName: string
         const deletedProgram = await deleteProgram(slug);
 
         revalidateTag("programs", "weeks");
+        revalidateTag(`program:${slug}`, "weeks");
         revalidatePath("/admin/programas");
         revalidatePath(`/admin/programas/${slug}/editar`);
 

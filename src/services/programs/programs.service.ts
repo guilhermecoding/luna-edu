@@ -54,7 +54,7 @@ export async function createProgram(data: {
 /**
  * Busca um programa pelo slug.
  *
- * Usa cache com tag `programs` para reaproveitar leituras frequentes.
+ * Usa cache com tag `program:${slug}` para reaproveitar leituras frequentes.
  *
  * @param slug Slug do programa.
  * @returns Programa encontrado ou `null` quando não existe.
@@ -62,7 +62,7 @@ export async function createProgram(data: {
 export async function getProgramBySlug(slug: string): Promise<Program | null> {
     "use cache";
     cacheLife("weeks");
-    cacheTag("programs");
+    cacheTag(`program:${slug}`);
 
     return await prisma.program.findUnique({
         where: {

@@ -3,14 +3,14 @@
 import { createProgram } from "@/services/programs/programs.service";
 import { ZodError } from "zod";
 import { createProgramSchema, type CreateProgramInput } from "./schema";
-import { revalidatePath, revalidateTag } from "next/cache";
+import { revalidatePath, updateTag } from "next/cache";
 
 export async function createProgramAction(data: CreateProgramInput) {
     try {
         const validatedData = createProgramSchema.parse(data);
         const program = await createProgram(validatedData);
 
-        revalidateTag("programs", "weeks");
+        updateTag("programs");
         revalidatePath("/admin/programas");
 
         return { success: true, data: program };

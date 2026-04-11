@@ -1,6 +1,6 @@
 "use server";
 
-import { revalidatePath, revalidateTag } from "next/cache";
+import { revalidatePath, updateTag } from "next/cache";
 import { ZodError, z } from "zod";
 import { deleteProgram, getProgramBySlug, updateProgram } from "@/services/programs/programs.service";
 import { editProgramSchema, type EditProgramInput } from "./schema";
@@ -14,8 +14,8 @@ export async function editProgramAction(slug: string, data: EditProgramInput) {
         const validatedData = editProgramSchema.parse(data);
         const program = await updateProgram(slug, validatedData);
 
-        revalidateTag("programs", "weeks");
-        revalidateTag(`program:${slug}`, "weeks");
+        updateTag("programs");
+        updateTag(`program:${slug}`);
         revalidatePath("/admin/programas");
         revalidatePath(`/admin/programas/${slug}/editar`);
 
@@ -63,8 +63,8 @@ export async function deleteProgramAction(slug: string, confirmationName: string
 
         const deletedProgram = await deleteProgram(slug);
 
-        revalidateTag("programs", "weeks");
-        revalidateTag(`program:${slug}`, "weeks");
+        updateTag("programs");
+        updateTag(`program:${slug}`);
         revalidatePath("/admin/programas");
         revalidatePath(`/admin/programas/${slug}/editar`);
 

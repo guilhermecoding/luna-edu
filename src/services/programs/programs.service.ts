@@ -15,7 +15,11 @@ export async function getPrograms(): Promise<Program[]> {
     cacheLife("weeks");
     cacheTag("programs");
 
-    return await prisma.program.findMany();
+    return await prisma.program.findMany({
+        orderBy: {
+            name: "asc",
+        },
+    });
 }
 
 /**

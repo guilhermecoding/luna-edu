@@ -5,15 +5,15 @@ import { cacheLife, cacheTag } from "next/cache";
 /**
  * Lista todos os programas disponíveis.
  *
- * Usa cache com tag `programs` para acelerar leitura e permitir invalidação
+ * Usa cache com tag `programs:list` para acelerar leitura e permitir invalidação
  * quando houver criação ou atualização.
  *
  * @returns Lista de programas.
  */
 export async function getPrograms(): Promise<Program[]> {
     "use cache";
-    cacheLife("weeks");
-    cacheTag("programs");
+    cacheLife("minutes");
+    cacheTag("programs:list");
 
     return await prisma.program.findMany({
         orderBy: {

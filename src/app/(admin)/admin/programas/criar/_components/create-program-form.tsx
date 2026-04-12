@@ -76,8 +76,7 @@ export function CreateProgramForm() {
             const result = await createProgramAction(data);
             if (result.success) {
                 // toast.success("Programa criado com sucesso.");
-                router.push("/admin/programas");
-                router.refresh();
+                router.replace("/admin/programas");
             } else {
                 toast.error(result.error || "Erro ao criar programa");
                 setError("root", {

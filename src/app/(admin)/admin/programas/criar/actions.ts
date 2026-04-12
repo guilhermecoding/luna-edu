@@ -10,7 +10,7 @@ export async function createProgramAction(data: CreateProgramInput) {
         const validatedData = createProgramSchema.parse(data);
         const program = await createProgram(validatedData);
 
-        updateTag("programs");
+        updateTag("programs:list");
         revalidatePath("/admin/programas");
 
         return { success: true, data: program };

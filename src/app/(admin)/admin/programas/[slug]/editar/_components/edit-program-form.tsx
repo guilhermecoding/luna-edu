@@ -201,13 +201,13 @@ export function EditProgramForm({ slug, name, description }: EditProgramFormProp
                         }
                     }}
                 >
-                    <DialogTrigger asChild>
-                        <div className="w-full flex justify-end">
+                    <div className="w-full flex justify-end">
+                        <DialogTrigger asChild>
                             <Button type="button" variant="destructive" className="w-full sm:w-auto">
                                 Apagar Programa
                             </Button>
-                        </div>
-                    </DialogTrigger>
+                        </DialogTrigger>
+                    </div>
                     <DialogContent>
                         <DialogHeader>
                             <DialogTitle>Apagar Programa</DialogTitle>

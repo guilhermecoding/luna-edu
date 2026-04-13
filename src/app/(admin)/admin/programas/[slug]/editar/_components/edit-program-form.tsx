@@ -23,7 +23,6 @@ import { editProgramSchema } from "../schema";
 import { IconAlertTriangle, IconLoader2 } from "@tabler/icons-react";
 import Image from "next/image";
 import imgGibbyDuvida from "@/assets/images/logo-gibby-duvida.svg";
-import { toast } from "sonner";
 import { isRedirectError } from "@/lib/is-redirect-error";
 
 type FormInput = z.input<typeof editProgramSchema>;
@@ -65,28 +64,6 @@ export function EditProgramForm({ slug, name, description }: EditProgramFormProp
     const nameValue = useWatch({ control, name: "name" });
     const canSubmit = isValid && Boolean(nameValue?.trim()) && !isSubmitting;
     const canDelete = deleteConfirmationName === name && !isDeleting;
-
-    useEffect(() => {
-        const toastType = searchParams.get("toast");
-        const message = searchParams.get("message");
-
-        if (!toastType || !message) {
-            return;
-        }
-
-        if (toastType === "success") {
-            toast.success(message);
-        } else {
-            toast.error(message);
-        }
-
-        const params = new URLSearchParams(searchParams.toString());
-        params.delete("toast");
-        params.delete("message");
-
-        const nextUrl = params.toString() ? `${pathname}?${params.toString()}` : pathname;
-        router.replace(nextUrl, { scroll: false });
-    }, [pathname, router, searchParams]);
 
     useEffect(() => {
         clearErrors();

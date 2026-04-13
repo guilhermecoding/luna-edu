@@ -12,7 +12,6 @@ import { createProgramAction } from "../actions";
 import { createProgramSchema } from "../schema";
 import { IconLoader2 } from "@tabler/icons-react";
 import { isRedirectError } from "@/lib/is-redirect-error";
-import { toast } from "sonner";
 
 type FormInput = z.input<typeof createProgramSchema>;
 type FormOutput = z.output<typeof createProgramSchema>;
@@ -61,28 +60,6 @@ export function CreateProgramForm() {
     const nameValue = useWatch({ control, name: "name" });
     const slugValue = useWatch({ control, name: "slug" });
     const canSubmit = isValid && Boolean(nameValue?.trim()) && Boolean(slugValue?.trim()) && !isSubmitting;
-
-    useEffect(() => {
-        const toastType = searchParams.get("toast");
-        const message = searchParams.get("message");
-
-        if (!toastType || !message) {
-            return;
-        }
-
-        if (toastType === "success") {
-            toast.success(message);
-        } else {
-            toast.error(message);
-        }
-
-        const params = new URLSearchParams(searchParams.toString());
-        params.delete("toast");
-        params.delete("message");
-
-        const nextUrl = params.toString() ? `${pathname}?${params.toString()}` : pathname;
-        router.replace(nextUrl, { scroll: false });
-    }, [pathname, router, searchParams]);
 
     useEffect(() => {
         clearErrors();

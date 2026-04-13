@@ -3,10 +3,8 @@ import Section from "@/components/section";
 import TitlePage from "@/components/title-page";
 import { IconCirclePlusFilled } from "@tabler/icons-react";
 import ListPrograms from "./_components/list-programs";
-import { ProgramsFeedbackToast } from "./_components/programs-feedback-toast";
 import { ButtonLink } from "@/components/ui/button-link";
 import { Metadata } from "next";
-import { Suspense } from "react";
 
 export const metadata: Metadata = {
     title: "Programas",
@@ -15,9 +13,6 @@ export const metadata: Metadata = {
 export default function ProgramsPage() {
     return (
         <Page>
-            <Suspense fallback={null}>
-                <ProgramsFeedbackToast />
-            </Suspense>
             <Section>
                 <div className="flex flex-col lg:flex-row gap-y-6">
                     <div className="flex-1">

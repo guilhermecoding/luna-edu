@@ -3,6 +3,8 @@ import { Poppins, Silkscreen } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import Providers from "@/provider/providers";
+import { Suspense } from "react";
+import { FeedBackToast } from "@/components/feedback-toast";
 
 const poppins = Poppins({
     subsets: ["latin"],
@@ -46,6 +48,9 @@ export default function RootLayout({
         >
             <body>
                 <Providers>
+                    <Suspense fallback={null}>
+                        <FeedBackToast />
+                    </Suspense>
                     {children}
                 </Providers>
             </body>

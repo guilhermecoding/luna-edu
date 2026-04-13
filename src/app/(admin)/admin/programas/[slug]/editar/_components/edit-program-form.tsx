@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useForm, useWatch, type SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import z from "zod";
@@ -23,6 +23,8 @@ import { editProgramSchema } from "../schema";
 import { IconAlertTriangle, IconLoader2 } from "@tabler/icons-react";
 import Image from "next/image";
 import imgGibbyDuvida from "@/assets/images/logo-gibby-duvida.svg";
+import { toast } from "sonner";
+import { isRedirectError } from "@/lib/is-redirect-error";
 
 type FormInput = z.input<typeof editProgramSchema>;
 type FormOutput = z.output<typeof editProgramSchema>;
@@ -35,6 +37,8 @@ type EditProgramFormProps = {
 
 export function EditProgramForm({ slug, name, description }: EditProgramFormProps) {
     const router = useRouter();
+    const pathname = usePathname();
+    const searchParams = useSearchParams();
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [deleteConfirmationName, setDeleteConfirmationName] = useState("");
     const [deleteError, setDeleteError] = useState<string | null>(null);
@@ -63,6 +67,28 @@ export function EditProgramForm({ slug, name, description }: EditProgramFormProp
     const canDelete = deleteConfirmationName === name && !isDeleting;
 
     useEffect(() => {
+        const toastType = searchParams.get("toast");
+        const message = searchParams.get("message");
+
+        if (!toastType || !message) {
+            return;
+        }
+
+        if (toastType === "success") {
+            toast.success(message);
+        } else {
+            toast.error(message);
+        }
+
+        const params = new URLSearchParams(searchParams.toString());
+        params.delete("toast");
+        params.delete("message");
+
+        const nextUrl = params.toString() ? `${pathname}?${params.toString()}` : pathname;
+        router.replace(nextUrl, { scroll: false });
+    }, [pathname, router, searchParams]);
+
+    useEffect(() => {
         clearErrors();
 
         return () => {
@@ -79,12 +105,26 @@ export function EditProgramForm({ slug, name, description }: EditProgramFormProp
         try {
             const result = await editProgramAction(slug, data);
             if (result?.success === false) {
+                const params = new URLSearchParams(searchParams.toString());
+                params.set("toast", "error");
+                params.set("message", result.error || "Erro ao atualizar programa");
+                router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+
                 setError("root", {
                     type: "server",
                     message: result.error || "Erro ao atualizar programa",
                 });
             }
-        } catch {
+        } catch (error) {
+            if (isRedirectError(error)) {
+                throw error;
+            }
+
+            const params = new URLSearchParams(searchParams.toString());
+            params.set("toast", "error");
+            params.set("message", "Erro ao atualizar programa");
+            router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+
             setError("root", {
                 type: "server",
                 message: "Erro ao atualizar programa",
@@ -99,9 +139,23 @@ export function EditProgramForm({ slug, name, description }: EditProgramFormProp
         try {
             const result = await deleteProgramAction(slug, deleteConfirmationName);
             if (result?.success === false) {
+                const params = new URLSearchParams(searchParams.toString());
+                params.set("toast", "error");
+                params.set("message", result.error || "Erro ao apagar programa");
+                router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+
                 setDeleteError(result.error || "Erro ao apagar programa");
             }
-        } catch {
+        } catch (error) {
+            if (isRedirectError(error)) {
+                throw error;
+            }
+
+            const params = new URLSearchParams(searchParams.toString());
+            params.set("toast", "error");
+            params.set("message", "Erro ao apagar programa");
+            router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+
             setDeleteError("Erro ao apagar programa");
         } finally {
             setIsDeleting(false);

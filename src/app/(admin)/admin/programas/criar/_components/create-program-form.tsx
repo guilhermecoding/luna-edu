@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useForm, useWatch, type SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import z from "zod";
@@ -12,6 +12,7 @@ import { createProgramAction } from "../actions";
 import { createProgramSchema } from "../schema";
 import { IconLoader2 } from "@tabler/icons-react";
 import { isRedirectError } from "@/lib/is-redirect-error";
+import { toast } from "sonner";
 
 type FormInput = z.input<typeof createProgramSchema>;
 type FormOutput = z.output<typeof createProgramSchema>;
@@ -34,6 +35,8 @@ function autoSlug(name: string) {
 
 export function CreateProgramForm() {
     const router = useRouter();
+    const pathname = usePathname();
+    const searchParams = useSearchParams();
 
     const form = useForm<FormInput, undefined, FormOutput>({
         resolver: zodResolver(createProgramSchema),
@@ -60,6 +63,28 @@ export function CreateProgramForm() {
     const canSubmit = isValid && Boolean(nameValue?.trim()) && Boolean(slugValue?.trim()) && !isSubmitting;
 
     useEffect(() => {
+        const toastType = searchParams.get("toast");
+        const message = searchParams.get("message");
+
+        if (!toastType || !message) {
+            return;
+        }
+
+        if (toastType === "success") {
+            toast.success(message);
+        } else {
+            toast.error(message);
+        }
+
+        const params = new URLSearchParams(searchParams.toString());
+        params.delete("toast");
+        params.delete("message");
+
+        const nextUrl = params.toString() ? `${pathname}?${params.toString()}` : pathname;
+        router.replace(nextUrl, { scroll: false });
+    }, [pathname, router, searchParams]);
+
+    useEffect(() => {
         clearErrors();
 
         return () => {
@@ -76,17 +101,28 @@ export function CreateProgramForm() {
 
         try {
             const result = await createProgramAction(data);
-            if (result?.success) {
-            } else {
+            if (result?.success === false) {
+                const params = new URLSearchParams(searchParams.toString());
+                params.set("toast", "error");
+                params.set("message", result.error || "Erro ao criar programa");
+                router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+
                 setError("root", {
                     type: "server",
                     message: result.error || "Erro ao criar programa",
                 });
+
+                return;
             }
         } catch (error) {
             if (isRedirectError(error)) {
                 throw error;
             }
+
+            const params = new URLSearchParams(searchParams.toString());
+            params.set("toast", "error");
+            params.set("message", "Erro ao criar programa");
+            router.replace(`${pathname}?${params.toString()}`, { scroll: false });
 
             setError("root", {
                 type: "server",

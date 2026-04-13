@@ -40,7 +40,12 @@ export async function editProgramAction(slug: string, data: EditProgramInput) {
         };
     }
 
-    redirect("/admin/programas");
+    const params = new URLSearchParams({
+        toast: "success",
+        message: "Programa atualizado com sucesso",
+    });
+
+    redirect(`/admin/programas?${params.toString()}`);
 }
 
 export async function deleteProgramAction(slug: string, confirmationName: string) {
@@ -89,5 +94,10 @@ export async function deleteProgramAction(slug: string, confirmationName: string
         };
     }
 
-    redirect("/admin/programas");
+    const params = new URLSearchParams({
+        toast: "success",
+        message: "Programa apagado com sucesso",
+    });
+
+    redirect(`/admin/programas?${params.toString()}`);
 }

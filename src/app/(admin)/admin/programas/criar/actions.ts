@@ -34,5 +34,10 @@ export async function createProgramAction(data: CreateProgramInput) {
         };
     }
 
-    redirect("/admin/programas");
+    const params = new URLSearchParams({
+        toast: "success",
+        message: "Programa criado com sucesso",
+    });
+
+    redirect(`/admin/programas?${params.toString()}`);
 }

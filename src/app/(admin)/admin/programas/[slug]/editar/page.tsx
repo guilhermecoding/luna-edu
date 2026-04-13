@@ -26,11 +26,13 @@ async function EditProgramPageContent({ params }: Omit<PageProps<"/admin/program
             <Section>
                 <BaseForm title="Editar Programa" description="Atualize os dados do programa">
                     <div className="mt-6">
-                        <EditProgramForm
-                            slug={program.slug}
-                            name={program.name}
-                            description={program.description ?? ""}
-                        />
+                        <Suspense fallback={null}>
+                            <EditProgramForm
+                                slug={program.slug}
+                                name={program.name}
+                                description={program.description ?? ""}
+                            />
+                        </Suspense>
                     </div>
                 </BaseForm>
             </Section>

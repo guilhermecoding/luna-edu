@@ -52,7 +52,7 @@ export const adminMenus: ItemMenuSidebarAdmin[] = [
                 icon: "backpack",
                 isActive: false,
                 items: [
-                    { title: "Criar Programa", url: "/admin/programas/criar" },
+                    { title: "Criar Programa", url: "/admin/programas/novo" },
                 ],
             },
         ],

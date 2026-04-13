@@ -9,7 +9,7 @@ export const metadata: Metadata = {
     title: "Criar Programa",
 };
 
-export default function CreateProgramPage() {
+export default function NewProgramPage() {
     return (
         <Page>
             <Section>

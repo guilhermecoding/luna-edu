@@ -11,7 +11,7 @@ export const programMenus: ItemMenuSidebarAdmin[] = [
                 items: [
                     {
                         title: "Criar Programa",
-                        url: "/admin/programas/criar",
+                        url: "/admin/programas/novo",
                     },
                 ],
             },

@@ -153,7 +153,7 @@ export function ProgramSwitcher({
                             <div className="flex size-6 items-center justify-center rounded-md border bg-transparent">
                                 <IconPlus className="size-4" />
                             </div>
-                            <Link href="/admin/programas/criar" className="font-medium text-muted-foreground w-full">
+                            <Link href="/admin/programas/novo" className="font-medium text-muted-foreground w-full">
                                 Adicionar programa
                             </Link>
                         </DropdownMenuItem>

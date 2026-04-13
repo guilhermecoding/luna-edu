@@ -4,16 +4,15 @@ import { createProgram } from "@/services/programs/programs.service";
 import { ZodError } from "zod";
 import { createProgramSchema, type CreateProgramInput } from "./schema";
 import { revalidatePath, updateTag } from "next/cache";
+import { redirect } from "next/navigation";
 
 export async function createProgramAction(data: CreateProgramInput) {
     try {
         const validatedData = createProgramSchema.parse(data);
-        const program = await createProgram(validatedData);
+        await createProgram(validatedData);
 
         updateTag("programs:list");
         revalidatePath("/admin/programas");
-
-        return { success: true, data: program };
     } catch (error) {
         if (error instanceof ZodError) {
             return {
@@ -34,4 +33,6 @@ export async function createProgramAction(data: CreateProgramInput) {
             error: "Erro ao criar programa",
         };
     }
+
+    redirect("/admin/programas");
 }

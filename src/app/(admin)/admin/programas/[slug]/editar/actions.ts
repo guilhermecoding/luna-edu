@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath, updateTag } from "next/cache";
+import { redirect } from "next/navigation";
 import { ZodError, z } from "zod";
 import { deleteProgram, getProgramBySlug, updateProgram } from "@/services/programs/programs.service";
 import { editProgramSchema, type EditProgramInput } from "./schema";
@@ -12,14 +13,12 @@ const deleteProgramSchema = z.object({
 export async function editProgramAction(slug: string, data: EditProgramInput) {
     try {
         const validatedData = editProgramSchema.parse(data);
-        const program = await updateProgram(slug, validatedData);
+        await updateProgram(slug, validatedData);
 
         updateTag("programs:list");
         updateTag(`program:${slug}`);
         revalidatePath("/admin/programas");
         revalidatePath(`/admin/programas/${slug}/editar`);
-
-        return { success: true, data: program };
     } catch (error) {
         if (error instanceof ZodError) {
             return {
@@ -40,6 +39,8 @@ export async function editProgramAction(slug: string, data: EditProgramInput) {
             error: "Erro ao atualizar programa",
         };
     }
+
+    redirect("/admin/programas");
 }
 
 export async function deleteProgramAction(slug: string, confirmationName: string) {
@@ -61,17 +62,12 @@ export async function deleteProgramAction(slug: string, confirmationName: string
             };
         }
 
-        const deletedProgram = await deleteProgram(slug);
+        await deleteProgram(slug);
 
         updateTag("programs:list");
         updateTag(`program:${slug}`);
         revalidatePath("/admin/programas");
         revalidatePath(`/admin/programas/${slug}/editar`);
-
-        return {
-            success: true,
-            data: deletedProgram,
-        };
     } catch (error) {
         if (error instanceof ZodError) {
             return {
@@ -92,4 +88,6 @@ export async function deleteProgramAction(slug: string, confirmationName: string
             error: "Erro ao apagar programa",
         };
     }
+
+    redirect("/admin/programas");
 }

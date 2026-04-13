@@ -7,7 +7,6 @@ import { useRouter } from "next/navigation";
 import { useForm, useWatch, type SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import z from "zod";
-import { toast } from "sonner";
 import { useEffect } from "react";
 import { createProgramAction } from "../actions";
 import { createProgramSchema } from "../schema";
@@ -74,18 +73,14 @@ export function CreateProgramForm() {
 
         try {
             const result = await createProgramAction(data);
-            if (result.success) {
-                // toast.success("Programa criado com sucesso.");
-                router.replace("/admin/programas");
+            if (result?.success) {
             } else {
-                toast.error(result.error || "Erro ao criar programa");
                 setError("root", {
                     type: "server",
                     message: result.error || "Erro ao criar programa",
                 });
             }
         } catch {
-            toast.error("Erro ao criar programa");
             setError("root", {
                 type: "server",
                 message: "Erro ao criar programa",

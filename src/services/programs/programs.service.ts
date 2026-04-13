@@ -12,7 +12,7 @@ import { cacheLife, cacheTag } from "next/cache";
  */
 export async function getPrograms(): Promise<Program[]> {
     "use cache";
-    cacheLife("minutes");
+    cacheLife("weeks");
     cacheTag("programs:list");
 
     return await prisma.program.findMany({

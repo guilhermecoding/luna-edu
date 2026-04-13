@@ -11,6 +11,7 @@ import { useEffect } from "react";
 import { createProgramAction } from "../actions";
 import { createProgramSchema } from "../schema";
 import { IconLoader2 } from "@tabler/icons-react";
+import { isRedirectError } from "@/lib/is-redirect-error";
 
 type FormInput = z.input<typeof createProgramSchema>;
 type FormOutput = z.output<typeof createProgramSchema>;
@@ -59,6 +60,8 @@ export function CreateProgramForm() {
     const canSubmit = isValid && Boolean(nameValue?.trim()) && Boolean(slugValue?.trim()) && !isSubmitting;
 
     useEffect(() => {
+        clearErrors();
+
         return () => {
             reset({
                 name: "",
@@ -66,7 +69,7 @@ export function CreateProgramForm() {
                 description: "",
             });
         };
-    }, [reset]);
+    }, [clearErrors, reset]);
 
     const onSubmit: SubmitHandler<FormOutput> = async (data: FormOutput) => {
         clearErrors("root");
@@ -80,7 +83,11 @@ export function CreateProgramForm() {
                     message: result.error || "Erro ao criar programa",
                 });
             }
-        } catch {
+        } catch (error) {
+            if (isRedirectError(error)) {
+                throw error;
+            }
+
             setError("root", {
                 type: "server",
                 message: "Erro ao criar programa",

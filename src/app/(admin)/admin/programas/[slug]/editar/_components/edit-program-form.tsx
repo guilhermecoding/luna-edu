@@ -63,13 +63,15 @@ export function EditProgramForm({ slug, name, description }: EditProgramFormProp
     const canDelete = deleteConfirmationName === name && !isDeleting;
 
     useEffect(() => {
+        clearErrors();
+
         return () => {
             reset({
                 name,
                 description,
             });
         };
-    }, [description, name, reset]);
+    }, [clearErrors, description, name, reset]);
 
     const onSubmit: SubmitHandler<FormOutput> = async (data) => {
         clearErrors("root");

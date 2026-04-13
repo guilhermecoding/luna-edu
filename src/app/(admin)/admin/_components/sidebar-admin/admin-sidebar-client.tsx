@@ -7,7 +7,7 @@ import { ItemMenuSidebarAdmin } from "@/@types/item-menu-sidebar.type";
 const user = {
     name: "shadcn",
     email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
+    avatar: "/gibby-normal-icon.svg",
 };
 
 export function AdminSidebarContent({ menus }: { menus: ItemMenuSidebarAdmin[] }) {

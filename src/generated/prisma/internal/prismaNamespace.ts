@@ -1972,7 +1972,8 @@ export const PeriodScalarFieldEnum = {
   name: 'name',
   startDate: 'startDate',
   endDate: 'endDate',
-  programId: 'programId'
+  programId: 'programId',
+  completedAt: 'completedAt'
 } as const
 
 export type PeriodScalarFieldEnum = (typeof PeriodScalarFieldEnum)[keyof typeof PeriodScalarFieldEnum]

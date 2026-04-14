@@ -1,9 +1,14 @@
 import BaseForm from "@/components/base-form";
 import Page from "@/components/page";
 import Section from "@/components/section";
-import SkeletonForm from "../../../../../../components/skeletons/skeleton-form";
+import { Suspense } from "react";
+import { CreatePeriodForm } from "./_components/create-period-form";
 
-export default function NewPeriodPage() {
+export default async function NewPeriodPage({
+    params,
+}: PageProps<"/admin/[program]/periodos/novo">) {
+    const { program } = await params;
+
     return (
         <Page>
             <Section>
@@ -12,7 +17,9 @@ export default function NewPeriodPage() {
                     description="Adicione um novo período letivo ao sistema"
                 >
                     <div className="mt-6">
-                        <SkeletonForm />
+                        <Suspense fallback={null}>
+                            <CreatePeriodForm programSlug={program} />
+                        </Suspense>
                     </div>
                 </BaseForm>
             </Section>

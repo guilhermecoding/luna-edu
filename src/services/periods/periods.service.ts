@@ -20,6 +20,27 @@ export async function createPeriod(
         endDate: Date;
     },
 ): Promise<Period> {
+    const overlappingPeriod = await prisma.period.findFirst({
+        where: {
+            program: {
+                slug: programSlug,
+            },
+            startDate: {
+                lte: data.endDate,
+            },
+            endDate: {
+                gte: data.startDate,
+            },
+        },
+        select: {
+            id: true,
+        },
+    });
+
+    if (overlappingPeriod) {
+        throw new Error("Não é possível ter períodos no mesmo intervalo de tempo.");
+    }
+
     return await prisma.period.create({
         data: {
             name: data.name,

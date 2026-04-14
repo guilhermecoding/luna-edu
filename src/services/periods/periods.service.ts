@@ -41,17 +41,25 @@ export async function createPeriod(
         throw new Error("Não é possível ter períodos no mesmo intervalo de tempo.");
     }
 
-    return await prisma.period.create({
-        data: {
-            name: data.name,
-            slug: data.slug,
-            startDate: data.startDate,
-            endDate: data.endDate,
-            program: {
-                connect: {
-                    slug: programSlug,
+    try {
+        return await prisma.period.create({
+            data: {
+                name: data.name,
+                slug: data.slug,
+                startDate: data.startDate,
+                endDate: data.endDate,
+                program: {
+                    connect: {
+                        slug: programSlug,
+                    },
                 },
             },
-        },
-    });
+        });
+    } catch (error) {
+        if (error instanceof Error && error.message.includes("Unique constraint failed")) {
+            throw new Error("Já existe um período com este slug. Tente outro.");
+        }
+
+        throw error;
+    }
 }

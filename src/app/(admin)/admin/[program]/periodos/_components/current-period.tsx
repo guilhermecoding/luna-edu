@@ -1,7 +1,8 @@
 import PulsingStatusIndicator from "@/components/pulsing-status-indicator";
 import TooltipText from "@/components/tooltip-text";
+import { ButtonLink } from "@/components/ui/button-link";
 import { Progress } from "@/components/ui/progress";
-import { IconHelpHexagonFilled } from "@tabler/icons-react";
+import { IconFileTextFilled, IconHelpHexagonFilled, IconPencilFilled } from "@tabler/icons-react";
 
 function Info({
     label,
@@ -29,7 +30,7 @@ function Info({
 
 export default function CurrentPeriod() {
     return (
-        <div className="w-full xl:w-3/5 border border-muted-foreground/40 bg-slate-100 dark:bg-muted p-8 rounded-4xl">
+        <div className="w-full xl:w-2/3 border border-muted-foreground/40 bg-slate-100 dark:bg-muted p-8 rounded-4xl">
             {/* Primeira linha */}
             <div className="flex flex-col gap-y-3">
                 {/* Bagde */}
@@ -50,14 +51,14 @@ export default function CurrentPeriod() {
             </div>
 
             {/* Segunda linha */}
-            <div className="w-full mt-8">
+            <div className="w-full mt-6">
                 <h1 className="font-bold capitalize text-4xl xl:text-5xl ">
                     1 Ciclo de 2026
                 </h1>
             </div>
 
             {/* Terceira linha */}
-            <div className="flex flex-col xl:flex-row items-start gap-y-4 xl:justify-between mt-8">
+            <div className="mt-8 w-full @2xl/main:flex-row flex flex-col gap-y-4 justify-between">
                 <Info label="DISCIPLINAS" value={12} />
                 <Info label="EST. TOTAL" value={562} info="Total de estudantes adicionados neste período" />
                 <Info label="EST. MATRICULADOS" value={342} info="Estudantes vinculados em pelo menos uma disciplina deste período" />
@@ -77,6 +78,25 @@ export default function CurrentPeriod() {
                 </div>
                 {/* Barra de progresso */}
                 <Progress value={65} className="mt-2 bg-mauve-300" indicatorClassName="bg-primary-theme rounded-full" />
+
+                {/* Linha do link */}
+                <div className="flex flex-col-reverse sm:flex-row justify-end items-center mt-6 gap-4">
+                    <ButtonLink
+                        href="/admin/PROGRAMA/periodos/PERIODO/editar"
+                        variant="outline"
+                        className="bg-transparent text-muted-foreground w-full sm:w-auto"
+                    >
+                        <IconPencilFilled />
+                        Editar
+                    </ButtonLink>
+                    <ButtonLink
+                        href="/admin/PROGRAMA/periodos/PERIODO/detalhes"
+                        className="w-full sm:w-auto"
+                    >
+                        <IconFileTextFilled />
+                        Detalhar
+                    </ButtonLink>
+                </div>
             </div>
         </div>
     );

@@ -3,6 +3,11 @@ import Page from "@/components/page";
 import Section from "@/components/section";
 import { Suspense } from "react";
 import { CreatePeriodForm } from "./_components/create-period-form";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+    title: "Novo Período",
+};
 
 export default async function NewPeriodPage({
     params,

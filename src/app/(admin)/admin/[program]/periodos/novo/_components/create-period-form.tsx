@@ -8,7 +8,7 @@ import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
-import { Controller, useForm, type SubmitHandler } from "react-hook-form";
+import { Controller, useForm, useWatch, type SubmitHandler } from "react-hook-form";
 import z from "zod";
 import { createPeriodAction } from "../actions";
 import { createPeriodSchema } from "../schema";
@@ -17,6 +17,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 type FormInput = z.input<typeof createPeriodSchema>;
 type FormOutput = z.output<typeof createPeriodSchema>;
@@ -29,6 +30,7 @@ export function CreatePeriodForm({ programSlug }: CreatePeriodFormProps) {
     const router = useRouter();
     const pathname = usePathname();
     const searchParams = useSearchParams();
+    const isMobile = useIsMobile();
 
     const form = useForm<FormInput, undefined, FormOutput>({
         resolver: zodResolver(createPeriodSchema),
@@ -47,12 +49,11 @@ export function CreatePeriodForm({ programSlug }: CreatePeriodFormProps) {
         clearErrors,
         control,
         formState: { errors, isSubmitting, isValid },
-        watch,
     } = form;
 
-    const nameValue = watch("name");
-    const startDateValue = watch("startDate");
-    const endDateValue = watch("endDate");
+    const nameValue = useWatch({ control, name: "name" });
+    const startDateValue = useWatch({ control, name: "startDate" });
+    const endDateValue = useWatch({ control, name: "endDate" });
     const canSubmit = isValid && Boolean(nameValue?.trim()) && Boolean(startDateValue) && Boolean(endDateValue) && !isSubmitting;
 
     useEffect(() => {
@@ -143,16 +144,29 @@ export function CreatePeriodForm({ programSlug }: CreatePeriodFormProps) {
                                         disabled={isSubmitting}
                                     >
                                         <IconCalendar className="size-4" />
-                                        {field.value ? format(field.value, "PPP", { locale: ptBR }) : <span>Selecione a data</span>}
+                                        <span className="truncate">
+                                            {field.value instanceof Date ? format(field.value, "PPP", { locale: ptBR }) : "Selecione a data"}
+                                        </span>
                                     </Button>
                                 </PopoverTrigger>
-                                <PopoverContent className="w-auto p-0" align="start">
+                                <PopoverContent
+                                    className={cn(
+                                        "p-0",
+                                        isMobile ? "w-[calc(100vw-3rem)] max-w-88" : "w-auto",
+                                    )}
+                                    align="start"
+                                    sideOffset={8}
+                                >
                                     <Calendar
                                         mode="single"
-                                        selected={field.value}
-                                        onSelect={field.onChange}
+                                        selected={field.value instanceof Date ? field.value : undefined}
+                                        onSelect={(date) => field.onChange(date)}
                                         disabled={isSubmitting}
                                         locale={ptBR}
+                                        className="mx-auto [--cell-size:--spacing(7)] sm:[--cell-size:--spacing(8)]"
+                                        classNames={{
+                                            root: "w-full",
+                                        }}
                                         initialFocus
                                     />
                                 </PopoverContent>
@@ -180,16 +194,29 @@ export function CreatePeriodForm({ programSlug }: CreatePeriodFormProps) {
                                         disabled={isSubmitting}
                                     >
                                         <IconCalendar className="size-4" />
-                                        {field.value ? format(field.value, "PPP", { locale: ptBR }) : <span>Selecione a data</span>}
+                                        <span className="truncate">
+                                            {field.value instanceof Date ? format(field.value, "PPP", { locale: ptBR }) : "Selecione a data"}
+                                        </span>
                                     </Button>
                                 </PopoverTrigger>
-                                <PopoverContent className="w-auto p-0" align="start">
+                                <PopoverContent
+                                    className={cn(
+                                        "p-0",
+                                        isMobile ? "w-[calc(100vw-3rem)] max-w-88" : "w-auto",
+                                    )}
+                                    align="start"
+                                    sideOffset={8}
+                                >
                                     <Calendar
                                         mode="single"
-                                        selected={field.value}
-                                        onSelect={field.onChange}
+                                        selected={field.value instanceof Date ? field.value : undefined}
+                                        onSelect={(date) => field.onChange(date)}
                                         disabled={isSubmitting}
                                         locale={ptBR}
+                                        className="mx-auto [--cell-size:--spacing(7)] sm:[--cell-size:--spacing(8)]"
+                                        classNames={{
+                                            root: "w-full",
+                                        }}
                                         initialFocus
                                     />
                                 </PopoverContent>

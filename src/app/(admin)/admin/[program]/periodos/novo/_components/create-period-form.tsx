@@ -1,23 +1,18 @@
 "use client";
 
 import { isRedirectError } from "@/lib/is-redirect-error";
-import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { IconCalendar, IconLoader2 } from "@tabler/icons-react";
-import { format } from "date-fns";
-import { ptBR } from "date-fns/locale";
+import { IconLoader2 } from "@tabler/icons-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 import { Controller, useForm, useWatch, type SubmitHandler } from "react-hook-form";
 import z from "zod";
 import { createPeriodAction } from "../actions";
 import { createPeriodSchema } from "../schema";
+import { DatePicker } from "@/components/date-picker";
 import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { useIsMobile } from "@/hooks/use-mobile";
 
 type FormInput = z.input<typeof createPeriodSchema>;
 type FormOutput = z.output<typeof createPeriodSchema>;
@@ -30,7 +25,6 @@ export function CreatePeriodForm({ programSlug }: CreatePeriodFormProps) {
     const router = useRouter();
     const pathname = usePathname();
     const searchParams = useSearchParams();
-    const isMobile = useIsMobile();
 
     const form = useForm<FormInput, undefined, FormOutput>({
         resolver: zodResolver(createPeriodSchema),
@@ -132,45 +126,13 @@ export function CreatePeriodForm({ programSlug }: CreatePeriodFormProps) {
                     render={({ field }) => (
                         <div className="space-y-2">
                             <Label>Data de Início *</Label>
-                            <Popover>
-                                <PopoverTrigger asChild>
-                                    <Button
-                                        type="button"
-                                        variant="outline"
-                                        className={cn(
-                                            "w-full justify-start rounded-lg bg-background p-5 text-left font-normal",
-                                            !field.value && "text-muted-foreground",
-                                        )}
-                                        disabled={isSubmitting}
-                                    >
-                                        <IconCalendar className="size-4" />
-                                        <span className="truncate">
-                                            {field.value instanceof Date ? format(field.value, "PPP", { locale: ptBR }) : "Selecione a data"}
-                                        </span>
-                                    </Button>
-                                </PopoverTrigger>
-                                <PopoverContent
-                                    className={cn(
-                                        "p-0",
-                                        isMobile ? "w-[calc(100vw-3rem)] max-w-88" : "w-auto",
-                                    )}
-                                    align="start"
-                                    sideOffset={8}
-                                >
-                                    <Calendar
-                                        mode="single"
-                                        selected={field.value instanceof Date ? field.value : undefined}
-                                        onSelect={(date) => field.onChange(date)}
-                                        disabled={isSubmitting}
-                                        locale={ptBR}
-                                        className="mx-auto [--cell-size:--spacing(7)] sm:[--cell-size:--spacing(8)]"
-                                        classNames={{
-                                            root: "w-full",
-                                        }}
-                                        initialFocus
-                                    />
-                                </PopoverContent>
-                            </Popover>
+                            <DatePicker
+                                value={field.value instanceof Date ? field.value : undefined}
+                                onChange={field.onChange}
+                                placeholder="Selecione a data"
+                                disabled={isSubmitting}
+                                className="w-full sm:w-53"
+                            />
                             {errors.startDate && <p className="text-sm text-red-600">{errors.startDate.message}</p>}
                         </div>
                     )}
@@ -182,45 +144,13 @@ export function CreatePeriodForm({ programSlug }: CreatePeriodFormProps) {
                     render={({ field }) => (
                         <div className="space-y-2">
                             <Label>Data de Término *</Label>
-                            <Popover>
-                                <PopoverTrigger asChild>
-                                    <Button
-                                        type="button"
-                                        variant="outline"
-                                        className={cn(
-                                            "w-full justify-start rounded-lg bg-background p-5 text-left font-normal",
-                                            !field.value && "text-muted-foreground",
-                                        )}
-                                        disabled={isSubmitting}
-                                    >
-                                        <IconCalendar className="size-4" />
-                                        <span className="truncate">
-                                            {field.value instanceof Date ? format(field.value, "PPP", { locale: ptBR }) : "Selecione a data"}
-                                        </span>
-                                    </Button>
-                                </PopoverTrigger>
-                                <PopoverContent
-                                    className={cn(
-                                        "p-0",
-                                        isMobile ? "w-[calc(100vw-3rem)] max-w-88" : "w-auto",
-                                    )}
-                                    align="start"
-                                    sideOffset={8}
-                                >
-                                    <Calendar
-                                        mode="single"
-                                        selected={field.value instanceof Date ? field.value : undefined}
-                                        onSelect={(date) => field.onChange(date)}
-                                        disabled={isSubmitting}
-                                        locale={ptBR}
-                                        className="mx-auto [--cell-size:--spacing(7)] sm:[--cell-size:--spacing(8)]"
-                                        classNames={{
-                                            root: "w-full",
-                                        }}
-                                        initialFocus
-                                    />
-                                </PopoverContent>
-                            </Popover>
+                            <DatePicker
+                                value={field.value instanceof Date ? field.value : undefined}
+                                onChange={field.onChange}
+                                placeholder="Selecione a data"
+                                disabled={isSubmitting}
+                                className="w-full sm:w-53"
+                            />
                             {errors.endDate && <p className="text-sm text-red-600">{errors.endDate.message}</p>}
                         </div>
                     )}

@@ -15,6 +15,7 @@ export async function createPeriod(
     programSlug: string,
     data: {
         name: string;
+        slug: string;
         startDate: Date;
         endDate: Date;
     },
@@ -22,6 +23,7 @@ export async function createPeriod(
     return await prisma.period.create({
         data: {
             name: data.name,
+            slug: data.slug,
             startDate: data.startDate,
             endDate: data.endDate,
             program: {

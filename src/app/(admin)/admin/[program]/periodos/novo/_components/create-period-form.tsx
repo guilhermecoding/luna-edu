@@ -12,6 +12,7 @@ import { createPeriodSchema } from "../schema";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import autoSlug from "@/lib/auto-slug";
 
 type FormInput = z.input<typeof createPeriodSchema>;
 type FormOutput = z.output<typeof createPeriodSchema>;
@@ -30,6 +31,7 @@ export function CreatePeriodForm({ programSlug }: CreatePeriodFormProps) {
         mode: "onChange",
         defaultValues: {
             name: "",
+            slug: "",
             startDate: undefined,
             endDate: undefined,
         },
@@ -38,6 +40,7 @@ export function CreatePeriodForm({ programSlug }: CreatePeriodFormProps) {
     const {
         register,
         reset,
+        setValue,
         setError,
         clearErrors,
         control,
@@ -45,9 +48,16 @@ export function CreatePeriodForm({ programSlug }: CreatePeriodFormProps) {
     } = form;
 
     const nameValue = useWatch({ control, name: "name" });
+    const slugValue = useWatch({ control, name: "slug" });
     const startDateValue = useWatch({ control, name: "startDate" });
     const endDateValue = useWatch({ control, name: "endDate" });
-    const canSubmit = isValid && Boolean(nameValue?.trim()) && Boolean(startDateValue) && Boolean(endDateValue) && !isSubmitting;
+    const canSubmit =
+        isValid &&
+        Boolean(nameValue?.trim()) &&
+        Boolean(slugValue?.trim()) &&
+        Boolean(startDateValue) &&
+        Boolean(endDateValue) &&
+        !isSubmitting;
 
     useEffect(() => {
         clearErrors();
@@ -55,6 +65,7 @@ export function CreatePeriodForm({ programSlug }: CreatePeriodFormProps) {
         return () => {
             reset({
                 name: "",
+                slug: "",
                 startDate: undefined,
                 endDate: undefined,
             });
@@ -116,6 +127,40 @@ export function CreatePeriodForm({ programSlug }: CreatePeriodFormProps) {
                     className="rounded-lg bg-background p-5"
                 />
                 {errors.name && <p className="text-sm text-red-600">{errors.name.message}</p>}
+            </div>
+
+            <div className="space-y-2">
+                <Label htmlFor="slug">Slug *</Label>
+                <div className="flex gap-2">
+                    <Input
+                        id="slug"
+                        placeholder="Ex: 2026-1"
+                        {...register("slug")}
+                        disabled={isSubmitting}
+                        aria-invalid={errors.slug ? "true" : "false"}
+                        className="w-72 rounded-lg bg-background p-5"
+                    />
+                    <Button
+                        type="button"
+                        variant="outline"
+                        className="mt-0.5 bg-black p-4 text-sm text-white dark:bg-white dark:text-black"
+                        onClick={() => {
+                            const newSlug = autoSlug(nameValue);
+                            if (newSlug) {
+                                setValue("slug", newSlug, {
+                                    shouldDirty: true,
+                                    shouldTouch: true,
+                                    shouldValidate: true,
+                                });
+                            }
+                        }}
+                        disabled={isSubmitting || !nameValue}
+                    >
+                        Auto
+                    </Button>
+                </div>
+                {errors.slug && <p className="text-sm text-red-600">{errors.slug.message}</p>}
+                <p className="text-xs text-muted-foreground">O slug não poderá ser alterado após a criação do período.</p>
             </div>
 
             <div className="grid gap-4 sm:grid-cols-2">

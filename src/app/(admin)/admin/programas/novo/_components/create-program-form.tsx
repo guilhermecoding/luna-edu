@@ -12,25 +12,10 @@ import { createProgramAction } from "../actions";
 import { createProgramSchema } from "../schema";
 import { IconLoader2 } from "@tabler/icons-react";
 import { isRedirectError } from "@/lib/is-redirect-error";
+import autoSlug from "@/lib/auto-slug";
 
 type FormInput = z.input<typeof createProgramSchema>;
 type FormOutput = z.output<typeof createProgramSchema>;
-
-/**
- * Gera um slug automaticamente a partir do nome do programa, removendo acentos, caracteres especiais e substituindo espaços por hífens.
- * @param name O nome do programa a ser convertido em slug.
- * @returns O slug gerado a partir do nome do programa.
- */
-function autoSlug(name: string) {
-    return name
-        .toLowerCase()
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "")
-        .replace(/[^\w\s-]/g, "")
-        .trim()
-        .replace(/\s+/g, "-")
-        .replace(/-+/g, "-");
-}
 
 export function CreateProgramForm() {
     const router = useRouter();
@@ -160,6 +145,7 @@ export function CreateProgramForm() {
                     </Button>
                 </div>
                 {errors.slug && <p className="text-sm text-red-600">{errors.slug.message}</p>}
+                <p className="text-xs text-muted-foreground">O slug não poderá ser alterado após a criação do programa.</p>
             </div>
 
             <div className="space-y-2">

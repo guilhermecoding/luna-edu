@@ -4,6 +4,7 @@ import TitlePage from "@/components/title-page";
 import { ButtonLink } from "@/components/ui/button-link";
 import { IconCalendarPlus } from "@tabler/icons-react";
 import { Metadata } from "next";
+import CurrentPeriod from "./_components/current-period";
 
 export const metadata: Metadata = {
     title: "Períodos",
@@ -30,6 +31,10 @@ export default async function PeriodsPage({
                         </ButtonLink>
                     </div>
                 </div>
+            </Section>
+
+            <Section className="mt-16">
+                <CurrentPeriod />
             </Section>
         </Page>
     );

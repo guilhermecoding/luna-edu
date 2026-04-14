@@ -128,7 +128,7 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
-  --primary-theme: #432DD7;
+  --primary-theme: oklch(62.3% 0.214 259.815);
 }
 
 @layer base {

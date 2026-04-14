@@ -9,7 +9,6 @@ import { Controller, useForm, useWatch, type SubmitHandler } from "react-hook-fo
 import z from "zod";
 import { createPeriodAction } from "../actions";
 import { createPeriodSchema } from "../schema";
-import { DatePicker } from "@/components/date-picker";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -126,12 +125,22 @@ export function CreatePeriodForm({ programSlug }: CreatePeriodFormProps) {
                     render={({ field }) => (
                         <div className="space-y-2">
                             <Label>Data de Início *</Label>
-                            <DatePicker
-                                value={field.value instanceof Date ? field.value : undefined}
-                                onChange={field.onChange}
-                                placeholder="Selecione a data"
+                            <Input
+                                type="date"
+                                value={field.value instanceof Date ? field.value.toISOString().slice(0, 10) : ""}
+                                onClick={(event) => {
+                                    try {
+                                        event.currentTarget.showPicker?.();
+                                    } catch {
+                                        // Em navegadores sem suporte/gesto válido, mantém comportamento nativo padrão.
+                                    }
+                                }}
+                                onChange={(event) => {
+                                    const nextValue = event.target.value;
+                                    field.onChange(nextValue ? new Date(`${nextValue}T00:00:00`) : undefined);
+                                }}
                                 disabled={isSubmitting}
-                                className="w-full sm:w-53"
+                                className="h-10 w-full rounded-xl bg-background px-3 text-sm sm:w-53"
                             />
                             {errors.startDate && <p className="text-sm text-red-600">{errors.startDate.message}</p>}
                         </div>
@@ -144,12 +153,22 @@ export function CreatePeriodForm({ programSlug }: CreatePeriodFormProps) {
                     render={({ field }) => (
                         <div className="space-y-2">
                             <Label>Data de Término *</Label>
-                            <DatePicker
-                                value={field.value instanceof Date ? field.value : undefined}
-                                onChange={field.onChange}
-                                placeholder="Selecione a data"
+                            <Input
+                                type="date"
+                                value={field.value instanceof Date ? field.value.toISOString().slice(0, 10) : ""}
+                                onClick={(event) => {
+                                    try {
+                                        event.currentTarget.showPicker?.();
+                                    } catch {
+                                        // Em navegadores sem suporte/gesto válido, mantém comportamento nativo padrão.
+                                    }
+                                }}
+                                onChange={(event) => {
+                                    const nextValue = event.target.value;
+                                    field.onChange(nextValue ? new Date(`${nextValue}T00:00:00`) : undefined);
+                                }}
                                 disabled={isSubmitting}
-                                className="w-full sm:w-53"
+                                className="h-10 w-full rounded-xl bg-background px-3 text-sm sm:w-53"
                             />
                             {errors.endDate && <p className="text-sm text-red-600">{errors.endDate.message}</p>}
                         </div>

@@ -183,17 +183,20 @@ model Room {
 }
 
 model Period {
-  id          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz
-  name        String
-  startDate   DateTime  @map("start_date") @db.Date
-  endDate     DateTime  @map("end_date") @db.Date
-  programId   String    @map("id_program") @db.Uuid
-  completedAt DateTime? @map("completed_at") @db.Timestamptz
+  id            String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt     DateTime  @default(now()) @map("created_at") @db.Timestamptz
+  name          String
+  startDate     DateTime  @map("start_date") @db.Date
+  endDate       DateTime  @map("end_date") @db.Date
+  programId     String    @map("id_program") @db.Uuid
+  completedAt   DateTime? @map("completed_at") @db.Timestamptz
+  slug          String
+  canonicalCode String?   @unique @default(dbgenerated("gen_random_uuid()")) @map("canonical_code") @db.Uuid
 
   program Program  @relation(fields: [programId], references: [id])
   courses Course[]
 
+  @@unique([programId, slug])
   @@map("periods")
   @@schema("public")
 }

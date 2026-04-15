@@ -30,7 +30,7 @@ function Info({
 
 export default function CurrentPeriod() {
     return (
-        <div className="w-full xl:w-2/3 border border-muted-foreground/40 bg-slate-100 dark:bg-muted p-8 rounded-4xl">
+        <div className="w-full xl:w-2/3 border border-muted-foreground/40 bg-surface dark:bg-muted p-8 rounded-4xl">
             {/* Primeira linha */}
             <div className="flex flex-col gap-y-3">
                 {/* Bagde */}

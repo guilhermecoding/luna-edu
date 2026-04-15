@@ -31,6 +31,7 @@ export const adminMenus: ItemMenuSidebarAdmin[] = [
                 url: "/admin/periodos",
                 icon: "calendar",
                 isActive: false,
+                hiddenOnPaths: ["^/admin/programas"],
                 items: [
                     { title: "Listar Períodos", url: "/admin/periodos" },
                     { title: "Criar Período", url: "/admin/periodos/novo" },
@@ -41,6 +42,7 @@ export const adminMenus: ItemMenuSidebarAdmin[] = [
                 url: "/admin/cursos",
                 icon: "book",
                 isActive: false,
+                hiddenOnPaths: ["^/admin/programas"],
                 items: [
                     { title: "Listar Cursos", url: "/admin/cursos" },
                     { title: "Novo Curso", url: "/admin/cursos/novo" },

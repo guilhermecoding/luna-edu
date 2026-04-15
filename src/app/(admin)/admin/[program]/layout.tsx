@@ -1,6 +1,4 @@
 import { getProgramBySlug } from "@/services/programs/programs.service";
-import { adminMenus } from "../../_config/menus/admin-menus";
-import SidebarAdminBase from "../_components/sidebar-admin/sidebar-admin-base";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import SidebarAndPageSkeleton from "@/components/skeletons/sidebar-and-page-skeleton";
@@ -21,9 +19,9 @@ async function ProgramLayoutContent({
     }
 
     return (
-        <SidebarAdminBase menus={adminMenus}>
+        <>
             {children}
-        </SidebarAdminBase>
+        </>
     );
 }
 

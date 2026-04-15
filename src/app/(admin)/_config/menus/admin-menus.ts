@@ -39,13 +39,12 @@ export const adminMenus: ItemMenuSidebarAdmin[] = [
             },
             {
                 title: "Cursos",
-                url: "/admin/cursos",
+                url: "/admin/[program]/periodos/[period]/cursos",
                 icon: "book",
                 isActive: false,
-                hiddenOnPaths: ["^/admin/programas"],
                 items: [
-                    { title: "Listar Cursos", url: "/admin/cursos" },
-                    { title: "Novo Curso", url: "/admin/cursos/novo" },
+                    { title: "Listar Cursos", url: "/admin/[program]/periodos/[period]/cursos" },
+                    { title: "Novo Curso", url: "/admin/[program]/periodos/[period]/cursos/novo" },
                 ],
             },
             {

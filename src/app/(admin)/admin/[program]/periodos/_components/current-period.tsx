@@ -5,7 +5,7 @@ import { Progress } from "@/components/ui/progress";
 import { IconFileTextFilled, IconHelpHexagonFilled, IconPencilFilled } from "@tabler/icons-react";
 import { connection } from "next/server";
 import { Suspense } from "react";
-import getPeriodStatus from "@/lib/get-period-status";
+import getPeriodStatus, { isPeriodActiveByDay } from "@/lib/get-period-status";
 import { PeriodListItem } from "@/services/periods/periods.type";
 
 function Info({
@@ -55,13 +55,14 @@ async function CurrentPeriodContent({
     const today = new Date();
 
     const current =
-        periods.find((p) => p.startDate <= today && p.endDate >= today) ?? periods[0];
+        periods.find((p) => isPeriodActiveByDay(p, today)) ?? periods[0];
 
     if (!current) {
         return <EmptyCurrentPeriod />;
     }
 
     const { statusLabel, statusVariant } = getPeriodStatus(current, today);
+    const isCurrentPeriodActive = isPeriodActiveByDay(current, today);
 
     return (
         <div className="w-full xl:w-2/3 border border-muted-foreground/40 bg-surface dark:bg-muted p-8 rounded-4xl">
@@ -71,7 +72,7 @@ async function CurrentPeriodContent({
                 <div className="flex items-center">
                     <div className="w-full flex flex-row justify-between">
                         <span className="bg-primary-theme/20 text-sm font-bold text-primary-theme px-4 py-1 rounded-full">
-                            PERÍODO ATUAL
+                            {isCurrentPeriodActive ? "PERÍODO ATUAL" : "ULTIMO PERÍODO"}
                         </span>
                         <PulsingStatusIndicator text={statusLabel} variant={statusVariant} />
                     </div>

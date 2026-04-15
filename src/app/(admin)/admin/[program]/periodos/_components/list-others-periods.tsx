@@ -3,6 +3,7 @@ import formatDate from "@/lib/format-date";
 import { Suspense } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { PeriodListItem } from "@/services/periods/periods.type";
+import getPeriodStatus from "@/lib/get-period-status";
 
 function SkeletonItem() {
     return (
@@ -61,32 +62,11 @@ async function ListOthersPeriodsContent({
         return <EmptyOthersPeriodsList />;
     }
 
-    function getStatus(period: PeriodListItem) {
-        if (period.completedAt) {
-            return {
-                statusLabel: "FINALIZADO",
-                statusVariant: "done" as const,
-            };
-        }
-
-        if (period.startDate > today) {
-            return {
-                statusLabel: "PRÓXIMO",
-                statusVariant: "info" as const,
-            };
-        }
-
-        return {
-            statusLabel: "PENDENTE",
-            statusVariant: "warning" as const,
-        };
-    }
-
     return (
         <div className="space-y-4">
             {periods.map((period) => (
                 (() => {
-                    const { statusLabel, statusVariant } = getStatus(period);
+                    const { statusLabel, statusVariant } = getPeriodStatus(period, today);
 
                     return (
                         <ItemPeriod

@@ -4,6 +4,8 @@ import { ButtonLink } from "@/components/ui/button-link";
 import { Progress } from "@/components/ui/progress";
 import { IconFileTextFilled, IconHelpHexagonFilled, IconPencilFilled } from "@tabler/icons-react";
 import type { PeriodListItem } from "@/services/periods/periods.service";
+import { connection } from "next/server";
+import { Suspense } from "react";
 
 function Info({
     label,
@@ -39,13 +41,15 @@ function EmptyCurrentPeriod() {
     );
 }
 
-export default async function CurrentPeriod({
+async function CurrentPeriodContent({
     periodsPromise,
     programSlug,
 }: {
     periodsPromise: Promise<PeriodListItem[]>;
     programSlug: string;
 }) {
+    await connection();
+
     const periods = await periodsPromise;
     const today = new Date();
 
@@ -126,5 +130,23 @@ export default async function CurrentPeriod({
                 </div>
             </div>
         </div>
+    );
+}
+
+export default function CurrentPeriod({
+    periodsPromise,
+    programSlug,
+}: {
+    periodsPromise: Promise<PeriodListItem[]>;
+    programSlug: string;
+}) {
+    if (!periodsPromise) {
+        return <EmptyCurrentPeriod />;
+    }
+
+    return (
+        <Suspense fallback={<div className="w-full h-64 bg-surface rounded-4xl animate-pulse" />}>
+            <CurrentPeriodContent periodsPromise={periodsPromise} programSlug={programSlug} />
+        </Suspense>
     );
 }

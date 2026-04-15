@@ -55,23 +55,51 @@ async function ListOthersPeriodsContent({
     programSlug: string;
 }) {
     const periods = await periodsPromise;
+    const today = new Date();
 
     if (periods.length === 0) {
         return <EmptyOthersPeriodsList />;
     }
 
+    function getStatus(period: PeriodListItem) {
+        if (period.completedAt) {
+            return {
+                statusLabel: "FINALIZADO",
+                statusVariant: "done" as const,
+            };
+        }
+
+        if (period.startDate > today) {
+            return {
+                statusLabel: "PRÓXIMO",
+                statusVariant: "info" as const,
+            };
+        }
+
+        return {
+            statusLabel: "PENDENTE",
+            statusVariant: "warning" as const,
+        };
+    }
+
     return (
         <div className="space-y-4">
             {periods.map((period) => (
-                <ItemPeriod
-                    key={period.id}
-                    programSlug={programSlug}
-                    periodSlug={period.slug}
-                    title={period.name}
-                    dateRange={`${formatDate(period.startDate)} - ${formatDate(period.endDate)}`}
-                    statusLabel={period.completedAt ? "FINALIZADO" : "ATIVO"}
-                    statusVariant={period.completedAt ? "done" : "success"}
-                />
+                (() => {
+                    const { statusLabel, statusVariant } = getStatus(period);
+
+                    return (
+                        <ItemPeriod
+                            key={period.id}
+                            programSlug={programSlug}
+                            periodSlug={period.slug}
+                            title={period.name}
+                            dateRange={`${formatDate(period.startDate)} - ${formatDate(period.endDate)}`}
+                            statusLabel={statusLabel}
+                            statusVariant={statusVariant}
+                        />
+                    );
+                })()
             ))}
         </div>
     );

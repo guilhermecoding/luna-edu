@@ -2,19 +2,19 @@ import { cn } from "@/lib/utils";
 
 type Variant = "success" | "warning" | "error" | "done" | "info";
 
-interface InfoProps {
+export interface StaticStatusIndicatorProps {
     text: string;
     variant?: Variant;
     size?: number;
     className?: string;
 }
 
-export default function StaticStatusIndicator({
+export function StaticStatusIndicator({
     text,
     variant = "done",
     size = 2.5,
     className,
-}: InfoProps,
+}: StaticStatusIndicatorProps,
 ) {
     return (
         <div className={cn("flex flex-row gap-2 items-center", className)}>

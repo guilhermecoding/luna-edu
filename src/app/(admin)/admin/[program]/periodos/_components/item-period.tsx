@@ -1,6 +1,6 @@
 "use client";
 
-import StaticStatusIndicator from "@/components/static-status-indicator";
+import { StaticStatusIndicator, StaticStatusIndicatorProps } from "@/components/static-status-indicator";
 import { Separator } from "@/components/ui/separator";
 import {
     Popover,
@@ -45,7 +45,7 @@ export default function ItemPeriod({
     title: string;
     dateRange: string;
     statusLabel: string;
-    statusVariant: "done" | "success" | "warning";
+    statusVariant: StaticStatusIndicatorProps["variant"];
 }) {
     return (
         <div className="w-full min-w-0 flex flex-row items-center bg-surface border border-muted-foreground/40 p-4 rounded-4xl gap-3">

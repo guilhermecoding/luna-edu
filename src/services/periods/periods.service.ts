@@ -115,6 +115,11 @@ export async function getPeriodsByProgramSlug(
             startDate: true,
             endDate: true,
             completedAt: true,
+            _count: {
+                select: {
+                    courses: true,
+                },
+            },
         },
     });
 }

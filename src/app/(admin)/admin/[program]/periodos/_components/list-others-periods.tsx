@@ -77,6 +77,7 @@ async function ListOthersPeriodsContent({
                             dateRange={`${formatDate(period.startDate)} - ${formatDate(period.endDate)}`}
                             statusLabel={statusLabel}
                             statusVariant={statusVariant}
+                            coursesCount={period._count.courses}
                         />
                     );
                 })()

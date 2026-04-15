@@ -31,7 +31,6 @@ import {
 import {
     deletePeriodAction,
     editPeriodAction,
-    updatePeriodStatusAction,
 } from "../actions";
 import { editPeriodSchema } from "../schema";
 
@@ -62,11 +61,8 @@ export function EditPeriodForm({
     const [deleteConfirmationName, setDeleteConfirmationName] = useState("");
     const [deleteError, setDeleteError] = useState<string | null>(null);
     const [isDeleting, setIsDeleting] = useState(false);
-    const [status, setStatus] = useState<PeriodStatus>(completedAt ? "completed" : "active");
     const [pendingStatus, setPendingStatus] = useState<PeriodStatus | null>(null);
     const [isStatusModalOpen, setIsStatusModalOpen] = useState(false);
-    const [statusError, setStatusError] = useState<string | null>(null);
-    const [isUpdatingStatus, setIsUpdatingStatus] = useState(false);
 
     const form = useForm<FormInput, undefined, FormOutput>({
         resolver: zodResolver(editPeriodSchema),
@@ -75,11 +71,13 @@ export function EditPeriodForm({
             name,
             startDate,
             endDate,
+            status: completedAt ? "completed" : "active",
         },
     });
 
     const {
         register,
+        setValue,
         setError,
         clearErrors,
         control,
@@ -89,14 +87,16 @@ export function EditPeriodForm({
     const nameValue = useWatch({ control, name: "name" });
     const startDateValue = useWatch({ control, name: "startDate" });
     const endDateValue = useWatch({ control, name: "endDate" });
+    const statusValue = useWatch({ control, name: "status" });
     const canSubmit =
         isValid &&
         Boolean(nameValue?.trim()) &&
         Boolean(startDateValue) &&
         Boolean(endDateValue) &&
+        Boolean(statusValue) &&
         !isSubmitting;
     const canDelete = deleteConfirmationName === name && !isDeleting;
-    const statusToConfirm = pendingStatus ?? status;
+    const statusToConfirm = pendingStatus ?? statusValue;
     const isConcludeAction = statusToConfirm === "completed";
 
     const onSubmit: SubmitHandler<FormOutput> = async (data) => {
@@ -149,44 +149,27 @@ export function EditPeriodForm({
             return;
         }
 
-        if (nextStatus === status) {
+        if (nextStatus === statusValue) {
             return;
         }
 
-        setStatusError(null);
         setPendingStatus(nextStatus);
         setIsStatusModalOpen(true);
     };
 
-    const onConfirmStatusChange = async () => {
+    const onConfirmStatusChange = () => {
         if (!pendingStatus) {
             setIsStatusModalOpen(false);
             return;
         }
 
-        setStatusError(null);
-        setIsUpdatingStatus(true);
-
-        try {
-            const result = await updatePeriodStatusAction(programSlug, periodSlug, pendingStatus);
-            if (result?.success === false) {
-                setStatusError(result.error || "Erro ao atualizar status do período");
-                return;
-            }
-
-            setStatus(pendingStatus);
-            setPendingStatus(null);
-            setIsStatusModalOpen(false);
-            router.refresh();
-        } catch (error) {
-            if (isRedirectError(error)) {
-                throw error;
-            }
-
-            setStatusError("Erro ao atualizar status do período");
-        } finally {
-            setIsUpdatingStatus(false);
-        }
+        setValue("status", pendingStatus, {
+            shouldDirty: true,
+            shouldTouch: true,
+            shouldValidate: true,
+        });
+        setPendingStatus(null);
+        setIsStatusModalOpen(false);
     };
 
     return (
@@ -225,9 +208,9 @@ export function EditPeriodForm({
             <div className="space-y-2">
                 <Label htmlFor="status">Status do Período</Label>
                 <Select
-                    value={status}
+                    value={statusValue}
                     onValueChange={onStatusChange}
-                    disabled={isSubmitting || isUpdatingStatus}
+                    disabled={isSubmitting}
                 >
                     <SelectTrigger id="status" className="h-10 w-full rounded-xl bg-background px-3 text-sm sm:w-53">
                         <SelectValue placeholder="Selecione um status" />
@@ -400,14 +383,9 @@ export function EditPeriodForm({
             <Dialog
                 open={isStatusModalOpen}
                 onOpenChange={(open) => {
-                    if (isUpdatingStatus) {
-                        return;
-                    }
-
                     setIsStatusModalOpen(open);
                     if (!open) {
                         setPendingStatus(null);
-                        setStatusError(null);
                     }
                 }}
             >
@@ -427,11 +405,9 @@ export function EditPeriodForm({
                         <span className="text-center">
                             {isConcludeAction
                                 ? "Ao concluir, este período deixará de ser considerado ativo até que seja ativado novamente."
-                                : "Ao ativar, este período voltará a ser considerado ativo imediatamente."}
+                                : "Ao ativar, este período voltará a ser considerado ativo após salvar as alterações."}
                         </span>
                     </div>
-
-                    {statusError && <p className="text-sm text-red-600">{statusError}</p>}
 
                     <DialogFooter>
                         <Button
@@ -440,27 +416,17 @@ export function EditPeriodForm({
                             onClick={() => {
                                 setIsStatusModalOpen(false);
                                 setPendingStatus(null);
-                                setStatusError(null);
                             }}
-                            disabled={isUpdatingStatus}
                         >
                             Cancelar
                         </Button>
                         <Button
                             type="button"
-                            variant={isConcludeAction ? "destructive" : "default"}
+                            variant="default"
                             onClick={onConfirmStatusChange}
-                            disabled={isUpdatingStatus}
                             className="flex items-center gap-2"
                         >
-                            {isUpdatingStatus && <IconLoader2 className="size-5 animate-spin" />}
-                            {isUpdatingStatus
-                                ? isConcludeAction
-                                    ? "Concluindo..."
-                                    : "Ativando..."
-                                : isConcludeAction
-                                    ? "Concluir"
-                                    : "Ativar"}
+                            {isConcludeAction ? "Concluir" : "Ativar"}
                         </Button>
                     </DialogFooter>
                 </DialogContent>

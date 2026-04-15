@@ -3,12 +3,11 @@
 import { StaticStatusIndicator, StaticStatusIndicatorProps } from "@/components/static-status-indicator";
 import { Separator } from "@/components/ui/separator";
 import {
-    Popover,
-    PopoverContent,
-    PopoverDescription,
-    PopoverHeader,
-    PopoverTrigger,
-} from "@/components/ui/popover";
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { IconCalendarFilled, IconDotsVerticalFilled, IconFileTextFilled, IconPencilFilled } from "@tabler/icons-react";
 import Link from "next/link";
@@ -88,30 +87,27 @@ export default function ItemPeriod({
                 </div>
             </div>
             {/* Ações */}
-            <Popover>
-                <PopoverTrigger asChild>
+            <DropdownMenu>
+                <DropdownMenuTrigger asChild>
                     <Button variant="outline" className="bg-transparent border-none p-0">
                         <IconDotsVerticalFilled className="size-6 text-muted-foreground/90" />
                     </Button>
-                </PopoverTrigger>
-                <PopoverContent align="end" className="w-auto">
-                    <PopoverHeader>
-                        <PopoverDescription className="sr-only">
-                            Selecione uma ação.
-                        </PopoverDescription>
-                        <div className="flex flex-col justify-center gap-y-4">
-                            <Link href={`/admin/${programSlug}/periodos/${periodSlug}/editar`} className="flex flex-row items-center gap-2 text-sm text-muted-foreground/90 hover:bg-muted rounded-full px-2 py-1">
-                                <IconPencilFilled />
-                                <span>Editar</span>
-                            </Link>
-                            <Link href={`/admin/${programSlug}/periodos/${periodSlug}/detalhes`} className="flex flex-row items-center gap-2 text-sm text-muted-foreground/90 hover:bg-muted rounded-full px-2 py-1">
-                                <IconFileTextFilled />
-                                <span>Detalhar</span>
-                            </Link>
-                        </div>
-                    </PopoverHeader>
-                </PopoverContent>
-            </Popover>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-44">
+                    <DropdownMenuItem asChild>
+                        <Link href={`/admin/${programSlug}/periodos/${periodSlug}/editar`} className="flex flex-row items-center gap-2 text-sm text-muted-foreground/90">
+                            <IconPencilFilled />
+                            <span>Editar</span>
+                        </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                        <Link href={`/admin/${programSlug}/periodos/${periodSlug}/detalhes`} className="flex flex-row items-center gap-2 text-sm text-muted-foreground/90">
+                            <IconFileTextFilled />
+                            <span>Detalhar</span>
+                        </Link>
+                    </DropdownMenuItem>
+                </DropdownMenuContent>
+            </DropdownMenu>
         </div>
     );
 }

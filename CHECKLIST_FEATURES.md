@@ -40,9 +40,11 @@ Atualizado em: 15/04/2026
 - [x] Criacao de periodo
 - [x] Regra para impedir sobreposicao de periodos abertos
 - [x] Validacoes com Zod nas Server Actions
-- [ ] Edicao de periodo
-- [ ] Encerramento/manual de conclusao de periodo
-- [ ] Exclusao de periodo
+- [x] Edicao de periodo
+- [x] Encerramento/manual de conclusao de periodo
+- [x] Exclusao de periodo
+- [ ] Adicionar card de pendências do período na página que lista os períodos
+- [ ] Formalizar o container principal de período atual
 
 ## Modulos Academicos (modelados no Prisma, pendentes de app)
 

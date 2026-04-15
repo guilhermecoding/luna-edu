@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Controller, useForm, useWatch, type SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { IconAlertTriangle, IconLoader2 } from "@tabler/icons-react";
+import { IconAlertTriangle, IconCircleCheckFilled, IconCircleDashed, IconLoader2 } from "@tabler/icons-react";
 import z from "zod";
 import imgGibbyDuvida from "@/assets/images/logo-gibby-duvida.svg";
 import { isRedirectError } from "@/lib/is-redirect-error";
@@ -216,8 +216,8 @@ export function EditPeriodForm({
                         <SelectValue placeholder="Selecione um status" />
                     </SelectTrigger>
                     <SelectContent>
-                        <SelectItem value="active">Ativo</SelectItem>
-                        <SelectItem value="completed">Concluído</SelectItem>
+                        <SelectItem value="active"><IconCircleDashed className="size-3.5" /> Ativo</SelectItem>
+                        <SelectItem value="completed"><IconCircleCheckFilled className="size-3.5" /> Concluído</SelectItem>
                     </SelectContent>
                 </Select>
                 <p className="text-xs text-muted-foreground">

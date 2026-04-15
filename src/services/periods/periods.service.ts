@@ -80,6 +80,15 @@ export async function createPeriod(
     }
 }
 
+/**
+ * Lista os períodos de um programa pelo slug.
+ *
+ * Usa cache com tag `program-periods:${programSlug}` para acelerar leituras
+ * e permitir invalidação precisa após mutações.
+ *
+ * @param programSlug Slug do programa.
+ * @returns Lista de períodos ordenada por início (mais recente primeiro).
+ */
 export async function getPeriodsByProgramSlug(
     programSlug: string,
 ): Promise<PeriodListItem[]> {
@@ -111,5 +120,184 @@ export async function getPeriodsByProgramSlug(
             endDate: true,
             completedAt: true,
         },
+    });
+}
+
+/**
+ * Busca um período específico dentro de um programa usando slug composto.
+ *
+ * Usa cache com tag `period:${programSlug}:${periodSlug}` para reaproveitar
+ * leituras frequentes da tela de edição/detalhes.
+ *
+ * @param programSlug Slug do programa.
+ * @param periodSlug Slug do período.
+ * @returns Período encontrado ou `null` quando programa/período não existir.
+ */
+export async function getPeriodByProgramAndSlug(
+    programSlug: string,
+    periodSlug: string,
+): Promise<Period | null> {
+    "use cache";
+    cacheLife("weeks");
+    cacheTag(`period:${programSlug}:${periodSlug}`);
+
+    const program = await prisma.program.findUnique({
+        where: {
+            slug: programSlug,
+        },
+        select: {
+            id: true,
+        },
+    });
+
+    if (!program) {
+        return null;
+    }
+
+    return prisma.period.findUnique({
+        where: {
+            programId_slug: {
+                programId: program.id,
+                slug: periodSlug,
+            },
+        },
+    });
+}
+
+/**
+ * Atualiza os dados editáveis de um período.
+ *
+ * Mantém o slug imutável e valida sobreposição de intervalo com outros
+ * períodos em aberto (`completedAt: null`) do mesmo programa.
+ *
+ * @param programSlug Slug do programa.
+ * @param periodSlug Slug do período a ser atualizado.
+ * @param data Dados permitidos para edição.
+ * @returns Período atualizado.
+ * @throws Error Quando programa/período não forem encontrados.
+ * @throws Error Quando houver conflito de intervalo com outro período em aberto.
+ */
+export async function updatePeriod(
+    programSlug: string,
+    periodSlug: string,
+    data: {
+        name: string;
+        startDate: Date;
+        endDate: Date;
+    },
+): Promise<Period> {
+    return prisma.$transaction(async (tx) => {
+        const program = await tx.program.findUnique({
+            where: {
+                slug: programSlug,
+            },
+            select: {
+                id: true,
+            },
+        });
+
+        if (!program) {
+            throw new Error("Programa não encontrado.");
+        }
+
+        const period = await tx.period.findUnique({
+            where: {
+                programId_slug: {
+                    programId: program.id,
+                    slug: periodSlug,
+                },
+            },
+            select: {
+                id: true,
+            },
+        });
+
+        if (!period) {
+            throw new Error("Período não encontrado.");
+        }
+
+        const overlappingOpenPeriod = await tx.period.findFirst({
+            where: {
+                programId: program.id,
+                id: {
+                    not: period.id,
+                },
+                startDate: {
+                    lte: data.endDate,
+                },
+                endDate: {
+                    gte: data.startDate,
+                },
+                completedAt: null,
+            },
+            select: {
+                id: true,
+            },
+        });
+
+        if (overlappingOpenPeriod) {
+            throw new Error("Não é possível ter períodos no mesmo intervalo de tempo.");
+        }
+
+        return tx.period.update({
+            where: {
+                programId_slug: {
+                    programId: program.id,
+                    slug: periodSlug,
+                },
+            },
+            data: {
+                name: data.name,
+                startDate: data.startDate,
+                endDate: data.endDate,
+            },
+        });
+    });
+}
+
+/**
+ * Remove um período de um programa pelo slug composto.
+ *
+ * @param programSlug Slug do programa.
+ * @param periodSlug Slug do período.
+ * @returns Período removido.
+ * @throws Error Quando programa/período não forem encontrados.
+ */
+export async function deletePeriod(programSlug: string, periodSlug: string): Promise<Period> {
+    return prisma.$transaction(async (tx) => {
+        const program = await tx.program.findUnique({
+            where: {
+                slug: programSlug,
+            },
+            select: {
+                id: true,
+            },
+        });
+
+        if (!program) {
+            throw new Error("Programa não encontrado.");
+        }
+
+        const period = await tx.period.findUnique({
+            where: {
+                programId_slug: {
+                    programId: program.id,
+                    slug: periodSlug,
+                },
+            },
+        });
+
+        if (!period) {
+            throw new Error("Período não encontrado.");
+        }
+
+        return tx.period.delete({
+            where: {
+                programId_slug: {
+                    programId: program.id,
+                    slug: periodSlug,
+                },
+            },
+        });
     });
 }

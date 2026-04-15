@@ -18,7 +18,7 @@ export default async function PeriodsPage({
 }: PageProps<"/admin/[program]/periodos">) {
     const { program } = await params;
 
-    const periodsPromise = getPeriodsByProgramSlug(program);
+    const periods = getPeriodsByProgramSlug(program);
 
     return (
         <Page>
@@ -40,15 +40,11 @@ export default async function PeriodsPage({
             </Section>
 
             <Section className="mt-16">
-                <Suspense fallback={<div className="h-64 rounded-4xl border animate-pulse" />}>
-                    <CurrentPeriod periodsPromise={periodsPromise} programSlug={program} />
-                </Suspense>
+                <CurrentPeriod periodsPromise={periods} programSlug={program} />
             </Section>
 
             <Section className="mt-16">
-                <Suspense fallback={<div className="h-40 rounded-4xl border animate-pulse" />}>
-                    <ListOthersPeriods periodsPromise={periodsPromise} programSlug={program} />
-                </Suspense>
+                <ListOthersPeriods periods={periods} programSlug={program} />
             </Section>
         </Page>
     );

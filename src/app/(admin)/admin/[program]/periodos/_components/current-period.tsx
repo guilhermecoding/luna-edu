@@ -7,6 +7,7 @@ import { connection } from "next/server";
 import { Suspense } from "react";
 import getPeriodStatus, { isPeriodActiveByDay } from "@/lib/get-period-status";
 import { PeriodListItem } from "@/services/periods/periods.type";
+import formatDate, { formatDateShort } from "@/lib/format-date";
 
 function Info({
     label,
@@ -80,7 +81,7 @@ async function CurrentPeriodContent({
                 {/* Status */}
                 <div className="flex justify-start sm:justify-end">
                     <span className="text-sm text-muted-foreground">
-                        Desde 14 Abr, 2026
+                        Desde {formatDate(current.startDate)}
                     </span>
                 </div>
             </div>
@@ -97,7 +98,7 @@ async function CurrentPeriodContent({
                 <Info label="DISCIPLINAS" value={12} />
                 <Info label="EST. TOTAL" value={562} info="Total de estudantes adicionados neste período" />
                 <Info label="EST. MATRICULADOS" value={342} info="Estudantes vinculados em pelo menos uma disciplina deste período" />
-                <Info label="TÉRMINO" value="22 jun" />
+                <Info label="TÉRMINO" value={formatDateShort(current.endDate)} />
             </div>
 
             {/* Quarta linha */}

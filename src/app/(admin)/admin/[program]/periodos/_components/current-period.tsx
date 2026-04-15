@@ -118,11 +118,3 @@ export default async function CurrentPeriod({
         </div>
     );
 }
-
-function formatDate(date: Date) {
-    return new Intl.DateTimeFormat("pt-BR", {
-        day: "2-digit",
-        month: "short",
-        year: "numeric",
-    }).format(date);
-}

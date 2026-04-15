@@ -1,5 +1,6 @@
 import type { PeriodListItem } from "@/services/periods/periods.service";
 import ItemPeriod from "./item-period";
+import formatDate from "@/lib/format-date";
 
 export default async function ListOthersPeriods({
     periodsPromise,
@@ -35,15 +36,4 @@ export default async function ListOthersPeriods({
             </div>
         </div>
     );
-}
-
-function formatDate(date: Date) {
-    const day = new Intl.DateTimeFormat("pt-BR", { day: "2-digit" }).format(date);
-    const month = new Intl.DateTimeFormat("pt-BR", { month: "short" })
-        .format(date)
-        .replace(".", "")
-        .replace(/^./, (char) => char.toUpperCase());
-    const year = new Intl.DateTimeFormat("pt-BR", { year: "numeric" }).format(date);
-
-    return `${day} ${month}, ${year}`;
 }

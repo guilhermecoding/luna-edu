@@ -402,7 +402,7 @@ export function EditPeriodForm({
 
                     <div className="flex flex-col items-center">
                         <Image className="h-32 w-32" src={imgGibbyDuvida} alt="Gibby Duvida" width={100} height={100} />
-                        <span className="text-center">
+                        <span className="text-start">
                             {isConcludeAction
                                 ? "Ao concluir, este período deixará de ser considerado ativo até que seja ativado novamente."
                                 : "Ao ativar, este período voltará a ser considerado ativo após salvar as alterações."}

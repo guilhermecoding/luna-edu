@@ -1,8 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { Controller, useForm, useWatch, type SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { IconAlertTriangle, IconLoader2 } from "@tabler/icons-react";
@@ -43,8 +43,6 @@ export function EditPeriodForm({
     endDate,
 }: EditPeriodFormProps) {
     const router = useRouter();
-    const pathname = usePathname();
-    const searchParams = useSearchParams();
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [deleteConfirmationName, setDeleteConfirmationName] = useState("");
     const [deleteError, setDeleteError] = useState<string | null>(null);
@@ -62,7 +60,6 @@ export function EditPeriodForm({
 
     const {
         register,
-        reset,
         setError,
         clearErrors,
         control,
@@ -80,29 +77,12 @@ export function EditPeriodForm({
         !isSubmitting;
     const canDelete = deleteConfirmationName === name && !isDeleting;
 
-    useEffect(() => {
-        clearErrors();
-
-        return () => {
-            reset({
-                name,
-                startDate,
-                endDate,
-            });
-        };
-    }, [clearErrors, endDate, name, reset, startDate]);
-
     const onSubmit: SubmitHandler<FormOutput> = async (data) => {
         clearErrors("root");
 
         try {
             const result = await editPeriodAction(programSlug, periodSlug, data);
             if (result?.success === false) {
-                const params = new URLSearchParams(searchParams.toString());
-                params.set("toast", "error");
-                params.set("message", result.error || "Erro ao atualizar período");
-                router.replace(`${pathname}?${params.toString()}`, { scroll: false });
-
                 setError("root", {
                     type: "server",
                     message: result.error || "Erro ao atualizar período",
@@ -114,11 +94,6 @@ export function EditPeriodForm({
             if (isRedirectError(error)) {
                 throw error;
             }
-
-            const params = new URLSearchParams(searchParams.toString());
-            params.set("toast", "error");
-            params.set("message", "Erro ao atualizar período");
-            router.replace(`${pathname}?${params.toString()}`, { scroll: false });
 
             setError("root", {
                 type: "server",
@@ -134,22 +109,12 @@ export function EditPeriodForm({
         try {
             const result = await deletePeriodAction(programSlug, periodSlug, deleteConfirmationName);
             if (result?.success === false) {
-                const params = new URLSearchParams(searchParams.toString());
-                params.set("toast", "error");
-                params.set("message", result.error || "Erro ao apagar período");
-                router.replace(`${pathname}?${params.toString()}`, { scroll: false });
-
                 setDeleteError(result.error || "Erro ao apagar período");
             }
         } catch (error) {
             if (isRedirectError(error)) {
                 throw error;
             }
-
-            const params = new URLSearchParams(searchParams.toString());
-            params.set("toast", "error");
-            params.set("message", "Erro ao apagar período");
-            router.replace(`${pathname}?${params.toString()}`, { scroll: false });
 
             setDeleteError("Erro ao apagar período");
         } finally {
@@ -270,7 +235,7 @@ export function EditPeriodForm({
                         <h3 className="text-xl font-semibold text-destructive">Zona de Perigo</h3>
                     </div>
                     <p className="mt-1 text-sm text-muted-foreground">
-                        Esta ação remove o período <b>permanentemente</b>, bem como todos os dados associados, e não pode ser desfeita.
+                        Esta ação remove o período <b>permanentemente</b>, bem como todos os dados associados (exceto os usuários), e não pode ser desfeita.
                     </p>
                 </div>
 
@@ -304,7 +269,7 @@ export function EditPeriodForm({
                             <Image className="h-32 w-32" src={imgGibbyDuvida} alt="Gibby Duvida" width={100} height={100} />
                             <span>
                                 {" "}
-                                Para confirmar, digite exatamente o nome do período: <strong>{name}</strong>
+                                Para confirmar, digite exatamente o nome do período:<br /> <strong>{name}</strong>
                             </span>
                         </div>
 

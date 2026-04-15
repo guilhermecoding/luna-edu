@@ -3,6 +3,7 @@ import TooltipText from "@/components/tooltip-text";
 import { ButtonLink } from "@/components/ui/button-link";
 import { Progress } from "@/components/ui/progress";
 import { IconFileTextFilled, IconHelpHexagonFilled, IconPencilFilled } from "@tabler/icons-react";
+import type { PeriodListItem } from "@/services/periods/periods.service";
 
 function Info({
     label,
@@ -28,7 +29,23 @@ function Info({
     );
 }
 
-export default function CurrentPeriod() {
+export default async function CurrentPeriod({
+    periodsPromise,
+    programSlug,
+}: {
+    periodsPromise: Promise<PeriodListItem[]>;
+    programSlug: string;
+}) {
+    const periods = await periodsPromise;
+    const today = new Date();
+
+    const current =
+        periods.find((p) => p.startDate <= today && p.endDate >= today) ?? periods[0];
+
+    if (!current) {
+        return <div className="rounded-4xl border p-8">Nenhum período cadastrado.</div>;
+    }
+
     return (
         <div className="w-full xl:w-2/3 border border-muted-foreground/40 bg-surface dark:bg-muted p-8 rounded-4xl">
             {/* Primeira linha */}
@@ -100,4 +117,12 @@ export default function CurrentPeriod() {
             </div>
         </div>
     );
+}
+
+function formatDate(date: Date) {
+    return new Intl.DateTimeFormat("pt-BR", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+    }).format(date);
 }

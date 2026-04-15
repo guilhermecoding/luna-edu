@@ -32,13 +32,27 @@ function Info({
     );
 }
 
-export default function ItemPeriod() {
+export default function ItemPeriod({
+    programSlug,
+    periodSlug,
+    title,
+    dateRange,
+    statusLabel,
+    statusVariant,
+}: {
+    programSlug: string;
+    periodSlug: string;
+    title: string;
+    dateRange: string;
+    statusLabel: string;
+    statusVariant: "done" | "success" | "warning";
+}) {
     return (
         <div className="w-full min-w-0 flex flex-row items-center bg-surface border border-muted-foreground/40 p-4 rounded-4xl gap-3">
             {/* Status (Celular) e Conteúdo */}
             <div className="mb-4 flex min-w-0 flex-1 flex-col sm:mb-0">
                 {/* Status (Celular) */}
-                <StaticStatusIndicator className="flex sm:hidden ml-1 mb-2" text="FINALIZADO" variant="done" />
+                <StaticStatusIndicator className="flex sm:hidden ml-1 mb-2" text={statusLabel} variant={statusVariant} />
 
                 <div className="flex w-full @container/item min-w-0 flex-row items-center justify-between">
                     <div className="flex w-full @sm/item:w-1/2 flex-row items-center">
@@ -50,10 +64,10 @@ export default function ItemPeriod() {
                         {/* Titulo e periodo */}
                         <div className="ml-4 min-w-0 flex-1">
                             <p className="truncate text-lg font-medium">
-                                1° Ciclo de 2026
+                                {title}
                             </p>
                             <p className="truncate text-sm font-medium text-muted-foreground/90">
-                                07 Ago, 2023 - 07 Set, 2023
+                                {dateRange}
                             </p>
                         </div>
                     </div>
@@ -68,7 +82,7 @@ export default function ItemPeriod() {
                     </div>
 
                     {/* Status (Tablet e Desktop) */}
-                    <StaticStatusIndicator className="hidden sm:flex" text="FINALIZADO" variant="done" />
+                    <StaticStatusIndicator className="hidden sm:flex" text={statusLabel} variant={statusVariant} />
 
 
                 </div>
@@ -86,11 +100,11 @@ export default function ItemPeriod() {
                             Selecione uma ação.
                         </PopoverDescription>
                         <div className="flex flex-col justify-center gap-y-4">
-                            <Link href="/admin/PROGRAMA/periodos/PERIODO/editar" className="flex flex-row items-center gap-2 text-sm text-muted-foreground/90 hover:bg-muted rounded-full px-2 py-1">
+                            <Link href={`/admin/${programSlug}/periodos/${periodSlug}/editar`} className="flex flex-row items-center gap-2 text-sm text-muted-foreground/90 hover:bg-muted rounded-full px-2 py-1">
                                 <IconPencilFilled />
                                 <span>Editar</span>
                             </Link>
-                            <Link href="/admin/PROGRAMA/periodos/PERIODO/detalhes" className="flex flex-row items-center gap-2 text-sm text-muted-foreground/90 hover:bg-muted rounded-full px-2 py-1">
+                            <Link href={`/admin/${programSlug}/periodos/${periodSlug}/detalhes`} className="flex flex-row items-center gap-2 text-sm text-muted-foreground/90 hover:bg-muted rounded-full px-2 py-1">
                                 <IconFileTextFilled />
                                 <span>Detalhar</span>
                             </Link>

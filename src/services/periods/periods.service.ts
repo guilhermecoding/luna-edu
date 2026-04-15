@@ -1,5 +1,11 @@
 import type { Period } from "@/generated/prisma/client";
+import { cacheLife, cacheTag } from "next/cache";
 import prisma from "@/lib/prisma";
+
+export type PeriodListItem = Pick<
+    Period,
+    "id" | "name" | "slug" | "startDate" | "endDate" | "completedAt"
+>;
 
 /**
  * Cria um novo período para o programa identificado pelo slug.
@@ -62,4 +68,25 @@ export async function createPeriod(
 
         throw error;
     }
+}
+
+export async function getPeriodsByProgramSlug(
+    programSlug: string,
+): Promise<PeriodListItem[]> {
+    "use cache";
+    cacheLife("weeks");
+    cacheTag(`program-periods:${programSlug}`);
+
+    return prisma.period.findMany({
+        where: { program: { slug: programSlug } },
+        orderBy: [{ startDate: "desc" }, { createdAt: "desc" }],
+        select: {
+            id: true,
+            name: true,
+            slug: true,
+            startDate: true,
+            endDate: true,
+            completedAt: true,
+        },
+    });
 }

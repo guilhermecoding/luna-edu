@@ -256,6 +256,67 @@ export async function updatePeriod(
 }
 
 /**
+ * Atualiza o status de conclusão de um período.
+ *
+ * Quando `status` for `active`, o período fica aberto (`completedAt: null`).
+ * Quando `status` for `completed`, marca o período como concluído com a data/hora atual.
+ *
+ * @param programSlug Slug do programa.
+ * @param periodSlug Slug do período.
+ * @param status Novo status do período.
+ * @returns Período atualizado.
+ * @throws Error Quando programa/período não forem encontrados.
+ */
+export async function updatePeriodStatus(
+    programSlug: string,
+    periodSlug: string,
+    status: "active" | "completed",
+): Promise<Period> {
+    return prisma.$transaction(async (tx) => {
+        const program = await tx.program.findUnique({
+            where: {
+                slug: programSlug,
+            },
+            select: {
+                id: true,
+            },
+        });
+
+        if (!program) {
+            throw new Error("Programa não encontrado.");
+        }
+
+        const period = await tx.period.findUnique({
+            where: {
+                programId_slug: {
+                    programId: program.id,
+                    slug: periodSlug,
+                },
+            },
+            select: {
+                id: true,
+            },
+        });
+
+        if (!period) {
+            throw new Error("Período não encontrado.");
+        }
+
+        return tx.period.update({
+            where: {
+                programId_slug: {
+                    programId: program.id,
+                    slug: periodSlug,
+                },
+            },
+            data: {
+                completedAt: status === "active" ? null : new Date(),
+            },
+        });
+    });
+}
+
+/**
  * Remove um período de um programa pelo slug composto.
  *
  * @param programSlug Slug do programa.

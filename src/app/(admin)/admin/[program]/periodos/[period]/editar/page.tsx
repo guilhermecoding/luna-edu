@@ -36,6 +36,7 @@ async function EditPeriodPageContent({
                                 name={periodData.name}
                                 startDate={periodData.startDate}
                                 endDate={periodData.endDate}
+                                completedAt={periodData.completedAt}
                             />
                         </Suspense>
                     </div>

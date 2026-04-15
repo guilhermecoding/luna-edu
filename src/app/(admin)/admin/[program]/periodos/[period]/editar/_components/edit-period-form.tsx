@@ -21,7 +21,18 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { deletePeriodAction, editPeriodAction } from "../actions";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
+import {
+    deletePeriodAction,
+    editPeriodAction,
+    updatePeriodStatusAction,
+} from "../actions";
 import { editPeriodSchema } from "../schema";
 
 type FormInput = z.input<typeof editPeriodSchema>;
@@ -33,7 +44,10 @@ type EditPeriodFormProps = {
     name: string;
     startDate: Date;
     endDate: Date;
+    completedAt: Date | null;
 };
+
+type PeriodStatus = "active" | "completed";
 
 export function EditPeriodForm({
     programSlug,
@@ -41,12 +55,18 @@ export function EditPeriodForm({
     name,
     startDate,
     endDate,
+    completedAt,
 }: EditPeriodFormProps) {
     const router = useRouter();
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [deleteConfirmationName, setDeleteConfirmationName] = useState("");
     const [deleteError, setDeleteError] = useState<string | null>(null);
     const [isDeleting, setIsDeleting] = useState(false);
+    const [status, setStatus] = useState<PeriodStatus>(completedAt ? "completed" : "active");
+    const [pendingStatus, setPendingStatus] = useState<PeriodStatus | null>(null);
+    const [isStatusModalOpen, setIsStatusModalOpen] = useState(false);
+    const [statusError, setStatusError] = useState<string | null>(null);
+    const [isUpdatingStatus, setIsUpdatingStatus] = useState(false);
 
     const form = useForm<FormInput, undefined, FormOutput>({
         resolver: zodResolver(editPeriodSchema),
@@ -76,6 +96,8 @@ export function EditPeriodForm({
         Boolean(endDateValue) &&
         !isSubmitting;
     const canDelete = deleteConfirmationName === name && !isDeleting;
+    const statusToConfirm = pendingStatus ?? status;
+    const isConcludeAction = statusToConfirm === "completed";
 
     const onSubmit: SubmitHandler<FormOutput> = async (data) => {
         clearErrors("root");
@@ -122,6 +144,51 @@ export function EditPeriodForm({
         }
     };
 
+    const onStatusChange = (nextStatus: string) => {
+        if (nextStatus !== "active" && nextStatus !== "completed") {
+            return;
+        }
+
+        if (nextStatus === status) {
+            return;
+        }
+
+        setStatusError(null);
+        setPendingStatus(nextStatus);
+        setIsStatusModalOpen(true);
+    };
+
+    const onConfirmStatusChange = async () => {
+        if (!pendingStatus) {
+            setIsStatusModalOpen(false);
+            return;
+        }
+
+        setStatusError(null);
+        setIsUpdatingStatus(true);
+
+        try {
+            const result = await updatePeriodStatusAction(programSlug, periodSlug, pendingStatus);
+            if (result?.success === false) {
+                setStatusError(result.error || "Erro ao atualizar status do período");
+                return;
+            }
+
+            setStatus(pendingStatus);
+            setPendingStatus(null);
+            setIsStatusModalOpen(false);
+            router.refresh();
+        } catch (error) {
+            if (isRedirectError(error)) {
+                throw error;
+            }
+
+            setStatusError("Erro ao atualizar status do período");
+        } finally {
+            setIsUpdatingStatus(false);
+        }
+    };
+
     return (
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             {errors.root?.message && (
@@ -153,6 +220,26 @@ export function EditPeriodForm({
                     className="w-full rounded-lg bg-muted p-5 text-muted-foreground"
                 />
                 <p className="text-xs text-muted-foreground">O slug não pode ser alterado.</p>
+            </div>
+
+            <div className="space-y-2">
+                <Label htmlFor="status">Status do Período</Label>
+                <Select
+                    value={status}
+                    onValueChange={onStatusChange}
+                    disabled={isSubmitting || isUpdatingStatus}
+                >
+                    <SelectTrigger id="status" className="h-10 w-full rounded-xl bg-background px-3 text-sm sm:w-53">
+                        <SelectValue placeholder="Selecione um status" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="active">Ativo</SelectItem>
+                        <SelectItem value="completed">Concluído</SelectItem>
+                    </SelectContent>
+                </Select>
+                <p className="text-xs text-muted-foreground">
+                    Período ativo quando concluído em branco. Período concluído quando possui data de conclusão.
+                </p>
             </div>
 
             <div className="grid gap-4 sm:grid-cols-2">
@@ -309,6 +396,75 @@ export function EditPeriodForm({
                     </DialogContent>
                 </Dialog>
             </div>
+
+            <Dialog
+                open={isStatusModalOpen}
+                onOpenChange={(open) => {
+                    if (isUpdatingStatus) {
+                        return;
+                    }
+
+                    setIsStatusModalOpen(open);
+                    if (!open) {
+                        setPendingStatus(null);
+                        setStatusError(null);
+                    }
+                }}
+            >
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogTitle>{isConcludeAction ? "Concluir Período" : "Ativar Período"}</DialogTitle>
+
+                        <DialogDescription>
+                            {isConcludeAction
+                                ? "Deseja realmente concluir este período?"
+                                : "Deseja realmente ativar este período?"}
+                        </DialogDescription>
+                    </DialogHeader>
+
+                    <div className="flex flex-col items-center">
+                        <Image className="h-32 w-32" src={imgGibbyDuvida} alt="Gibby Duvida" width={100} height={100} />
+                        <span className="text-center">
+                            {isConcludeAction
+                                ? "Ao concluir, este período deixará de ser considerado ativo até que seja ativado novamente."
+                                : "Ao ativar, este período voltará a ser considerado ativo imediatamente."}
+                        </span>
+                    </div>
+
+                    {statusError && <p className="text-sm text-red-600">{statusError}</p>}
+
+                    <DialogFooter>
+                        <Button
+                            type="button"
+                            variant="outline"
+                            onClick={() => {
+                                setIsStatusModalOpen(false);
+                                setPendingStatus(null);
+                                setStatusError(null);
+                            }}
+                            disabled={isUpdatingStatus}
+                        >
+                            Cancelar
+                        </Button>
+                        <Button
+                            type="button"
+                            variant={isConcludeAction ? "destructive" : "default"}
+                            onClick={onConfirmStatusChange}
+                            disabled={isUpdatingStatus}
+                            className="flex items-center gap-2"
+                        >
+                            {isUpdatingStatus && <IconLoader2 className="size-5 animate-spin" />}
+                            {isUpdatingStatus
+                                ? isConcludeAction
+                                    ? "Concluindo..."
+                                    : "Ativando..."
+                                : isConcludeAction
+                                    ? "Concluir"
+                                    : "Ativar"}
+                        </Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
         </form>
     );
 }

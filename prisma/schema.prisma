@@ -197,6 +197,7 @@ model Period {
   courses Course[]
 
   @@unique([programId, slug])
+  @@index([programId, completedAt, startDate, endDate])
   @@map("periods")
   @@schema("public")
 }

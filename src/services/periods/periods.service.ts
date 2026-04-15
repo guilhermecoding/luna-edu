@@ -26,41 +26,50 @@ export async function createPeriod(
         endDate: Date;
     },
 ): Promise<Period> {
-    const overlappingOpenPeriod = await prisma.period.findFirst({
-        where: {
-            program: {
-                slug: programSlug,
-            },
-            startDate: {
-                lte: data.endDate,
-            },
-            endDate: {
-                gte: data.startDate,
-            },
-            completedAt: null,
-        },
-        select: {
-            id: true,
-        },
-    });
-
-    if (overlappingOpenPeriod) {
-        throw new Error("Não é possível ter períodos no mesmo intervalo de tempo.");
-    }
-
     try {
-        return await prisma.period.create({
-            data: {
-                name: data.name,
-                slug: data.slug,
-                startDate: data.startDate,
-                endDate: data.endDate,
-                program: {
-                    connect: {
-                        slug: programSlug,
-                    },
+        return await prisma.$transaction(async (tx) => {
+            const program = await tx.program.findUnique({
+                where: {
+                    slug: programSlug,
                 },
-            },
+                select: {
+                    id: true,
+                },
+            });
+
+            if (!program) {
+                throw new Error("Programa não encontrado.");
+            }
+
+            const overlappingOpenPeriod = await tx.period.findFirst({
+                where: {
+                    programId: program.id,
+                    startDate: {
+                        lte: data.endDate,
+                    },
+                    endDate: {
+                        gte: data.startDate,
+                    },
+                    completedAt: null,
+                },
+                select: {
+                    id: true,
+                },
+            });
+
+            if (overlappingOpenPeriod) {
+                throw new Error("Não é possível ter períodos no mesmo intervalo de tempo.");
+            }
+
+            return tx.period.create({
+                data: {
+                    name: data.name,
+                    slug: data.slug,
+                    startDate: data.startDate,
+                    endDate: data.endDate,
+                    programId: program.id,
+                },
+            });
         });
     } catch (error) {
         if (error instanceof Error && error.message.includes("Unique constraint failed")) {
@@ -78,8 +87,21 @@ export async function getPeriodsByProgramSlug(
     cacheLife("weeks");
     cacheTag(`program-periods:${programSlug}`);
 
+    const program = await prisma.program.findUnique({
+        where: {
+            slug: programSlug,
+        },
+        select: {
+            id: true,
+        },
+    });
+
+    if (!program) {
+        return [];
+    }
+
     return prisma.period.findMany({
-        where: { program: { slug: programSlug } },
+        where: { programId: program.id },
         orderBy: [{ startDate: "desc" }, { createdAt: "desc" }],
         select: {
             id: true,

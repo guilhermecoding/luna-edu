@@ -221,7 +221,7 @@ export function EditPeriodForm({
                     </SelectContent>
                 </Select>
                 <p className="text-xs text-muted-foreground">
-                    Período ativo quando concluído em branco. Período concluído quando possui data de conclusão.
+                    Controla o status do período, independentemente das datas de início e término. Períodos concluídos não são considerados ativos mesmo que a data atual esteja entre o início e término.
                 </p>
             </div>
 

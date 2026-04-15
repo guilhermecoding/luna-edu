@@ -86,14 +86,14 @@ export default function CurrentPeriod() {
                         variant="outline"
                         className="bg-transparent text-muted-foreground w-full sm:w-auto"
                     >
-                        <IconPencilFilled />
+                        <IconPencilFilled className="size-5" />
                         Editar
                     </ButtonLink>
                     <ButtonLink
                         href="/admin/PROGRAMA/periodos/PERIODO/detalhes"
                         className="w-full sm:w-auto"
                     >
-                        <IconFileTextFilled />
+                        <IconFileTextFilled className="size-5" />
                         Detalhar
                     </ButtonLink>
                 </div>

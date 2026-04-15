@@ -5,6 +5,10 @@ export const metadata: Metadata = {
         template: "%s | LUNA (Admin)",
         default: "Administrador",
     },
+    robots: {
+        index: false,
+        follow: false,
+    },
 };
 
 export default function AdminLayout({

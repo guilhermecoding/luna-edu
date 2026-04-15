@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 /**
  * Variantes visuais disponíveis para o indicador.
  */
-type Variant = "success" | "error" | "warning";
+type Variant = "success" | "error" | "warning" | "info" | "done";
 
 /**
  * Propriedades do componente de status com animação de pulso.
@@ -45,12 +45,16 @@ export default function PulsingStatusIndicator({
                     "bg-green-400": variant === "success",
                     "bg-red-400": variant === "error",
                     "bg-yellow-400": variant === "warning",
+                    "bg-blue-400": variant === "info",
+                    "hidden": variant === "done",
                 }, `w-${size} h-${size}`,
                 )}></span>
                 <span className={cn("relative inline-flex rounded-full", {
                     "bg-green-500": variant === "success",
                     "bg-red-500": variant === "error",
                     "bg-yellow-500": variant === "warning",
+                    "bg-blue-500": variant === "info",
+                    "bg-zinc-500": variant === "done",
                 }, `w-${size} h-${size}`,
                 )}></span>
             </div>
@@ -58,6 +62,8 @@ export default function PulsingStatusIndicator({
                 "text-green-500": variant === "success",
                 "text-red-500": variant === "error",
                 "text-yellow-500": variant === "warning",
+                "text-blue-500": variant === "info",
+                "text-zinc-500": variant === "done",
             })}>
                 {text}
             </span>

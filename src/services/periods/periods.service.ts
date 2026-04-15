@@ -1,11 +1,7 @@
 import type { Period } from "@/generated/prisma/client";
 import { cacheLife, cacheTag } from "next/cache";
 import prisma from "@/lib/prisma";
-
-export type PeriodListItem = Pick<
-    Period,
-    "id" | "name" | "slug" | "startDate" | "endDate" | "completedAt"
->;
+import { PeriodListItem } from "./periods.type";
 
 /**
  * Cria um novo período para o programa identificado pelo slug.

@@ -1,8 +1,8 @@
-import type { PeriodListItem } from "@/services/periods/periods.service";
 import ItemPeriod from "./item-period";
 import formatDate from "@/lib/format-date";
 import { Suspense } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
+import { PeriodListItem } from "@/services/periods/periods.type";
 
 function SkeletonItem() {
     return (

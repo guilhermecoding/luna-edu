@@ -3,9 +3,10 @@ import TooltipText from "@/components/tooltip-text";
 import { ButtonLink } from "@/components/ui/button-link";
 import { Progress } from "@/components/ui/progress";
 import { IconFileTextFilled, IconHelpHexagonFilled, IconPencilFilled } from "@tabler/icons-react";
-import type { PeriodListItem } from "@/services/periods/periods.service";
 import { connection } from "next/server";
 import { Suspense } from "react";
+import getPeriodStatus from "@/lib/get-period-status";
+import { PeriodListItem } from "@/services/periods/periods.type";
 
 function Info({
     label,
@@ -60,6 +61,8 @@ async function CurrentPeriodContent({
         return <EmptyCurrentPeriod />;
     }
 
+    const { statusLabel, statusVariant } = getPeriodStatus(current, today);
+
     return (
         <div className="w-full xl:w-2/3 border border-muted-foreground/40 bg-surface dark:bg-muted p-8 rounded-4xl">
             {/* Primeira linha */}
@@ -70,7 +73,7 @@ async function CurrentPeriodContent({
                         <span className="bg-primary-theme/20 text-sm font-bold text-primary-theme px-4 py-1 rounded-full">
                             PERÍODO ATUAL
                         </span>
-                        <PulsingStatusIndicator text="ATIVO" variant="success" />
+                        <PulsingStatusIndicator text={statusLabel} variant={statusVariant} />
                     </div>
                 </div>
                 {/* Status */}
@@ -84,7 +87,7 @@ async function CurrentPeriodContent({
             {/* Segunda linha */}
             <div className="w-full mt-6">
                 <h1 className="font-bold capitalize text-4xl xl:text-5xl ">
-                    1 Ciclo de 2026
+                    {current.name}
                 </h1>
             </div>
 

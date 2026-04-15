@@ -3,7 +3,6 @@ import ItemPeriod from "./item-period";
 import formatDate from "@/lib/format-date";
 import { Suspense } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
-import { IconInfoSquareRounded } from "@tabler/icons-react";
 
 function SkeletonItem() {
     return (
@@ -38,16 +37,6 @@ function ListOthersPeriodsSkeleton() {
     );
 }
 
-function EmptyGeneralPeriodsList() {
-    return (
-        <div>
-            <p className="text-muted-foreground flex gap-1">
-                <IconInfoSquareRounded className="size-4 mt-1 shrink-0" /> Há apenas um período cadastrado, possivelmente o período atual. Para visualizar outros períodos, adicione um período futuro, finalize o período atual ou aguarde ele ser finalizado automaticamente.
-            </p>
-        </div>
-    );
-}
-
 function EmptyOthersPeriodsList() {
     return (
         <div>
@@ -66,24 +55,14 @@ async function ListOthersPeriodsContent({
     programSlug: string;
 }) {
     const periods = await periodsPromise;
-    const today = new Date();
 
     if (periods.length === 0) {
         return <EmptyOthersPeriodsList />;
     }
 
-    const currentId =
-        periods.find((p) => p.startDate <= today && p.endDate >= today)?.id ?? periods[0]?.id;
-
-    const others = periods.filter((p) => p.id !== currentId);
-
-    if (others.length === 0) {
-        return <EmptyGeneralPeriodsList />;
-    }
-
     return (
         <div className="space-y-4">
-            {others.map((period) => (
+            {periods.map((period) => (
                 <ItemPeriod
                     key={period.id}
                     programSlug={programSlug}
@@ -108,7 +87,7 @@ export default function ListOthersPeriods({
 
     return (
         <div>
-            <h1 className="font-bold text-2xl mb-6">Histórico de Períodos</h1>
+            <h1 className="font-bold text-2xl mb-6">Registro de Períodos</h1>
             <Suspense fallback={<ListOthersPeriodsSkeleton />}>
                 <ListOthersPeriodsContent periodsPromise={periods} programSlug={programSlug} />
             </Suspense>

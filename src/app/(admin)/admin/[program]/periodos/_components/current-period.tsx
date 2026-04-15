@@ -29,6 +29,16 @@ function Info({
     );
 }
 
+function EmptyCurrentPeriod() {
+    return (
+        <div>
+            <p className="text-muted-foreground">
+                Nenhum período encontrado.
+            </p>
+        </div>
+    );
+}
+
 export default async function CurrentPeriod({
     periodsPromise,
     programSlug,
@@ -43,7 +53,7 @@ export default async function CurrentPeriod({
         periods.find((p) => p.startDate <= today && p.endDate >= today) ?? periods[0];
 
     if (!current) {
-        return <div className="rounded-4xl border p-8">Nenhum período cadastrado.</div>;
+        return <EmptyCurrentPeriod />;
     }
 
     return (

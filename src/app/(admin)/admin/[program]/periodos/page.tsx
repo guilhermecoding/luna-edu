@@ -1,4 +1,3 @@
-import { Suspense } from "react";
 import type { Metadata } from "next";
 import Page from "@/components/page";
 import Section from "@/components/section";

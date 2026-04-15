@@ -99,7 +99,7 @@ export default async function CurrentPeriod({
                 {/* Linha do link */}
                 <div className="flex flex-col-reverse sm:flex-row justify-end items-center mt-6 gap-4">
                     <ButtonLink
-                        href="/admin/PROGRAMA/periodos/PERIODO/editar"
+                        href={`/admin/${programSlug}/periodos/${current.slug}/editar`}
                         variant="outline"
                         className="bg-transparent text-muted-foreground w-full sm:w-auto"
                     >
@@ -107,7 +107,7 @@ export default async function CurrentPeriod({
                         Editar
                     </ButtonLink>
                     <ButtonLink
-                        href="/admin/PROGRAMA/periodos/PERIODO/detalhes"
+                        href={`/admin/${programSlug}/periodos/${current.slug}/detalhes`}
                         className="w-full sm:w-auto"
                     >
                         <IconFileTextFilled className="size-5" />

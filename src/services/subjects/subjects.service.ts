@@ -131,7 +131,8 @@ export async function deleteSubject(id: string): Promise<Subject> {
         });
         return subject;
     } catch (error) {
-        if (error instanceof Error && error.message.includes("Foreign key constraint failed")) {
+        const msg = error instanceof Error ? error.message.toLowerCase() : String(error).toLowerCase();
+        if ((error as { code?: string })?.code === "P2003" || msg.includes("foreign key constraint") || msg.includes("violates restrict")) {
             throw new Error("Não é possível excluir a disciplina porque existem turmas associadas a ela.");
         }
         if (error instanceof Error && error.message.includes("Record to delete does not exist")) {

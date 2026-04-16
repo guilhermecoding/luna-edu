@@ -137,7 +137,8 @@ export async function deleteDegree(id: string): Promise<Degree> {
         });
         return degree;
     } catch (error) {
-        if (error instanceof Error && error.message.includes("Foreign key constraint failed")) {
+        const msg = error instanceof Error ? error.message.toLowerCase() : String(error).toLowerCase();
+        if ((error as { code?: string })?.code === "P2003" || msg.includes("foreign key constraint") || msg.includes("violates restrict")) {
             throw new Error("Não é possível excluir esta matriz porque existem disciplinas curriculares baseadas nela.");
         }
         if (error instanceof Error && error.message.includes("Record to delete does not exist")) {

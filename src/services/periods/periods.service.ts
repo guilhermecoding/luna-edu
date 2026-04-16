@@ -268,40 +268,48 @@ export async function updatePeriod(
  * @throws Error Quando programa/período não forem encontrados.
  */
 export async function deletePeriod(programSlug: string, periodSlug: string): Promise<Period> {
-    return prisma.$transaction(async (tx) => {
-        const program = await tx.program.findUnique({
-            where: {
-                slug: programSlug,
-            },
-            select: {
-                id: true,
-            },
-        });
-
-        if (!program) {
-            throw new Error("Programa não encontrado.");
-        }
-
-        const period = await tx.period.findUnique({
-            where: {
-                programId_slug: {
-                    programId: program.id,
-                    slug: periodSlug,
+    try {
+        return await prisma.$transaction(async (tx) => {
+            const program = await tx.program.findUnique({
+                where: {
+                    slug: programSlug,
                 },
-            },
-        });
-
-        if (!period) {
-            throw new Error("Período não encontrado.");
-        }
-
-        return tx.period.delete({
-            where: {
-                programId_slug: {
-                    programId: program.id,
-                    slug: periodSlug,
+                select: {
+                    id: true,
                 },
-            },
+            });
+
+            if (!program) {
+                throw new Error("Programa não encontrado.");
+            }
+
+            const period = await tx.period.findUnique({
+                where: {
+                    programId_slug: {
+                        programId: program.id,
+                        slug: periodSlug,
+                    },
+                },
+            });
+
+            if (!period) {
+                throw new Error("Período não encontrado.");
+            }
+
+            return tx.period.delete({
+                where: {
+                    programId_slug: {
+                        programId: program.id,
+                        slug: periodSlug,
+                    },
+                },
+            });
         });
-    });
+    } catch (error) {
+        const msg = error instanceof Error ? error.message.toLowerCase() : String(error).toLowerCase();
+        if ((error as { code?: string })?.code === "P2003" || msg.includes("foreign key constraint") || msg.includes("violates restrict")) {
+            throw new Error("Não é possível excluir o período porque existem turmas ou matrículas associadas a ele.");
+        }
+        throw error;
+    }
 }

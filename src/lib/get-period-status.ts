@@ -1,14 +1,15 @@
 import { PeriodListItem } from "@/services/periods/periods.type";
-import getDayKeyInTimeZone from "@/lib/get-day-key-in-time-zone";
+import getDayKeyInTimeZone, { APP_TIMEZONE } from "@/lib/get-day-key-in-time-zone";
 
 export function isPeriodActiveByDay(
     period: PeriodListItem,
     referenceDate: Date,
-    timeZone = "UTC",
+    dbTimeZone = "UTC",
+    referenceTimeZone = APP_TIMEZONE,
 ) {
-    const referenceDay = getDayKeyInTimeZone(referenceDate, timeZone);
-    const startDay = getDayKeyInTimeZone(period.startDate, timeZone);
-    const endDay = getDayKeyInTimeZone(period.endDate, timeZone);
+    const referenceDay = getDayKeyInTimeZone(referenceDate, referenceTimeZone);
+    const startDay = getDayKeyInTimeZone(period.startDate, dbTimeZone);
+    const endDay = getDayKeyInTimeZone(period.endDate, dbTimeZone);
 
     return referenceDay >= startDay && referenceDay <= endDay;
 }
@@ -16,7 +17,8 @@ export function isPeriodActiveByDay(
 export default function getPeriodStatus(
     period: PeriodListItem,
     today: Date,
-    timeZone = "UTC",
+    dbTimeZone = "UTC",
+    referenceTimeZone = APP_TIMEZONE,
 ) {
     if (period.completedAt) {
         return {
@@ -25,9 +27,9 @@ export default function getPeriodStatus(
         };
     }
 
-    const todayDay = getDayKeyInTimeZone(today, timeZone);
-    const startDay = getDayKeyInTimeZone(period.startDate, timeZone);
-    const endDay = getDayKeyInTimeZone(period.endDate, timeZone);
+    const todayDay = getDayKeyInTimeZone(today, referenceTimeZone);
+    const startDay = getDayKeyInTimeZone(period.startDate, dbTimeZone);
+    const endDay = getDayKeyInTimeZone(period.endDate, dbTimeZone);
 
     if (todayDay < startDay) {
         return {

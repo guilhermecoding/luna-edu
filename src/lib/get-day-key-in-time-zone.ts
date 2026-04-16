@@ -17,7 +17,9 @@
  * @param timeZone Timezone IANA (ex.: "America/Sao_Paulo", "UTC").
  * @returns Chave numerica YYYYMMDD.
  */
-export default function getDayKeyInTimeZone(date: Date, timeZone: string): number {
+export const APP_TIMEZONE = process.env.NEXT_PUBLIC_APP_TIMEZONE || process.env.TZ || Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
+
+export default function getDayKeyInTimeZone(date: Date, timeZone: string = APP_TIMEZONE): number {
     const parts = new Intl.DateTimeFormat("en-CA", {
         timeZone,
         year: "numeric",

@@ -8,6 +8,7 @@ import { Suspense } from "react";
 import getPeriodStatus, { isPeriodActiveByDay } from "@/lib/get-period-status";
 import { PeriodListItem } from "@/services/periods/periods.type";
 import formatDate, { formatDateShort } from "@/lib/format-date";
+import getDayKeyInTimeZone, { APP_TIMEZONE } from "@/lib/get-day-key-in-time-zone";
 
 function Info({
     label,
@@ -73,7 +74,7 @@ async function CurrentPeriodContent({
                 <div className="flex items-center">
                     <div className="w-full flex flex-row justify-between">
                         <span className="bg-primary-theme/20 text-sm font-bold max-[400px]:w-min w-auto text-primary-theme px-4 py-1 rounded-full">
-                            {isCurrentPeriodActive ? "PERÍODO ATUAL" : "ULTIMO PERÍODO"}
+                            {isCurrentPeriodActive ? "PERÍODO ATUAL" : (getDayKeyInTimeZone(current.endDate, "UTC") < getDayKeyInTimeZone(today, APP_TIMEZONE) ? "ÚLTIMO PERÍODO" : "PERÍODO FUTURO")}
                         </span>
                         <PulsingStatusIndicator text={statusLabel} variant={statusVariant} />
                     </div>
@@ -81,7 +82,7 @@ async function CurrentPeriodContent({
                 {/* Status */}
                 <div className="flex justify-start sm:justify-end">
                     <span className="text-sm text-muted-foreground">
-                        Desde {formatDate(current.startDate)}
+                        {current.startDate > today ? "Inicia em " : "Desde "} {formatDate(current.startDate)}
                     </span>
                 </div>
             </div>

@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import PageSkeleton from "@/components/skeletons/page-skeleton";
 
-async function ProgramLayoutContent({
+async function MatrizesLayoutContent({
     children,
     params,
 }: Readonly<{
@@ -25,7 +25,7 @@ async function ProgramLayoutContent({
     );
 }
 
-export default function ProgramLayout({
+export default function MatrizesLayout({
     children,
     params,
 }: Readonly<{
@@ -34,9 +34,9 @@ export default function ProgramLayout({
 }>) {
     return (
         <Suspense fallback={<PageSkeleton />}>
-            <ProgramLayoutContent params={params}>
+            <MatrizesLayoutContent params={params}>
                 {children}
-            </ProgramLayoutContent>
+            </MatrizesLayoutContent>
         </Suspense>
     );
 }

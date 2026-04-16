@@ -104,7 +104,7 @@ async function ListSubjectsContent({
                             </td>
                             <td className="px-6 py-4 text-right">
                                 <Link
-                                    href={`/admin/${programSlug}/matrizes/${degreeSlug}/disciplinas/${subject.id}/editar`}
+                                    href={`/admin/${programSlug}/matrizes/${degreeSlug}/disciplinas/${subject.code}/editar`}
                                     className="p-2 inline-flex rounded-md hover:bg-black/5 dark:hover:bg-white/10 text-muted-foreground transition-colors"
                                     title="Editar disciplina"
                                 >

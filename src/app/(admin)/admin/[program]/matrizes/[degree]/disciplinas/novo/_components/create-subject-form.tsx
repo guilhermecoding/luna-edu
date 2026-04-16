@@ -131,6 +131,7 @@ export function CreateSubjectForm({ programSlug, degreeSlug }: Props) {
                         className="p-5 rounded-lg bg-background font-mono text-sm"
                     />
                     {errors.code && <p className="text-sm text-red-600">{errors.code.message}</p>}
+                    <p className="text-xs text-muted-foreground mt-1">Atenção: Este código não poderá ser alterado posteriormente.</p>
                 </div>
 
                 <div className="space-y-2">

@@ -4,7 +4,7 @@ import Section from "@/components/section";
 import { Suspense } from "react";
 import { EditSubjectForm } from "./_components/edit-subject-form";
 import { Metadata } from "next";
-import { getSubjectById } from "@/services/subjects/subjects.service";
+import { getSubjectByCode } from "@/services/subjects/subjects.service";
 import { notFound } from "next/navigation";
 import { getDegreeBySlug } from "@/services/degrees/degrees.service";
 
@@ -17,8 +17,8 @@ export default async function EditSubjectPage({
 }: PageProps<"/admin/[program]/matrizes/[degree]/disciplinas/[subject]/editar">) {
     const { program, degree, subject } = await params;
     
-    // Validar se dados existem
-    const subjectData = await getSubjectById(subject);
+    // Validar se dados existem (subject params contains code instead of ID)
+    const subjectData = await getSubjectByCode(subject);
     const degreeData = await getDegreeBySlug(program, degree);
 
     if (!subjectData || !degreeData) {

@@ -43,6 +43,24 @@ export async function getSubjectById(id: string): Promise<Subject | null> {
 }
 
 /**
+ * Busca uma disciplina específica pelo código.
+ *
+ * @param code Código da disciplina.
+ * @returns Disciplina encontrada ou null.
+ */
+export async function getSubjectByCode(code: string): Promise<Subject | null> {
+    "use cache";
+    cacheLife("max");
+    cacheTag(`subject:code:${code}`);
+
+    return await prisma.subject.findUnique({
+        where: {
+            code,
+        },
+    });
+}
+
+/**
  * Cria uma nova disciplina base (Subject) na Matriz.
  *
  * @param data Dados para criação da disciplina.

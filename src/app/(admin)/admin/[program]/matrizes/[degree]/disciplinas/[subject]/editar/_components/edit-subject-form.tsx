@@ -160,15 +160,15 @@ export function EditSubjectForm({ programSlug, degreeSlug, degreeId, subjectId, 
                 </div>
 
                 <div className="space-y-2">
-                    <Label htmlFor="code">Código Interno Único *</Label>
+                    <Label htmlFor="code">Código Interno Único</Label>
                     <Input
                         id="code"
                         {...register("code")}
+                        readOnly
                         disabled={isSubmitting}
-                        aria-invalid={errors.code ? "true" : "false"}
-                        className="p-5 rounded-lg bg-background font-mono text-sm"
+                        className="p-5 rounded-lg bg-background font-mono text-sm opacity-70 cursor-not-allowed"
                     />
-                    {errors.code && <p className="text-sm text-red-600">{errors.code.message}</p>}
+                    <p className="text-xs text-muted-foreground mt-1">O código não pode ser alterado após a criação.</p>
                 </div>
 
                 <div className="space-y-2">

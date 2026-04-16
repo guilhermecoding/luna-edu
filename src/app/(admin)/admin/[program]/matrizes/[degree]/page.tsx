@@ -6,14 +6,18 @@ import { ButtonLink } from "@/components/ui/button-link";
 import { Metadata } from "next";
 import { getDegreeBySlug } from "@/services/degrees/degrees.service";
 import ListSubjects from "./_components/list-subjects";
+import { Suspense } from "react";
+import PageSkeleton from "@/components/skeletons/page-skeleton";
 
 export const metadata: Metadata = {
     title: "Grade Curricular",
 };
 
-export default async function DegreeDashboardPage({
+async function DegreeDashboardPageContent({
     params,
-}: PageProps<"/admin/[program]/matrizes/[degree]">) {
+}: {
+    params: Promise<{ program: string; degree: string }>;
+}) {
     const { program: programSlug, degree: degreeSlug } = await params;
     const degreeData = await getDegreeBySlug(programSlug, degreeSlug);
 
@@ -49,5 +53,16 @@ export default async function DegreeDashboardPage({
                 <ListSubjects programSlug={programSlug} degreeSlug={degreeSlug} degreeId={degreeData.id} />
             </Section>
         </Page>
+    );
+}
+
+export default function DegreeDashboardPage({
+    params,
+}: PageProps<"/admin/[program]/matrizes/[degree]">) {
+
+    return (
+        <Suspense fallback={<PageSkeleton />}>
+            <DegreeDashboardPageContent params={params} />
+        </Suspense>
     );
 }

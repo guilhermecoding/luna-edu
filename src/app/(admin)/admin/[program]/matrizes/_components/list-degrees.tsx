@@ -1,5 +1,5 @@
 import { getDegreesByProgramId } from "@/services/degrees/degrees.service";
-import { IconBook, IconEdit, IconChevronRight, IconHash, IconClock, IconBlocks, IconUnlink, IconEye } from "@tabler/icons-react";
+import { IconBook, IconEdit, IconChevronRight, IconClock, IconBlocks, IconUnlink, IconEye } from "@tabler/icons-react";
 import Link from "next/link";
 import { ButtonLink } from "@/components/ui/button-link";
 import { Degree } from "@/generated/prisma/client";

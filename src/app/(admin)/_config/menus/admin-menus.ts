@@ -37,6 +37,16 @@ export const adminMenus: ItemMenuSidebarAdmin[] = [
                 ],
             },
             {
+                title: "Matrizes Curriculares",
+                url: "/admin/[program]/matrizes",
+                icon: "book-2",
+                isActive: false,
+                hiddenOnPaths: ["^/admin/programas"],
+                items: [
+                    { title: "Nova Matriz", url: "/admin/[program]/matrizes/novo" },
+                ],
+            },
+            {
                 title: "Cursos",
                 url: "/admin/[program]/periodos/[period]/cursos",
                 icon: "book",

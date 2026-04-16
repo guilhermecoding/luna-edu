@@ -10,7 +10,7 @@ import { cacheLife, cacheTag } from "next/cache";
  */
 export async function getDegreesByProgramId(programId: string): Promise<Degree[]> {
     "use cache";
-    cacheLife("weeks");
+    cacheLife("max");
     cacheTag(`programs:${programId}:degrees`);
 
     return await prisma.degree.findMany({
@@ -32,7 +32,7 @@ export async function getDegreesByProgramId(programId: string): Promise<Degree[]
  */
 export async function getDegreeBySlug(programSlug: string, slug: string): Promise<Degree | null> {
     "use cache";
-    cacheLife("weeks");
+    cacheLife("max");
     cacheTag(`degree:${programSlug}:${slug}`);
 
     return await prisma.degree.findFirst({

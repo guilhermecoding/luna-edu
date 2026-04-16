@@ -1,5 +1,5 @@
 import { getDegreesByProgramId } from "@/services/degrees/degrees.service";
-import { IconBook, IconEdit, IconChevronRight, IconClock, IconBlocks, IconUnlink, IconEye } from "@tabler/icons-react";
+import { IconBook, IconEdit, IconChevronRight, IconClock, IconUnlink, IconEye } from "@tabler/icons-react";
 import Link from "next/link";
 import { ButtonLink } from "@/components/ui/button-link";
 import { Degree } from "@/generated/prisma/client";
@@ -88,10 +88,12 @@ async function ListDegreesContent({
 
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {degreesData.map((degree) => (
+            {degreesData.map((degree, index) => (
                 <div key={degree.id} className="border border-surface-border rounded-4xl p-6 bg-surface flex flex-col items-start hover:border-primary/50 transition-colors">
-                    <div className="flex bg-background border border-surface-border p-3 rounded-lg mb-4 text-primary">
-                        <IconBlocks className="size-6" />
+                    <div className="flex justify-center items-center bg-background border border-surface-border size-12 p-3 rounded-lg mb-4 text-primary">
+                        <span className="font-bold font-silkscreen text-2xl">
+                            {index + 1}
+                        </span>
                     </div>
                     <div className="flex-1 w-full">
                         <h4 className="text-2xl sm:text-3xl capitalize font-semibold line-clamp-2" title={degree.name}>{degree.name}</h4>

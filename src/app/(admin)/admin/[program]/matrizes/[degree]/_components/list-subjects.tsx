@@ -1,22 +1,44 @@
 import { getSubjectsByDegreeId } from "@/services/subjects/subjects.service";
 import { IconBooks, IconPencil } from "@tabler/icons-react";
 import Link from "next/link";
+import { Suspense } from "react";
 
-export default async function ListSubjects({ programSlug, degreeSlug, degreeId }: { programSlug: string, degreeSlug: string, degreeId: string }) {
+function EmptySubjectsList({
+    programSlug,
+    degreeSlug,
+}: {
+    programSlug: string,
+    degreeSlug: string
+}) {
+    return (
+        <div className="flex flex-col items-center justify-center p-12 text-center border-2 border-dashed border-surface-border rounded-4xl">
+            <IconBooks className="size-12 text-muted-foreground mb-4 opacity-50" />
+            <h3 className="text-lg font-semibold">Nenhuma disciplina cadastrada</h3>
+            <p className="text-muted-foreground mt-2 max-w-sm mb-6">
+                A primeira etapa para utilizar o sistema é preencher a estrutura curricular das matrizes com as disciplinas teóricas (Cálculo I, Português, etc).
+            </p>
+            <Link href={`/admin/${programSlug}/matrizes/${degreeSlug}/disciplinas/novo`} className="text-primary hover:underline text-sm font-medium">
+                + Adicionar a primeira disciplina
+            </Link>
+        </div>
+    );
+}
+
+
+async function ListSubjectsContent({
+    programSlug,
+    degreeSlug,
+    degreeId,
+}: {
+    programSlug: string,
+    degreeSlug: string,
+    degreeId: string
+}) {
     const subjects = await getSubjectsByDegreeId(degreeId);
 
     if (subjects.length === 0) {
         return (
-            <div className="flex flex-col items-center justify-center p-12 text-center border rounded-xl bg-background shadow-sm">
-                <IconBooks className="size-12 text-muted-foreground mb-4 opacity-50" />
-                <h3 className="text-lg font-semibold">Nenhuma disciplina cadastrada</h3>
-                <p className="text-muted-foreground mt-2 max-w-sm mb-6">
-                    A primeira etapa para utilizar o sistema é preencher a estrutura curricular das matrizes com as disciplinas teóricas (Cálculo I, Português, etc).
-                </p>
-                <Link href={`/admin/${programSlug}/matrizes/${degreeSlug}/disciplinas/novo`} className="text-primary hover:underline text-sm font-medium">
-                    + Adicionar a primeira disciplina
-                </Link>
-            </div>
+            <EmptySubjectsList programSlug={programSlug} degreeSlug={degreeSlug} />
         );
     }
 
@@ -61,5 +83,21 @@ export default async function ListSubjects({ programSlug, degreeSlug, degreeId }
                 </tbody>
             </table>
         </div>
+    );
+}
+
+export default function ListSubjects({
+    programSlug,
+    degreeSlug,
+    degreeId,
+}: {
+    programSlug: string,
+    degreeSlug: string,
+    degreeId: string
+}) {
+    return (
+        <Suspense fallback={null}>
+            <ListSubjectsContent programSlug={programSlug} degreeSlug={degreeSlug} degreeId={degreeId} />
+        </Suspense>
     );
 }

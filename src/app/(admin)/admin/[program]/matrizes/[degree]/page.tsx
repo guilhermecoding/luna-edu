@@ -49,7 +49,6 @@ async function DegreeDashboardPageContent({
             </Section>
 
             <Section className="mt-12">
-                <h3 className="text-xl font-semibold mb-6">Disciplinas (Grade Curricular)</h3>
                 <ListSubjects programSlug={programSlug} degreeSlug={degreeSlug} degreeId={degreeData.id} />
             </Section>
         </Page>

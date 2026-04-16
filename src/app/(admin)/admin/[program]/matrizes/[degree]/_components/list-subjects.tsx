@@ -43,31 +43,42 @@ async function ListSubjectsContent({
     }
 
     return (
-        <div className="overflow-x-auto rounded-xl border bg-background text-sm shadow-sm">
+        <div className="overflow-x-auto rounded-4xl border border-surface-border bg-background text-sm">
             <table className="w-full text-left">
                 <thead className="bg-primary/5 text-muted-foreground uppercase text-xs">
                     <tr>
                         <th className="px-6 py-4 font-medium">Disciplina/Matéria</th>
-                        <th className="px-6 py-4 font-medium">Código</th>
-                        <th className="px-6 py-4 font-medium">Carga (h)</th>
-                        <th className="px-6 py-4 font-medium">Semestre/Período Base</th>
+                        <th className="px-6 text-center py-4 font-medium">Código</th>
+                        <th className="px-6 text-center py-4 font-medium">Carga (h)</th>
+                        <th className="px-6 text-center py-4 font-medium">Semestre/Período Base</th>
                         <th className="px-6 py-4 font-medium text-right">Ação</th>
                     </tr>
                 </thead>
                 <tbody className="divide-y divide-border">
                     {subjects.map((subject) => (
                         <tr key={subject.id} className="hover:bg-muted/50 transition-colors">
-                            <td className="px-6 py-4 font-medium text-foreground">
-                                {subject.name}
+                            <td className="flex flex-row items-center gap-3 px-6 py-4 text-foreground">
+                                <span className="bg-blue-200 text-blue-800 p-2 size-10 flex items-center justify-center shrink-0 rounded-full text-sm font-medium">
+                                    {(() => {
+                                        const words = subject.name.trim().split(/\s+/);
+                                        if (words.length > 1) {
+                                            return (words[0][0] + words[0][1] + words[1][0]).toUpperCase();
+                                        }
+                                        return words[0].slice(0, 2).toUpperCase();
+                                    })()}
+                                </span>
+                                <span className="font-bold text-base text-medium">
+                                    {subject.name}
+                                </span>
                             </td>
-                            <td className="px-6 py-4 text-muted-foreground">
+                            <td className="px-6 text-center py-4 text-muted-foreground">
                                 {subject.code || "-"}
                             </td>
-                            <td className="px-6 py-4">
-                                {subject.workload ? `${subject.workload}h` : "-"}
+                            <td className="px-6 text-center py-4">
+                                {subject.workload ? `${subject.workload}h` : "Não atribuível"}
                             </td>
-                            <td className="px-6 py-4 text-muted-foreground">
-                                {subject.basePeriod ? `${subject.basePeriod}º Período` : "-"}
+                            <td className="px-6 text-center py-4 text-muted-foreground">
+                                {subject.basePeriod ? `${subject.basePeriod}º Período` : "Não atribuível"}
                             </td>
                             <td className="px-6 py-4 text-right">
                                 <Link

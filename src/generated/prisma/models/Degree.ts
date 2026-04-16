@@ -268,12 +268,13 @@ export type DegreeOrderByWithRelationInput = {
 
 export type DegreeWhereUniqueInput = Prisma.AtLeast<{
   id?: string
-  slug?: string
+  programId_slug?: Prisma.DegreeProgramIdSlugCompoundUniqueInput
   AND?: Prisma.DegreeWhereInput | Prisma.DegreeWhereInput[]
   OR?: Prisma.DegreeWhereInput[]
   NOT?: Prisma.DegreeWhereInput | Prisma.DegreeWhereInput[]
   createdAt?: Prisma.DateTimeFilter<"Degree"> | Date | string
   name?: Prisma.StringFilter<"Degree"> | string
+  slug?: Prisma.StringFilter<"Degree"> | string
   description?: Prisma.StringNullableFilter<"Degree"> | string | null
   modality?: Prisma.StringNullableFilter<"Degree"> | string | null
   level?: Prisma.StringNullableFilter<"Degree"> | string | null
@@ -281,7 +282,7 @@ export type DegreeWhereUniqueInput = Prisma.AtLeast<{
   programId?: Prisma.UuidFilter<"Degree"> | string
   program?: Prisma.XOR<Prisma.ProgramScalarRelationFilter, Prisma.ProgramWhereInput>
   subjects?: Prisma.SubjectListRelationFilter
-}, "id" | "slug">
+}, "id" | "programId_slug">
 
 export type DegreeOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -410,6 +411,11 @@ export type DegreeListRelationFilter = {
 
 export type DegreeOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
+}
+
+export type DegreeProgramIdSlugCompoundUniqueInput = {
+  programId: string
+  slug: string
 }
 
 export type DegreeCountOrderByAggregateInput = {

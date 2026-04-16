@@ -161,7 +161,7 @@ model Degree {
     id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
     createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz
     name        String
-    slug        String   @unique
+    slug        String
     description String?
     modality    String?
     level       String?
@@ -172,6 +172,7 @@ model Degree {
 
     subjects    Subject[]
 
+    @@unique([programId, slug])
     @@map("degrees")
     @@schema("public")
 }

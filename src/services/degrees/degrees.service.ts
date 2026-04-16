@@ -24,19 +24,23 @@ export async function getDegreesByProgramId(programId: string): Promise<Degree[]
 }
 
 /**
- * Busca uma matriz (Degree) pelo slug.
+ * Busca uma matriz (Degree) pelo slug, dentro de um programa.
  *
+ * @param programSlug Slug do programa pai.
  * @param slug Slug único da matriz.
  * @returns A matriz encontrada ou null.
  */
-export async function getDegreeBySlug(slug: string): Promise<Degree | null> {
+export async function getDegreeBySlug(programSlug: string, slug: string): Promise<Degree | null> {
     "use cache";
     cacheLife("weeks");
-    cacheTag(`degrees:${slug}`);
+    cacheTag(`degree:${programSlug}:${slug}`);
 
-    return await prisma.degree.findUnique({
+    return await prisma.degree.findFirst({
         where: {
             slug,
+            program: {
+                slug: programSlug,
+            },
         },
     });
 }

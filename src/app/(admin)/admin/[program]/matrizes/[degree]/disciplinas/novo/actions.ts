@@ -10,7 +10,7 @@ import { getDegreeBySlug } from "@/services/degrees/degrees.service";
 export async function createSubjectAction(programSlug: string, degreeSlug: string, data: CreateSubjectInput) {
     try {
         const validatedData = createSubjectSchema.parse(data);
-        const degree = await getDegreeBySlug(degreeSlug);
+        const degree = await getDegreeBySlug(programSlug, degreeSlug);
         
         if (!degree) {
             return {

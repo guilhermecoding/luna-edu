@@ -15,7 +15,7 @@ export default async function EditDegreePage({
     params,
 }: PageProps<"/admin/[program]/matrizes/[degree]/editar">) {
     const { program, degree } = await params;
-    const degreeData = await getDegreeBySlug(degree);
+    const degreeData = await getDegreeBySlug(program, degree);
 
     if (!degreeData) {
         return notFound();

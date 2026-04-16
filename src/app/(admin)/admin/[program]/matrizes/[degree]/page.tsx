@@ -16,7 +16,7 @@ export default async function DegreeDashboardPage({
     params,
 }: PageProps<"/admin/[program]/matrizes/[degree]">) {
     const { program: programSlug, degree: degreeSlug } = await params;
-    const degreeData = await getDegreeBySlug(degreeSlug);
+    const degreeData = await getDegreeBySlug(programSlug, degreeSlug);
 
     if (!degreeData) {
         return notFound();

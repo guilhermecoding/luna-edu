@@ -10,9 +10,9 @@ async function DegreeLayoutContent({
     children: React.ReactNode;
     params: Promise<{ program: string; degree: string }>;
 }>) {
-    const { degree: degreeSlug } = await params;
+    const { program: programSlug, degree: degreeSlug } = await params;
 
-    const degree = await getDegreeBySlug(degreeSlug);
+    const degree = await getDegreeBySlug(programSlug, degreeSlug);
 
     if (!degree) {
         return notFound();

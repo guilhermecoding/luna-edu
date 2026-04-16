@@ -19,7 +19,7 @@ export default async function EditSubjectPage({
     
     // Validar se dados existem
     const subjectData = await getSubjectById(subject);
-    const degreeData = await getDegreeBySlug(degree);
+    const degreeData = await getDegreeBySlug(program, degree);
 
     if (!subjectData || !degreeData) {
         return notFound();

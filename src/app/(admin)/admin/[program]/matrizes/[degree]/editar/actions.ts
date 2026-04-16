@@ -19,7 +19,7 @@ export async function editDegreeAction(id: string, programSlug: string, degreeSl
             totalHours: data.totalHours,
         });
 
-        updateTag(`degrees:${degreeSlug}`);
+        updateTag(`degree:${programSlug}:${degreeSlug}`);
         // Também devemos invalidar a lista
         revalidatePath(`/admin/${programSlug}/matrizes`);
         revalidatePath(`/admin/${programSlug}/matrizes/${degreeSlug}`);

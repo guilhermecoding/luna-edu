@@ -17,8 +17,7 @@ export default async function DegreesPage({
 }: PageProps<"/admin/[program]/matrizes">) {
     const { program: programSlug } = await params;
     const program = await getProgramBySlug(programSlug);
-
-    if (!program) return notFound();
+    if (!program) return null; // Fallback de segurança silencioso
 
     return (
         <Page>

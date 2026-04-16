@@ -1,7 +1,7 @@
 import { getDegreeBySlug } from "@/services/degrees/degrees.service";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
-import SidebarAndPageSkeleton from "@/components/skeletons/sidebar-and-page-skeleton";
+import PageSkeleton from "@/components/skeletons/page-skeleton";
 
 async function DegreeLayoutContent({
     children,
@@ -33,7 +33,7 @@ export default function DegreeLayout({
     params: Promise<{ program: string; degree: string }>;
 }>) {
     return (
-        <Suspense fallback={<SidebarAndPageSkeleton />}>
+        <Suspense fallback={<PageSkeleton />}>
             <DegreeLayoutContent params={params}>
                 {children}
             </DegreeLayoutContent>

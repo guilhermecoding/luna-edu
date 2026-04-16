@@ -5,42 +5,33 @@ import { ButtonLink } from "@/components/ui/button-link";
 import { Degree } from "@/generated/prisma/client";
 import { Suspense } from "react";
 import { Separator } from "@/components/ui/separator";
+import { Skeleton } from "@/components/ui/skeleton";
 
 function ListDegreesSkeleton() {
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {Array.from({ length: 6 }).map((_, i) => (
-                <div key={i} className="border rounded-xl p-6 bg-background shadow-sm flex flex-col items-start">
-                    <div className="flex bg-primary/10 p-3 rounded-lg mb-4 text-primary">
-                        <IconBook className="size-6" />
+            {Array.from({ length: 3 }).map((_, i) => (
+                <div key={i} className="rounded-4xl p-6 bg-muted flex flex-col items-start">
+                    <div className="flex p-3 rounded-lg mb-4 text-primary">
+                        <Skeleton className="size-9 rounded-lg bg-muted-foreground/20" />
                     </div>
-                    <div className="flex-1 w-full">
-                        <h4 className="text-lg font-semibold line-clamp-1">Matriz Curricular</h4>
-                        <div className="flex flex-wrap gap-2 text-xs text-muted-foreground mt-1 mb-3">
-                            <span className="bg-secondary px-2 py-0.5 rounded-full">slug</span>
-                            <span className="bg-secondary px-2 py-0.5 rounded-full">120h</span>
+                    <div className="flex-1 w-full space-y-3">
+                        <Skeleton className="h-8 w-3/4 bg-muted-foreground/20" />
+                        <div className="flex flex-wrap gap-2 my-3">
+                            <Skeleton className="h-5 w-16 rounded-full bg-muted-foreground/20" />
+                            <Skeleton className="h-5 w-12 rounded-full bg-muted-foreground/20" />
+                            <Skeleton className="h-5 w-20 rounded-full bg-muted-foreground/20" />
                         </div>
-                        <p className="text-sm text-balance text-muted-foreground line-clamp-2 mt-2">
-                            Descrição da matriz curricular
-                        </p>
+                        <div className="space-y-2">
+                            <Skeleton className="h-4 w-full bg-muted-foreground/20" />
+                            <Skeleton className="h-4 w-5/6 bg-muted-foreground/20" />
+                        </div>
                     </div>
 
-                    <div className="w-full flex items-center justify-between mt-6 pt-4 border-t">
-                        <Link
-                            href="#"
-                            className="text-muted-foreground hover:text-foreground text-sm flex items-center gap-1 transition-colors"
-                        >
-                            <IconEdit className="size-4" />
-                            Editar
-                        </Link>
-
-                        <Link
-                            href="#"
-                            className="text-primary hover:text-primary/80 text-sm font-medium flex items-center gap-1 transition-colors"
-                        >
-                            Ver Disciplinas
-                            <IconChevronRight className="size-4" />
-                        </Link>
+                    <div className="w-full flex items-center justify-between mt-6 pt-4 px-4 border-t gap-4">
+                        <Skeleton className="h-4 w-12 bg-muted-foreground/20" />
+                        <Separator orientation="vertical" className="h-6 border" />
+                        <Skeleton className="h-4 w-24 bg-muted-foreground/20" />
                     </div>
                 </div>
             ))}

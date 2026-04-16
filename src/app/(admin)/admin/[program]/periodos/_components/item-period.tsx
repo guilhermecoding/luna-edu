@@ -49,7 +49,7 @@ export default function ItemPeriod({
     coursesCount: number;
 }) {
     return (
-        <div className="w-full min-w-0 flex flex-row items-center bg-surface border border-muted-foreground/40 p-4 rounded-4xl gap-3">
+        <div className="w-full min-w-0 flex flex-row items-center bg-surface border border-surface-border p-4 rounded-4xl gap-3">
             {/* Status (Celular) e Conteúdo */}
             <div className="mb-4 flex min-w-0 flex-1 flex-col sm:mb-0">
                 {/* Status (Celular) */}
@@ -103,7 +103,7 @@ export default function ItemPeriod({
                         </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
-                        <Link href={`/admin/${programSlug}/periodos/${periodSlug}/detalhes`} className="flex flex-row items-center gap-2 text-sm text-muted-foreground/90">
+                        <Link href={`/admin/${programSlug}/periodos/${periodSlug}`} className="flex flex-row items-center gap-2 text-sm text-muted-foreground/90">
                             <IconFileTextFilled />
                             <span>Detalhar</span>
                         </Link>

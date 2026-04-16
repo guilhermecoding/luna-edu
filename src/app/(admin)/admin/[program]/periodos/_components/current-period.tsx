@@ -67,7 +67,7 @@ async function CurrentPeriodContent({
     const isCurrentPeriodActive = isPeriodActiveByDay(current, today);
 
     return (
-        <div className="w-full border border-muted-foreground/40 bg-surface dark:bg-muted p-8 rounded-4xl">
+        <div className="w-full border border-surface-border bg-surface dark:bg-muted p-8 rounded-4xl">
             {/* Primeira linha */}
             <div className="flex flex-col gap-y-3">
                 {/* Bagde */}
@@ -127,7 +127,7 @@ async function CurrentPeriodContent({
                         Editar
                     </ButtonLink>
                     <ButtonLink
-                        href={`/admin/${programSlug}/periodos/${current.slug}/detalhes`}
+                        href={`/admin/${programSlug}/periodos/${current.slug}`}
                         className="w-full sm:w-auto"
                     >
                         <IconFileTextFilled className="size-5" />

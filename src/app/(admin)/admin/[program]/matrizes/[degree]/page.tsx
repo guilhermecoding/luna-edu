@@ -5,7 +5,6 @@ import { IconCirclePlusFilled } from "@tabler/icons-react";
 import { ButtonLink } from "@/components/ui/button-link";
 import { Metadata } from "next";
 import { getDegreeBySlug } from "@/services/degrees/degrees.service";
-import { notFound } from "next/navigation";
 import ListSubjects from "./_components/list-subjects";
 
 export const metadata: Metadata = {

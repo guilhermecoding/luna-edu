@@ -28,13 +28,12 @@ export const adminMenus: ItemMenuSidebarAdmin[] = [
             },
             {
                 title: "Períodos",
-                url: "/admin/periodos",
+                url: "/admin/[program]/periodos",
                 icon: "calendar",
                 isActive: false,
                 hiddenOnPaths: ["^/admin/programas"],
                 items: [
-                    { title: "Listar Períodos", url: "/admin/periodos" },
-                    { title: "Criar Período", url: "/admin/periodos/novo" },
+                    { title: "Novo Período", url: "/admin/[program]/periodos/novo" },
                 ],
             },
             {

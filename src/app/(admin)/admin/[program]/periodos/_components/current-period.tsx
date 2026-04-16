@@ -66,13 +66,13 @@ async function CurrentPeriodContent({
     const isCurrentPeriodActive = isPeriodActiveByDay(current, today);
 
     return (
-        <div className="w-full xl:w-2/3 border border-muted-foreground/40 bg-surface dark:bg-muted p-8 rounded-4xl">
+        <div className="w-full border border-muted-foreground/40 bg-surface dark:bg-muted p-8 rounded-4xl">
             {/* Primeira linha */}
             <div className="flex flex-col gap-y-3">
                 {/* Bagde */}
                 <div className="flex items-center">
                     <div className="w-full flex flex-row justify-between">
-                        <span className="bg-primary-theme/20 text-sm font-bold text-primary-theme px-4 py-1 rounded-full">
+                        <span className="bg-primary-theme/20 text-sm font-bold max-[400px]:w-min w-auto text-primary-theme px-4 py-1 rounded-full">
                             {isCurrentPeriodActive ? "PERÍODO ATUAL" : "ULTIMO PERÍODO"}
                         </span>
                         <PulsingStatusIndicator text={statusLabel} variant={statusVariant} />

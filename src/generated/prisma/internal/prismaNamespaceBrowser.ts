@@ -56,6 +56,8 @@ export const ModelName = {
   Account: 'Account',
   Verification: 'Verification',
   Program: 'Program',
+  Degree: 'Degree',
+  Subject: 'Subject',
   Campus: 'Campus',
   Room: 'Room',
   Period: 'Period',
@@ -166,6 +168,34 @@ export const ProgramScalarFieldEnum = {
 export type ProgramScalarFieldEnum = (typeof ProgramScalarFieldEnum)[keyof typeof ProgramScalarFieldEnum]
 
 
+export const DegreeScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  name: 'name',
+  slug: 'slug',
+  description: 'description',
+  modality: 'modality',
+  level: 'level',
+  totalHours: 'totalHours',
+  programId: 'programId'
+} as const
+
+export type DegreeScalarFieldEnum = (typeof DegreeScalarFieldEnum)[keyof typeof DegreeScalarFieldEnum]
+
+
+export const SubjectScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  name: 'name',
+  code: 'code',
+  workload: 'workload',
+  basePeriod: 'basePeriod',
+  degreeId: 'degreeId'
+} as const
+
+export type SubjectScalarFieldEnum = (typeof SubjectScalarFieldEnum)[keyof typeof SubjectScalarFieldEnum]
+
+
 export const CampusScalarFieldEnum = {
   id: 'id',
   name: 'name',
@@ -209,6 +239,7 @@ export const CourseScalarFieldEnum = {
   code: 'code',
   periodId: 'periodId',
   roomId: 'roomId',
+  subjectId: 'subjectId',
   shift: 'shift'
 } as const
 

@@ -31,6 +31,7 @@ export type CourseMinAggregateOutputType = {
   code: string | null
   periodId: string | null
   roomId: string | null
+  subjectId: string | null
   shift: $Enums.Shift | null
 }
 
@@ -41,6 +42,7 @@ export type CourseMaxAggregateOutputType = {
   code: string | null
   periodId: string | null
   roomId: string | null
+  subjectId: string | null
   shift: $Enums.Shift | null
 }
 
@@ -51,6 +53,7 @@ export type CourseCountAggregateOutputType = {
   code: number
   periodId: number
   roomId: number
+  subjectId: number
   shift: number
   _all: number
 }
@@ -63,6 +66,7 @@ export type CourseMinAggregateInputType = {
   code?: true
   periodId?: true
   roomId?: true
+  subjectId?: true
   shift?: true
 }
 
@@ -73,6 +77,7 @@ export type CourseMaxAggregateInputType = {
   code?: true
   periodId?: true
   roomId?: true
+  subjectId?: true
   shift?: true
 }
 
@@ -83,6 +88,7 @@ export type CourseCountAggregateInputType = {
   code?: true
   periodId?: true
   roomId?: true
+  subjectId?: true
   shift?: true
   _all?: true
 }
@@ -166,6 +172,7 @@ export type CourseGroupByOutputType = {
   code: string | null
   periodId: string
   roomId: string | null
+  subjectId: string
   shift: $Enums.Shift
   _count: CourseCountAggregateOutputType | null
   _min: CourseMinAggregateOutputType | null
@@ -197,9 +204,11 @@ export type CourseWhereInput = {
   code?: Prisma.UuidNullableFilter<"Course"> | string | null
   periodId?: Prisma.UuidFilter<"Course"> | string
   roomId?: Prisma.UuidNullableFilter<"Course"> | string | null
+  subjectId?: Prisma.UuidFilter<"Course"> | string
   shift?: Prisma.EnumShiftFilter<"Course"> | $Enums.Shift
   period?: Prisma.XOR<Prisma.PeriodScalarRelationFilter, Prisma.PeriodWhereInput>
   room?: Prisma.XOR<Prisma.RoomNullableScalarRelationFilter, Prisma.RoomWhereInput> | null
+  subject?: Prisma.XOR<Prisma.SubjectScalarRelationFilter, Prisma.SubjectWhereInput>
   enrollments?: Prisma.EnrollmentListRelationFilter
   lessons?: Prisma.LessonListRelationFilter
   activities?: Prisma.ActivityListRelationFilter
@@ -215,9 +224,11 @@ export type CourseOrderByWithRelationInput = {
   code?: Prisma.SortOrderInput | Prisma.SortOrder
   periodId?: Prisma.SortOrder
   roomId?: Prisma.SortOrderInput | Prisma.SortOrder
+  subjectId?: Prisma.SortOrder
   shift?: Prisma.SortOrder
   period?: Prisma.PeriodOrderByWithRelationInput
   room?: Prisma.RoomOrderByWithRelationInput
+  subject?: Prisma.SubjectOrderByWithRelationInput
   enrollments?: Prisma.EnrollmentOrderByRelationAggregateInput
   lessons?: Prisma.LessonOrderByRelationAggregateInput
   activities?: Prisma.ActivityOrderByRelationAggregateInput
@@ -236,9 +247,11 @@ export type CourseWhereUniqueInput = Prisma.AtLeast<{
   name?: Prisma.StringFilter<"Course"> | string
   periodId?: Prisma.UuidFilter<"Course"> | string
   roomId?: Prisma.UuidNullableFilter<"Course"> | string | null
+  subjectId?: Prisma.UuidFilter<"Course"> | string
   shift?: Prisma.EnumShiftFilter<"Course"> | $Enums.Shift
   period?: Prisma.XOR<Prisma.PeriodScalarRelationFilter, Prisma.PeriodWhereInput>
   room?: Prisma.XOR<Prisma.RoomNullableScalarRelationFilter, Prisma.RoomWhereInput> | null
+  subject?: Prisma.XOR<Prisma.SubjectScalarRelationFilter, Prisma.SubjectWhereInput>
   enrollments?: Prisma.EnrollmentListRelationFilter
   lessons?: Prisma.LessonListRelationFilter
   activities?: Prisma.ActivityListRelationFilter
@@ -254,6 +267,7 @@ export type CourseOrderByWithAggregationInput = {
   code?: Prisma.SortOrderInput | Prisma.SortOrder
   periodId?: Prisma.SortOrder
   roomId?: Prisma.SortOrderInput | Prisma.SortOrder
+  subjectId?: Prisma.SortOrder
   shift?: Prisma.SortOrder
   _count?: Prisma.CourseCountOrderByAggregateInput
   _max?: Prisma.CourseMaxOrderByAggregateInput
@@ -270,6 +284,7 @@ export type CourseScalarWhereWithAggregatesInput = {
   code?: Prisma.UuidNullableWithAggregatesFilter<"Course"> | string | null
   periodId?: Prisma.UuidWithAggregatesFilter<"Course"> | string
   roomId?: Prisma.UuidNullableWithAggregatesFilter<"Course"> | string | null
+  subjectId?: Prisma.UuidWithAggregatesFilter<"Course"> | string
   shift?: Prisma.EnumShiftWithAggregatesFilter<"Course"> | $Enums.Shift
 }
 
@@ -281,6 +296,7 @@ export type CourseCreateInput = {
   shift: $Enums.Shift
   period: Prisma.PeriodCreateNestedOneWithoutCoursesInput
   room?: Prisma.RoomCreateNestedOneWithoutCoursesInput
+  subject: Prisma.SubjectCreateNestedOneWithoutCoursesInput
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutCourseInput
   lessons?: Prisma.LessonCreateNestedManyWithoutCourseInput
   activities?: Prisma.ActivityCreateNestedManyWithoutCourseInput
@@ -296,6 +312,7 @@ export type CourseUncheckedCreateInput = {
   code?: string | null
   periodId: string
   roomId?: string | null
+  subjectId: string
   shift: $Enums.Shift
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutCourseInput
   lessons?: Prisma.LessonUncheckedCreateNestedManyWithoutCourseInput
@@ -313,6 +330,7 @@ export type CourseUpdateInput = {
   shift?: Prisma.EnumShiftFieldUpdateOperationsInput | $Enums.Shift
   period?: Prisma.PeriodUpdateOneRequiredWithoutCoursesNestedInput
   room?: Prisma.RoomUpdateOneWithoutCoursesNestedInput
+  subject?: Prisma.SubjectUpdateOneRequiredWithoutCoursesNestedInput
   enrollments?: Prisma.EnrollmentUpdateManyWithoutCourseNestedInput
   lessons?: Prisma.LessonUpdateManyWithoutCourseNestedInput
   activities?: Prisma.ActivityUpdateManyWithoutCourseNestedInput
@@ -328,6 +346,7 @@ export type CourseUncheckedUpdateInput = {
   code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   periodId?: Prisma.StringFieldUpdateOperationsInput | string
   roomId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subjectId?: Prisma.StringFieldUpdateOperationsInput | string
   shift?: Prisma.EnumShiftFieldUpdateOperationsInput | $Enums.Shift
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutCourseNestedInput
   lessons?: Prisma.LessonUncheckedUpdateManyWithoutCourseNestedInput
@@ -344,6 +363,7 @@ export type CourseCreateManyInput = {
   code?: string | null
   periodId: string
   roomId?: string | null
+  subjectId: string
   shift: $Enums.Shift
 }
 
@@ -362,6 +382,7 @@ export type CourseUncheckedUpdateManyInput = {
   code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   periodId?: Prisma.StringFieldUpdateOperationsInput | string
   roomId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subjectId?: Prisma.StringFieldUpdateOperationsInput | string
   shift?: Prisma.EnumShiftFieldUpdateOperationsInput | $Enums.Shift
 }
 
@@ -382,6 +403,7 @@ export type CourseCountOrderByAggregateInput = {
   code?: Prisma.SortOrder
   periodId?: Prisma.SortOrder
   roomId?: Prisma.SortOrder
+  subjectId?: Prisma.SortOrder
   shift?: Prisma.SortOrder
 }
 
@@ -392,6 +414,7 @@ export type CourseMaxOrderByAggregateInput = {
   code?: Prisma.SortOrder
   periodId?: Prisma.SortOrder
   roomId?: Prisma.SortOrder
+  subjectId?: Prisma.SortOrder
   shift?: Prisma.SortOrder
 }
 
@@ -402,12 +425,55 @@ export type CourseMinOrderByAggregateInput = {
   code?: Prisma.SortOrder
   periodId?: Prisma.SortOrder
   roomId?: Prisma.SortOrder
+  subjectId?: Prisma.SortOrder
   shift?: Prisma.SortOrder
 }
 
 export type CourseScalarRelationFilter = {
   is?: Prisma.CourseWhereInput
   isNot?: Prisma.CourseWhereInput
+}
+
+export type CourseCreateNestedManyWithoutSubjectInput = {
+  create?: Prisma.XOR<Prisma.CourseCreateWithoutSubjectInput, Prisma.CourseUncheckedCreateWithoutSubjectInput> | Prisma.CourseCreateWithoutSubjectInput[] | Prisma.CourseUncheckedCreateWithoutSubjectInput[]
+  connectOrCreate?: Prisma.CourseCreateOrConnectWithoutSubjectInput | Prisma.CourseCreateOrConnectWithoutSubjectInput[]
+  createMany?: Prisma.CourseCreateManySubjectInputEnvelope
+  connect?: Prisma.CourseWhereUniqueInput | Prisma.CourseWhereUniqueInput[]
+}
+
+export type CourseUncheckedCreateNestedManyWithoutSubjectInput = {
+  create?: Prisma.XOR<Prisma.CourseCreateWithoutSubjectInput, Prisma.CourseUncheckedCreateWithoutSubjectInput> | Prisma.CourseCreateWithoutSubjectInput[] | Prisma.CourseUncheckedCreateWithoutSubjectInput[]
+  connectOrCreate?: Prisma.CourseCreateOrConnectWithoutSubjectInput | Prisma.CourseCreateOrConnectWithoutSubjectInput[]
+  createMany?: Prisma.CourseCreateManySubjectInputEnvelope
+  connect?: Prisma.CourseWhereUniqueInput | Prisma.CourseWhereUniqueInput[]
+}
+
+export type CourseUpdateManyWithoutSubjectNestedInput = {
+  create?: Prisma.XOR<Prisma.CourseCreateWithoutSubjectInput, Prisma.CourseUncheckedCreateWithoutSubjectInput> | Prisma.CourseCreateWithoutSubjectInput[] | Prisma.CourseUncheckedCreateWithoutSubjectInput[]
+  connectOrCreate?: Prisma.CourseCreateOrConnectWithoutSubjectInput | Prisma.CourseCreateOrConnectWithoutSubjectInput[]
+  upsert?: Prisma.CourseUpsertWithWhereUniqueWithoutSubjectInput | Prisma.CourseUpsertWithWhereUniqueWithoutSubjectInput[]
+  createMany?: Prisma.CourseCreateManySubjectInputEnvelope
+  set?: Prisma.CourseWhereUniqueInput | Prisma.CourseWhereUniqueInput[]
+  disconnect?: Prisma.CourseWhereUniqueInput | Prisma.CourseWhereUniqueInput[]
+  delete?: Prisma.CourseWhereUniqueInput | Prisma.CourseWhereUniqueInput[]
+  connect?: Prisma.CourseWhereUniqueInput | Prisma.CourseWhereUniqueInput[]
+  update?: Prisma.CourseUpdateWithWhereUniqueWithoutSubjectInput | Prisma.CourseUpdateWithWhereUniqueWithoutSubjectInput[]
+  updateMany?: Prisma.CourseUpdateManyWithWhereWithoutSubjectInput | Prisma.CourseUpdateManyWithWhereWithoutSubjectInput[]
+  deleteMany?: Prisma.CourseScalarWhereInput | Prisma.CourseScalarWhereInput[]
+}
+
+export type CourseUncheckedUpdateManyWithoutSubjectNestedInput = {
+  create?: Prisma.XOR<Prisma.CourseCreateWithoutSubjectInput, Prisma.CourseUncheckedCreateWithoutSubjectInput> | Prisma.CourseCreateWithoutSubjectInput[] | Prisma.CourseUncheckedCreateWithoutSubjectInput[]
+  connectOrCreate?: Prisma.CourseCreateOrConnectWithoutSubjectInput | Prisma.CourseCreateOrConnectWithoutSubjectInput[]
+  upsert?: Prisma.CourseUpsertWithWhereUniqueWithoutSubjectInput | Prisma.CourseUpsertWithWhereUniqueWithoutSubjectInput[]
+  createMany?: Prisma.CourseCreateManySubjectInputEnvelope
+  set?: Prisma.CourseWhereUniqueInput | Prisma.CourseWhereUniqueInput[]
+  disconnect?: Prisma.CourseWhereUniqueInput | Prisma.CourseWhereUniqueInput[]
+  delete?: Prisma.CourseWhereUniqueInput | Prisma.CourseWhereUniqueInput[]
+  connect?: Prisma.CourseWhereUniqueInput | Prisma.CourseWhereUniqueInput[]
+  update?: Prisma.CourseUpdateWithWhereUniqueWithoutSubjectInput | Prisma.CourseUpdateWithWhereUniqueWithoutSubjectInput[]
+  updateMany?: Prisma.CourseUpdateManyWithWhereWithoutSubjectInput | Prisma.CourseUpdateManyWithWhereWithoutSubjectInput[]
+  deleteMany?: Prisma.CourseScalarWhereInput | Prisma.CourseScalarWhereInput[]
 }
 
 export type CourseCreateNestedManyWithoutRoomInput = {
@@ -582,6 +648,78 @@ export type CourseUpdateOneRequiredWithoutCourseAssistantsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.CourseUpdateToOneWithWhereWithoutCourseAssistantsInput, Prisma.CourseUpdateWithoutCourseAssistantsInput>, Prisma.CourseUncheckedUpdateWithoutCourseAssistantsInput>
 }
 
+export type CourseCreateWithoutSubjectInput = {
+  id?: string
+  createdAt?: Date | string
+  name: string
+  code?: string | null
+  shift: $Enums.Shift
+  period: Prisma.PeriodCreateNestedOneWithoutCoursesInput
+  room?: Prisma.RoomCreateNestedOneWithoutCoursesInput
+  enrollments?: Prisma.EnrollmentCreateNestedManyWithoutCourseInput
+  lessons?: Prisma.LessonCreateNestedManyWithoutCourseInput
+  activities?: Prisma.ActivityCreateNestedManyWithoutCourseInput
+  courseAssistants?: Prisma.CourseAssistantCreateNestedManyWithoutCourseInput
+  finalGrades?: Prisma.FinalGradeCreateNestedManyWithoutCourseInput
+  stats?: Prisma.StudentCourseStatsCreateNestedManyWithoutCourseInput
+}
+
+export type CourseUncheckedCreateWithoutSubjectInput = {
+  id?: string
+  createdAt?: Date | string
+  name: string
+  code?: string | null
+  periodId: string
+  roomId?: string | null
+  shift: $Enums.Shift
+  enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutCourseInput
+  lessons?: Prisma.LessonUncheckedCreateNestedManyWithoutCourseInput
+  activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutCourseInput
+  courseAssistants?: Prisma.CourseAssistantUncheckedCreateNestedManyWithoutCourseInput
+  finalGrades?: Prisma.FinalGradeUncheckedCreateNestedManyWithoutCourseInput
+  stats?: Prisma.StudentCourseStatsUncheckedCreateNestedManyWithoutCourseInput
+}
+
+export type CourseCreateOrConnectWithoutSubjectInput = {
+  where: Prisma.CourseWhereUniqueInput
+  create: Prisma.XOR<Prisma.CourseCreateWithoutSubjectInput, Prisma.CourseUncheckedCreateWithoutSubjectInput>
+}
+
+export type CourseCreateManySubjectInputEnvelope = {
+  data: Prisma.CourseCreateManySubjectInput | Prisma.CourseCreateManySubjectInput[]
+  skipDuplicates?: boolean
+}
+
+export type CourseUpsertWithWhereUniqueWithoutSubjectInput = {
+  where: Prisma.CourseWhereUniqueInput
+  update: Prisma.XOR<Prisma.CourseUpdateWithoutSubjectInput, Prisma.CourseUncheckedUpdateWithoutSubjectInput>
+  create: Prisma.XOR<Prisma.CourseCreateWithoutSubjectInput, Prisma.CourseUncheckedCreateWithoutSubjectInput>
+}
+
+export type CourseUpdateWithWhereUniqueWithoutSubjectInput = {
+  where: Prisma.CourseWhereUniqueInput
+  data: Prisma.XOR<Prisma.CourseUpdateWithoutSubjectInput, Prisma.CourseUncheckedUpdateWithoutSubjectInput>
+}
+
+export type CourseUpdateManyWithWhereWithoutSubjectInput = {
+  where: Prisma.CourseScalarWhereInput
+  data: Prisma.XOR<Prisma.CourseUpdateManyMutationInput, Prisma.CourseUncheckedUpdateManyWithoutSubjectInput>
+}
+
+export type CourseScalarWhereInput = {
+  AND?: Prisma.CourseScalarWhereInput | Prisma.CourseScalarWhereInput[]
+  OR?: Prisma.CourseScalarWhereInput[]
+  NOT?: Prisma.CourseScalarWhereInput | Prisma.CourseScalarWhereInput[]
+  id?: Prisma.UuidFilter<"Course"> | string
+  createdAt?: Prisma.DateTimeFilter<"Course"> | Date | string
+  name?: Prisma.StringFilter<"Course"> | string
+  code?: Prisma.UuidNullableFilter<"Course"> | string | null
+  periodId?: Prisma.UuidFilter<"Course"> | string
+  roomId?: Prisma.UuidNullableFilter<"Course"> | string | null
+  subjectId?: Prisma.UuidFilter<"Course"> | string
+  shift?: Prisma.EnumShiftFilter<"Course"> | $Enums.Shift
+}
+
 export type CourseCreateWithoutRoomInput = {
   id?: string
   createdAt?: Date | string
@@ -589,6 +727,7 @@ export type CourseCreateWithoutRoomInput = {
   code?: string | null
   shift: $Enums.Shift
   period: Prisma.PeriodCreateNestedOneWithoutCoursesInput
+  subject: Prisma.SubjectCreateNestedOneWithoutCoursesInput
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutCourseInput
   lessons?: Prisma.LessonCreateNestedManyWithoutCourseInput
   activities?: Prisma.ActivityCreateNestedManyWithoutCourseInput
@@ -603,6 +742,7 @@ export type CourseUncheckedCreateWithoutRoomInput = {
   name: string
   code?: string | null
   periodId: string
+  subjectId: string
   shift: $Enums.Shift
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutCourseInput
   lessons?: Prisma.LessonUncheckedCreateNestedManyWithoutCourseInput
@@ -638,19 +778,6 @@ export type CourseUpdateManyWithWhereWithoutRoomInput = {
   data: Prisma.XOR<Prisma.CourseUpdateManyMutationInput, Prisma.CourseUncheckedUpdateManyWithoutRoomInput>
 }
 
-export type CourseScalarWhereInput = {
-  AND?: Prisma.CourseScalarWhereInput | Prisma.CourseScalarWhereInput[]
-  OR?: Prisma.CourseScalarWhereInput[]
-  NOT?: Prisma.CourseScalarWhereInput | Prisma.CourseScalarWhereInput[]
-  id?: Prisma.UuidFilter<"Course"> | string
-  createdAt?: Prisma.DateTimeFilter<"Course"> | Date | string
-  name?: Prisma.StringFilter<"Course"> | string
-  code?: Prisma.UuidNullableFilter<"Course"> | string | null
-  periodId?: Prisma.UuidFilter<"Course"> | string
-  roomId?: Prisma.UuidNullableFilter<"Course"> | string | null
-  shift?: Prisma.EnumShiftFilter<"Course"> | $Enums.Shift
-}
-
 export type CourseCreateWithoutPeriodInput = {
   id?: string
   createdAt?: Date | string
@@ -658,6 +785,7 @@ export type CourseCreateWithoutPeriodInput = {
   code?: string | null
   shift: $Enums.Shift
   room?: Prisma.RoomCreateNestedOneWithoutCoursesInput
+  subject: Prisma.SubjectCreateNestedOneWithoutCoursesInput
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutCourseInput
   lessons?: Prisma.LessonCreateNestedManyWithoutCourseInput
   activities?: Prisma.ActivityCreateNestedManyWithoutCourseInput
@@ -672,6 +800,7 @@ export type CourseUncheckedCreateWithoutPeriodInput = {
   name: string
   code?: string | null
   roomId?: string | null
+  subjectId: string
   shift: $Enums.Shift
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutCourseInput
   lessons?: Prisma.LessonUncheckedCreateNestedManyWithoutCourseInput
@@ -715,6 +844,7 @@ export type CourseCreateWithoutEnrollmentsInput = {
   shift: $Enums.Shift
   period: Prisma.PeriodCreateNestedOneWithoutCoursesInput
   room?: Prisma.RoomCreateNestedOneWithoutCoursesInput
+  subject: Prisma.SubjectCreateNestedOneWithoutCoursesInput
   lessons?: Prisma.LessonCreateNestedManyWithoutCourseInput
   activities?: Prisma.ActivityCreateNestedManyWithoutCourseInput
   courseAssistants?: Prisma.CourseAssistantCreateNestedManyWithoutCourseInput
@@ -729,6 +859,7 @@ export type CourseUncheckedCreateWithoutEnrollmentsInput = {
   code?: string | null
   periodId: string
   roomId?: string | null
+  subjectId: string
   shift: $Enums.Shift
   lessons?: Prisma.LessonUncheckedCreateNestedManyWithoutCourseInput
   activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutCourseInput
@@ -761,6 +892,7 @@ export type CourseUpdateWithoutEnrollmentsInput = {
   shift?: Prisma.EnumShiftFieldUpdateOperationsInput | $Enums.Shift
   period?: Prisma.PeriodUpdateOneRequiredWithoutCoursesNestedInput
   room?: Prisma.RoomUpdateOneWithoutCoursesNestedInput
+  subject?: Prisma.SubjectUpdateOneRequiredWithoutCoursesNestedInput
   lessons?: Prisma.LessonUpdateManyWithoutCourseNestedInput
   activities?: Prisma.ActivityUpdateManyWithoutCourseNestedInput
   courseAssistants?: Prisma.CourseAssistantUpdateManyWithoutCourseNestedInput
@@ -775,6 +907,7 @@ export type CourseUncheckedUpdateWithoutEnrollmentsInput = {
   code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   periodId?: Prisma.StringFieldUpdateOperationsInput | string
   roomId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subjectId?: Prisma.StringFieldUpdateOperationsInput | string
   shift?: Prisma.EnumShiftFieldUpdateOperationsInput | $Enums.Shift
   lessons?: Prisma.LessonUncheckedUpdateManyWithoutCourseNestedInput
   activities?: Prisma.ActivityUncheckedUpdateManyWithoutCourseNestedInput
@@ -791,6 +924,7 @@ export type CourseCreateWithoutLessonsInput = {
   shift: $Enums.Shift
   period: Prisma.PeriodCreateNestedOneWithoutCoursesInput
   room?: Prisma.RoomCreateNestedOneWithoutCoursesInput
+  subject: Prisma.SubjectCreateNestedOneWithoutCoursesInput
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutCourseInput
   activities?: Prisma.ActivityCreateNestedManyWithoutCourseInput
   courseAssistants?: Prisma.CourseAssistantCreateNestedManyWithoutCourseInput
@@ -805,6 +939,7 @@ export type CourseUncheckedCreateWithoutLessonsInput = {
   code?: string | null
   periodId: string
   roomId?: string | null
+  subjectId: string
   shift: $Enums.Shift
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutCourseInput
   activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutCourseInput
@@ -837,6 +972,7 @@ export type CourseUpdateWithoutLessonsInput = {
   shift?: Prisma.EnumShiftFieldUpdateOperationsInput | $Enums.Shift
   period?: Prisma.PeriodUpdateOneRequiredWithoutCoursesNestedInput
   room?: Prisma.RoomUpdateOneWithoutCoursesNestedInput
+  subject?: Prisma.SubjectUpdateOneRequiredWithoutCoursesNestedInput
   enrollments?: Prisma.EnrollmentUpdateManyWithoutCourseNestedInput
   activities?: Prisma.ActivityUpdateManyWithoutCourseNestedInput
   courseAssistants?: Prisma.CourseAssistantUpdateManyWithoutCourseNestedInput
@@ -851,6 +987,7 @@ export type CourseUncheckedUpdateWithoutLessonsInput = {
   code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   periodId?: Prisma.StringFieldUpdateOperationsInput | string
   roomId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subjectId?: Prisma.StringFieldUpdateOperationsInput | string
   shift?: Prisma.EnumShiftFieldUpdateOperationsInput | $Enums.Shift
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutCourseNestedInput
   activities?: Prisma.ActivityUncheckedUpdateManyWithoutCourseNestedInput
@@ -867,6 +1004,7 @@ export type CourseCreateWithoutActivitiesInput = {
   shift: $Enums.Shift
   period: Prisma.PeriodCreateNestedOneWithoutCoursesInput
   room?: Prisma.RoomCreateNestedOneWithoutCoursesInput
+  subject: Prisma.SubjectCreateNestedOneWithoutCoursesInput
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutCourseInput
   lessons?: Prisma.LessonCreateNestedManyWithoutCourseInput
   courseAssistants?: Prisma.CourseAssistantCreateNestedManyWithoutCourseInput
@@ -881,6 +1019,7 @@ export type CourseUncheckedCreateWithoutActivitiesInput = {
   code?: string | null
   periodId: string
   roomId?: string | null
+  subjectId: string
   shift: $Enums.Shift
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutCourseInput
   lessons?: Prisma.LessonUncheckedCreateNestedManyWithoutCourseInput
@@ -913,6 +1052,7 @@ export type CourseUpdateWithoutActivitiesInput = {
   shift?: Prisma.EnumShiftFieldUpdateOperationsInput | $Enums.Shift
   period?: Prisma.PeriodUpdateOneRequiredWithoutCoursesNestedInput
   room?: Prisma.RoomUpdateOneWithoutCoursesNestedInput
+  subject?: Prisma.SubjectUpdateOneRequiredWithoutCoursesNestedInput
   enrollments?: Prisma.EnrollmentUpdateManyWithoutCourseNestedInput
   lessons?: Prisma.LessonUpdateManyWithoutCourseNestedInput
   courseAssistants?: Prisma.CourseAssistantUpdateManyWithoutCourseNestedInput
@@ -927,6 +1067,7 @@ export type CourseUncheckedUpdateWithoutActivitiesInput = {
   code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   periodId?: Prisma.StringFieldUpdateOperationsInput | string
   roomId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subjectId?: Prisma.StringFieldUpdateOperationsInput | string
   shift?: Prisma.EnumShiftFieldUpdateOperationsInput | $Enums.Shift
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutCourseNestedInput
   lessons?: Prisma.LessonUncheckedUpdateManyWithoutCourseNestedInput
@@ -943,6 +1084,7 @@ export type CourseCreateWithoutFinalGradesInput = {
   shift: $Enums.Shift
   period: Prisma.PeriodCreateNestedOneWithoutCoursesInput
   room?: Prisma.RoomCreateNestedOneWithoutCoursesInput
+  subject: Prisma.SubjectCreateNestedOneWithoutCoursesInput
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutCourseInput
   lessons?: Prisma.LessonCreateNestedManyWithoutCourseInput
   activities?: Prisma.ActivityCreateNestedManyWithoutCourseInput
@@ -957,6 +1099,7 @@ export type CourseUncheckedCreateWithoutFinalGradesInput = {
   code?: string | null
   periodId: string
   roomId?: string | null
+  subjectId: string
   shift: $Enums.Shift
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutCourseInput
   lessons?: Prisma.LessonUncheckedCreateNestedManyWithoutCourseInput
@@ -989,6 +1132,7 @@ export type CourseUpdateWithoutFinalGradesInput = {
   shift?: Prisma.EnumShiftFieldUpdateOperationsInput | $Enums.Shift
   period?: Prisma.PeriodUpdateOneRequiredWithoutCoursesNestedInput
   room?: Prisma.RoomUpdateOneWithoutCoursesNestedInput
+  subject?: Prisma.SubjectUpdateOneRequiredWithoutCoursesNestedInput
   enrollments?: Prisma.EnrollmentUpdateManyWithoutCourseNestedInput
   lessons?: Prisma.LessonUpdateManyWithoutCourseNestedInput
   activities?: Prisma.ActivityUpdateManyWithoutCourseNestedInput
@@ -1003,6 +1147,7 @@ export type CourseUncheckedUpdateWithoutFinalGradesInput = {
   code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   periodId?: Prisma.StringFieldUpdateOperationsInput | string
   roomId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subjectId?: Prisma.StringFieldUpdateOperationsInput | string
   shift?: Prisma.EnumShiftFieldUpdateOperationsInput | $Enums.Shift
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutCourseNestedInput
   lessons?: Prisma.LessonUncheckedUpdateManyWithoutCourseNestedInput
@@ -1019,6 +1164,7 @@ export type CourseCreateWithoutStatsInput = {
   shift: $Enums.Shift
   period: Prisma.PeriodCreateNestedOneWithoutCoursesInput
   room?: Prisma.RoomCreateNestedOneWithoutCoursesInput
+  subject: Prisma.SubjectCreateNestedOneWithoutCoursesInput
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutCourseInput
   lessons?: Prisma.LessonCreateNestedManyWithoutCourseInput
   activities?: Prisma.ActivityCreateNestedManyWithoutCourseInput
@@ -1033,6 +1179,7 @@ export type CourseUncheckedCreateWithoutStatsInput = {
   code?: string | null
   periodId: string
   roomId?: string | null
+  subjectId: string
   shift: $Enums.Shift
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutCourseInput
   lessons?: Prisma.LessonUncheckedCreateNestedManyWithoutCourseInput
@@ -1065,6 +1212,7 @@ export type CourseUpdateWithoutStatsInput = {
   shift?: Prisma.EnumShiftFieldUpdateOperationsInput | $Enums.Shift
   period?: Prisma.PeriodUpdateOneRequiredWithoutCoursesNestedInput
   room?: Prisma.RoomUpdateOneWithoutCoursesNestedInput
+  subject?: Prisma.SubjectUpdateOneRequiredWithoutCoursesNestedInput
   enrollments?: Prisma.EnrollmentUpdateManyWithoutCourseNestedInput
   lessons?: Prisma.LessonUpdateManyWithoutCourseNestedInput
   activities?: Prisma.ActivityUpdateManyWithoutCourseNestedInput
@@ -1079,6 +1227,7 @@ export type CourseUncheckedUpdateWithoutStatsInput = {
   code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   periodId?: Prisma.StringFieldUpdateOperationsInput | string
   roomId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subjectId?: Prisma.StringFieldUpdateOperationsInput | string
   shift?: Prisma.EnumShiftFieldUpdateOperationsInput | $Enums.Shift
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutCourseNestedInput
   lessons?: Prisma.LessonUncheckedUpdateManyWithoutCourseNestedInput
@@ -1095,6 +1244,7 @@ export type CourseCreateWithoutCourseAssistantsInput = {
   shift: $Enums.Shift
   period: Prisma.PeriodCreateNestedOneWithoutCoursesInput
   room?: Prisma.RoomCreateNestedOneWithoutCoursesInput
+  subject: Prisma.SubjectCreateNestedOneWithoutCoursesInput
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutCourseInput
   lessons?: Prisma.LessonCreateNestedManyWithoutCourseInput
   activities?: Prisma.ActivityCreateNestedManyWithoutCourseInput
@@ -1109,6 +1259,7 @@ export type CourseUncheckedCreateWithoutCourseAssistantsInput = {
   code?: string | null
   periodId: string
   roomId?: string | null
+  subjectId: string
   shift: $Enums.Shift
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutCourseInput
   lessons?: Prisma.LessonUncheckedCreateNestedManyWithoutCourseInput
@@ -1141,6 +1292,7 @@ export type CourseUpdateWithoutCourseAssistantsInput = {
   shift?: Prisma.EnumShiftFieldUpdateOperationsInput | $Enums.Shift
   period?: Prisma.PeriodUpdateOneRequiredWithoutCoursesNestedInput
   room?: Prisma.RoomUpdateOneWithoutCoursesNestedInput
+  subject?: Prisma.SubjectUpdateOneRequiredWithoutCoursesNestedInput
   enrollments?: Prisma.EnrollmentUpdateManyWithoutCourseNestedInput
   lessons?: Prisma.LessonUpdateManyWithoutCourseNestedInput
   activities?: Prisma.ActivityUpdateManyWithoutCourseNestedInput
@@ -1155,6 +1307,7 @@ export type CourseUncheckedUpdateWithoutCourseAssistantsInput = {
   code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   periodId?: Prisma.StringFieldUpdateOperationsInput | string
   roomId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subjectId?: Prisma.StringFieldUpdateOperationsInput | string
   shift?: Prisma.EnumShiftFieldUpdateOperationsInput | $Enums.Shift
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutCourseNestedInput
   lessons?: Prisma.LessonUncheckedUpdateManyWithoutCourseNestedInput
@@ -1163,12 +1316,65 @@ export type CourseUncheckedUpdateWithoutCourseAssistantsInput = {
   stats?: Prisma.StudentCourseStatsUncheckedUpdateManyWithoutCourseNestedInput
 }
 
+export type CourseCreateManySubjectInput = {
+  id?: string
+  createdAt?: Date | string
+  name: string
+  code?: string | null
+  periodId: string
+  roomId?: string | null
+  shift: $Enums.Shift
+}
+
+export type CourseUpdateWithoutSubjectInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  shift?: Prisma.EnumShiftFieldUpdateOperationsInput | $Enums.Shift
+  period?: Prisma.PeriodUpdateOneRequiredWithoutCoursesNestedInput
+  room?: Prisma.RoomUpdateOneWithoutCoursesNestedInput
+  enrollments?: Prisma.EnrollmentUpdateManyWithoutCourseNestedInput
+  lessons?: Prisma.LessonUpdateManyWithoutCourseNestedInput
+  activities?: Prisma.ActivityUpdateManyWithoutCourseNestedInput
+  courseAssistants?: Prisma.CourseAssistantUpdateManyWithoutCourseNestedInput
+  finalGrades?: Prisma.FinalGradeUpdateManyWithoutCourseNestedInput
+  stats?: Prisma.StudentCourseStatsUpdateManyWithoutCourseNestedInput
+}
+
+export type CourseUncheckedUpdateWithoutSubjectInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  periodId?: Prisma.StringFieldUpdateOperationsInput | string
+  roomId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  shift?: Prisma.EnumShiftFieldUpdateOperationsInput | $Enums.Shift
+  enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutCourseNestedInput
+  lessons?: Prisma.LessonUncheckedUpdateManyWithoutCourseNestedInput
+  activities?: Prisma.ActivityUncheckedUpdateManyWithoutCourseNestedInput
+  courseAssistants?: Prisma.CourseAssistantUncheckedUpdateManyWithoutCourseNestedInput
+  finalGrades?: Prisma.FinalGradeUncheckedUpdateManyWithoutCourseNestedInput
+  stats?: Prisma.StudentCourseStatsUncheckedUpdateManyWithoutCourseNestedInput
+}
+
+export type CourseUncheckedUpdateManyWithoutSubjectInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  periodId?: Prisma.StringFieldUpdateOperationsInput | string
+  roomId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  shift?: Prisma.EnumShiftFieldUpdateOperationsInput | $Enums.Shift
+}
+
 export type CourseCreateManyRoomInput = {
   id?: string
   createdAt?: Date | string
   name: string
   code?: string | null
   periodId: string
+  subjectId: string
   shift: $Enums.Shift
 }
 
@@ -1179,6 +1385,7 @@ export type CourseUpdateWithoutRoomInput = {
   code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   shift?: Prisma.EnumShiftFieldUpdateOperationsInput | $Enums.Shift
   period?: Prisma.PeriodUpdateOneRequiredWithoutCoursesNestedInput
+  subject?: Prisma.SubjectUpdateOneRequiredWithoutCoursesNestedInput
   enrollments?: Prisma.EnrollmentUpdateManyWithoutCourseNestedInput
   lessons?: Prisma.LessonUpdateManyWithoutCourseNestedInput
   activities?: Prisma.ActivityUpdateManyWithoutCourseNestedInput
@@ -1193,6 +1400,7 @@ export type CourseUncheckedUpdateWithoutRoomInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   periodId?: Prisma.StringFieldUpdateOperationsInput | string
+  subjectId?: Prisma.StringFieldUpdateOperationsInput | string
   shift?: Prisma.EnumShiftFieldUpdateOperationsInput | $Enums.Shift
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutCourseNestedInput
   lessons?: Prisma.LessonUncheckedUpdateManyWithoutCourseNestedInput
@@ -1208,6 +1416,7 @@ export type CourseUncheckedUpdateManyWithoutRoomInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   periodId?: Prisma.StringFieldUpdateOperationsInput | string
+  subjectId?: Prisma.StringFieldUpdateOperationsInput | string
   shift?: Prisma.EnumShiftFieldUpdateOperationsInput | $Enums.Shift
 }
 
@@ -1217,6 +1426,7 @@ export type CourseCreateManyPeriodInput = {
   name: string
   code?: string | null
   roomId?: string | null
+  subjectId: string
   shift: $Enums.Shift
 }
 
@@ -1227,6 +1437,7 @@ export type CourseUpdateWithoutPeriodInput = {
   code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   shift?: Prisma.EnumShiftFieldUpdateOperationsInput | $Enums.Shift
   room?: Prisma.RoomUpdateOneWithoutCoursesNestedInput
+  subject?: Prisma.SubjectUpdateOneRequiredWithoutCoursesNestedInput
   enrollments?: Prisma.EnrollmentUpdateManyWithoutCourseNestedInput
   lessons?: Prisma.LessonUpdateManyWithoutCourseNestedInput
   activities?: Prisma.ActivityUpdateManyWithoutCourseNestedInput
@@ -1241,6 +1452,7 @@ export type CourseUncheckedUpdateWithoutPeriodInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   roomId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subjectId?: Prisma.StringFieldUpdateOperationsInput | string
   shift?: Prisma.EnumShiftFieldUpdateOperationsInput | $Enums.Shift
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutCourseNestedInput
   lessons?: Prisma.LessonUncheckedUpdateManyWithoutCourseNestedInput
@@ -1256,6 +1468,7 @@ export type CourseUncheckedUpdateManyWithoutPeriodInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   roomId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subjectId?: Prisma.StringFieldUpdateOperationsInput | string
   shift?: Prisma.EnumShiftFieldUpdateOperationsInput | $Enums.Shift
 }
 
@@ -1342,9 +1555,11 @@ export type CourseSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   code?: boolean
   periodId?: boolean
   roomId?: boolean
+  subjectId?: boolean
   shift?: boolean
   period?: boolean | Prisma.PeriodDefaultArgs<ExtArgs>
   room?: boolean | Prisma.Course$roomArgs<ExtArgs>
+  subject?: boolean | Prisma.SubjectDefaultArgs<ExtArgs>
   enrollments?: boolean | Prisma.Course$enrollmentsArgs<ExtArgs>
   lessons?: boolean | Prisma.Course$lessonsArgs<ExtArgs>
   activities?: boolean | Prisma.Course$activitiesArgs<ExtArgs>
@@ -1361,9 +1576,11 @@ export type CourseSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   code?: boolean
   periodId?: boolean
   roomId?: boolean
+  subjectId?: boolean
   shift?: boolean
   period?: boolean | Prisma.PeriodDefaultArgs<ExtArgs>
   room?: boolean | Prisma.Course$roomArgs<ExtArgs>
+  subject?: boolean | Prisma.SubjectDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["course"]>
 
 export type CourseSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1373,9 +1590,11 @@ export type CourseSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
   code?: boolean
   periodId?: boolean
   roomId?: boolean
+  subjectId?: boolean
   shift?: boolean
   period?: boolean | Prisma.PeriodDefaultArgs<ExtArgs>
   room?: boolean | Prisma.Course$roomArgs<ExtArgs>
+  subject?: boolean | Prisma.SubjectDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["course"]>
 
 export type CourseSelectScalar = {
@@ -1385,13 +1604,15 @@ export type CourseSelectScalar = {
   code?: boolean
   periodId?: boolean
   roomId?: boolean
+  subjectId?: boolean
   shift?: boolean
 }
 
-export type CourseOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "name" | "code" | "periodId" | "roomId" | "shift", ExtArgs["result"]["course"]>
+export type CourseOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "name" | "code" | "periodId" | "roomId" | "subjectId" | "shift", ExtArgs["result"]["course"]>
 export type CourseInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   period?: boolean | Prisma.PeriodDefaultArgs<ExtArgs>
   room?: boolean | Prisma.Course$roomArgs<ExtArgs>
+  subject?: boolean | Prisma.SubjectDefaultArgs<ExtArgs>
   enrollments?: boolean | Prisma.Course$enrollmentsArgs<ExtArgs>
   lessons?: boolean | Prisma.Course$lessonsArgs<ExtArgs>
   activities?: boolean | Prisma.Course$activitiesArgs<ExtArgs>
@@ -1403,10 +1624,12 @@ export type CourseInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs 
 export type CourseIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   period?: boolean | Prisma.PeriodDefaultArgs<ExtArgs>
   room?: boolean | Prisma.Course$roomArgs<ExtArgs>
+  subject?: boolean | Prisma.SubjectDefaultArgs<ExtArgs>
 }
 export type CourseIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   period?: boolean | Prisma.PeriodDefaultArgs<ExtArgs>
   room?: boolean | Prisma.Course$roomArgs<ExtArgs>
+  subject?: boolean | Prisma.SubjectDefaultArgs<ExtArgs>
 }
 
 export type $CoursePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1414,6 +1637,7 @@ export type $CoursePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
   objects: {
     period: Prisma.$PeriodPayload<ExtArgs>
     room: Prisma.$RoomPayload<ExtArgs> | null
+    subject: Prisma.$SubjectPayload<ExtArgs>
     enrollments: Prisma.$EnrollmentPayload<ExtArgs>[]
     lessons: Prisma.$LessonPayload<ExtArgs>[]
     activities: Prisma.$ActivityPayload<ExtArgs>[]
@@ -1428,6 +1652,7 @@ export type $CoursePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     code: string | null
     periodId: string
     roomId: string | null
+    subjectId: string
     shift: $Enums.Shift
   }, ExtArgs["result"]["course"]>
   composites: {}
@@ -1825,6 +2050,7 @@ export interface Prisma__CourseClient<T, Null = never, ExtArgs extends runtime.T
   readonly [Symbol.toStringTag]: "PrismaPromise"
   period<T extends Prisma.PeriodDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.PeriodDefaultArgs<ExtArgs>>): Prisma.Prisma__PeriodClient<runtime.Types.Result.GetResult<Prisma.$PeriodPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   room<T extends Prisma.Course$roomArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Course$roomArgs<ExtArgs>>): Prisma.Prisma__RoomClient<runtime.Types.Result.GetResult<Prisma.$RoomPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  subject<T extends Prisma.SubjectDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.SubjectDefaultArgs<ExtArgs>>): Prisma.Prisma__SubjectClient<runtime.Types.Result.GetResult<Prisma.$SubjectPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   enrollments<T extends Prisma.Course$enrollmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Course$enrollmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EnrollmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   lessons<T extends Prisma.Course$lessonsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Course$lessonsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LessonPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   activities<T extends Prisma.Course$activitiesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Course$activitiesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ActivityPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -1866,6 +2092,7 @@ export interface CourseFieldRefs {
   readonly code: Prisma.FieldRef<"Course", 'String'>
   readonly periodId: Prisma.FieldRef<"Course", 'String'>
   readonly roomId: Prisma.FieldRef<"Course", 'String'>
+  readonly subjectId: Prisma.FieldRef<"Course", 'String'>
   readonly shift: Prisma.FieldRef<"Course", 'Shift'>
 }
     

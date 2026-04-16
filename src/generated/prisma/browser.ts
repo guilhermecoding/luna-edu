@@ -43,6 +43,16 @@ export type Verification = Prisma.VerificationModel
  */
 export type Program = Prisma.ProgramModel
 /**
+ * Model Degree
+ * 
+ */
+export type Degree = Prisma.DegreeModel
+/**
+ * Model Subject
+ * 
+ */
+export type Subject = Prisma.SubjectModel
+/**
  * Model Campus
  * 
  */

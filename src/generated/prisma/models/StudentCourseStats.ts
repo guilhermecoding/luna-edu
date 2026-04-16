@@ -537,14 +537,6 @@ export type StudentCourseStatsUncheckedUpdateManyWithoutStudentNestedInput = {
   deleteMany?: Prisma.StudentCourseStatsScalarWhereInput | Prisma.StudentCourseStatsScalarWhereInput[]
 }
 
-export type NullableIntFieldUpdateOperationsInput = {
-  set?: number | null
-  increment?: number
-  decrement?: number
-  multiply?: number
-  divide?: number
-}
-
 export type StudentCourseStatsCreateWithoutCourseInput = {
   id?: string
   createdAt?: Date | string

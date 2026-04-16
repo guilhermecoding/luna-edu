@@ -48,7 +48,9 @@ Atualizado em: 15/04/2026
 
 ## Modulos Academicos (modelados no Prisma, pendentes de app)
 
-- [ ] Cursos
+- [ ] Gerenciamento de Cursos de Formação (Degrees)
+- [ ] Gerenciamento de Disciplinas da Matriz (Subjects)
+- [ ] Gerenciamento de Ofertas/Turmas Abertas (Courses)
 - [ ] Salas e campus
 - [ ] Alunos e matriculas
 - [ ] Aulas e presencas
@@ -73,7 +75,10 @@ Atualizado em: 15/04/2026
 ## Backlog Curto (proximas entregas sugeridas)
 
 - [ ] Implementar autenticao visual (login) e guarda de rota por papel
-- [ ] Finalizar CRUD de periodos (editar, concluir, excluir)
-- [ ] Iniciar CRUD de cursos e alunos, reaproveitando a estrutura Prisma
+- [x] Finalizar CRUD de periodos (editar, concluir, excluir)
+- [ ] Iniciar CRUD de Cursos de Formação (Degrees)
+- [ ] Iniciar CRUD de Matriz Curricular/Disciplinas (Subjects)
+- [ ] Iniciar CRUD de Ofertas Letivas/Turmas (Courses)
+- [ ] Iniciar CRUD de Alunos, reaproveitando a nova estrutura Prisma
 - [ ] Criar dashboard inicial do admin com metricas basicas
 - [ ] Criar API de consulta de vagas para comunicação com sistemas externos

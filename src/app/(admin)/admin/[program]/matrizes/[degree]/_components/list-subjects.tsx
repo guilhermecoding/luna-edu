@@ -25,6 +25,28 @@ function EmptySubjectsList({
 }
 
 
+const AVATAR_COLORS = [
+    "bg-green-200 text-green-800",
+    "bg-blue-200 text-blue-800",
+    "bg-yellow-200 text-yellow-800",
+    "bg-teal-200 text-teal-800",
+    "bg-cyan-200 text-cyan-800",
+    "bg-indigo-200 text-indigo-800",
+    "bg-rose-200 text-rose-800",
+    "bg-purple-200 text-purple-800",
+    "bg-pink-200 text-pink-800",
+    "bg-red-200 text-red-800",
+];
+
+const getAvatarColor = (name: string) => {
+    let hash = 0;
+    for (let i = 0; i < name.length; i++) {
+        hash = name.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    const index = Math.abs(hash) % AVATAR_COLORS.length;
+    return AVATAR_COLORS[index];
+};
+
 async function ListSubjectsContent({
     programSlug,
     degreeSlug,
@@ -58,7 +80,7 @@ async function ListSubjectsContent({
                     {subjects.map((subject) => (
                         <tr key={subject.id} className="hover:bg-muted/50 transition-colors">
                             <td className="flex flex-row items-center gap-3 px-6 py-4 text-foreground">
-                                <span className="bg-blue-200 text-blue-800 p-2 size-10 flex items-center justify-center shrink-0 rounded-full text-sm font-medium">
+                                <span className={`${getAvatarColor(subject.name)} p-2 size-10 flex items-center justify-center shrink-0 rounded-full text-sm font-medium`}>
                                     {(() => {
                                         const words = subject.name.trim().split(/\s+/);
                                         if (words.length > 1) {

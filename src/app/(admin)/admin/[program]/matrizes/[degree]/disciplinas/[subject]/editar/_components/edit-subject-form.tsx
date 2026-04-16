@@ -172,6 +172,18 @@ export function EditSubjectForm({ programSlug, degreeSlug, degreeId, subjectId, 
                 </div>
 
                 <div className="space-y-2">
+                    <Label htmlFor="workload">Carga Horária (h)*</Label>
+                    <Input
+                        id="workload"
+                        type="number"
+                        {...register("workload")}
+                        disabled={isSubmitting}
+                        className="p-5 rounded-lg bg-background"
+                    />
+                    {errors.workload && <p className="text-sm text-red-600">{errors.workload.message}</p>}
+                </div>
+
+                <div className="space-y-2 col-span-2 sm:col-span-1">
                     <Label>Semestre/Período Recomendado*</Label>
                     <Select
                         value={isBasePeriodAssignable ? "assignable" : "not_assignable"}
@@ -206,18 +218,6 @@ export function EditSubjectForm({ programSlug, degreeSlug, degreeId, subjectId, 
                             {errors.basePeriod && <p className="text-sm text-red-600 mt-1">{errors.basePeriod.message}</p>}
                         </div>
                     )}
-                </div>
-
-                <div className="space-y-2 sm:col-span-2">
-                    <Label htmlFor="workload">Carga Horária (h)*</Label>
-                    <Input
-                        id="workload"
-                        type="number"
-                        {...register("workload")}
-                        disabled={isSubmitting}
-                        className="p-5 rounded-lg bg-background sm:w-72"
-                    />
-                    {errors.workload && <p className="text-sm text-red-600">{errors.workload.message}</p>}
                 </div>
             </div>
 

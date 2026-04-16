@@ -134,6 +134,19 @@ export function CreateSubjectForm({ programSlug, degreeSlug }: Props) {
                 </div>
 
                 <div className="space-y-2">
+                    <Label htmlFor="workload">Carga Horária (h)*</Label>
+                    <Input
+                        id="workload"
+                        type="number"
+                        placeholder="Ex: 80"
+                        {...register("workload")}
+                        disabled={isSubmitting}
+                        className="p-5 rounded-lg bg-background"
+                    />
+                    {errors.workload && <p className="text-sm text-red-600">{errors.workload.message}</p>}
+                </div>
+
+                <div className="space-y-2 col-span-2 sm:col-span-1">
                     <Label>Semestre/Período Recomendado*</Label>
                     <Select
                         value={isBasePeriodAssignable ? "assignable" : "not_assignable"}
@@ -153,7 +166,7 @@ export function CreateSubjectForm({ programSlug, degreeSlug }: Props) {
                             <SelectItem value="not_assignable">Não atribuível</SelectItem>
                         </SelectContent>
                     </Select>
-                    
+
                     {isBasePeriodAssignable && (
                         <div className="pt-2 relative">
                             <Input
@@ -167,19 +180,6 @@ export function CreateSubjectForm({ programSlug, degreeSlug }: Props) {
                             {errors.basePeriod && <p className="text-sm text-red-600 mt-1">{errors.basePeriod.message}</p>}
                         </div>
                     )}
-                </div>
-
-                <div className="space-y-2 sm:col-span-2">
-                    <Label htmlFor="workload">Carga Horária (h)*</Label>
-                    <Input
-                        id="workload"
-                        type="number"
-                        placeholder="Ex: 80"
-                        {...register("workload")}
-                        disabled={isSubmitting}
-                        className="p-5 rounded-lg bg-background sm:w-72"
-                    />
-                    {errors.workload && <p className="text-sm text-red-600">{errors.workload.message}</p>}
                 </div>
             </div>
 

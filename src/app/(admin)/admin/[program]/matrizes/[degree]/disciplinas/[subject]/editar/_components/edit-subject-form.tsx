@@ -165,9 +165,9 @@ export function EditSubjectForm({ programSlug, degreeSlug, degreeId, subjectId, 
                     />
                     {errors.code && <p className="text-sm text-red-600">{errors.code.message}</p>}
                 </div>
-                
+
                 <div className="space-y-2">
-                    <Label htmlFor="basePeriod">Semestre/Período Recomendado</Label>
+                    <Label htmlFor="basePeriod">Semestre/Período Recomendado*</Label>
                     <Input
                         id="basePeriod"
                         type="number"
@@ -179,7 +179,7 @@ export function EditSubjectForm({ programSlug, degreeSlug, degreeId, subjectId, 
                 </div>
 
                 <div className="space-y-2 sm:col-span-2">
-                    <Label htmlFor="workload">Carga Horária (h)</Label>
+                    <Label htmlFor="workload">Carga Horária (h)*</Label>
                     <Input
                         id="workload"
                         type="number"
@@ -245,7 +245,7 @@ export function EditSubjectForm({ programSlug, degreeSlug, degreeId, subjectId, 
 
                         <div className="flex flex-col items-center">
                             <Image className="w-32 h-32" src={imgGibbyDuvida} alt="Gibby Duvida" width={100} height={100} />
-                            <span className="text-center mt-2"> Para confirmar, digite exatamente o nome da disciplina: <br/><strong className="text-foreground">{initialData.name}</strong></span>
+                            <span className="text-center mt-2"> Para confirmar, digite exatamente o nome da disciplina: <br /><strong className="text-foreground">{initialData.name}</strong></span>
                         </div>
 
                         <div className="space-y-2 mt-2">

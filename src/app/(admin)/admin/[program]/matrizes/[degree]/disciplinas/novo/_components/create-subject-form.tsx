@@ -128,9 +128,9 @@ export function CreateSubjectForm({ programSlug, degreeSlug }: Props) {
                     />
                     {errors.code && <p className="text-sm text-red-600">{errors.code.message}</p>}
                 </div>
-                
+
                 <div className="space-y-2">
-                    <Label htmlFor="basePeriod">Semestre/Período Recomendado</Label>
+                    <Label htmlFor="basePeriod">Semestre/Período Recomendado*</Label>
                     <Input
                         id="basePeriod"
                         type="number"
@@ -143,7 +143,7 @@ export function CreateSubjectForm({ programSlug, degreeSlug }: Props) {
                 </div>
 
                 <div className="space-y-2 sm:col-span-2">
-                    <Label htmlFor="workload">Carga Horária (h)</Label>
+                    <Label htmlFor="workload">Carga Horária (h)*</Label>
                     <Input
                         id="workload"
                         type="number"

@@ -131,6 +131,9 @@ export async function deleteSubject(id: string): Promise<Subject> {
         });
         return subject;
     } catch (error) {
+        if (error instanceof Error && error.message.includes("Foreign key constraint failed")) {
+            throw new Error("Não é possível excluir a disciplina porque existem turmas associadas a ela.");
+        }
         if (error instanceof Error && error.message.includes("Record to delete does not exist")) {
             throw new Error("Disciplina base não encontrada.");
         }

@@ -1,8 +1,8 @@
 "use server";
 
-import { updateDegree } from "@/services/degrees/degrees.service";
+import { deleteDegree, updateDegree } from "@/services/degrees/degrees.service";
 import { ZodError } from "zod";
-import { createDegreeSchema, type CreateDegreeInput } from "../../novo/schema";
+import { type CreateDegreeInput } from "../../novo/schema";
 import { revalidatePath, updateTag } from "next/cache";
 import { redirect } from "next/navigation";
 
@@ -23,7 +23,7 @@ export async function editDegreeAction(id: string, programSlug: string, degreeSl
         // Também devemos invalidar a lista
         revalidatePath(`/admin/${programSlug}/matrizes`);
         revalidatePath(`/admin/${programSlug}/matrizes/${degreeSlug}`);
-        
+
     } catch (error) {
         if (error instanceof ZodError) {
             return {
@@ -48,6 +48,34 @@ export async function editDegreeAction(id: string, programSlug: string, degreeSl
     const params = new URLSearchParams({
         toast: "success",
         message: "Matriz curricular atualizada com sucesso",
+    });
+
+    redirect(`/admin/${programSlug}/matrizes?${params.toString()}`);
+}
+
+export async function deleteDegreeAction(id: string, programSlug: string) {
+    try {
+        await deleteDegree(id);
+
+        // Invalida a listagem do programa
+        updateTag(`programs:${programSlug}:degrees`);
+    } catch (error) {
+        if (error instanceof Error) {
+            return {
+                success: false,
+                error: error.message,
+            };
+        }
+
+        return {
+            success: false,
+            error: "Erro desconhecido ao excluir matriz.",
+        };
+    }
+
+    const params = new URLSearchParams({
+        toast: "success",
+        message: "Matriz curricular excluída com sucesso",
     });
 
     redirect(`/admin/${programSlug}/matrizes?${params.toString()}`);

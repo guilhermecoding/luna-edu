@@ -17,6 +17,7 @@ import { useForm, type SubmitHandler, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import z from "zod";
 import { useEffect, useState } from "react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { deleteSubjectAction, editSubjectAction } from "../actions";
 import { createSubjectSchema } from "../../../novo/schema";
 import { IconAlertTriangle, IconLoader2 } from "@tabler/icons-react";
@@ -46,6 +47,10 @@ export function EditSubjectForm({ programSlug, degreeSlug, degreeId, subjectId, 
     const [deleteConfirmationName, setDeleteConfirmationName] = useState("");
     const [deleteError, setDeleteError] = useState<string | null>(null);
     const [isDeleting, setIsDeleting] = useState(false);
+
+    const [isBasePeriodAssignable, setIsBasePeriodAssignable] = useState(
+        initialData.basePeriod !== null && initialData.basePeriod !== undefined,
+    );
 
     const form = useForm<FormInput, undefined, FormOutput>({
         resolver: zodResolver(editSubjectSchema),
@@ -167,15 +172,40 @@ export function EditSubjectForm({ programSlug, degreeSlug, degreeId, subjectId, 
                 </div>
 
                 <div className="space-y-2">
-                    <Label htmlFor="basePeriod">Semestre/Período Recomendado*</Label>
-                    <Input
-                        id="basePeriod"
-                        type="number"
-                        {...register("basePeriod")}
+                    <Label>Semestre/Período Recomendado*</Label>
+                    <Select
+                        value={isBasePeriodAssignable ? "assignable" : "not_assignable"}
+                        onValueChange={(value) => {
+                            const assignable = value === "assignable";
+                            setIsBasePeriodAssignable(assignable);
+                            if (!assignable) {
+                                form.setValue("basePeriod", undefined, { shouldValidate: true, shouldDirty: true });
+                            }
+                        }}
                         disabled={isSubmitting}
-                        className="p-5 rounded-lg bg-background"
-                    />
-                    {errors.basePeriod && <p className="text-sm text-red-600">{errors.basePeriod.message}</p>}
+                    >
+                        <SelectTrigger className="w-full bg-background p-5 h-[62px]">
+                            <SelectValue placeholder="Selecione..." />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="assignable">Atribuível</SelectItem>
+                            <SelectItem value="not_assignable">Não atribuível</SelectItem>
+                        </SelectContent>
+                    </Select>
+
+                    {isBasePeriodAssignable && (
+                        <div className="pt-2 relative">
+                            <Input
+                                id="basePeriod"
+                                type="number"
+                                placeholder="Ex: 1"
+                                {...register("basePeriod")}
+                                disabled={isSubmitting}
+                                className="p-5 rounded-lg bg-background"
+                            />
+                            {errors.basePeriod && <p className="text-sm text-red-600 mt-1">{errors.basePeriod.message}</p>}
+                        </div>
+                    )}
                 </div>
 
                 <div className="space-y-2 sm:col-span-2">

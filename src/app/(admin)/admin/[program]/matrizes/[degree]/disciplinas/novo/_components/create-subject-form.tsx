@@ -7,7 +7,9 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import z from "zod";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+
 import { createSubjectAction } from "../actions";
 import { createSubjectSchema } from "../schema";
 import { IconLoader2 } from "@tabler/icons-react";
@@ -25,6 +27,8 @@ export function CreateSubjectForm({ programSlug, degreeSlug }: Props) {
     const router = useRouter();
     const pathname = usePathname();
     const searchParams = useSearchParams();
+
+    const [isBasePeriodAssignable, setIsBasePeriodAssignable] = useState(true);
 
     const form = useForm<FormInput, undefined, FormOutput>({
         resolver: zodResolver(createSubjectSchema),
@@ -130,16 +134,39 @@ export function CreateSubjectForm({ programSlug, degreeSlug }: Props) {
                 </div>
 
                 <div className="space-y-2">
-                    <Label htmlFor="basePeriod">Semestre/Período Recomendado*</Label>
-                    <Input
-                        id="basePeriod"
-                        type="number"
-                        placeholder="Ex: 1"
-                        {...register("basePeriod")}
-                        disabled={isSubmitting}
-                        className="p-5 rounded-lg bg-background"
-                    />
-                    {errors.basePeriod && <p className="text-sm text-red-600">{errors.basePeriod.message}</p>}
+                    <Label>Semestre/Período Recomendado*</Label>
+                    <Select
+                        value={isBasePeriodAssignable ? "assignable" : "not_assignable"}
+                        onValueChange={(value) => {
+                            const assignable = value === "assignable";
+                            setIsBasePeriodAssignable(assignable);
+                            if (!assignable) {
+                                form.setValue("basePeriod", undefined, { shouldValidate: true, shouldDirty: true });
+                            }
+                        }}
+                    >
+                        <SelectTrigger className="w-full bg-background p-5 h-[62px]">
+                            <SelectValue placeholder="Selecione..." />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="assignable">Atribuível</SelectItem>
+                            <SelectItem value="not_assignable">Não atribuível</SelectItem>
+                        </SelectContent>
+                    </Select>
+                    
+                    {isBasePeriodAssignable && (
+                        <div className="pt-2 relative">
+                            <Input
+                                id="basePeriod"
+                                type="number"
+                                placeholder="Ex: 1"
+                                {...register("basePeriod")}
+                                disabled={isSubmitting}
+                                className="p-5 rounded-lg bg-background"
+                            />
+                            {errors.basePeriod && <p className="text-sm text-red-600 mt-1">{errors.basePeriod.message}</p>}
+                        </div>
+                    )}
                 </div>
 
                 <div className="space-y-2 sm:col-span-2">

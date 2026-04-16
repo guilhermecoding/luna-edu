@@ -117,12 +117,13 @@ export function CreateSubjectForm({ programSlug, degreeSlug }: Props) {
                 </div>
 
                 <div className="space-y-2">
-                    <Label htmlFor="code">Código Interno</Label>
+                    <Label htmlFor="code">Código Interno Único *</Label>
                     <Input
                         id="code"
                         placeholder="Ex: MAT0101"
                         {...register("code")}
                         disabled={isSubmitting}
+                        aria-invalid={errors.code ? "true" : "false"}
                         className="p-5 rounded-lg bg-background font-mono text-sm"
                     />
                     {errors.code && <p className="text-sm text-red-600">{errors.code.message}</p>}

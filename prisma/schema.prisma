@@ -180,7 +180,7 @@ model Subject {
     id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
     createdAt  DateTime @default(now()) @map("created_at") @db.Timestamptz
     name       String
-    code       String?
+    code       String   @unique
     workload   Int?
     basePeriod Int?     @map("base_period") @db.SmallInt
     

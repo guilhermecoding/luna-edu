@@ -51,21 +51,28 @@ export async function getSubjectById(id: string): Promise<Subject | null> {
 export async function createSubject(data: {
     name: string;
     degreeId: string;
-    code?: string;
+    code: string;
     workload?: number;
     basePeriod?: number;
 }): Promise<Subject> {
-    const subject = await prisma.subject.create({
-        data: {
-            name: data.name,
-            degreeId: data.degreeId,
-            code: data.code || null,
-            workload: data.workload || null,
-            basePeriod: data.basePeriod || null,
-        },
-    });
+    try {
+        const subject = await prisma.subject.create({
+            data: {
+                name: data.name,
+                degreeId: data.degreeId,
+                code: data.code,
+                workload: data.workload || null,
+                basePeriod: data.basePeriod || null,
+            },
+        });
 
-    return subject;
+        return subject;
+    } catch (error) {
+        if (error instanceof Error && error.message.includes("Unique constraint failed")) {
+            throw new Error("Já existe uma disciplina cadastrada com este código. Indique outro código.");
+        }
+        throw error;
+    }
 }
 
 /**
@@ -79,7 +86,7 @@ export async function updateSubject(
     id: string,
     data: {
         name: string;
-        code?: string;
+        code: string;
         workload?: number;
         basePeriod?: number;
     },
@@ -91,7 +98,7 @@ export async function updateSubject(
             },
             data: {
                 name: data.name,
-                code: data.code || null,
+                code: data.code,
                 workload: data.workload || null,
                 basePeriod: data.basePeriod || null,
             },
@@ -99,6 +106,9 @@ export async function updateSubject(
 
         return subject;
     } catch (error) {
+        if (error instanceof Error && error.message.includes("Unique constraint failed")) {
+            throw new Error("Já existe uma outra disciplina usando este código. Tente outro.");
+        }
         if (error instanceof Error && error.message.includes("Record to update not found")) {
             throw new Error("Disciplina base não encontrada.");
         }

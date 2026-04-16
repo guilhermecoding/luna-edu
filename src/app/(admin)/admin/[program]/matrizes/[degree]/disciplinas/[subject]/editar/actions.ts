@@ -7,7 +7,7 @@ import { revalidatePath, updateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import z from "zod";
 
-const editSubjectSchema = createSubjectSchema.omit({ degreeId: true });
+const editSubjectSchema = createSubjectSchema;
 export type EditSubjectInput = z.infer<typeof editSubjectSchema>;
 
 export async function editSubjectAction(subjectId: string, programSlug: string, degreeSlug: string, degreeId: string, data: EditSubjectInput) {

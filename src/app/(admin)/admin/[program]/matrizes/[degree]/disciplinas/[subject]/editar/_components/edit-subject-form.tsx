@@ -14,7 +14,7 @@ import { IconLoader2 } from "@tabler/icons-react";
 import { isRedirectError } from "@/lib/is-redirect-error";
 import { Subject } from "@/generated/prisma/client";
 
-const editSubjectSchema = createSubjectSchema.omit({ degreeId: true });
+const editSubjectSchema = createSubjectSchema;
 type FormInput = z.input<typeof editSubjectSchema>;
 type FormOutput = z.output<typeof editSubjectSchema>;
 
@@ -111,11 +111,12 @@ export function EditSubjectForm({ programSlug, degreeSlug, degreeId, subjectId, 
                 </div>
 
                 <div className="space-y-2">
-                    <Label htmlFor="code">Código Interno</Label>
+                    <Label htmlFor="code">Código Interno Único *</Label>
                     <Input
                         id="code"
                         {...register("code")}
                         disabled={isSubmitting}
+                        aria-invalid={errors.code ? "true" : "false"}
                         className="p-5 rounded-lg bg-background font-mono text-sm"
                     />
                     {errors.code && <p className="text-sm text-red-600">{errors.code.message}</p>}

@@ -1,3 +1,5 @@
+"use client";
+
 import {
     Tooltip,
     TooltipContent,
@@ -19,7 +21,7 @@ export default function TooltipText({
 }) {
     return (
         <Tooltip>
-            <TooltipTrigger>{children}</TooltipTrigger>
+            <TooltipTrigger onClick={(e) => e.preventDefault()}>{children}</TooltipTrigger>
             <TooltipContent>
                 <p>{text}</p>
             </TooltipContent>

@@ -2,7 +2,7 @@ import BaseForm from "@/components/base-form";
 import Page from "@/components/page";
 import Section from "@/components/section";
 import { Suspense } from "react";
-import { RoomForm } from "../../_components/room-form";
+import { EditRoomForm } from "../../_components/edit-room-form";
 import { Metadata } from "next";
 import SkeletonForm from "@/components/skeletons/skeleton-form";
 import { getCampusBySlug } from "@/services/campuses/campuses.service";
@@ -38,7 +38,7 @@ async function EditRoomContent({
                 >
                     <div className="mt-6">
                         <Suspense fallback={<SkeletonForm />}>
-                            <RoomForm campusSlug={campus} initialData={roomData} />
+                            <EditRoomForm campusSlug={campus} initialData={roomData} />
                         </Suspense>
                     </div>
                 </BaseForm>

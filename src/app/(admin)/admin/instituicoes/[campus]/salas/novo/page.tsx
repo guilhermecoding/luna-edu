@@ -2,7 +2,7 @@ import BaseForm from "@/components/base-form";
 import Page from "@/components/page";
 import Section from "@/components/section";
 import { Suspense } from "react";
-import { RoomForm } from "../_components/room-form";
+import { CreateRoomForm } from "./_components/create-room-form";
 import { Metadata } from "next";
 import SkeletonForm from "@/components/skeletons/skeleton-form";
 import { getCampusBySlug } from "@/services/campuses/campuses.service";
@@ -33,7 +33,7 @@ export default async function NewRoomPage({
                 >
                     <div className="mt-6">
                         <Suspense fallback={<SkeletonForm />}>
-                            <RoomForm campusSlug={campus} />
+                            <CreateRoomForm campusSlug={campus} />
                         </Suspense>
                     </div>
                 </BaseForm>

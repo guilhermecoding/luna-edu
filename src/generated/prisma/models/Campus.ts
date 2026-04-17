@@ -312,9 +312,9 @@ export type CampusMinOrderByAggregateInput = {
   createdAt?: Prisma.SortOrder
 }
 
-export type CampusNullableScalarRelationFilter = {
-  is?: Prisma.CampusWhereInput | null
-  isNot?: Prisma.CampusWhereInput | null
+export type CampusScalarRelationFilter = {
+  is?: Prisma.CampusWhereInput
+  isNot?: Prisma.CampusWhereInput
 }
 
 export type CampusCreateNestedOneWithoutRoomsInput = {
@@ -323,12 +323,10 @@ export type CampusCreateNestedOneWithoutRoomsInput = {
   connect?: Prisma.CampusWhereUniqueInput
 }
 
-export type CampusUpdateOneWithoutRoomsNestedInput = {
+export type CampusUpdateOneRequiredWithoutRoomsNestedInput = {
   create?: Prisma.XOR<Prisma.CampusCreateWithoutRoomsInput, Prisma.CampusUncheckedCreateWithoutRoomsInput>
   connectOrCreate?: Prisma.CampusCreateOrConnectWithoutRoomsInput
   upsert?: Prisma.CampusUpsertWithoutRoomsInput
-  disconnect?: Prisma.CampusWhereInput | boolean
-  delete?: Prisma.CampusWhereInput | boolean
   connect?: Prisma.CampusWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.CampusUpdateToOneWithWhereWithoutRoomsInput, Prisma.CampusUpdateWithoutRoomsInput>, Prisma.CampusUncheckedUpdateWithoutRoomsInput>
 }

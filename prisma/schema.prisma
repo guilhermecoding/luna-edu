@@ -213,11 +213,13 @@ model Room {
     name      String
     capacity  BigInt
     block     String?
-    campusId  String?  @map("campus_id") @db.Uuid
+    campusId  String   @map("campus_id") @db.Uuid
+    slug      String
 
-    campus  Campus?  @relation(fields: [campusId], references: [id])
+    campus  Campus   @relation(fields: [campusId], references: [id])
     courses Course[]
 
+    @@unique([campusId, slug])
     @@map("rooms")
     @@schema("public")
 }

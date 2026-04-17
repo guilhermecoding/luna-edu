@@ -12,14 +12,12 @@ export const metadata: Metadata = {
     title: "Editar Instituição",
 };
 
-export default async function EditCampusPage({
+async function EditCampusContent({
     params,
-}: {
-    params: Promise<{ slug: string }>;
-}) {
-    const { slug } = await params;
+}: Omit<PageProps<"/admin/instituicoes/[campus]/editar">, "searchParams">) {
+    const { campus } = await params;
 
-    const campusData = await getCampusBySlug(slug);
+    const campusData = await getCampusBySlug(campus);
 
     if (!campusData) {
         notFound();
@@ -42,5 +40,13 @@ export default async function EditCampusPage({
                 </BaseForm>
             </Section>
         </Page>
+    );
+}
+
+export default function EditCampusPage({
+    params,
+}: PageProps<"/admin/instituicoes/[campus]/editar">) {
+    return (
+        <EditCampusContent params={params} />
     );
 }

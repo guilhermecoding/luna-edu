@@ -13,7 +13,7 @@ export const adminMenus: ItemMenuSidebarAdmin[] = [
         ],
     },
     {
-        group: "GERENCIAMENTO",
+        group: "ACADÊMICO",
         items: [
             {
                 title: "Usuários",
@@ -68,34 +68,15 @@ export const adminMenus: ItemMenuSidebarAdmin[] = [
         ],
     },
     {
-        group: "RELATÓRIOS",
+        group: "GERENCIAMENTO",
         items: [
             {
-                title: "Estatísticas",
-                url: "/admin/estatisticas",
-                icon: "chart-arcs",
-                isActive: false,
-            },
-            {
-                title: "Relatórios",
-                url: "/admin/relatorios",
-                icon: "file-text",
-                isActive: false,
-            },
-        ],
-    },
-    {
-        group: "SISTEMA",
-        items: [
-            {
-                title: "Configurações",
-                url: "/admin/configuracoes",
-                icon: "settings",
+                title: "Instituições",
+                url: "/admin/instituicoes",
+                icon: "building-estate",
                 isActive: false,
                 items: [
-                    { title: "Geral", url: "/admin/configuracoes" },
-                    { title: "Segurança", url: "/admin/configuracoes/seguranca" },
-                    { title: "Email", url: "/admin/configuracoes/email" },
+                    { title: "Adicionar Instituição", url: "/admin/instituicoes/novo" },
                 ],
             },
         ],

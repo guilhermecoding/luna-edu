@@ -28,6 +28,7 @@ export type CampusMinAggregateOutputType = {
   id: string | null
   name: string | null
   block: string | null
+  address: string | null
   createdAt: Date | null
 }
 
@@ -35,6 +36,7 @@ export type CampusMaxAggregateOutputType = {
   id: string | null
   name: string | null
   block: string | null
+  address: string | null
   createdAt: Date | null
 }
 
@@ -42,6 +44,7 @@ export type CampusCountAggregateOutputType = {
   id: number
   name: number
   block: number
+  address: number
   createdAt: number
   _all: number
 }
@@ -51,6 +54,7 @@ export type CampusMinAggregateInputType = {
   id?: true
   name?: true
   block?: true
+  address?: true
   createdAt?: true
 }
 
@@ -58,6 +62,7 @@ export type CampusMaxAggregateInputType = {
   id?: true
   name?: true
   block?: true
+  address?: true
   createdAt?: true
 }
 
@@ -65,6 +70,7 @@ export type CampusCountAggregateInputType = {
   id?: true
   name?: true
   block?: true
+  address?: true
   createdAt?: true
   _all?: true
 }
@@ -145,6 +151,7 @@ export type CampusGroupByOutputType = {
   id: string
   name: string
   block: string | null
+  address: string | null
   createdAt: Date
   _count: CampusCountAggregateOutputType | null
   _min: CampusMinAggregateOutputType | null
@@ -173,6 +180,7 @@ export type CampusWhereInput = {
   id?: Prisma.UuidFilter<"Campus"> | string
   name?: Prisma.StringFilter<"Campus"> | string
   block?: Prisma.StringNullableFilter<"Campus"> | string | null
+  address?: Prisma.StringNullableFilter<"Campus"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Campus"> | Date | string
   rooms?: Prisma.RoomListRelationFilter
 }
@@ -181,6 +189,7 @@ export type CampusOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   block?: Prisma.SortOrderInput | Prisma.SortOrder
+  address?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   rooms?: Prisma.RoomOrderByRelationAggregateInput
 }
@@ -192,6 +201,7 @@ export type CampusWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.CampusWhereInput | Prisma.CampusWhereInput[]
   name?: Prisma.StringFilter<"Campus"> | string
   block?: Prisma.StringNullableFilter<"Campus"> | string | null
+  address?: Prisma.StringNullableFilter<"Campus"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Campus"> | Date | string
   rooms?: Prisma.RoomListRelationFilter
 }, "id">
@@ -200,6 +210,7 @@ export type CampusOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   block?: Prisma.SortOrderInput | Prisma.SortOrder
+  address?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.CampusCountOrderByAggregateInput
   _max?: Prisma.CampusMaxOrderByAggregateInput
@@ -213,6 +224,7 @@ export type CampusScalarWhereWithAggregatesInput = {
   id?: Prisma.UuidWithAggregatesFilter<"Campus"> | string
   name?: Prisma.StringWithAggregatesFilter<"Campus"> | string
   block?: Prisma.StringNullableWithAggregatesFilter<"Campus"> | string | null
+  address?: Prisma.StringNullableWithAggregatesFilter<"Campus"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Campus"> | Date | string
 }
 
@@ -220,6 +232,7 @@ export type CampusCreateInput = {
   id?: string
   name: string
   block?: string | null
+  address?: string | null
   createdAt?: Date | string
   rooms?: Prisma.RoomCreateNestedManyWithoutCampusInput
 }
@@ -228,6 +241,7 @@ export type CampusUncheckedCreateInput = {
   id?: string
   name: string
   block?: string | null
+  address?: string | null
   createdAt?: Date | string
   rooms?: Prisma.RoomUncheckedCreateNestedManyWithoutCampusInput
 }
@@ -236,6 +250,7 @@ export type CampusUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   block?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   rooms?: Prisma.RoomUpdateManyWithoutCampusNestedInput
 }
@@ -244,6 +259,7 @@ export type CampusUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   block?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   rooms?: Prisma.RoomUncheckedUpdateManyWithoutCampusNestedInput
 }
@@ -252,6 +268,7 @@ export type CampusCreateManyInput = {
   id?: string
   name: string
   block?: string | null
+  address?: string | null
   createdAt?: Date | string
 }
 
@@ -259,6 +276,7 @@ export type CampusUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   block?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -266,6 +284,7 @@ export type CampusUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   block?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -273,6 +292,7 @@ export type CampusCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   block?: Prisma.SortOrder
+  address?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -280,6 +300,7 @@ export type CampusMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   block?: Prisma.SortOrder
+  address?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -287,6 +308,7 @@ export type CampusMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   block?: Prisma.SortOrder
+  address?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -315,6 +337,7 @@ export type CampusCreateWithoutRoomsInput = {
   id?: string
   name: string
   block?: string | null
+  address?: string | null
   createdAt?: Date | string
 }
 
@@ -322,6 +345,7 @@ export type CampusUncheckedCreateWithoutRoomsInput = {
   id?: string
   name: string
   block?: string | null
+  address?: string | null
   createdAt?: Date | string
 }
 
@@ -345,6 +369,7 @@ export type CampusUpdateWithoutRoomsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   block?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -352,6 +377,7 @@ export type CampusUncheckedUpdateWithoutRoomsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   block?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -390,6 +416,7 @@ export type CampusSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   id?: boolean
   name?: boolean
   block?: boolean
+  address?: boolean
   createdAt?: boolean
   rooms?: boolean | Prisma.Campus$roomsArgs<ExtArgs>
   _count?: boolean | Prisma.CampusCountOutputTypeDefaultArgs<ExtArgs>
@@ -399,6 +426,7 @@ export type CampusSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   id?: boolean
   name?: boolean
   block?: boolean
+  address?: boolean
   createdAt?: boolean
 }, ExtArgs["result"]["campus"]>
 
@@ -406,6 +434,7 @@ export type CampusSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
   id?: boolean
   name?: boolean
   block?: boolean
+  address?: boolean
   createdAt?: boolean
 }, ExtArgs["result"]["campus"]>
 
@@ -413,10 +442,11 @@ export type CampusSelectScalar = {
   id?: boolean
   name?: boolean
   block?: boolean
+  address?: boolean
   createdAt?: boolean
 }
 
-export type CampusOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "block" | "createdAt", ExtArgs["result"]["campus"]>
+export type CampusOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "block" | "address" | "createdAt", ExtArgs["result"]["campus"]>
 export type CampusInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   rooms?: boolean | Prisma.Campus$roomsArgs<ExtArgs>
   _count?: boolean | Prisma.CampusCountOutputTypeDefaultArgs<ExtArgs>
@@ -433,6 +463,7 @@ export type $CampusPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     id: string
     name: string
     block: string | null
+    address: string | null
     createdAt: Date
   }, ExtArgs["result"]["campus"]>
   composites: {}
@@ -861,6 +892,7 @@ export interface CampusFieldRefs {
   readonly id: Prisma.FieldRef<"Campus", 'String'>
   readonly name: Prisma.FieldRef<"Campus", 'String'>
   readonly block: Prisma.FieldRef<"Campus", 'String'>
+  readonly address: Prisma.FieldRef<"Campus", 'String'>
   readonly createdAt: Prisma.FieldRef<"Campus", 'DateTime'>
 }
     

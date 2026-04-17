@@ -167,10 +167,10 @@ model Degree {
     level       String?
     totalHours  Int?     @map("total_hours")
 
-    programId   String   @map("program_id") @db.Uuid
-    program     Program  @relation(fields: [programId], references: [id])
+    programId String  @map("program_id") @db.Uuid
+    program   Program @relation(fields: [programId], references: [id])
 
-    subjects    Subject[]
+    subjects Subject[]
 
     @@unique([programId, slug])
     @@map("degrees")
@@ -184,11 +184,11 @@ model Subject {
     code       String   @unique
     workload   Int?
     basePeriod Int?     @map("base_period") @db.SmallInt
-    
-    degreeId   String   @map("degree_id") @db.Uuid
-    degree     Degree   @relation(fields: [degreeId], references: [id])
 
-    courses    Course[]
+    degreeId String @map("degree_id") @db.Uuid
+    degree   Degree @relation(fields: [degreeId], references: [id])
+
+    courses Course[]
 
     @@map("subjects")
     @@schema("public")
@@ -198,6 +198,7 @@ model Campus {
     id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
     name      String
     block     String?
+    address   String?
     createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
 
     rooms Room[]

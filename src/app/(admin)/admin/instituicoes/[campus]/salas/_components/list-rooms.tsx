@@ -74,61 +74,66 @@ async function ListRoomsContent({ campusSlug }: { campusSlug: string }) {
     return (
         <div className="overflow-x-auto rounded-4xl border border-surface-border bg-surface text-sm">
             <table className="w-full text-left border-collapse">
-                <thead className="bg-primary/5 text-muted-foreground uppercase text-xs">
+
+                <thead className="bg-primary/5 text-muted-foreground uppercase text-[10px] sm:text-xs">
                     <tr>
-                        <th className="px-6 py-4 font-medium">Sala / Laboratório</th>
-                        <th className="px-6 py-4 font-medium text-center">Capacidade</th>
-                        <th className="px-6 py-4 font-medium text-center">Bloco / Prédio</th>
-                        <th className="px-6 py-4 font-medium text-center whitespace-nowrap">Ações</th>
+                        <th className="px-4 sm:px-6 py-4 font-medium min-w-[180px]">Sala / Laboratório</th>
+                        <th className="px-4 sm:px-6 py-4 font-medium text-center min-w-[120px]">Capacidade</th>
+                        <th className="px-4 sm:px-6 py-4 font-medium text-center min-w-[120px]">Bloco / Prédio</th>
+                        <th className="px-4 sm:px-6 py-4 font-medium text-center whitespace-nowrap min-w-[140px]">Ações</th>
                     </tr>
                 </thead>
                 <tbody className="divide-y divide-surface-border">
                     {rooms.map((room) => (
                         <tr key={room.id} className="hover:bg-muted/50 transition-colors group">
-                            <td className="px-6 py-4">
+                            <td className="px-4 sm:px-6 py-4">
                                 <div className="flex items-center gap-3">
-                                    <div className="flex justify-center items-center bg-background border border-surface-border size-10 rounded-lg text-primary shrink-0 transition-transform group-hover:scale-105">
-                                        <IconDoor className="size-5" />
+                                    <div className="flex justify-center items-center bg-background border border-surface-border size-8 sm:size-10 rounded-lg text-primary shrink-0 transition-transform group-hover:scale-105">
+                                        <IconDoor className="size-4 sm:size-5" />
                                     </div>
-                                    <span className="font-bold text-base text-foreground uppercase line-clamp-1" title={room.name}>
+                                    <span className="font-bold text-sm sm:text-base text-foreground uppercase" title={room.name}>
                                         {room.name}
                                     </span>
                                 </div>
                             </td>
-                            <td className="px-6 py-4 text-center">
-                                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary font-medium text-xs">
-                                    <IconUsers className="size-3.5" />
-                                    {room.capacity} {Number(room.capacity) === 1 ? "vaga" : "vagas"}
+                            <td className="px-4 sm:px-6 py-4">
+                                <div className="flex justify-center">
+                                    <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary font-medium text-[10px] sm:text-xs whitespace-nowrap">
+                                        <IconUsers className="size-3 sm:size-3.5" />
+                                        {room.capacity} {Number(room.capacity) === 1 ? "vaga" : "vagas"}
+                                    </div>
                                 </div>
                             </td>
-                            <td className="px-6 py-4 text-center">
-                                {room.block ? (
-                                    <div className="flex flex-row items-center gap-1.5 px-3 py-1 rounded-full bg-muted text-muted-foreground font-medium text-xs">
-                                        <IconBuilding className="size-3.5" />
-                                        Bloco {room.block}
-                                    </div>
-                                ) : (
-                                    <span className="text-muted-foreground/50 text-xs italic">Não informado</span>
-                                )}
+                            <td className="px-4 sm:px-6 py-4">
+                                <div className="flex justify-center">
+                                    {room.block ? (
+                                        <div className="flex flex-row items-center gap-1.5 px-3 py-1 rounded-full bg-muted text-muted-foreground font-medium text-[10px] sm:text-xs whitespace-nowrap">
+                                            <IconBuilding className="size-3 sm:size-3.5" />
+                                            Bloco {room.block}
+                                        </div>
+                                    ) : (
+                                        <span className="text-muted-foreground/50 text-[10px] sm:text-xs italic whitespace-nowrap">Não informado</span>
+                                    )}
+                                </div>
                             </td>
-                            <td className="px-6 py-4 text-right">
-                                <div className="flex flex-row items-center justify-end gap-2">
+                            <td className="px-4 sm:px-6 py-4">
+                                <div className="flex flex-row items-center justify-center sm:justify-end gap-1 sm:gap-2">
                                     <Link
                                         href={`/admin/instituicoes/${campusSlug}/salas/${room.slug}/editar`}
-                                        className="p-2 inline-flex rounded-lg hover:bg-black/5 dark:hover:bg-white/10 text-muted-foreground transition-colors"
+                                        className="p-2 inline-flex rounded-lg hover:bg-black/5 dark:hover:bg-white/10 text-muted-foreground transition-colors shrink-0"
                                         title="Editar sala"
                                     >
-                                        <IconEdit className="size-5" />
+                                        <IconEdit className="size-4 sm:size-5" />
                                     </Link>
 
-                                    <Separator orientation="vertical" className="h-4 bg-surface-border mt-2.5" />
+                                    <Separator orientation="vertical" className="h-4 bg-surface-border block mt-2.5" />
 
                                     <Link
                                         href={`/admin/instituicoes/${campusSlug}/salas/${room.slug}/editar`}
-                                        className="text-primary hover:text-primary/80 text-sm font-bold flex items-center gap-1 transition-colors px-2 py-1 rounded-lg hover:bg-primary/5"
+                                        className="text-primary hover:text-primary/80 text-[10px] sm:text-sm font-bold flex items-center gap-1 transition-colors px-2 py-1 rounded-lg hover:bg-primary/5 whitespace-nowrap shrink-0"
                                     >
-                                        Detalhes
-                                        <IconChevronRight className="size-4" />
+                                        <span className="">Detalhes</span>
+                                        <IconChevronRight className="size-3 sm:size-4" />
                                     </Link>
                                 </div>
                             </td>

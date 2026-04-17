@@ -3,6 +3,7 @@ import { Metadata } from "next";
 import SidebarAdminBase from "./_components/sidebar-admin/sidebar-admin-base";
 import { adminMenus } from "../_config/menus/admin-menus";
 import { Suspense } from "react";
+import SidebarAndPageSkeleton from "@/components/skeletons/sidebar-and-page-skeleton";
 
 export const metadata: Metadata = {
     title: {
@@ -21,7 +22,7 @@ export default function AdminLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <Suspense fallback={null}>
+        <Suspense fallback={<SidebarAndPageSkeleton />}>
             <SidebarAdminBase menus={adminMenus}>
                 {children}
             </SidebarAdminBase>

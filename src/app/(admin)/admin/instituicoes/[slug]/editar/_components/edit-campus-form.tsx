@@ -150,7 +150,7 @@ export function EditCampusForm({ initialData }: EditCampusFormProps) {
                         {errors.name && <p className="text-sm text-red-600">{errors.name.message}</p>}
                     </div>
 
-                    <div className="space-y-2 md:col-span-1">
+                    <div className="space-y-2 md:col-span-1 cursor-not-allowed">
                         <Label htmlFor="slug">Slug</Label>
                         <Input
                             id="slug"

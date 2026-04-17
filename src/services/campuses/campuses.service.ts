@@ -1,4 +1,4 @@
-import { Campus } from "@/generated/prisma/client";
+import { Campus, Prisma } from "@/generated/prisma/client";
 import prisma from "@/lib/prisma";
 import { cacheLife, cacheTag } from "next/cache";
 
@@ -54,6 +54,9 @@ export async function createCampus(data: {
 
         return campus;
     } catch (error) {
+        if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2002") {
+            throw new Error("Já existe uma instituição com este slug");
+        }
         throw error;
     }
 }
@@ -104,8 +107,13 @@ export async function updateCampus(
 
         return campus;
     } catch (error) {
-        if (error instanceof Error && error.message.includes("Record to update not found")) {
-            throw new Error("Instituição não encontrada");
+        if (error instanceof Prisma.PrismaClientKnownRequestError) {
+            if (error.code === "P2025") {
+                throw new Error("Instituição não encontrada");
+            }
+            if (error.code === "P2002") {
+                throw new Error("Já existe uma instituição com este slug");
+            }
         }
 
         throw error;

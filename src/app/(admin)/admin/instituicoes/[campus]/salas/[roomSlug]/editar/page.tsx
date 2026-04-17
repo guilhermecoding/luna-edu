@@ -2,7 +2,7 @@ import BaseForm from "@/components/base-form";
 import Page from "@/components/page";
 import Section from "@/components/section";
 import { Suspense } from "react";
-import { EditRoomForm } from "../../_components/edit-room-form";
+import { EditRoomForm } from "./_components/edit-room-form";
 import { Metadata } from "next";
 import SkeletonForm from "@/components/skeletons/skeleton-form";
 import { getCampusBySlug } from "@/services/campuses/campuses.service";

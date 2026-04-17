@@ -7,7 +7,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useForm, type SubmitHandler, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
-import { createRoomAction } from "../../actions";
+import { createRoomAction } from "../actions";
 import { roomSchema, type RoomInput } from "../../schema";
 import { IconLoader2 } from "@tabler/icons-react";
 import { isRedirectError } from "@/lib/is-redirect-error";

@@ -15,14 +15,12 @@ export const metadata: Metadata = {
 
 async function EditRoomContent({
     params,
-}: {
-    params: Promise<{ campus: string; roomSlug: string }>;
-}) {
-    const { campus, roomSlug } = await params;
+}: Omit<PageProps<"/admin/instituicoes/[campus]/salas/[room]/editar">, "searchParams">) {
+    const { campus, room } = await params;
 
     const [campusData, roomData] = await Promise.all([
         getCampusBySlug(campus),
-        getRoomBySlug(campus, roomSlug),
+        getRoomBySlug(campus, room),
     ]);
 
     if (!campusData || !roomData) {
@@ -49,8 +47,6 @@ async function EditRoomContent({
 
 export default function EditRoomPage({
     params,
-}: {
-    params: Promise<{ campus: string; roomSlug: string }>;
-}) {
+}: PageProps<"/admin/instituicoes/[campus]/salas/[room]/editar">) {
     return <EditRoomContent params={params} />;
 }

@@ -200,6 +200,7 @@ export const CampusScalarFieldEnum = {
   id: 'id',
   name: 'name',
   address: 'address',
+  slug: 'slug',
   createdAt: 'createdAt'
 } as const
 

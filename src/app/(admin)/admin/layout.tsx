@@ -7,7 +7,7 @@ import SidebarAndPageSkeleton from "@/components/skeletons/sidebar-and-page-skel
 
 export const metadata: Metadata = {
     title: {
-        template: "%s | LUNA (Admin)",
+        template: "%s | LUNA ACADEMY (Admin)",
         default: "Administrador",
     },
     robots: {

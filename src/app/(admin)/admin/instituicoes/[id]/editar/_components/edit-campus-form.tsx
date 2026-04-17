@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -10,10 +9,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import { deleteCampusAction, editCampusAction } from "../actions";
 import { createCampusSchema, type CreateCampusInput } from "../../../novo/schema";
-import { IconAlertTriangleFilled, IconLoader2, IconTrash } from "@tabler/icons-react";
+import { IconAlertTriangle, IconLoader2 } from "@tabler/icons-react";
+import Image from "next/image";
+import imgGibbyDuvida from "@/assets/images/logo-gibby-duvida.svg";
 import { isRedirectError } from "@/lib/is-redirect-error";
 import { Campus } from "@/generated/prisma/client";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
     Dialog,
     DialogContent,
@@ -35,6 +35,8 @@ export function EditCampusForm({ initialData }: EditCampusFormProps) {
 
     const [isDeleting, setIsDeleting] = useState(false);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [deleteConfirmationName, setDeleteConfirmationName] = useState("");
+    const [deleteError, setDeleteError] = useState<string | null>(null);
 
     const form = useForm<CreateCampusInput>({
         resolver: zodResolver(createCampusSchema),
@@ -54,6 +56,7 @@ export function EditCampusForm({ initialData }: EditCampusFormProps) {
     } = form;
 
     const canSubmit = isValid && isDirty && !isSubmitting && !isDeleting;
+    const canDelete = deleteConfirmationName === initialData.name && !isDeleting;
 
     useEffect(() => {
         clearErrors();
@@ -94,6 +97,7 @@ export function EditCampusForm({ initialData }: EditCampusFormProps) {
     };
 
     const handleDelete = async () => {
+        setDeleteError(null);
         setIsDeleting(true);
         try {
             const result = await deleteCampusAction(initialData.id);
@@ -103,10 +107,7 @@ export function EditCampusForm({ initialData }: EditCampusFormProps) {
                 params.set("message", result.error || "Erro ao excluir instituição");
                 router.replace(`${pathname}?${params.toString()}`, { scroll: false });
 
-                setError("root", {
-                    type: "server",
-                    message: result.error || "Erro ao excluir instituição",
-                });
+                setDeleteError(result.error || "Erro ao excluir instituição");
             }
         } catch (error) {
             if (isRedirectError(error)) {
@@ -118,10 +119,7 @@ export function EditCampusForm({ initialData }: EditCampusFormProps) {
             params.set("message", "Erro fatal ao excluir instituição");
             router.replace(`${pathname}?${params.toString()}`, { scroll: false });
 
-            setError("root", {
-                type: "server",
-                message: "Erro fatal ao excluir instituição",
-            });
+            setDeleteError("Erro fatal ao excluir instituição");
         } finally {
             setIsDeleting(false);
             setIsDeleteModalOpen(false);
@@ -152,7 +150,7 @@ export function EditCampusForm({ initialData }: EditCampusFormProps) {
                     </div>
 
                     <div className="space-y-2 md:col-span-2">
-                        <Label htmlFor="address">Endereço</Label>
+                        <Label htmlFor="address">Endereço *</Label>
                         <Input
                             id="address"
                             placeholder="Ex: Av. Principal, 1000"
@@ -180,71 +178,83 @@ export function EditCampusForm({ initialData }: EditCampusFormProps) {
                 </div>
             </form>
 
-            <Card className="border-red-500/20 bg-red-500/5 shadow-none rounded-3xl">
-                <CardHeader>
-                    <CardTitle className="text-red-600 flex items-center gap-2 text-xl">
-                        <IconAlertTriangleFilled className="size-6" />
-                        Zona de Perigo
-                    </CardTitle>
-                    <CardDescription className="text-red-600/80 text-base">
-                        Ações irreversíveis para esta instituição. Proceda com cautela.
-                    </CardDescription>
-                </CardHeader>
-                <CardContent>
-                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-5 rounded-xl border border-red-500/20 bg-red-500/10">
-                        <div className="space-y-1">
-                            <h4 className="font-semibold text-red-900 dark:text-red-400">Excluir Instituição</h4>
-                            <p className="text-sm text-red-700 dark:text-red-400/80">
-                                Esta ação removerá permanentemente a instituição do sistema.
-                                Apenas instituições sem salas vinculadas podem ser excluídas.
-                            </p>
-                        </div>
-                        <Dialog open={isDeleteModalOpen} onOpenChange={setIsDeleteModalOpen}>
-                            <DialogTrigger asChild>
-                                <Button
-                                    variant="destructive"
-                                    className="shrink-0 rounded-xl bg-red-600 hover:bg-red-700"
-                                    disabled={isDeleting || isSubmitting}
-                                >
-                                    {isDeleting ? (
-                                        <IconLoader2 className="size-5 animate-spin mr-2" />
-                                    ) : (
-                                        <IconTrash className="size-5 mr-2" />
-                                    )}
-                                    {isDeleting ? "Excluindo..." : "Excluir Instituição"}
-                                </Button>
-                            </DialogTrigger>
-                            <DialogContent>
-                                <DialogHeader>
-                                    <DialogTitle>Você tem certeza absoluta?</DialogTitle>
-                                    <DialogDescription>
-                                        Esta ação não pode ser desfeita. Isso excluirá permanentemente
-                                        a instituição <strong>{initialData.name}</strong> e removerá todos
-                                        os dados associados a ela de nossos servidores.
-                                    </DialogDescription>
-                                </DialogHeader>
-                                <DialogFooter>
-                                    <Button
-                                        variant="outline"
-                                        onClick={() => setIsDeleteModalOpen(false)}
-                                        disabled={isDeleting}
-                                    >
-                                        Cancelar
-                                    </Button>
-                                    <Button
-                                        variant="destructive"
-                                        onClick={handleDelete}
-                                        className="bg-red-600 hover:bg-red-700 text-white"
-                                        disabled={isDeleting}
-                                    >
-                                        {isDeleting ? "Excluindo..." : "Sim, excluir instituição"}
-                                    </Button>
-                                </DialogFooter>
-                            </DialogContent>
-                        </Dialog>
+            <div className="border border-destructive/25 bg-destructive/5 rounded-2xl p-4 sm:p-5 space-y-4">
+                <div>
+                    <div className="flex flex-row items-center gap-2">
+                        <IconAlertTriangle className="size-5 text-red-600" />
+                        <h3 className="text-xl font-semibold text-destructive">Zona de Perigo</h3>
                     </div>
-                </CardContent>
-            </Card>
+                    <p className="text-sm text-muted-foreground mt-1">
+                        Esta ação removerá a instituição <b>permanentemente</b> do sistema. Apenas instituições sem salas vinculadas podem ser excluídas.
+                    </p>
+                </div>
+
+                <Dialog
+                    open={isDeleteModalOpen}
+                    onOpenChange={(open) => {
+                        setIsDeleteModalOpen(open);
+                        if (!open) {
+                            setDeleteConfirmationName("");
+                            setDeleteError(null);
+                        }
+                    }}
+                >
+                    <div className="w-full flex justify-end">
+                        <DialogTrigger asChild>
+                            <Button type="button" variant="destructive" className="w-full sm:w-auto">
+                                Excluir Instituição
+                            </Button>
+                        </DialogTrigger>
+                    </div>
+                    <DialogContent>
+                        <DialogHeader>
+                            <DialogTitle>Excluir Instituição</DialogTitle>
+                            <DialogDescription>
+                                Deseja realmente excluir esta instituição permanentemente?
+                            </DialogDescription>
+                        </DialogHeader>
+
+                        <div className="flex flex-col items-center">
+                            <Image className="w-32 h-32" src={imgGibbyDuvida} alt="Gibby Duvida" width={100} height={100} />
+                            <span className="text-center mt-2"> Para confirmar, digite exatamente o nome da instituição: <br /><strong className="text-lg text-foreground">{initialData.name}</strong></span>
+                        </div>
+
+                        <div className="space-y-2 mt-2">
+                            <Label htmlFor="confirm-delete-name">Confirme o nome</Label>
+                            <Input
+                                id="confirm-delete-name"
+                                value={deleteConfirmationName}
+                                onChange={(event) => setDeleteConfirmationName(event.target.value)}
+                                placeholder="Digite o nome exato"
+                                className="rounded-lg bg-background"
+                                disabled={isDeleting}
+                            />
+                            {deleteError && <p className="text-sm text-red-600">{deleteError}</p>}
+                        </div>
+
+                        <DialogFooter className="mt-4">
+                            <Button
+                                type="button"
+                                variant="outline"
+                                onClick={() => setIsDeleteModalOpen(false)}
+                                disabled={isDeleting}
+                            >
+                                Cancelar
+                            </Button>
+                            <Button
+                                type="button"
+                                variant="destructive"
+                                onClick={handleDelete}
+                                className="flex items-center gap-2"
+                                disabled={!canDelete}
+                            >
+                                {isDeleting && <IconLoader2 className="size-5 animate-spin" />}
+                                {isDeleting ? "Excluindo..." : "Excluir Definitivamente"}
+                            </Button>
+                        </DialogFooter>
+                    </DialogContent>
+                </Dialog>
+            </div>
         </div>
     );
 }

@@ -1,7 +1,9 @@
 import { getCampuses } from "@/services/campuses/campuses.service";
-import { IconBuildingCommunity, IconPencil } from "@tabler/icons-react";
+import { IconBuildingCommunity, IconPencil, IconMapPinFilled, IconDoor, IconEye } from "@tabler/icons-react";
 import Link from "next/link";
 import { Suspense } from "react";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { ButtonLink } from "@/components/ui/button-link";
 
 function EmptyCampusesList() {
     return (
@@ -28,37 +30,52 @@ async function ListCampusesContent() {
     }
 
     return (
-        <div className="overflow-x-auto rounded-4xl border border-surface-border bg-background text-sm">
-            <table className="w-full text-left">
-                <thead className="bg-primary/5 text-muted-foreground uppercase text-xs">
-                    <tr>
-                        <th className="px-6 py-4 font-medium">Nome da Instituição</th>
-                        <th className="px-6 py-4 font-medium">Endereço</th>
-                        <th className="px-6 py-4 font-medium text-right">Ação</th>
-                    </tr>
-                </thead>
-                <tbody className="divide-y divide-border">
-                    {campuses.map((campus) => (
-                        <tr key={campus.id} className="hover:bg-muted/50 transition-colors">
-                            <td className="px-6 py-4 text-foreground font-bold">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+            {campuses.map((campus) => (
+                <Card key={campus.id} className="flex flex-col group">
+                    <CardHeader className="pb-3 border-b border-border/50 bg-muted/20">
+                        <div className="flex justify-between items-start gap-4">
+                            <CardTitle className="text-xl font-bold leading-tight">
                                 {campus.name}
-                            </td>
-                            <td className="px-6 py-4 text-muted-foreground">
-                                {campus.address || "-"}
-                            </td>
-                            <td className="px-6 py-4 text-right">
-                                <Link
-                                    href={`/admin/instituicoes/${campus.id}/editar`}
-                                    className="p-2 inline-flex rounded-md hover:bg-black/5 dark:hover:bg-white/10 text-muted-foreground transition-colors"
-                                    title="Editar instituição"
-                                >
-                                    <IconPencil className="size-4" />
-                                </Link>
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
+                            </CardTitle>
+                            <Link
+                                href={`/admin/instituicoes/${campus.id}/editar`}
+                                className="p-2 shrink-0 rounded-md hover:bg-black/5 dark:hover:bg-white/10 text-muted-foreground transition-colors"
+                                title="Editar instituição"
+                            >
+                                <IconPencil className="size-4" />
+                            </Link>
+                        </div>
+                    </CardHeader>
+
+                    <CardContent className="flex-1 pt-5 space-y-4">
+                        <div className="flex items-start gap-3 text-muted-foreground">
+                            <IconMapPinFilled className="size-5 shrink-0 text-primary/70 mt-0.5" />
+                            <span className="text-sm leading-snug">
+                                {campus.address || "Endereço não cadastrado"}
+                            </span>
+                        </div>
+
+                        <div className="flex items-center gap-3 text-muted-foreground">
+                            <IconDoor className="size-5 shrink-0 text-primary/70" />
+                            <span className="text-sm font-medium">
+                                {campus._count.rooms} {campus._count.rooms === 1 ? "sala" : "salas"}
+                            </span>
+                        </div>
+                    </CardContent>
+
+                    <CardFooter className="pt-4 pb-5">
+                        <ButtonLink
+                            href={`/admin/instituicoes/${campus.id}/salas`}
+                            variant="secondary"
+                            className="w-full flex justify-center items-center gap-2"
+                        >
+                            <IconEye className="size-4" />
+                            Gerenciar Salas
+                        </ButtonLink>
+                    </CardFooter>
+                </Card>
+            ))}
         </div>
     );
 }

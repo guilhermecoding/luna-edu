@@ -99,7 +99,7 @@ export function CreateCampusForm() {
                 </div>
 
                 <div className="space-y-2 md:col-span-2">
-                    <Label htmlFor="address">Endereço</Label>
+                    <Label htmlFor="address">Endereço *</Label>
                     <Input
                         id="address"
                         placeholder="Ex: Av. Principal, 1000"

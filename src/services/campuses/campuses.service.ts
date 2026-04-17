@@ -2,17 +2,30 @@ import { Campus } from "@/generated/prisma/client";
 import prisma from "@/lib/prisma";
 import { cacheLife, cacheTag } from "next/cache";
 
+export type CampusWithRoomCount = Campus & {
+    _count: {
+        rooms: number;
+    };
+};
+
 /**
- * Lista todas as instituições/campuses disponíveis.
+ * Lista todas as instituições/campuses disponíveis com a contagem de salas.
  *
  * @returns Lista de campuses.
  */
-export async function getCampuses(): Promise<Campus[]> {
+export async function getCampuses(): Promise<CampusWithRoomCount[]> {
     "use cache";
     cacheLife("weeks");
     cacheTag("campuses:list");
 
     return await prisma.campus.findMany({
+        include: {
+            _count: {
+                select: {
+                    rooms: true,
+                },
+            },
+        },
         orderBy: {
             name: "asc",
         },
@@ -27,13 +40,13 @@ export async function getCampuses(): Promise<Campus[]> {
  */
 export async function createCampus(data: {
     name: string;
-    address?: string | null;
+    address: string;
 }): Promise<Campus> {
     try {
         const campus = await prisma.campus.create({
             data: {
                 name: data.name,
-                address: data.address || null,
+                address: data.address,
             },
         });
 
@@ -73,7 +86,7 @@ export async function updateCampus(
     id: string,
     data: {
         name: string;
-        address?: string | null;
+        address: string;
     },
 ): Promise<Campus> {
     try {
@@ -83,7 +96,7 @@ export async function updateCampus(
             },
             data: {
                 name: data.name,
-                address: data.address || null,
+                address: data.address,
             },
         });
 

@@ -18,6 +18,7 @@ export async function updateRoomAction(campusSlug: string, roomId: string, data:
 
         updateTag(`campus:${campusSlug}:rooms`);
         revalidatePath(`/admin/instituicoes/${campusSlug}/salas`);
+        revalidatePath(`/admin/instituicoes/${campusSlug}/salas/${validatedData.slug}/editar`);
     } catch (error) {
         if (error instanceof ZodError) {
             return { success: false, error: error.issues[0]?.message || "Erro de validação" };
@@ -42,13 +43,18 @@ export async function deleteRoomAction(campusSlug: string, roomId: string) {
 
         updateTag(`campus:${campusSlug}:rooms`);
         revalidatePath(`/admin/instituicoes/${campusSlug}/salas`);
-        revalidatePath(`/admin/instituicoes/${campusSlug}/salas/[roomSlug]/editar`);
-
-        return { success: true };
     } catch (error) {
         if (error instanceof Error) {
             return { success: false, error: error.message };
         }
         return { success: false, error: "Erro ao excluir sala" };
     }
+
+    const params = new URLSearchParams({
+        toast: "success",
+        message: "Sala excluída com sucesso",
+    });
+
+    redirect(`/admin/instituicoes/${campusSlug}/salas?${params.toString()}`);
 }
+

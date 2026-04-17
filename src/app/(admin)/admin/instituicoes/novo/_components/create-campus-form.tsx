@@ -44,6 +44,7 @@ export function CreateCampusForm() {
 
     useEffect(() => {
         clearErrors();
+        reset();
     }, [clearErrors, reset]);
 
     const onSubmit: SubmitHandler<CreateCampusInput> = async (data) => {

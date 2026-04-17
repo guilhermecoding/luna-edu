@@ -6,7 +6,6 @@ import { ButtonLink } from "@/components/ui/button-link";
 import { Metadata } from "next";
 import ListDegrees from "./_components/list-degrees";
 import { getProgramBySlug } from "@/services/programs/programs.service";
-import { notFound } from "next/navigation";
 
 export const metadata: Metadata = {
     title: "Matrizes Curriculares",

@@ -199,7 +199,6 @@ export type SubjectScalarFieldEnum = (typeof SubjectScalarFieldEnum)[keyof typeo
 export const CampusScalarFieldEnum = {
   id: 'id',
   name: 'name',
-  block: 'block',
   address: 'address',
   createdAt: 'createdAt'
 } as const
@@ -212,6 +211,7 @@ export const RoomScalarFieldEnum = {
   createdAt: 'createdAt',
   name: 'name',
   capacity: 'capacity',
+  block: 'block',
   campusId: 'campusId'
 } as const
 

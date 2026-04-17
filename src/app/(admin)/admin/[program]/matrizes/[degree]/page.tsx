@@ -39,9 +39,6 @@ async function DegreeDashboardPageContent({
                         />
                         <div className="mt-4 flex flex-wrap gap-2 text-sm text-muted-foreground">
                             <span className="bg-secondary px-3 py-1 rounded-full text-foreground">{degreeData.slug}</span>
-                            {degreeData.level && <span className="bg-foreground/5 px-2 py-1 rounded-md">{degreeData.level}</span>}
-                            {degreeData.modality && <span className="bg-foreground/5 px-2 py-1 rounded-md">{degreeData.modality}</span>}
-                            {degreeData.totalHours && <span className="bg-foreground/5 px-2 py-1 rounded-md">Carga Horária Total: {degreeData.totalHours}h</span>}
                         </div>
                     </div>
                     <div className="flex flex-1 justify-end items-center">

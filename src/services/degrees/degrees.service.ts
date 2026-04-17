@@ -30,7 +30,7 @@ export async function getDegreesByProgramId(programId: string): Promise<Degree[]
  * @param slug Slug único da matriz.
  * @returns A matriz encontrada ou null.
  */
-export async function getDegreeBySlug(programSlug: string, slug: string): Promise<Degree | null> {
+export async function getDegreeBySlug(programSlug: string, slug: string) {
     "use cache";
     cacheLife("max");
     cacheTag(`degree:${programSlug}:${slug}`);
@@ -40,6 +40,13 @@ export async function getDegreeBySlug(programSlug: string, slug: string): Promis
             slug,
             program: {
                 slug: programSlug,
+            },
+        },
+        include: {
+            _count: {
+                select: {
+                    subjects: true,
+                },
             },
         },
     });

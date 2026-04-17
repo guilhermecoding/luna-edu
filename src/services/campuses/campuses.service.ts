@@ -15,7 +15,7 @@ export type CampusWithRoomCount = Campus & {
  */
 export async function getCampuses(): Promise<CampusWithRoomCount[]> {
     "use cache";
-    cacheLife("weeks");
+    cacheLife("max");
     cacheTag("campuses:list");
 
     return await prisma.campus.findMany({
@@ -69,7 +69,7 @@ export async function createCampus(data: {
  */
 export async function getCampusBySlug(slug: string): Promise<Campus | null> {
     "use cache";
-    cacheLife("weeks");
+    cacheLife("max");
     cacheTag(`campus:${slug}`);
 
     return await prisma.campus.findUnique({

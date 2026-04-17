@@ -7,7 +7,7 @@ import { cacheLife, cacheTag } from "next/cache";
  */
 export async function getRoomsByCampus(campusSlug: string): Promise<Room[]> {
     "use cache";
-    cacheLife("weeks");
+    cacheLife("max");
     cacheTag(`campus:${campusSlug}:rooms`);
 
     return await prisma.room.findMany({
@@ -27,7 +27,7 @@ export async function getRoomsByCampus(campusSlug: string): Promise<Room[]> {
  */
 export async function getRoomBySlug(campusSlug: string, roomSlug: string): Promise<Room | null> {
     "use cache";
-    cacheLife("weeks");
+    cacheLife("max");
     cacheTag(`campus:${campusSlug}:room:${roomSlug}`);
 
     return await prisma.room.findFirst({

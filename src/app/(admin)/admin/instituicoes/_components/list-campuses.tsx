@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { ButtonLink } from "@/components/ui/button-link";
+import { connection } from "next/server";
 
 function EmptyCampusesList() {
     return (
@@ -21,6 +22,8 @@ function EmptyCampusesList() {
 }
 
 async function ListCampusesContent() {
+    await connection(); // Diz pro Next.js que este trecho de código depende do banco de dados
+
     const campuses = await getCampuses();
 
     if (campuses.length === 0) {

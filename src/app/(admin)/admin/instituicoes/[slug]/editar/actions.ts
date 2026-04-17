@@ -12,7 +12,7 @@ export async function editCampusAction(id: string, data: CreateCampusInput) {
         await updateCampus(id, validatedData);
 
         updateTag("campuses:list");
-        updateTag(`campus:${id}`);
+        updateTag(`campus:${validatedData.slug}`);
         revalidatePath("/admin/instituicoes");
     } catch (error) {
         if (error instanceof ZodError) {

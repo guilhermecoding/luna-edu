@@ -41,12 +41,14 @@ export async function getCampuses(): Promise<CampusWithRoomCount[]> {
 export async function createCampus(data: {
     name: string;
     address: string;
+    slug: string;
 }): Promise<Campus> {
     try {
         const campus = await prisma.campus.create({
             data: {
                 name: data.name,
                 address: data.address,
+                slug: data.slug,
             },
         });
 
@@ -57,19 +59,19 @@ export async function createCampus(data: {
 }
 
 /**
- * Busca uma instituição (Campus) pelo ID.
+ * Busca uma instituição (Campus) pelo Slug.
  *
- * @param id ID da instituição.
+ * @param slug Slug da instituição.
  * @returns Instituição encontrada ou `null` quando não existe.
  */
-export async function getCampusById(id: string): Promise<Campus | null> {
+export async function getCampusBySlug(slug: string): Promise<Campus | null> {
     "use cache";
     cacheLife("weeks");
-    cacheTag(`campus:${id}`);
+    cacheTag(`campus:${slug}`);
 
     return await prisma.campus.findUnique({
         where: {
-            id,
+            slug,
         },
     });
 }

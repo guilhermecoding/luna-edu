@@ -43,6 +43,7 @@ export function EditCampusForm({ initialData }: EditCampusFormProps) {
         mode: "onChange",
         defaultValues: {
             name: initialData.name,
+            slug: initialData.slug,
             address: initialData.address || "",
         },
     });
@@ -144,9 +145,20 @@ export function EditCampusForm({ initialData }: EditCampusFormProps) {
                             {...register("name")}
                             disabled={isSubmitting || isDeleting}
                             aria-invalid={errors.name ? "true" : "false"}
-                            className="p-5 h-[62px] rounded-lg bg-background"
+                            className="p-5 rounded-lg bg-background"
                         />
                         {errors.name && <p className="text-sm text-red-600">{errors.name.message}</p>}
+                    </div>
+
+                    <div className="space-y-2 md:col-span-1">
+                        <Label htmlFor="slug">Slug</Label>
+                        <Input
+                            id="slug"
+                            {...register("slug")}
+                            disabled
+                            className="p-5 rounded-lg bg-muted text-muted-foreground"
+                        />
+                        <p className="text-xs text-muted-foreground italic">O slug não pode ser alterado após a criação.</p>
                     </div>
 
                     <div className="space-y-2 md:col-span-2">
@@ -156,7 +168,7 @@ export function EditCampusForm({ initialData }: EditCampusFormProps) {
                             placeholder="Ex: Av. Principal, 1000"
                             {...register("address")}
                             disabled={isSubmitting || isDeleting}
-                            className="p-5 h-[62px] rounded-lg bg-background"
+                            className="p-5 rounded-lg bg-background"
                         />
                         {errors.address && <p className="text-sm text-red-600">{errors.address.message}</p>}
                     </div>

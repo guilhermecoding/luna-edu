@@ -11,6 +11,7 @@ import { createCampusAction } from "../actions";
 import { createCampusSchema, type CreateCampusInput } from "../schema";
 import { IconLoader2 } from "@tabler/icons-react";
 import { isRedirectError } from "@/lib/is-redirect-error";
+import autoSlug from "@/lib/auto-slug";
 
 export function CreateCampusForm() {
     const router = useRouter();
@@ -23,6 +24,7 @@ export function CreateCampusForm() {
         defaultValues: {
             name: "",
             address: "",
+            slug: "",
         },
     });
 
@@ -30,13 +32,15 @@ export function CreateCampusForm() {
         register,
         control,
         formState: { errors, isSubmitting, isValid, isDirty },
+        setValue,
         setError,
         clearErrors,
         reset,
     } = form;
 
     const nameValue = useWatch({ control, name: "name" });
-    const canSubmit = isValid && isDirty && !isSubmitting;
+    const slugValue = useWatch({ control, name: "slug" });
+    const canSubmit = isValid && isDirty && !isSubmitting && Boolean(nameValue?.trim()) && Boolean(slugValue?.trim());
 
     useEffect(() => {
         clearErrors();
@@ -93,9 +97,43 @@ export function CreateCampusForm() {
                         {...register("name")}
                         disabled={isSubmitting}
                         aria-invalid={errors.name ? "true" : "false"}
-                        className="p-5 h-[62px] rounded-lg bg-background"
+                        className="p-5 rounded-lg bg-background"
                     />
                     {errors.name && <p className="text-sm text-red-600">{errors.name.message}</p>}
+                </div>
+
+                <div className="space-y-2 md:col-span-1">
+                    <Label htmlFor="slug">Slug *</Label>
+                    <div className="flex gap-2">
+                        <Input
+                            id="slug"
+                            placeholder="Ex: campus-central"
+                            {...register("slug")}
+                            disabled={isSubmitting}
+                            aria-invalid={errors.slug ? "true" : "false"}
+                            className="p-5 rounded-lg bg-background flex-1"
+                        />
+                        <Button
+                            type="button"
+                            variant="outline"
+                            className="text-sm p-4 bg-black text-white dark:bg-white dark:text-black mt-0.5"
+                            onClick={() => {
+                                const newSlug = autoSlug(nameValue);
+                                if (newSlug) {
+                                    setValue("slug", newSlug, {
+                                        shouldDirty: true,
+                                        shouldTouch: true,
+                                        shouldValidate: true,
+                                    });
+                                }
+                            }}
+                            disabled={isSubmitting || !nameValue}
+                        >
+                            Auto
+                        </Button>
+                    </div>
+                    {errors.slug && <p className="text-sm text-red-600">{errors.slug.message}</p>}
+                    <p className="text-xs text-muted-foreground italic">O slug será usado na URL e não poderá ser alterado depois.</p>
                 </div>
 
                 <div className="space-y-2 md:col-span-2">
@@ -105,7 +143,7 @@ export function CreateCampusForm() {
                         placeholder="Ex: Av. Principal, 1000"
                         {...register("address")}
                         disabled={isSubmitting}
-                        className="p-5 h-[62px] rounded-lg bg-background"
+                        className="p-5 rounded-lg bg-background"
                     />
                     {errors.address && <p className="text-sm text-red-600">{errors.address.message}</p>}
                 </div>

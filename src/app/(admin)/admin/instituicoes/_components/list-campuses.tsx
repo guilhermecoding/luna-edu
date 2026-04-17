@@ -39,7 +39,7 @@ async function ListCampusesContent() {
                                 {campus.name}
                             </CardTitle>
                             <Link
-                                href={`/admin/instituicoes/${campus.id}/editar`}
+                                href={`/admin/instituicoes/${campus.slug}/editar`}
                                 className="p-2 shrink-0 rounded-md hover:bg-black/5 dark:hover:bg-white/10 text-muted-foreground transition-colors"
                                 title="Editar instituição"
                             >
@@ -66,7 +66,7 @@ async function ListCampusesContent() {
 
                     <CardFooter className="pt-4 pb-5">
                         <ButtonLink
-                            href={`/admin/instituicoes/${campus.id}/salas`}
+                            href={`/admin/instituicoes/${campus.slug}/salas`}
                             variant="secondary"
                             className="w-full flex justify-center items-center gap-2"
                         >

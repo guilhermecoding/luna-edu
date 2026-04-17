@@ -106,8 +106,8 @@ export function CreateSubjectForm({ programSlug, degreeSlug }: Props) {
                 </div>
             )}
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                <div className="space-y-2 sm:col-span-2">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-2 md:col-span-2">
                     <Label htmlFor="name">Nome da Disciplina *</Label>
                     <Input
                         id="name"
@@ -115,12 +115,12 @@ export function CreateSubjectForm({ programSlug, degreeSlug }: Props) {
                         {...register("name")}
                         disabled={isSubmitting}
                         aria-invalid={errors.name ? "true" : "false"}
-                        className="p-5 rounded-lg bg-background"
+                        className="p-5 h-[62px] rounded-lg bg-background"
                     />
                     {errors.name && <p className="text-sm text-red-600">{errors.name.message}</p>}
                 </div>
 
-                <div className="space-y-2">
+                <div className="space-y-2 md:col-span-1">
                     <Label htmlFor="code">Código Interno Único *</Label>
                     <Input
                         id="code"
@@ -128,13 +128,13 @@ export function CreateSubjectForm({ programSlug, degreeSlug }: Props) {
                         {...register("code")}
                         disabled={isSubmitting}
                         aria-invalid={errors.code ? "true" : "false"}
-                        className="p-5 rounded-lg bg-background font-mono text-sm"
+                        className="p-5 h-[62px] rounded-lg bg-background font-mono text-sm"
                     />
                     {errors.code && <p className="text-sm text-red-600">{errors.code.message}</p>}
                     <p className="text-xs text-muted-foreground mt-1">Atenção: Este código não poderá ser alterado posteriormente.</p>
                 </div>
 
-                <div className="space-y-2">
+                <div className="space-y-2 md:col-span-1">
                     <Label htmlFor="workload">Carga Horária (h)*</Label>
                     <Input
                         id="workload"
@@ -142,12 +142,12 @@ export function CreateSubjectForm({ programSlug, degreeSlug }: Props) {
                         placeholder="Ex: 80"
                         {...register("workload")}
                         disabled={isSubmitting}
-                        className="p-5 rounded-lg bg-background"
+                        className="p-5 h-[62px] rounded-lg bg-background"
                     />
                     {errors.workload && <p className="text-sm text-red-600">{errors.workload.message}</p>}
                 </div>
 
-                <div className="space-y-2 col-span-2 sm:col-span-1">
+                <div className="space-y-2 md:col-span-1">
                     <Label>Semestre/Período Recomendado*</Label>
                     <Select
                         value={isBasePeriodAssignable ? "assignable" : "not_assignable"}
@@ -176,7 +176,7 @@ export function CreateSubjectForm({ programSlug, degreeSlug }: Props) {
                                 placeholder="Ex: 1"
                                 {...register("basePeriod")}
                                 disabled={isSubmitting}
-                                className="p-5 rounded-lg bg-background"
+                                className="p-5 h-[62px] rounded-lg bg-background"
                             />
                             {errors.basePeriod && <p className="text-sm text-red-600 mt-1">{errors.basePeriod.message}</p>}
                         </div>

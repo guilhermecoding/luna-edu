@@ -4,6 +4,7 @@ import Section from "@/components/section";
 import { Suspense } from "react";
 import { CreateSubjectForm } from "./_components/create-subject-form";
 import { Metadata } from "next";
+import SkeletonForm from "@/components/skeletons/skeleton-form";
 
 export const metadata: Metadata = {
     title: "Nova Disciplina Teórica",
@@ -22,7 +23,7 @@ export default async function NewSubjectPage({
                     description="Adicione uma disciplina base teórica a grade curricular."
                 >
                     <div className="mt-6">
-                        <Suspense fallback={null}>
+                        <Suspense fallback={<SkeletonForm />}>
                             <CreateSubjectForm programSlug={program} degreeSlug={degree} />
                         </Suspense>
                     </div>

@@ -146,44 +146,44 @@ export function EditSubjectForm({ programSlug, degreeSlug, degreeId, subjectId, 
                 </div>
             )}
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                <div className="space-y-2 sm:col-span-2">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-2 md:col-span-2">
                     <Label htmlFor="name">Nome da Disciplina *</Label>
                     <Input
                         id="name"
                         {...register("name")}
                         disabled={isSubmitting}
                         aria-invalid={errors.name ? "true" : "false"}
-                        className="p-5 rounded-lg bg-background"
+                        className="p-5 h-[62px] rounded-lg bg-background"
                     />
                     {errors.name && <p className="text-sm text-red-600">{errors.name.message}</p>}
                 </div>
 
-                <div className="space-y-2">
+                <div className="space-y-2 md:col-span-1">
                     <Label htmlFor="code">Código Interno Único</Label>
                     <Input
                         id="code"
                         {...register("code")}
                         readOnly
                         disabled={isSubmitting}
-                        className="p-5 rounded-lg bg-background font-mono text-sm opacity-70 cursor-not-allowed"
+                        className="p-5 h-[62px] rounded-lg bg-background font-mono text-sm opacity-70 cursor-not-allowed"
                     />
                     <p className="text-xs text-muted-foreground mt-1">O código não pode ser alterado após a criação.</p>
                 </div>
 
-                <div className="space-y-2">
+                <div className="space-y-2 md:col-span-1">
                     <Label htmlFor="workload">Carga Horária (h)*</Label>
                     <Input
                         id="workload"
                         type="number"
                         {...register("workload")}
                         disabled={isSubmitting}
-                        className="p-5 rounded-lg bg-background"
+                        className="p-5 h-[62px] rounded-lg bg-background"
                     />
                     {errors.workload && <p className="text-sm text-red-600">{errors.workload.message}</p>}
                 </div>
 
-                <div className="space-y-2 col-span-2 sm:col-span-1">
+                <div className="space-y-2 md:col-span-1">
                     <Label>Semestre/Período Recomendado*</Label>
                     <Select
                         value={isBasePeriodAssignable ? "assignable" : "not_assignable"}
@@ -213,7 +213,7 @@ export function EditSubjectForm({ programSlug, degreeSlug, degreeId, subjectId, 
                                 placeholder="Ex: 1"
                                 {...register("basePeriod")}
                                 disabled={isSubmitting}
-                                className="p-5 rounded-lg bg-background"
+                                className="p-5 h-[62px] rounded-lg bg-background"
                             />
                             {errors.basePeriod && <p className="text-sm text-red-600 mt-1">{errors.basePeriod.message}</p>}
                         </div>

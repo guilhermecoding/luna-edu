@@ -7,6 +7,7 @@ import { Metadata } from "next";
 import { getSubjectByCode } from "@/services/subjects/subjects.service";
 import { notFound } from "next/navigation";
 import { getDegreeBySlug } from "@/services/degrees/degrees.service";
+import SkeletonForm from "@/components/skeletons/skeleton-form";
 
 export const metadata: Metadata = {
     title: "Editar Disciplina",
@@ -16,7 +17,7 @@ export default async function EditSubjectPage({
     params,
 }: PageProps<"/admin/[program]/matrizes/[degree]/disciplinas/[subject]/editar">) {
     const { program, degree, subject } = await params;
-    
+
     // Validar se dados existem (subject params contains code instead of ID)
     const subjectData = await getSubjectByCode(subject);
     const degreeData = await getDegreeBySlug(program, degree);
@@ -33,13 +34,13 @@ export default async function EditSubjectPage({
                     description={`Editando a matéria: ${subjectData.name} (${degreeData.name})`}
                 >
                     <div className="mt-6">
-                        <Suspense fallback={null}>
-                            <EditSubjectForm 
+                        <Suspense fallback={<SkeletonForm />}>
+                            <EditSubjectForm
                                 programSlug={program}
                                 degreeSlug={degreeData.slug}
                                 degreeId={degreeData.id}
                                 subjectId={subjectData.id}
-                                initialData={subjectData} 
+                                initialData={subjectData}
                             />
                         </Suspense>
                     </div>

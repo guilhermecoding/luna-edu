@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
+import { connection } from "next/server";
 
 function ListCampusesSkeleton() {
     return (
@@ -54,7 +55,6 @@ function CampusTag({
     );
 }
 
-import { connection } from "next/server";
 
 function EmptyCampusesList() {
     return (
@@ -72,7 +72,7 @@ function EmptyCampusesList() {
 }
 
 async function ListCampusesContent() {
-    await connection(); // Diz pro Next.js que este trecho de código depende do banco de dados
+    await connection(); // Sinaliza ao Next.js que este componente depende de uma requisição real (necessário pois cacheLife usa Date.now() internamente)
 
     const campuses = await getCampuses();
 

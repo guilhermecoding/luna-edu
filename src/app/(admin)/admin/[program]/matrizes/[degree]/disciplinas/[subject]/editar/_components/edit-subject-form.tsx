@@ -166,7 +166,7 @@ export function EditSubjectForm({ programSlug, degreeSlug, degreeId, subjectId, 
                         {...register("code")}
                         readOnly
                         disabled={isSubmitting}
-                        className="p-5 h-[62px] rounded-lg bg-background font-mono text-sm opacity-70 cursor-not-allowed"
+                        className="p-5 h-[62px] rounded-lg bg-background font-mono text-sm opacity-70 cursor-not-allowed uppercase"
                     />
                     <p className="text-xs text-muted-foreground mt-1">O código não pode ser alterado após a criação.</p>
                 </div>

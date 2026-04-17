@@ -128,7 +128,7 @@ export function CreateSubjectForm({ programSlug, degreeSlug }: Props) {
                         {...register("code")}
                         disabled={isSubmitting}
                         aria-invalid={errors.code ? "true" : "false"}
-                        className="p-5 h-[62px] rounded-lg bg-background font-mono text-sm"
+                        className="p-5 h-[62px] rounded-lg bg-background font-mono text-sm uppercase"
                     />
                     {errors.code && <p className="text-sm text-red-600">{errors.code.message}</p>}
                     <p className="text-xs text-muted-foreground mt-1">Atenção: Este código não poderá ser alterado posteriormente.</p>

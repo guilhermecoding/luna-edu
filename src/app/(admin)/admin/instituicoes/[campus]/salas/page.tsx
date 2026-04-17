@@ -35,7 +35,7 @@ export default async function RoomsPage({
                     <div className="flex-1">
                         <TitlePage
                             title={campusData.name}
-                            description="Gerencie as salas e laboratórios disponíveis neste campus."
+                            description="Gerencie as salas disponíveis neste local."
                         />
                     </div>
                     <div className="flex flex-1 justify-end items-end">

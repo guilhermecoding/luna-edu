@@ -50,8 +50,8 @@ export function CreateRoomForm({ campusSlug }: CreateRoomFormProps) {
 
     useEffect(() => {
         clearErrors();
-        reset(form.getValues());
-    }, [clearErrors, reset, form]);
+        reset();
+    }, [clearErrors, reset]);
 
     const onSubmit: SubmitHandler<RoomInput> = async (data) => {
         clearErrors("root");

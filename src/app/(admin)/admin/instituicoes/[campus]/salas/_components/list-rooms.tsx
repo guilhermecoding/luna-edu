@@ -4,6 +4,20 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
+import { RoomType } from "@/generated/prisma/enums";
+
+function roomType(type: RoomType) {
+    switch (type) {
+        case RoomType.CLASSROOM:
+            return "Sala de Aula";
+        case RoomType.LABORATORY:
+            return "Laboratório";
+        case RoomType.AUDITORIUM:
+            return "Auditório";
+        case RoomType.OTHERS:
+            return "Outro";
+    }
+}
 
 function ListRoomsSkeleton() {
     return (
@@ -91,9 +105,12 @@ async function ListRoomsContent({ campusSlug }: { campusSlug: string }) {
                                     <div className="flex justify-center items-center bg-background border border-surface-border size-8 sm:size-10 rounded-lg text-primary shrink-0 transition-transform group-hover:scale-105">
                                         <IconDoor className="size-4 sm:size-5" />
                                     </div>
-                                    <span className="font-bold text-sm sm:text-base text-foreground uppercase" title={room.name}>
-                                        {room.name}
-                                    </span>
+                                    <div className="flex flex-col">
+                                        <span className="font-bold text-sm sm:text-base text-foreground uppercase" title={room.name}>
+                                            {room.name}
+                                        </span>
+                                        <span className="text-muted-foreground text-[10px] sm:text-xs">{roomType(room.type)}</span>
+                                    </div>
                                 </div>
                             </td>
                             <td className="px-4 sm:px-6 py-4">

@@ -11,7 +11,7 @@ export const shiftLabels: Record<(typeof SHIFTS)[number], string> = {
 export const courseSchema = z.object({
     name: z.string().min(2, "O nome deve ter no mínimo 2 caracteres"),
     subjectId: z.string().min(1, "Selecione uma disciplina"),
-    roomId: z.string().optional(),
+    roomId: z.string().min(1, "Selecione uma sala"),
     shift: z.enum(SHIFTS, {
         message: "Selecione um turno",
     }),

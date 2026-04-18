@@ -15,10 +15,11 @@ import {
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useForm, type SubmitHandler, useWatch, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect } from "react";
+import { Fragment, useEffect } from "react";
+import { Separator } from "@/components/ui/separator";
 import { createCourseAction } from "../actions";
 import { courseSchema, type CourseInput, SHIFTS, shiftLabels } from "../../schema";
-import { IconLoader2 } from "@tabler/icons-react";
+import { IconBuilding, IconLoader2, IconUsers } from "@tabler/icons-react";
 import { isRedirectError } from "@/lib/is-redirect-error";
 
 type SubjectWithDegree = {
@@ -36,6 +37,7 @@ type RoomWithCampus = {
     id: string;
     name: string;
     block: string | null;
+    capacity: bigint | number;
     campus: {
         name: string;
         slug: string;
@@ -243,35 +245,50 @@ export function CreateCourseForm({ programSlug, periodSlug, subjects, rooms }: C
                 </div>
 
                 <div className="space-y-2 md:col-span-1">
-                    <Label htmlFor="roomId">Sala (opcional)</Label>
+                    <Label htmlFor="roomId">Sala *</Label>
                     <Controller
                         control={control}
                         name="roomId"
                         render={({ field }) => (
                             <Select
                                 value={field.value || ""}
-                                onValueChange={(value) => field.onChange(value === "__none__" ? undefined : value)}
+                                onValueChange={field.onChange}
                                 disabled={isSubmitting}
                             >
                                 <SelectTrigger
                                     id="roomId"
                                     className="p-5 rounded-lg bg-background"
+                                    aria-invalid={errors.roomId ? "true" : "false"}
                                 >
-                                    <SelectValue placeholder="Selecione uma sala (opcional)" />
+                                    <SelectValue placeholder="Selecione uma sala" />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="__none__">
-                                        <span className="text-muted-foreground italic">Nenhuma sala</span>
-                                    </SelectItem>
                                     {Object.entries(roomsByCampus).map(([campusName, campusRooms]) => (
                                         <SelectGroup key={campusName}>
                                             <SelectLabel className="text-xs text-muted-foreground uppercase font-semibold">
                                                 {campusName}
                                             </SelectLabel>
-                                            {campusRooms.map((room) => (
-                                                <SelectItem key={room.id} value={room.id}>
-                                                    {room.name} {room.block ? `(${room.block})` : ""}
-                                                </SelectItem>
+                                            {campusRooms.map((room, index) => (
+                                                <Fragment key={room.id}>
+                                                    <SelectItem value={room.id}>
+                                                        <div className="flex flex-col gap-0.5 py-1">
+                                                            <span className="font-semibold text-sm">{room.name}</span>
+                                                            <div className="flex flex-wrap gap-2 mt-1">
+                                                                <div className="flex items-center gap-1 bg-muted px-2 py-0.5 rounded-md text-[10px] text-muted-foreground border border-surface-border">
+                                                                    <IconBuilding className="size-3" />
+                                                                    <span>Bloco {room.block || "S/B"}</span>
+                                                                </div>
+                                                                <div className="flex items-center gap-1 bg-muted px-2 py-0.5 rounded-md text-[10px] text-muted-foreground border border-surface-border">
+                                                                    <IconUsers className="size-3" />
+                                                                    <span>{Number(room.capacity)} vagas</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </SelectItem>
+                                                    {index < campusRooms.length - 1 && (
+                                                        <Separator className="my-1 opacity-50" />
+                                                    )}
+                                                </Fragment>
                                             ))}
                                         </SelectGroup>
                                     ))}
@@ -279,7 +296,7 @@ export function CreateCourseForm({ programSlug, periodSlug, subjects, rooms }: C
                             </Select>
                         )}
                     />
-                    <p className="text-xs text-muted-foreground italic">A sala pode ser definida depois.</p>
+                    {errors.roomId && <p className="text-sm text-red-600">{errors.roomId.message}</p>}
                 </div>
             </div>
 

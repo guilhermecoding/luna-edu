@@ -27,7 +27,7 @@ export async function getCampuses(): Promise<CampusWithRoomCount[]> {
             },
         },
         orderBy: {
-            name: "asc",
+            createdAt: "asc",
         },
     });
 }

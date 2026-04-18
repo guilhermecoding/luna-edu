@@ -5,6 +5,7 @@ import { ZodError } from "zod";
 import { roomSchema, type RoomInput } from "../../schema";
 import { revalidatePath, updateTag } from "next/cache";
 import { redirect } from "next/navigation";
+import { RoomType } from "@/generated/prisma/client";
 
 export async function updateRoomAction(campusSlug: string, roomId: string, data: RoomInput) {
     try {
@@ -14,6 +15,7 @@ export async function updateRoomAction(campusSlug: string, roomId: string, data:
             name: validatedData.name,
             capacity: Number(validatedData.capacity),
             block: validatedData.block,
+            type: validatedData.type as RoomType,
         });
 
         updateTag(`campus:${campusSlug}:rooms`);
@@ -57,4 +59,3 @@ export async function deleteRoomAction(campusSlug: string, roomId: string) {
 
     redirect(`/admin/instituicoes/${campusSlug}/salas?${params.toString()}`);
 }
-

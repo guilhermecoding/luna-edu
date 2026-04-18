@@ -12,12 +12,19 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useForm, type SubmitHandler } from "react-hook-form";
+import { useForm, type SubmitHandler, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import { updateRoomAction, deleteRoomAction } from "../actions";
-import { roomSchema, type RoomInput } from "../../../schema";
+import { roomSchema, type RoomInput, ROOM_TYPES, roomTypeLabels } from "../../../schema";
 import { IconAlertTriangle, IconLoader2, IconTrash } from "@tabler/icons-react";
 import Image from "next/image";
 import imgGibbyDuvida from "@/assets/images/logo-gibby-duvida.svg";
@@ -46,12 +53,14 @@ export function EditRoomForm({ campusSlug, initialData }: EditRoomFormProps) {
             name: initialData.name,
             capacity: String(initialData.capacity),
             block: initialData.block || "",
+            type: initialData.type,
             slug: initialData.slug,
         },
     });
 
     const {
         register,
+        control,
         formState: { errors, isSubmitting, isValid, isDirty },
         setError,
         clearErrors,
@@ -181,6 +190,37 @@ export function EditRoomForm({ campusSlug, initialData }: EditRoomFormProps) {
                         className="p-5 rounded-lg bg-background"
                     />
                     {errors.block && <p className="text-sm text-red-600">{errors.block.message}</p>}
+                </div>
+
+                <div className="space-y-2 md:col-span-1">
+                    <Label htmlFor="type">Tipo *</Label>
+                    <Controller
+                        control={control}
+                        name="type"
+                        render={({ field }) => (
+                            <Select
+                                value={field.value}
+                                onValueChange={field.onChange}
+                                disabled={isSubmitting || isDeleting}
+                            >
+                                <SelectTrigger
+                                    id="type"
+                                    className="p-5 rounded-lg bg-background"
+                                    aria-invalid={errors.type ? "true" : "false"}
+                                >
+                                    <SelectValue placeholder="Selecione o tipo" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {ROOM_TYPES.map((type) => (
+                                        <SelectItem key={type} value={type}>
+                                            {roomTypeLabels[type]}
+                                        </SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+                        )}
+                    />
+                    {errors.type && <p className="text-sm text-red-600">{errors.type.message}</p>}
                 </div>
             </div>
 

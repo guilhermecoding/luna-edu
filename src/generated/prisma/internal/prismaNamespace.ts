@@ -2140,6 +2140,7 @@ export const RoomScalarFieldEnum = {
   name: 'name',
   capacity: 'capacity',
   block: 'block',
+  type: 'type',
   campusId: 'campusId',
   slug: 'slug'
 } as const
@@ -2407,6 +2408,20 @@ export type BigIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 
  * Reference to a field of type 'BigInt[]'
  */
 export type ListBigIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BigInt[]'>
+    
+
+
+/**
+ * Reference to a field of type 'RoomType'
+ */
+export type EnumRoomTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RoomType'>
+    
+
+
+/**
+ * Reference to a field of type 'RoomType[]'
+ */
+export type ListEnumRoomTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RoomType[]'>
     
 
 

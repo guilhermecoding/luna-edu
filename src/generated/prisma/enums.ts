@@ -46,6 +46,16 @@ export const ActivityType = {
 export type ActivityType = (typeof ActivityType)[keyof typeof ActivityType]
 
 
+export const RoomType = {
+  CLASSROOM: 'CLASSROOM',
+  LABORATORY: 'LABORATORY',
+  AUDITORIUM: 'AUDITORIUM',
+  OTHERS: 'OTHERS'
+} as const
+
+export type RoomType = (typeof RoomType)[keyof typeof RoomType]
+
+
 export const NotificationType = {
   INFO: 'INFO',
   WARNING: 'WARNING',

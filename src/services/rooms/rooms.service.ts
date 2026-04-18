@@ -1,5 +1,5 @@
 import prisma from "@/lib/prisma";
-import { Prisma, Room } from "@/generated/prisma/client";
+import { Prisma, Room, RoomType } from "@/generated/prisma/client";
 import { cacheLife, cacheTag } from "next/cache";
 
 /**
@@ -47,6 +47,7 @@ export async function createRoom(data: {
     name: string;
     capacity: number | bigint;
     block?: string | null;
+    type: RoomType;
     slug: string;
     campusId: string;
 }): Promise<Room> {
@@ -56,6 +57,7 @@ export async function createRoom(data: {
                 name: data.name,
                 capacity: BigInt(data.capacity),
                 block: data.block,
+                type: data.type,
                 slug: data.slug,
                 campusId: data.campusId,
             },
@@ -78,6 +80,7 @@ export async function updateRoom(
         name: string;
         capacity: number | bigint;
         block?: string | null;
+        type: RoomType;
     },
 ): Promise<Room> {
     try {
@@ -89,6 +92,7 @@ export async function updateRoom(
                 name: data.name,
                 capacity: BigInt(data.capacity),
                 block: data.block,
+                type: data.type,
             },
         });
         return room;

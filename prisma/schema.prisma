@@ -47,6 +47,16 @@ enum ActivityType {
     @@schema("public")
 }
 
+enum RoomType {
+    CLASSROOM
+    LABORATORY
+    AUDITORIUM
+    OTHERS
+
+    @@map("room_type")
+    @@schema("public")
+}
+
 enum NotificationType {
     INFO
     WARNING
@@ -213,6 +223,7 @@ model Room {
     name      String
     capacity  BigInt
     block     String?
+    type      RoomType @default(CLASSROOM)
     campusId  String   @map("campus_id") @db.Uuid
     slug      String
 

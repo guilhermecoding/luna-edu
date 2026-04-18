@@ -3,12 +3,19 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useForm, type SubmitHandler, useWatch } from "react-hook-form";
+import { useForm, type SubmitHandler, useWatch, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
 import { createRoomAction } from "../actions";
-import { roomSchema, type RoomInput } from "../../schema";
+import { roomSchema, type RoomInput, ROOM_TYPES, roomTypeLabels } from "../../schema";
 import { IconLoader2 } from "@tabler/icons-react";
 import { isRedirectError } from "@/lib/is-redirect-error";
 import autoSlug from "@/lib/auto-slug";
@@ -29,6 +36,7 @@ export function CreateRoomForm({ campusSlug }: CreateRoomFormProps) {
             name: "",
             capacity: "30",
             block: "",
+            type: undefined,
             slug: "",
         },
     });
@@ -142,6 +150,37 @@ export function CreateRoomForm({ campusSlug }: CreateRoomFormProps) {
                     </div>
                     {errors.slug && <p className="text-sm text-red-600">{errors.slug.message}</p>}
                     <p className="text-xs text-muted-foreground italic">O slug será usado na URL e não poderá ser alterado depois.</p>
+                </div>
+
+                <div className="space-y-2 md:col-span-1">
+                    <Label htmlFor="type">Tipo *</Label>
+                    <Controller
+                        control={control}
+                        name="type"
+                        render={({ field }) => (
+                            <Select
+                                value={field.value}
+                                onValueChange={field.onChange}
+                                disabled={isSubmitting}
+                            >
+                                <SelectTrigger
+                                    id="type"
+                                    className="p-5 rounded-lg bg-background"
+                                    aria-invalid={errors.type ? "true" : "false"}
+                                >
+                                    <SelectValue placeholder="Selecione o tipo" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {ROOM_TYPES.map((type) => (
+                                        <SelectItem key={type} value={type}>
+                                            {roomTypeLabels[type]}
+                                        </SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+                        )}
+                    />
+                    {errors.type && <p className="text-sm text-red-600">{errors.type.message}</p>}
                 </div>
 
                 <div className="space-y-2 md:col-span-1">

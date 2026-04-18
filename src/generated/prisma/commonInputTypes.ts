@@ -230,6 +230,13 @@ export type BigIntFilter<$PrismaModel = never> = {
   not?: Prisma.NestedBigIntFilter<$PrismaModel> | bigint | number
 }
 
+export type EnumRoomTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.RoomType | Prisma.EnumRoomTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.RoomType[] | Prisma.ListEnumRoomTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.RoomType[] | Prisma.ListEnumRoomTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumRoomTypeFilter<$PrismaModel> | $Enums.RoomType
+}
+
 export type BigIntWithAggregatesFilter<$PrismaModel = never> = {
   equals?: bigint | number | Prisma.BigIntFieldRefInput<$PrismaModel>
   in?: bigint[] | number[] | Prisma.ListBigIntFieldRefInput<$PrismaModel>
@@ -244,6 +251,16 @@ export type BigIntWithAggregatesFilter<$PrismaModel = never> = {
   _sum?: Prisma.NestedBigIntFilter<$PrismaModel>
   _min?: Prisma.NestedBigIntFilter<$PrismaModel>
   _max?: Prisma.NestedBigIntFilter<$PrismaModel>
+}
+
+export type EnumRoomTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.RoomType | Prisma.EnumRoomTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.RoomType[] | Prisma.ListEnumRoomTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.RoomType[] | Prisma.ListEnumRoomTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumRoomTypeWithAggregatesFilter<$PrismaModel> | $Enums.RoomType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumRoomTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumRoomTypeFilter<$PrismaModel>
 }
 
 export type UuidNullableFilter<$PrismaModel = never> = {
@@ -662,6 +679,13 @@ export type NestedBigIntFilter<$PrismaModel = never> = {
   not?: Prisma.NestedBigIntFilter<$PrismaModel> | bigint | number
 }
 
+export type NestedEnumRoomTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.RoomType | Prisma.EnumRoomTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.RoomType[] | Prisma.ListEnumRoomTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.RoomType[] | Prisma.ListEnumRoomTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumRoomTypeFilter<$PrismaModel> | $Enums.RoomType
+}
+
 export type NestedBigIntWithAggregatesFilter<$PrismaModel = never> = {
   equals?: bigint | number | Prisma.BigIntFieldRefInput<$PrismaModel>
   in?: bigint[] | number[] | Prisma.ListBigIntFieldRefInput<$PrismaModel>
@@ -687,6 +711,16 @@ export type NestedFloatFilter<$PrismaModel = never> = {
   gt?: number | Prisma.FloatFieldRefInput<$PrismaModel>
   gte?: number | Prisma.FloatFieldRefInput<$PrismaModel>
   not?: Prisma.NestedFloatFilter<$PrismaModel> | number
+}
+
+export type NestedEnumRoomTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.RoomType | Prisma.EnumRoomTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.RoomType[] | Prisma.ListEnumRoomTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.RoomType[] | Prisma.ListEnumRoomTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumRoomTypeWithAggregatesFilter<$PrismaModel> | $Enums.RoomType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumRoomTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumRoomTypeFilter<$PrismaModel>
 }
 
 export type NestedUuidNullableFilter<$PrismaModel = never> = {

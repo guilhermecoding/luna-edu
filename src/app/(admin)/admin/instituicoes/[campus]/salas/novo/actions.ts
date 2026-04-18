@@ -6,6 +6,7 @@ import { ZodError } from "zod";
 import { roomSchema, type RoomInput } from "../schema";
 import { revalidatePath, updateTag } from "next/cache";
 import { redirect } from "next/navigation";
+import { RoomType } from "@/generated/prisma/client";
 
 export async function createRoomAction(campusSlug: string, data: RoomInput) {
     try {
@@ -20,6 +21,7 @@ export async function createRoomAction(campusSlug: string, data: RoomInput) {
             name: validatedData.name,
             capacity: Number(validatedData.capacity),
             block: validatedData.block,
+            type: validatedData.type as RoomType,
             slug: validatedData.slug,
             campusId: campus.id,
         });

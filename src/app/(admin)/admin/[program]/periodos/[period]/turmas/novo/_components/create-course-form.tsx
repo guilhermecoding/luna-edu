@@ -188,7 +188,7 @@ export function CreateCourseForm({ programSlug, periodSlug, subjects, rooms }: C
                             >
                                 <SelectTrigger
                                     id="subjectId"
-                                    className="p-5 rounded-lg bg-background"
+                                    className="p-5 rounded-lg bg-background w-full"
                                     aria-invalid={errors.subjectId ? "true" : "false"}
                                 >
                                     <SelectValue placeholder="Selecione uma disciplina" />
@@ -226,7 +226,7 @@ export function CreateCourseForm({ programSlug, periodSlug, subjects, rooms }: C
                             >
                                 <SelectTrigger
                                     id="shift"
-                                    className="p-5 rounded-lg bg-background"
+                                    className="p-5 rounded-lg bg-background w-full"
                                     aria-invalid={errors.shift ? "true" : "false"}
                                 >
                                     <SelectValue placeholder="Selecione o turno" />
@@ -257,10 +257,16 @@ export function CreateCourseForm({ programSlug, periodSlug, subjects, rooms }: C
                             >
                                 <SelectTrigger
                                     id="roomId"
-                                    className="p-5 rounded-lg bg-background"
+                                    className="p-5 rounded-lg bg-background w-full"
                                     aria-invalid={errors.roomId ? "true" : "false"}
                                 >
-                                    <SelectValue placeholder="Selecione uma sala" />
+                                    <SelectValue placeholder="Selecione uma sala">
+                                        {field.value ? (
+                                            <span key={field.value}>
+                                                {rooms.find((r) => r.id === field.value)?.name}
+                                            </span>
+                                        ) : null}
+                                    </SelectValue>
                                 </SelectTrigger>
                                 <SelectContent>
                                     {Object.entries(roomsByCampus).map(([campusName, campusRooms]) => (
@@ -271,19 +277,19 @@ export function CreateCourseForm({ programSlug, periodSlug, subjects, rooms }: C
                                             {campusRooms.map((room, index) => (
                                                 <Fragment key={room.id}>
                                                     <SelectItem value={room.id}>
-                                                        <div className="flex flex-col gap-0.5 py-1">
+                                                        <span className="flex flex-col gap-0.5 py-1">
                                                             <span className="font-semibold text-sm">{room.name}</span>
-                                                            <div className="flex flex-wrap gap-2 mt-1">
-                                                                <div className="flex items-center gap-1 bg-muted px-2 py-0.5 rounded-md text-[10px] text-muted-foreground border border-surface-border">
+                                                            <span className="flex flex-wrap gap-2 mt-1">
+                                                                <span className="flex items-center gap-1 bg-muted px-2 py-0.5 rounded-md text-[10px] text-muted-foreground border border-surface-border">
                                                                     <IconBuilding className="size-3" />
                                                                     <span>Bloco {room.block || "S/B"}</span>
-                                                                </div>
-                                                                <div className="flex items-center gap-1 bg-muted px-2 py-0.5 rounded-md text-[10px] text-muted-foreground border border-surface-border">
+                                                                </span>
+                                                                <span className="flex items-center gap-1 bg-muted px-2 py-0.5 rounded-md text-[10px] text-muted-foreground border border-surface-border">
                                                                     <IconUsers className="size-3" />
                                                                     <span>{Number(room.capacity)} vagas</span>
-                                                                </div>
-                                                            </div>
-                                                        </div>
+                                                                </span>
+                                                            </span>
+                                                        </span>
                                                     </SelectItem>
                                                     {index < campusRooms.length - 1 && (
                                                         <Separator className="my-1 opacity-50" />

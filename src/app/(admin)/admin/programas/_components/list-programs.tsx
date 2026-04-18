@@ -2,7 +2,7 @@ import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Program } from "@/generated/prisma/client";
 import { getPrograms } from "@/services/programs/programs.service";
-import { IconExternalLinkFilled, IconPencilFilled } from "@tabler/icons-react";
+import { IconBlocks, IconExternalLinkFilled, IconPencilFilled } from "@tabler/icons-react";
 import Link from "next/link";
 import { connection } from "next/server";
 import { Suspense } from "react";
@@ -19,11 +19,15 @@ function ListProgramsSkeleton() {
 
 function EmptyList() {
     return (
-        <div className="w-full h-18 flex justify-center items-center">
-            <h1 className="text-muted-foreground text-base sm:text-lg font-medium text-center">
-                Ops! Não há programas de aprendizado disponíveis. <br />
-                Comece criando um programa.
-            </h1>
+        <div className="flex flex-col items-center justify-center p-12 text-center border-2 border-dashed border-surface-border rounded-4xl">
+            <IconBlocks className="size-12 text-muted-foreground mb-4 opacity-50" />
+            <h3 className="text-lg font-semibold">Nenhum programa cadastrado</h3>
+            <p className="text-muted-foreground mt-2 max-w-sm mb-6">
+                Programas de aprendizado organizam períodos, matrizes curriculares e disciplinas. Comece criando o primeiro programa.
+            </p>
+            <Link href="/admin/programas/novo" className="text-primary hover:underline text-sm font-medium">
+                + Adicionar o primeiro programa
+            </Link>
         </div>
     );
 }

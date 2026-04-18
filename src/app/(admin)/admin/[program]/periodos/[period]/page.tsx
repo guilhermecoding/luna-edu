@@ -1,33 +1,54 @@
 import Page from "@/components/page";
 import Section from "@/components/section";
-import { IconSchoolFilled } from "@tabler/icons-react";
+import TitlePage from "@/components/title-page";
+import { IconCalendarFilled, IconUsersGroup } from "@tabler/icons-react";
+import { ButtonLink } from "@/components/ui/button-link";
+import { getPeriodByProgramAndSlug } from "@/services/periods/periods.service";
+import { notFound } from "next/navigation";
+import { Metadata } from "next";
 
-export default function PeriodPage() {
+export const metadata: Metadata = {
+    title: "Período Letivo",
+};
+
+export default async function PeriodPage({
+    params,
+}: {
+    params: Promise<{ program: string; period: string }>;
+}) {
+    const { program, period } = await params;
+    const periodData = await getPeriodByProgramAndSlug(program, period);
+
+    if (!periodData) {
+        notFound();
+    }
+
+    const isActive = !periodData.completedAt;
+
     return (
         <Page>
-            <Section className="space-y-5">
-                {/* Nome do programa */}
-                <div>
-                    <div className="flex flex-row items-center gap-3">
-                        <IconSchoolFilled className="text-primary-theme" />
-                        <span className="text-primary-theme text-xl font-bold">UBERHUB CODE</span>
-                    </div>
+            <Section>
+                <div className="flex flex-row items-center gap-1 mb-3">
+                    <IconCalendarFilled className="size-4 text-muted-foreground" />
+                    <p className="text-muted-foreground font-bold">Período Letivo</p>
                 </div>
-
-                {/* Titulo e status */}
-                <div className="flex flex-row justify-between">
-                    {/* Titulo */}
-                    <h1 className="text-5xl font-bold">
-                        2° Ciclo de 2026
-                    </h1>
-                    {/* Status */}
-                    <div className="bg-muted border border-surface-border flex flex-col px-6 py-4 rounded-lg text-center">
-                        <p className="text-sm text-muted-foreground">
-                            Status
-                        </p>
-                        <p className="font-bold text-xl text-primary-theme">
-                            ATIVO
-                        </p>
+                <div className="flex flex-col lg:flex-row gap-y-6">
+                    <div className="flex-1">
+                        <TitlePage
+                            title={periodData.name}
+                            description={`${new Date(periodData.startDate).toLocaleDateString("pt-BR")} — ${new Date(periodData.endDate).toLocaleDateString("pt-BR")}`}
+                        />
+                        <div className="mt-3">
+                            <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold ${isActive ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400" : "bg-muted text-muted-foreground"}`}>
+                                {isActive ? "Ativo" : "Finalizado"}
+                            </span>
+                        </div>
+                    </div>
+                    <div className="flex flex-1 justify-end items-end">
+                        <ButtonLink className="w-full sm:w-auto" href={`/admin/${program}/periodos/${period}/turmas`}>
+                            <IconUsersGroup className="size-5" />
+                            Gerenciar Turmas
+                        </ButtonLink>
                     </div>
                 </div>
             </Section>

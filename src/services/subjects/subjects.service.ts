@@ -25,6 +25,41 @@ export async function getSubjectsByDegreeId(degreeId: string): Promise<Subject[]
 }
 
 /**
+ * Lista todas as disciplinas vinculadas a todas as matrizes de um programa.
+ * Utilizado no formulário de criação de turmas para filtrar por programa.
+ *
+ * @param programSlug Slug do programa.
+ * @returns Lista de disciplinas com informações da matriz (degree).
+ */
+export async function getSubjectsByProgramSlug(programSlug: string) {
+    "use cache";
+    cacheLife("max");
+    cacheTag(`program:${programSlug}:subjects`);
+
+    return await prisma.subject.findMany({
+        where: {
+            degree: {
+                program: {
+                    slug: programSlug,
+                },
+            },
+        },
+        include: {
+            degree: {
+                select: {
+                    name: true,
+                    slug: true,
+                },
+            },
+        },
+        orderBy: [
+            { degree: { name: "asc" } },
+            { name: "asc" },
+        ],
+    });
+}
+
+/**
  * Busca uma disciplina específica pelo ID.
  *
  * @param id ID da disciplina.

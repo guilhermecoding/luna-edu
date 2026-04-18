@@ -3,6 +3,31 @@ import { Prisma, Room, RoomType } from "@/generated/prisma/client";
 import { cacheLife, cacheTag } from "next/cache";
 
 /**
+ * Retorna todas as salas do sistema com dados do campus.
+ * Utilizado no formulário de criação de turmas.
+ */
+export async function getAllRooms() {
+    "use cache";
+    cacheLife("max");
+    cacheTag("all-rooms");
+
+    return await prisma.room.findMany({
+        include: {
+            campus: {
+                select: {
+                    name: true,
+                    slug: true,
+                },
+            },
+        },
+        orderBy: [
+            { campus: { name: "asc" } },
+            { name: "asc" },
+        ],
+    });
+}
+
+/**
  * Retorna as salas de um determinado campus.
  */
 export async function getRoomsByCampus(campusSlug: string): Promise<Room[]> {

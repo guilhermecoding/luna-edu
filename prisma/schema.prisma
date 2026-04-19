@@ -66,6 +66,19 @@ enum NotificationType {
     @@schema("public")
 }
 
+enum DayOfWeek {
+    MONDAY
+    TUESDAY
+    WEDNESDAY
+    THURSDAY
+    FRIDAY
+    SATURDAY
+    SUNDAY
+
+    @@map("day_of_week")
+    @@schema("public")
+}
+
 // ================= AUTH =================
 
 model User {
@@ -91,6 +104,8 @@ model User {
 
     courseAssistants CourseAssistant[]
     notifications    Notification[]
+    schedules        Schedule[]
+    lessons          Lesson[]
 
     @@unique([email, cpf])
     @@map("user")
@@ -229,6 +244,7 @@ model Room {
 
     campus  Campus   @relation(fields: [campusId], references: [id])
     courses Course[]
+    schedules Schedule[]
 
     @@unique([campusId, slug])
     @@map("rooms")
@@ -255,6 +271,42 @@ model Period {
     @@schema("public")
 }
 
+model TimeSlot {
+    id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+    name      String
+    startTime String   @map("start_time")
+    endTime   String   @map("end_time")
+    order     Int      @db.SmallInt
+    shift     Shift
+
+    schedules Schedule[]
+    lessons   Lesson[]
+
+    @@map("time_slots")
+    @@schema("public")
+}
+
+model Schedule {
+    id          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+    createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz
+    courseId    String    @map("course_id") @db.Uuid
+    dayOfWeek   DayOfWeek @map("day_of_week")
+    timeSlotId  String    @map("time_slot_id") @db.Uuid
+    teacherId   String    @map("teacher_id") @db.Uuid
+    roomId      String?   @map("room_id") @db.Uuid
+
+    course   Course   @relation(fields: [courseId], references: [id])
+    timeSlot TimeSlot @relation(fields: [timeSlotId], references: [id])
+    teacher  User     @relation(fields: [teacherId], references: [id])
+    room     Room?    @relation(fields: [roomId], references: [id])
+    lessons  Lesson[]
+
+    @@unique([courseId, dayOfWeek, timeSlotId])
+    @@unique([teacherId, dayOfWeek, timeSlotId])
+    @@map("schedules")
+    @@schema("public")
+}
+
 model Course {
     id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
     createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
@@ -275,6 +327,7 @@ model Course {
     courseAssistants CourseAssistant[]
     finalGrades      FinalGrade[]
     stats            StudentCourseStats[]
+    schedules        Schedule[]
 
     @@map("courses")
     @@schema("public")
@@ -317,13 +370,19 @@ model Enrollment {
 }
 
 model Lesson {
-    id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-    createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
-    courseId  String   @map("course_id") @db.Uuid
-    date      DateTime @db.Date
-    topic     String
+    id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+    createdAt  DateTime @default(now()) @map("created_at") @db.Timestamptz
+    courseId   String   @map("course_id") @db.Uuid
+    date       DateTime @db.Date
+    topic      String
+    scheduleId String?  @map("schedule_id") @db.Uuid
+    timeSlotId String?  @map("time_slot_id") @db.Uuid
+    teacherId  String?  @map("teacher_id") @db.Uuid
 
     course      Course       @relation(fields: [courseId], references: [id])
+    schedule    Schedule?    @relation(fields: [scheduleId], references: [id])
+    timeSlot    TimeSlot?    @relation(fields: [timeSlotId], references: [id])
+    teacher     User?        @relation(fields: [teacherId], references: [id])
     attendances Attendance[]
 
     @@map("lessons")

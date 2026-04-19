@@ -61,6 +61,8 @@ export const ModelName = {
   Campus: 'Campus',
   Room: 'Room',
   Period: 'Period',
+  TimeSlot: 'TimeSlot',
+  Schedule: 'Schedule',
   Course: 'Course',
   Student: 'Student',
   Enrollment: 'Enrollment',
@@ -236,6 +238,32 @@ export const PeriodScalarFieldEnum = {
 export type PeriodScalarFieldEnum = (typeof PeriodScalarFieldEnum)[keyof typeof PeriodScalarFieldEnum]
 
 
+export const TimeSlotScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  startTime: 'startTime',
+  endTime: 'endTime',
+  order: 'order',
+  shift: 'shift',
+  programId: 'programId'
+} as const
+
+export type TimeSlotScalarFieldEnum = (typeof TimeSlotScalarFieldEnum)[keyof typeof TimeSlotScalarFieldEnum]
+
+
+export const ScheduleScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  courseId: 'courseId',
+  dayOfWeek: 'dayOfWeek',
+  timeSlotId: 'timeSlotId',
+  teacherId: 'teacherId',
+  roomId: 'roomId'
+} as const
+
+export type ScheduleScalarFieldEnum = (typeof ScheduleScalarFieldEnum)[keyof typeof ScheduleScalarFieldEnum]
+
+
 export const CourseScalarFieldEnum = {
   id: 'id',
   createdAt: 'createdAt',
@@ -280,7 +308,10 @@ export const LessonScalarFieldEnum = {
   createdAt: 'createdAt',
   courseId: 'courseId',
   date: 'date',
-  topic: 'topic'
+  topic: 'topic',
+  scheduleId: 'scheduleId',
+  timeSlotId: 'timeSlotId',
+  teacherId: 'teacherId'
 } as const
 
 export type LessonScalarFieldEnum = (typeof LessonScalarFieldEnum)[keyof typeof LessonScalarFieldEnum]

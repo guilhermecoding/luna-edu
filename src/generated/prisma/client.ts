@@ -92,6 +92,16 @@ export type Room = Prisma.RoomModel
  */
 export type Period = Prisma.PeriodModel
 /**
+ * Model TimeSlot
+ * 
+ */
+export type TimeSlot = Prisma.TimeSlotModel
+/**
+ * Model Schedule
+ * 
+ */
+export type Schedule = Prisma.ScheduleModel
+/**
  * Model Course
  * 
  */

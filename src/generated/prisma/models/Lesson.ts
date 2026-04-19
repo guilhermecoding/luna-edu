@@ -30,6 +30,9 @@ export type LessonMinAggregateOutputType = {
   courseId: string | null
   date: Date | null
   topic: string | null
+  scheduleId: string | null
+  timeSlotId: string | null
+  teacherId: string | null
 }
 
 export type LessonMaxAggregateOutputType = {
@@ -38,6 +41,9 @@ export type LessonMaxAggregateOutputType = {
   courseId: string | null
   date: Date | null
   topic: string | null
+  scheduleId: string | null
+  timeSlotId: string | null
+  teacherId: string | null
 }
 
 export type LessonCountAggregateOutputType = {
@@ -46,6 +52,9 @@ export type LessonCountAggregateOutputType = {
   courseId: number
   date: number
   topic: number
+  scheduleId: number
+  timeSlotId: number
+  teacherId: number
   _all: number
 }
 
@@ -56,6 +65,9 @@ export type LessonMinAggregateInputType = {
   courseId?: true
   date?: true
   topic?: true
+  scheduleId?: true
+  timeSlotId?: true
+  teacherId?: true
 }
 
 export type LessonMaxAggregateInputType = {
@@ -64,6 +76,9 @@ export type LessonMaxAggregateInputType = {
   courseId?: true
   date?: true
   topic?: true
+  scheduleId?: true
+  timeSlotId?: true
+  teacherId?: true
 }
 
 export type LessonCountAggregateInputType = {
@@ -72,6 +87,9 @@ export type LessonCountAggregateInputType = {
   courseId?: true
   date?: true
   topic?: true
+  scheduleId?: true
+  timeSlotId?: true
+  teacherId?: true
   _all?: true
 }
 
@@ -153,6 +171,9 @@ export type LessonGroupByOutputType = {
   courseId: string
   date: Date
   topic: string
+  scheduleId: string | null
+  timeSlotId: string | null
+  teacherId: string | null
   _count: LessonCountAggregateOutputType | null
   _min: LessonMinAggregateOutputType | null
   _max: LessonMaxAggregateOutputType | null
@@ -182,7 +203,13 @@ export type LessonWhereInput = {
   courseId?: Prisma.UuidFilter<"Lesson"> | string
   date?: Prisma.DateTimeFilter<"Lesson"> | Date | string
   topic?: Prisma.StringFilter<"Lesson"> | string
+  scheduleId?: Prisma.UuidNullableFilter<"Lesson"> | string | null
+  timeSlotId?: Prisma.UuidNullableFilter<"Lesson"> | string | null
+  teacherId?: Prisma.UuidNullableFilter<"Lesson"> | string | null
   course?: Prisma.XOR<Prisma.CourseScalarRelationFilter, Prisma.CourseWhereInput>
+  schedule?: Prisma.XOR<Prisma.ScheduleNullableScalarRelationFilter, Prisma.ScheduleWhereInput> | null
+  timeSlot?: Prisma.XOR<Prisma.TimeSlotNullableScalarRelationFilter, Prisma.TimeSlotWhereInput> | null
+  teacher?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   attendances?: Prisma.AttendanceListRelationFilter
 }
 
@@ -192,7 +219,13 @@ export type LessonOrderByWithRelationInput = {
   courseId?: Prisma.SortOrder
   date?: Prisma.SortOrder
   topic?: Prisma.SortOrder
+  scheduleId?: Prisma.SortOrderInput | Prisma.SortOrder
+  timeSlotId?: Prisma.SortOrderInput | Prisma.SortOrder
+  teacherId?: Prisma.SortOrderInput | Prisma.SortOrder
   course?: Prisma.CourseOrderByWithRelationInput
+  schedule?: Prisma.ScheduleOrderByWithRelationInput
+  timeSlot?: Prisma.TimeSlotOrderByWithRelationInput
+  teacher?: Prisma.UserOrderByWithRelationInput
   attendances?: Prisma.AttendanceOrderByRelationAggregateInput
 }
 
@@ -205,7 +238,13 @@ export type LessonWhereUniqueInput = Prisma.AtLeast<{
   courseId?: Prisma.UuidFilter<"Lesson"> | string
   date?: Prisma.DateTimeFilter<"Lesson"> | Date | string
   topic?: Prisma.StringFilter<"Lesson"> | string
+  scheduleId?: Prisma.UuidNullableFilter<"Lesson"> | string | null
+  timeSlotId?: Prisma.UuidNullableFilter<"Lesson"> | string | null
+  teacherId?: Prisma.UuidNullableFilter<"Lesson"> | string | null
   course?: Prisma.XOR<Prisma.CourseScalarRelationFilter, Prisma.CourseWhereInput>
+  schedule?: Prisma.XOR<Prisma.ScheduleNullableScalarRelationFilter, Prisma.ScheduleWhereInput> | null
+  timeSlot?: Prisma.XOR<Prisma.TimeSlotNullableScalarRelationFilter, Prisma.TimeSlotWhereInput> | null
+  teacher?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   attendances?: Prisma.AttendanceListRelationFilter
 }, "id">
 
@@ -215,6 +254,9 @@ export type LessonOrderByWithAggregationInput = {
   courseId?: Prisma.SortOrder
   date?: Prisma.SortOrder
   topic?: Prisma.SortOrder
+  scheduleId?: Prisma.SortOrderInput | Prisma.SortOrder
+  timeSlotId?: Prisma.SortOrderInput | Prisma.SortOrder
+  teacherId?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.LessonCountOrderByAggregateInput
   _max?: Prisma.LessonMaxOrderByAggregateInput
   _min?: Prisma.LessonMinOrderByAggregateInput
@@ -229,6 +271,9 @@ export type LessonScalarWhereWithAggregatesInput = {
   courseId?: Prisma.UuidWithAggregatesFilter<"Lesson"> | string
   date?: Prisma.DateTimeWithAggregatesFilter<"Lesson"> | Date | string
   topic?: Prisma.StringWithAggregatesFilter<"Lesson"> | string
+  scheduleId?: Prisma.UuidNullableWithAggregatesFilter<"Lesson"> | string | null
+  timeSlotId?: Prisma.UuidNullableWithAggregatesFilter<"Lesson"> | string | null
+  teacherId?: Prisma.UuidNullableWithAggregatesFilter<"Lesson"> | string | null
 }
 
 export type LessonCreateInput = {
@@ -237,6 +282,9 @@ export type LessonCreateInput = {
   date: Date | string
   topic: string
   course: Prisma.CourseCreateNestedOneWithoutLessonsInput
+  schedule?: Prisma.ScheduleCreateNestedOneWithoutLessonsInput
+  timeSlot?: Prisma.TimeSlotCreateNestedOneWithoutLessonsInput
+  teacher?: Prisma.UserCreateNestedOneWithoutLessonsInput
   attendances?: Prisma.AttendanceCreateNestedManyWithoutLessonInput
 }
 
@@ -246,6 +294,9 @@ export type LessonUncheckedCreateInput = {
   courseId: string
   date: Date | string
   topic: string
+  scheduleId?: string | null
+  timeSlotId?: string | null
+  teacherId?: string | null
   attendances?: Prisma.AttendanceUncheckedCreateNestedManyWithoutLessonInput
 }
 
@@ -255,6 +306,9 @@ export type LessonUpdateInput = {
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   topic?: Prisma.StringFieldUpdateOperationsInput | string
   course?: Prisma.CourseUpdateOneRequiredWithoutLessonsNestedInput
+  schedule?: Prisma.ScheduleUpdateOneWithoutLessonsNestedInput
+  timeSlot?: Prisma.TimeSlotUpdateOneWithoutLessonsNestedInput
+  teacher?: Prisma.UserUpdateOneWithoutLessonsNestedInput
   attendances?: Prisma.AttendanceUpdateManyWithoutLessonNestedInput
 }
 
@@ -264,6 +318,9 @@ export type LessonUncheckedUpdateInput = {
   courseId?: Prisma.StringFieldUpdateOperationsInput | string
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   topic?: Prisma.StringFieldUpdateOperationsInput | string
+  scheduleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  timeSlotId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  teacherId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   attendances?: Prisma.AttendanceUncheckedUpdateManyWithoutLessonNestedInput
 }
 
@@ -273,6 +330,9 @@ export type LessonCreateManyInput = {
   courseId: string
   date: Date | string
   topic: string
+  scheduleId?: string | null
+  timeSlotId?: string | null
+  teacherId?: string | null
 }
 
 export type LessonUpdateManyMutationInput = {
@@ -288,6 +348,9 @@ export type LessonUncheckedUpdateManyInput = {
   courseId?: Prisma.StringFieldUpdateOperationsInput | string
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   topic?: Prisma.StringFieldUpdateOperationsInput | string
+  scheduleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  timeSlotId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  teacherId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type LessonListRelationFilter = {
@@ -306,6 +369,9 @@ export type LessonCountOrderByAggregateInput = {
   courseId?: Prisma.SortOrder
   date?: Prisma.SortOrder
   topic?: Prisma.SortOrder
+  scheduleId?: Prisma.SortOrder
+  timeSlotId?: Prisma.SortOrder
+  teacherId?: Prisma.SortOrder
 }
 
 export type LessonMaxOrderByAggregateInput = {
@@ -314,6 +380,9 @@ export type LessonMaxOrderByAggregateInput = {
   courseId?: Prisma.SortOrder
   date?: Prisma.SortOrder
   topic?: Prisma.SortOrder
+  scheduleId?: Prisma.SortOrder
+  timeSlotId?: Prisma.SortOrder
+  teacherId?: Prisma.SortOrder
 }
 
 export type LessonMinOrderByAggregateInput = {
@@ -322,11 +391,140 @@ export type LessonMinOrderByAggregateInput = {
   courseId?: Prisma.SortOrder
   date?: Prisma.SortOrder
   topic?: Prisma.SortOrder
+  scheduleId?: Prisma.SortOrder
+  timeSlotId?: Prisma.SortOrder
+  teacherId?: Prisma.SortOrder
 }
 
 export type LessonScalarRelationFilter = {
   is?: Prisma.LessonWhereInput
   isNot?: Prisma.LessonWhereInput
+}
+
+export type LessonCreateNestedManyWithoutTeacherInput = {
+  create?: Prisma.XOR<Prisma.LessonCreateWithoutTeacherInput, Prisma.LessonUncheckedCreateWithoutTeacherInput> | Prisma.LessonCreateWithoutTeacherInput[] | Prisma.LessonUncheckedCreateWithoutTeacherInput[]
+  connectOrCreate?: Prisma.LessonCreateOrConnectWithoutTeacherInput | Prisma.LessonCreateOrConnectWithoutTeacherInput[]
+  createMany?: Prisma.LessonCreateManyTeacherInputEnvelope
+  connect?: Prisma.LessonWhereUniqueInput | Prisma.LessonWhereUniqueInput[]
+}
+
+export type LessonUncheckedCreateNestedManyWithoutTeacherInput = {
+  create?: Prisma.XOR<Prisma.LessonCreateWithoutTeacherInput, Prisma.LessonUncheckedCreateWithoutTeacherInput> | Prisma.LessonCreateWithoutTeacherInput[] | Prisma.LessonUncheckedCreateWithoutTeacherInput[]
+  connectOrCreate?: Prisma.LessonCreateOrConnectWithoutTeacherInput | Prisma.LessonCreateOrConnectWithoutTeacherInput[]
+  createMany?: Prisma.LessonCreateManyTeacherInputEnvelope
+  connect?: Prisma.LessonWhereUniqueInput | Prisma.LessonWhereUniqueInput[]
+}
+
+export type LessonUpdateManyWithoutTeacherNestedInput = {
+  create?: Prisma.XOR<Prisma.LessonCreateWithoutTeacherInput, Prisma.LessonUncheckedCreateWithoutTeacherInput> | Prisma.LessonCreateWithoutTeacherInput[] | Prisma.LessonUncheckedCreateWithoutTeacherInput[]
+  connectOrCreate?: Prisma.LessonCreateOrConnectWithoutTeacherInput | Prisma.LessonCreateOrConnectWithoutTeacherInput[]
+  upsert?: Prisma.LessonUpsertWithWhereUniqueWithoutTeacherInput | Prisma.LessonUpsertWithWhereUniqueWithoutTeacherInput[]
+  createMany?: Prisma.LessonCreateManyTeacherInputEnvelope
+  set?: Prisma.LessonWhereUniqueInput | Prisma.LessonWhereUniqueInput[]
+  disconnect?: Prisma.LessonWhereUniqueInput | Prisma.LessonWhereUniqueInput[]
+  delete?: Prisma.LessonWhereUniqueInput | Prisma.LessonWhereUniqueInput[]
+  connect?: Prisma.LessonWhereUniqueInput | Prisma.LessonWhereUniqueInput[]
+  update?: Prisma.LessonUpdateWithWhereUniqueWithoutTeacherInput | Prisma.LessonUpdateWithWhereUniqueWithoutTeacherInput[]
+  updateMany?: Prisma.LessonUpdateManyWithWhereWithoutTeacherInput | Prisma.LessonUpdateManyWithWhereWithoutTeacherInput[]
+  deleteMany?: Prisma.LessonScalarWhereInput | Prisma.LessonScalarWhereInput[]
+}
+
+export type LessonUncheckedUpdateManyWithoutTeacherNestedInput = {
+  create?: Prisma.XOR<Prisma.LessonCreateWithoutTeacherInput, Prisma.LessonUncheckedCreateWithoutTeacherInput> | Prisma.LessonCreateWithoutTeacherInput[] | Prisma.LessonUncheckedCreateWithoutTeacherInput[]
+  connectOrCreate?: Prisma.LessonCreateOrConnectWithoutTeacherInput | Prisma.LessonCreateOrConnectWithoutTeacherInput[]
+  upsert?: Prisma.LessonUpsertWithWhereUniqueWithoutTeacherInput | Prisma.LessonUpsertWithWhereUniqueWithoutTeacherInput[]
+  createMany?: Prisma.LessonCreateManyTeacherInputEnvelope
+  set?: Prisma.LessonWhereUniqueInput | Prisma.LessonWhereUniqueInput[]
+  disconnect?: Prisma.LessonWhereUniqueInput | Prisma.LessonWhereUniqueInput[]
+  delete?: Prisma.LessonWhereUniqueInput | Prisma.LessonWhereUniqueInput[]
+  connect?: Prisma.LessonWhereUniqueInput | Prisma.LessonWhereUniqueInput[]
+  update?: Prisma.LessonUpdateWithWhereUniqueWithoutTeacherInput | Prisma.LessonUpdateWithWhereUniqueWithoutTeacherInput[]
+  updateMany?: Prisma.LessonUpdateManyWithWhereWithoutTeacherInput | Prisma.LessonUpdateManyWithWhereWithoutTeacherInput[]
+  deleteMany?: Prisma.LessonScalarWhereInput | Prisma.LessonScalarWhereInput[]
+}
+
+export type LessonCreateNestedManyWithoutTimeSlotInput = {
+  create?: Prisma.XOR<Prisma.LessonCreateWithoutTimeSlotInput, Prisma.LessonUncheckedCreateWithoutTimeSlotInput> | Prisma.LessonCreateWithoutTimeSlotInput[] | Prisma.LessonUncheckedCreateWithoutTimeSlotInput[]
+  connectOrCreate?: Prisma.LessonCreateOrConnectWithoutTimeSlotInput | Prisma.LessonCreateOrConnectWithoutTimeSlotInput[]
+  createMany?: Prisma.LessonCreateManyTimeSlotInputEnvelope
+  connect?: Prisma.LessonWhereUniqueInput | Prisma.LessonWhereUniqueInput[]
+}
+
+export type LessonUncheckedCreateNestedManyWithoutTimeSlotInput = {
+  create?: Prisma.XOR<Prisma.LessonCreateWithoutTimeSlotInput, Prisma.LessonUncheckedCreateWithoutTimeSlotInput> | Prisma.LessonCreateWithoutTimeSlotInput[] | Prisma.LessonUncheckedCreateWithoutTimeSlotInput[]
+  connectOrCreate?: Prisma.LessonCreateOrConnectWithoutTimeSlotInput | Prisma.LessonCreateOrConnectWithoutTimeSlotInput[]
+  createMany?: Prisma.LessonCreateManyTimeSlotInputEnvelope
+  connect?: Prisma.LessonWhereUniqueInput | Prisma.LessonWhereUniqueInput[]
+}
+
+export type LessonUpdateManyWithoutTimeSlotNestedInput = {
+  create?: Prisma.XOR<Prisma.LessonCreateWithoutTimeSlotInput, Prisma.LessonUncheckedCreateWithoutTimeSlotInput> | Prisma.LessonCreateWithoutTimeSlotInput[] | Prisma.LessonUncheckedCreateWithoutTimeSlotInput[]
+  connectOrCreate?: Prisma.LessonCreateOrConnectWithoutTimeSlotInput | Prisma.LessonCreateOrConnectWithoutTimeSlotInput[]
+  upsert?: Prisma.LessonUpsertWithWhereUniqueWithoutTimeSlotInput | Prisma.LessonUpsertWithWhereUniqueWithoutTimeSlotInput[]
+  createMany?: Prisma.LessonCreateManyTimeSlotInputEnvelope
+  set?: Prisma.LessonWhereUniqueInput | Prisma.LessonWhereUniqueInput[]
+  disconnect?: Prisma.LessonWhereUniqueInput | Prisma.LessonWhereUniqueInput[]
+  delete?: Prisma.LessonWhereUniqueInput | Prisma.LessonWhereUniqueInput[]
+  connect?: Prisma.LessonWhereUniqueInput | Prisma.LessonWhereUniqueInput[]
+  update?: Prisma.LessonUpdateWithWhereUniqueWithoutTimeSlotInput | Prisma.LessonUpdateWithWhereUniqueWithoutTimeSlotInput[]
+  updateMany?: Prisma.LessonUpdateManyWithWhereWithoutTimeSlotInput | Prisma.LessonUpdateManyWithWhereWithoutTimeSlotInput[]
+  deleteMany?: Prisma.LessonScalarWhereInput | Prisma.LessonScalarWhereInput[]
+}
+
+export type LessonUncheckedUpdateManyWithoutTimeSlotNestedInput = {
+  create?: Prisma.XOR<Prisma.LessonCreateWithoutTimeSlotInput, Prisma.LessonUncheckedCreateWithoutTimeSlotInput> | Prisma.LessonCreateWithoutTimeSlotInput[] | Prisma.LessonUncheckedCreateWithoutTimeSlotInput[]
+  connectOrCreate?: Prisma.LessonCreateOrConnectWithoutTimeSlotInput | Prisma.LessonCreateOrConnectWithoutTimeSlotInput[]
+  upsert?: Prisma.LessonUpsertWithWhereUniqueWithoutTimeSlotInput | Prisma.LessonUpsertWithWhereUniqueWithoutTimeSlotInput[]
+  createMany?: Prisma.LessonCreateManyTimeSlotInputEnvelope
+  set?: Prisma.LessonWhereUniqueInput | Prisma.LessonWhereUniqueInput[]
+  disconnect?: Prisma.LessonWhereUniqueInput | Prisma.LessonWhereUniqueInput[]
+  delete?: Prisma.LessonWhereUniqueInput | Prisma.LessonWhereUniqueInput[]
+  connect?: Prisma.LessonWhereUniqueInput | Prisma.LessonWhereUniqueInput[]
+  update?: Prisma.LessonUpdateWithWhereUniqueWithoutTimeSlotInput | Prisma.LessonUpdateWithWhereUniqueWithoutTimeSlotInput[]
+  updateMany?: Prisma.LessonUpdateManyWithWhereWithoutTimeSlotInput | Prisma.LessonUpdateManyWithWhereWithoutTimeSlotInput[]
+  deleteMany?: Prisma.LessonScalarWhereInput | Prisma.LessonScalarWhereInput[]
+}
+
+export type LessonCreateNestedManyWithoutScheduleInput = {
+  create?: Prisma.XOR<Prisma.LessonCreateWithoutScheduleInput, Prisma.LessonUncheckedCreateWithoutScheduleInput> | Prisma.LessonCreateWithoutScheduleInput[] | Prisma.LessonUncheckedCreateWithoutScheduleInput[]
+  connectOrCreate?: Prisma.LessonCreateOrConnectWithoutScheduleInput | Prisma.LessonCreateOrConnectWithoutScheduleInput[]
+  createMany?: Prisma.LessonCreateManyScheduleInputEnvelope
+  connect?: Prisma.LessonWhereUniqueInput | Prisma.LessonWhereUniqueInput[]
+}
+
+export type LessonUncheckedCreateNestedManyWithoutScheduleInput = {
+  create?: Prisma.XOR<Prisma.LessonCreateWithoutScheduleInput, Prisma.LessonUncheckedCreateWithoutScheduleInput> | Prisma.LessonCreateWithoutScheduleInput[] | Prisma.LessonUncheckedCreateWithoutScheduleInput[]
+  connectOrCreate?: Prisma.LessonCreateOrConnectWithoutScheduleInput | Prisma.LessonCreateOrConnectWithoutScheduleInput[]
+  createMany?: Prisma.LessonCreateManyScheduleInputEnvelope
+  connect?: Prisma.LessonWhereUniqueInput | Prisma.LessonWhereUniqueInput[]
+}
+
+export type LessonUpdateManyWithoutScheduleNestedInput = {
+  create?: Prisma.XOR<Prisma.LessonCreateWithoutScheduleInput, Prisma.LessonUncheckedCreateWithoutScheduleInput> | Prisma.LessonCreateWithoutScheduleInput[] | Prisma.LessonUncheckedCreateWithoutScheduleInput[]
+  connectOrCreate?: Prisma.LessonCreateOrConnectWithoutScheduleInput | Prisma.LessonCreateOrConnectWithoutScheduleInput[]
+  upsert?: Prisma.LessonUpsertWithWhereUniqueWithoutScheduleInput | Prisma.LessonUpsertWithWhereUniqueWithoutScheduleInput[]
+  createMany?: Prisma.LessonCreateManyScheduleInputEnvelope
+  set?: Prisma.LessonWhereUniqueInput | Prisma.LessonWhereUniqueInput[]
+  disconnect?: Prisma.LessonWhereUniqueInput | Prisma.LessonWhereUniqueInput[]
+  delete?: Prisma.LessonWhereUniqueInput | Prisma.LessonWhereUniqueInput[]
+  connect?: Prisma.LessonWhereUniqueInput | Prisma.LessonWhereUniqueInput[]
+  update?: Prisma.LessonUpdateWithWhereUniqueWithoutScheduleInput | Prisma.LessonUpdateWithWhereUniqueWithoutScheduleInput[]
+  updateMany?: Prisma.LessonUpdateManyWithWhereWithoutScheduleInput | Prisma.LessonUpdateManyWithWhereWithoutScheduleInput[]
+  deleteMany?: Prisma.LessonScalarWhereInput | Prisma.LessonScalarWhereInput[]
+}
+
+export type LessonUncheckedUpdateManyWithoutScheduleNestedInput = {
+  create?: Prisma.XOR<Prisma.LessonCreateWithoutScheduleInput, Prisma.LessonUncheckedCreateWithoutScheduleInput> | Prisma.LessonCreateWithoutScheduleInput[] | Prisma.LessonUncheckedCreateWithoutScheduleInput[]
+  connectOrCreate?: Prisma.LessonCreateOrConnectWithoutScheduleInput | Prisma.LessonCreateOrConnectWithoutScheduleInput[]
+  upsert?: Prisma.LessonUpsertWithWhereUniqueWithoutScheduleInput | Prisma.LessonUpsertWithWhereUniqueWithoutScheduleInput[]
+  createMany?: Prisma.LessonCreateManyScheduleInputEnvelope
+  set?: Prisma.LessonWhereUniqueInput | Prisma.LessonWhereUniqueInput[]
+  disconnect?: Prisma.LessonWhereUniqueInput | Prisma.LessonWhereUniqueInput[]
+  delete?: Prisma.LessonWhereUniqueInput | Prisma.LessonWhereUniqueInput[]
+  connect?: Prisma.LessonWhereUniqueInput | Prisma.LessonWhereUniqueInput[]
+  update?: Prisma.LessonUpdateWithWhereUniqueWithoutScheduleInput | Prisma.LessonUpdateWithWhereUniqueWithoutScheduleInput[]
+  updateMany?: Prisma.LessonUpdateManyWithWhereWithoutScheduleInput | Prisma.LessonUpdateManyWithWhereWithoutScheduleInput[]
+  deleteMany?: Prisma.LessonScalarWhereInput | Prisma.LessonScalarWhereInput[]
 }
 
 export type LessonCreateNestedManyWithoutCourseInput = {
@@ -385,11 +583,172 @@ export type LessonUpdateOneRequiredWithoutAttendancesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.LessonUpdateToOneWithWhereWithoutAttendancesInput, Prisma.LessonUpdateWithoutAttendancesInput>, Prisma.LessonUncheckedUpdateWithoutAttendancesInput>
 }
 
+export type LessonCreateWithoutTeacherInput = {
+  id?: string
+  createdAt?: Date | string
+  date: Date | string
+  topic: string
+  course: Prisma.CourseCreateNestedOneWithoutLessonsInput
+  schedule?: Prisma.ScheduleCreateNestedOneWithoutLessonsInput
+  timeSlot?: Prisma.TimeSlotCreateNestedOneWithoutLessonsInput
+  attendances?: Prisma.AttendanceCreateNestedManyWithoutLessonInput
+}
+
+export type LessonUncheckedCreateWithoutTeacherInput = {
+  id?: string
+  createdAt?: Date | string
+  courseId: string
+  date: Date | string
+  topic: string
+  scheduleId?: string | null
+  timeSlotId?: string | null
+  attendances?: Prisma.AttendanceUncheckedCreateNestedManyWithoutLessonInput
+}
+
+export type LessonCreateOrConnectWithoutTeacherInput = {
+  where: Prisma.LessonWhereUniqueInput
+  create: Prisma.XOR<Prisma.LessonCreateWithoutTeacherInput, Prisma.LessonUncheckedCreateWithoutTeacherInput>
+}
+
+export type LessonCreateManyTeacherInputEnvelope = {
+  data: Prisma.LessonCreateManyTeacherInput | Prisma.LessonCreateManyTeacherInput[]
+  skipDuplicates?: boolean
+}
+
+export type LessonUpsertWithWhereUniqueWithoutTeacherInput = {
+  where: Prisma.LessonWhereUniqueInput
+  update: Prisma.XOR<Prisma.LessonUpdateWithoutTeacherInput, Prisma.LessonUncheckedUpdateWithoutTeacherInput>
+  create: Prisma.XOR<Prisma.LessonCreateWithoutTeacherInput, Prisma.LessonUncheckedCreateWithoutTeacherInput>
+}
+
+export type LessonUpdateWithWhereUniqueWithoutTeacherInput = {
+  where: Prisma.LessonWhereUniqueInput
+  data: Prisma.XOR<Prisma.LessonUpdateWithoutTeacherInput, Prisma.LessonUncheckedUpdateWithoutTeacherInput>
+}
+
+export type LessonUpdateManyWithWhereWithoutTeacherInput = {
+  where: Prisma.LessonScalarWhereInput
+  data: Prisma.XOR<Prisma.LessonUpdateManyMutationInput, Prisma.LessonUncheckedUpdateManyWithoutTeacherInput>
+}
+
+export type LessonScalarWhereInput = {
+  AND?: Prisma.LessonScalarWhereInput | Prisma.LessonScalarWhereInput[]
+  OR?: Prisma.LessonScalarWhereInput[]
+  NOT?: Prisma.LessonScalarWhereInput | Prisma.LessonScalarWhereInput[]
+  id?: Prisma.UuidFilter<"Lesson"> | string
+  createdAt?: Prisma.DateTimeFilter<"Lesson"> | Date | string
+  courseId?: Prisma.UuidFilter<"Lesson"> | string
+  date?: Prisma.DateTimeFilter<"Lesson"> | Date | string
+  topic?: Prisma.StringFilter<"Lesson"> | string
+  scheduleId?: Prisma.UuidNullableFilter<"Lesson"> | string | null
+  timeSlotId?: Prisma.UuidNullableFilter<"Lesson"> | string | null
+  teacherId?: Prisma.UuidNullableFilter<"Lesson"> | string | null
+}
+
+export type LessonCreateWithoutTimeSlotInput = {
+  id?: string
+  createdAt?: Date | string
+  date: Date | string
+  topic: string
+  course: Prisma.CourseCreateNestedOneWithoutLessonsInput
+  schedule?: Prisma.ScheduleCreateNestedOneWithoutLessonsInput
+  teacher?: Prisma.UserCreateNestedOneWithoutLessonsInput
+  attendances?: Prisma.AttendanceCreateNestedManyWithoutLessonInput
+}
+
+export type LessonUncheckedCreateWithoutTimeSlotInput = {
+  id?: string
+  createdAt?: Date | string
+  courseId: string
+  date: Date | string
+  topic: string
+  scheduleId?: string | null
+  teacherId?: string | null
+  attendances?: Prisma.AttendanceUncheckedCreateNestedManyWithoutLessonInput
+}
+
+export type LessonCreateOrConnectWithoutTimeSlotInput = {
+  where: Prisma.LessonWhereUniqueInput
+  create: Prisma.XOR<Prisma.LessonCreateWithoutTimeSlotInput, Prisma.LessonUncheckedCreateWithoutTimeSlotInput>
+}
+
+export type LessonCreateManyTimeSlotInputEnvelope = {
+  data: Prisma.LessonCreateManyTimeSlotInput | Prisma.LessonCreateManyTimeSlotInput[]
+  skipDuplicates?: boolean
+}
+
+export type LessonUpsertWithWhereUniqueWithoutTimeSlotInput = {
+  where: Prisma.LessonWhereUniqueInput
+  update: Prisma.XOR<Prisma.LessonUpdateWithoutTimeSlotInput, Prisma.LessonUncheckedUpdateWithoutTimeSlotInput>
+  create: Prisma.XOR<Prisma.LessonCreateWithoutTimeSlotInput, Prisma.LessonUncheckedCreateWithoutTimeSlotInput>
+}
+
+export type LessonUpdateWithWhereUniqueWithoutTimeSlotInput = {
+  where: Prisma.LessonWhereUniqueInput
+  data: Prisma.XOR<Prisma.LessonUpdateWithoutTimeSlotInput, Prisma.LessonUncheckedUpdateWithoutTimeSlotInput>
+}
+
+export type LessonUpdateManyWithWhereWithoutTimeSlotInput = {
+  where: Prisma.LessonScalarWhereInput
+  data: Prisma.XOR<Prisma.LessonUpdateManyMutationInput, Prisma.LessonUncheckedUpdateManyWithoutTimeSlotInput>
+}
+
+export type LessonCreateWithoutScheduleInput = {
+  id?: string
+  createdAt?: Date | string
+  date: Date | string
+  topic: string
+  course: Prisma.CourseCreateNestedOneWithoutLessonsInput
+  timeSlot?: Prisma.TimeSlotCreateNestedOneWithoutLessonsInput
+  teacher?: Prisma.UserCreateNestedOneWithoutLessonsInput
+  attendances?: Prisma.AttendanceCreateNestedManyWithoutLessonInput
+}
+
+export type LessonUncheckedCreateWithoutScheduleInput = {
+  id?: string
+  createdAt?: Date | string
+  courseId: string
+  date: Date | string
+  topic: string
+  timeSlotId?: string | null
+  teacherId?: string | null
+  attendances?: Prisma.AttendanceUncheckedCreateNestedManyWithoutLessonInput
+}
+
+export type LessonCreateOrConnectWithoutScheduleInput = {
+  where: Prisma.LessonWhereUniqueInput
+  create: Prisma.XOR<Prisma.LessonCreateWithoutScheduleInput, Prisma.LessonUncheckedCreateWithoutScheduleInput>
+}
+
+export type LessonCreateManyScheduleInputEnvelope = {
+  data: Prisma.LessonCreateManyScheduleInput | Prisma.LessonCreateManyScheduleInput[]
+  skipDuplicates?: boolean
+}
+
+export type LessonUpsertWithWhereUniqueWithoutScheduleInput = {
+  where: Prisma.LessonWhereUniqueInput
+  update: Prisma.XOR<Prisma.LessonUpdateWithoutScheduleInput, Prisma.LessonUncheckedUpdateWithoutScheduleInput>
+  create: Prisma.XOR<Prisma.LessonCreateWithoutScheduleInput, Prisma.LessonUncheckedCreateWithoutScheduleInput>
+}
+
+export type LessonUpdateWithWhereUniqueWithoutScheduleInput = {
+  where: Prisma.LessonWhereUniqueInput
+  data: Prisma.XOR<Prisma.LessonUpdateWithoutScheduleInput, Prisma.LessonUncheckedUpdateWithoutScheduleInput>
+}
+
+export type LessonUpdateManyWithWhereWithoutScheduleInput = {
+  where: Prisma.LessonScalarWhereInput
+  data: Prisma.XOR<Prisma.LessonUpdateManyMutationInput, Prisma.LessonUncheckedUpdateManyWithoutScheduleInput>
+}
+
 export type LessonCreateWithoutCourseInput = {
   id?: string
   createdAt?: Date | string
   date: Date | string
   topic: string
+  schedule?: Prisma.ScheduleCreateNestedOneWithoutLessonsInput
+  timeSlot?: Prisma.TimeSlotCreateNestedOneWithoutLessonsInput
+  teacher?: Prisma.UserCreateNestedOneWithoutLessonsInput
   attendances?: Prisma.AttendanceCreateNestedManyWithoutLessonInput
 }
 
@@ -398,6 +757,9 @@ export type LessonUncheckedCreateWithoutCourseInput = {
   createdAt?: Date | string
   date: Date | string
   topic: string
+  scheduleId?: string | null
+  timeSlotId?: string | null
+  teacherId?: string | null
   attendances?: Prisma.AttendanceUncheckedCreateNestedManyWithoutLessonInput
 }
 
@@ -427,23 +789,15 @@ export type LessonUpdateManyWithWhereWithoutCourseInput = {
   data: Prisma.XOR<Prisma.LessonUpdateManyMutationInput, Prisma.LessonUncheckedUpdateManyWithoutCourseInput>
 }
 
-export type LessonScalarWhereInput = {
-  AND?: Prisma.LessonScalarWhereInput | Prisma.LessonScalarWhereInput[]
-  OR?: Prisma.LessonScalarWhereInput[]
-  NOT?: Prisma.LessonScalarWhereInput | Prisma.LessonScalarWhereInput[]
-  id?: Prisma.UuidFilter<"Lesson"> | string
-  createdAt?: Prisma.DateTimeFilter<"Lesson"> | Date | string
-  courseId?: Prisma.UuidFilter<"Lesson"> | string
-  date?: Prisma.DateTimeFilter<"Lesson"> | Date | string
-  topic?: Prisma.StringFilter<"Lesson"> | string
-}
-
 export type LessonCreateWithoutAttendancesInput = {
   id?: string
   createdAt?: Date | string
   date: Date | string
   topic: string
   course: Prisma.CourseCreateNestedOneWithoutLessonsInput
+  schedule?: Prisma.ScheduleCreateNestedOneWithoutLessonsInput
+  timeSlot?: Prisma.TimeSlotCreateNestedOneWithoutLessonsInput
+  teacher?: Prisma.UserCreateNestedOneWithoutLessonsInput
 }
 
 export type LessonUncheckedCreateWithoutAttendancesInput = {
@@ -452,6 +806,9 @@ export type LessonUncheckedCreateWithoutAttendancesInput = {
   courseId: string
   date: Date | string
   topic: string
+  scheduleId?: string | null
+  timeSlotId?: string | null
+  teacherId?: string | null
 }
 
 export type LessonCreateOrConnectWithoutAttendancesInput = {
@@ -476,6 +833,9 @@ export type LessonUpdateWithoutAttendancesInput = {
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   topic?: Prisma.StringFieldUpdateOperationsInput | string
   course?: Prisma.CourseUpdateOneRequiredWithoutLessonsNestedInput
+  schedule?: Prisma.ScheduleUpdateOneWithoutLessonsNestedInput
+  timeSlot?: Prisma.TimeSlotUpdateOneWithoutLessonsNestedInput
+  teacher?: Prisma.UserUpdateOneWithoutLessonsNestedInput
 }
 
 export type LessonUncheckedUpdateWithoutAttendancesInput = {
@@ -484,6 +844,135 @@ export type LessonUncheckedUpdateWithoutAttendancesInput = {
   courseId?: Prisma.StringFieldUpdateOperationsInput | string
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   topic?: Prisma.StringFieldUpdateOperationsInput | string
+  scheduleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  timeSlotId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  teacherId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+}
+
+export type LessonCreateManyTeacherInput = {
+  id?: string
+  createdAt?: Date | string
+  courseId: string
+  date: Date | string
+  topic: string
+  scheduleId?: string | null
+  timeSlotId?: string | null
+}
+
+export type LessonUpdateWithoutTeacherInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  topic?: Prisma.StringFieldUpdateOperationsInput | string
+  course?: Prisma.CourseUpdateOneRequiredWithoutLessonsNestedInput
+  schedule?: Prisma.ScheduleUpdateOneWithoutLessonsNestedInput
+  timeSlot?: Prisma.TimeSlotUpdateOneWithoutLessonsNestedInput
+  attendances?: Prisma.AttendanceUpdateManyWithoutLessonNestedInput
+}
+
+export type LessonUncheckedUpdateWithoutTeacherInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  courseId?: Prisma.StringFieldUpdateOperationsInput | string
+  date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  topic?: Prisma.StringFieldUpdateOperationsInput | string
+  scheduleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  timeSlotId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attendances?: Prisma.AttendanceUncheckedUpdateManyWithoutLessonNestedInput
+}
+
+export type LessonUncheckedUpdateManyWithoutTeacherInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  courseId?: Prisma.StringFieldUpdateOperationsInput | string
+  date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  topic?: Prisma.StringFieldUpdateOperationsInput | string
+  scheduleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  timeSlotId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+}
+
+export type LessonCreateManyTimeSlotInput = {
+  id?: string
+  createdAt?: Date | string
+  courseId: string
+  date: Date | string
+  topic: string
+  scheduleId?: string | null
+  teacherId?: string | null
+}
+
+export type LessonUpdateWithoutTimeSlotInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  topic?: Prisma.StringFieldUpdateOperationsInput | string
+  course?: Prisma.CourseUpdateOneRequiredWithoutLessonsNestedInput
+  schedule?: Prisma.ScheduleUpdateOneWithoutLessonsNestedInput
+  teacher?: Prisma.UserUpdateOneWithoutLessonsNestedInput
+  attendances?: Prisma.AttendanceUpdateManyWithoutLessonNestedInput
+}
+
+export type LessonUncheckedUpdateWithoutTimeSlotInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  courseId?: Prisma.StringFieldUpdateOperationsInput | string
+  date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  topic?: Prisma.StringFieldUpdateOperationsInput | string
+  scheduleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  teacherId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attendances?: Prisma.AttendanceUncheckedUpdateManyWithoutLessonNestedInput
+}
+
+export type LessonUncheckedUpdateManyWithoutTimeSlotInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  courseId?: Prisma.StringFieldUpdateOperationsInput | string
+  date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  topic?: Prisma.StringFieldUpdateOperationsInput | string
+  scheduleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  teacherId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+}
+
+export type LessonCreateManyScheduleInput = {
+  id?: string
+  createdAt?: Date | string
+  courseId: string
+  date: Date | string
+  topic: string
+  timeSlotId?: string | null
+  teacherId?: string | null
+}
+
+export type LessonUpdateWithoutScheduleInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  topic?: Prisma.StringFieldUpdateOperationsInput | string
+  course?: Prisma.CourseUpdateOneRequiredWithoutLessonsNestedInput
+  timeSlot?: Prisma.TimeSlotUpdateOneWithoutLessonsNestedInput
+  teacher?: Prisma.UserUpdateOneWithoutLessonsNestedInput
+  attendances?: Prisma.AttendanceUpdateManyWithoutLessonNestedInput
+}
+
+export type LessonUncheckedUpdateWithoutScheduleInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  courseId?: Prisma.StringFieldUpdateOperationsInput | string
+  date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  topic?: Prisma.StringFieldUpdateOperationsInput | string
+  timeSlotId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  teacherId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attendances?: Prisma.AttendanceUncheckedUpdateManyWithoutLessonNestedInput
+}
+
+export type LessonUncheckedUpdateManyWithoutScheduleInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  courseId?: Prisma.StringFieldUpdateOperationsInput | string
+  date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  topic?: Prisma.StringFieldUpdateOperationsInput | string
+  timeSlotId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  teacherId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type LessonCreateManyCourseInput = {
@@ -491,6 +980,9 @@ export type LessonCreateManyCourseInput = {
   createdAt?: Date | string
   date: Date | string
   topic: string
+  scheduleId?: string | null
+  timeSlotId?: string | null
+  teacherId?: string | null
 }
 
 export type LessonUpdateWithoutCourseInput = {
@@ -498,6 +990,9 @@ export type LessonUpdateWithoutCourseInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   topic?: Prisma.StringFieldUpdateOperationsInput | string
+  schedule?: Prisma.ScheduleUpdateOneWithoutLessonsNestedInput
+  timeSlot?: Prisma.TimeSlotUpdateOneWithoutLessonsNestedInput
+  teacher?: Prisma.UserUpdateOneWithoutLessonsNestedInput
   attendances?: Prisma.AttendanceUpdateManyWithoutLessonNestedInput
 }
 
@@ -506,6 +1001,9 @@ export type LessonUncheckedUpdateWithoutCourseInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   topic?: Prisma.StringFieldUpdateOperationsInput | string
+  scheduleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  timeSlotId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  teacherId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   attendances?: Prisma.AttendanceUncheckedUpdateManyWithoutLessonNestedInput
 }
 
@@ -514,6 +1012,9 @@ export type LessonUncheckedUpdateManyWithoutCourseInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   topic?: Prisma.StringFieldUpdateOperationsInput | string
+  scheduleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  timeSlotId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  teacherId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 
@@ -553,7 +1054,13 @@ export type LessonSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   courseId?: boolean
   date?: boolean
   topic?: boolean
+  scheduleId?: boolean
+  timeSlotId?: boolean
+  teacherId?: boolean
   course?: boolean | Prisma.CourseDefaultArgs<ExtArgs>
+  schedule?: boolean | Prisma.Lesson$scheduleArgs<ExtArgs>
+  timeSlot?: boolean | Prisma.Lesson$timeSlotArgs<ExtArgs>
+  teacher?: boolean | Prisma.Lesson$teacherArgs<ExtArgs>
   attendances?: boolean | Prisma.Lesson$attendancesArgs<ExtArgs>
   _count?: boolean | Prisma.LessonCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["lesson"]>
@@ -564,7 +1071,13 @@ export type LessonSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   courseId?: boolean
   date?: boolean
   topic?: boolean
+  scheduleId?: boolean
+  timeSlotId?: boolean
+  teacherId?: boolean
   course?: boolean | Prisma.CourseDefaultArgs<ExtArgs>
+  schedule?: boolean | Prisma.Lesson$scheduleArgs<ExtArgs>
+  timeSlot?: boolean | Prisma.Lesson$timeSlotArgs<ExtArgs>
+  teacher?: boolean | Prisma.Lesson$teacherArgs<ExtArgs>
 }, ExtArgs["result"]["lesson"]>
 
 export type LessonSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -573,7 +1086,13 @@ export type LessonSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
   courseId?: boolean
   date?: boolean
   topic?: boolean
+  scheduleId?: boolean
+  timeSlotId?: boolean
+  teacherId?: boolean
   course?: boolean | Prisma.CourseDefaultArgs<ExtArgs>
+  schedule?: boolean | Prisma.Lesson$scheduleArgs<ExtArgs>
+  timeSlot?: boolean | Prisma.Lesson$timeSlotArgs<ExtArgs>
+  teacher?: boolean | Prisma.Lesson$teacherArgs<ExtArgs>
 }, ExtArgs["result"]["lesson"]>
 
 export type LessonSelectScalar = {
@@ -582,25 +1101,40 @@ export type LessonSelectScalar = {
   courseId?: boolean
   date?: boolean
   topic?: boolean
+  scheduleId?: boolean
+  timeSlotId?: boolean
+  teacherId?: boolean
 }
 
-export type LessonOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "courseId" | "date" | "topic", ExtArgs["result"]["lesson"]>
+export type LessonOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "courseId" | "date" | "topic" | "scheduleId" | "timeSlotId" | "teacherId", ExtArgs["result"]["lesson"]>
 export type LessonInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   course?: boolean | Prisma.CourseDefaultArgs<ExtArgs>
+  schedule?: boolean | Prisma.Lesson$scheduleArgs<ExtArgs>
+  timeSlot?: boolean | Prisma.Lesson$timeSlotArgs<ExtArgs>
+  teacher?: boolean | Prisma.Lesson$teacherArgs<ExtArgs>
   attendances?: boolean | Prisma.Lesson$attendancesArgs<ExtArgs>
   _count?: boolean | Prisma.LessonCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type LessonIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   course?: boolean | Prisma.CourseDefaultArgs<ExtArgs>
+  schedule?: boolean | Prisma.Lesson$scheduleArgs<ExtArgs>
+  timeSlot?: boolean | Prisma.Lesson$timeSlotArgs<ExtArgs>
+  teacher?: boolean | Prisma.Lesson$teacherArgs<ExtArgs>
 }
 export type LessonIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   course?: boolean | Prisma.CourseDefaultArgs<ExtArgs>
+  schedule?: boolean | Prisma.Lesson$scheduleArgs<ExtArgs>
+  timeSlot?: boolean | Prisma.Lesson$timeSlotArgs<ExtArgs>
+  teacher?: boolean | Prisma.Lesson$teacherArgs<ExtArgs>
 }
 
 export type $LessonPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Lesson"
   objects: {
     course: Prisma.$CoursePayload<ExtArgs>
+    schedule: Prisma.$SchedulePayload<ExtArgs> | null
+    timeSlot: Prisma.$TimeSlotPayload<ExtArgs> | null
+    teacher: Prisma.$UserPayload<ExtArgs> | null
     attendances: Prisma.$AttendancePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -609,6 +1143,9 @@ export type $LessonPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     courseId: string
     date: Date
     topic: string
+    scheduleId: string | null
+    timeSlotId: string | null
+    teacherId: string | null
   }, ExtArgs["result"]["lesson"]>
   composites: {}
 }
@@ -1004,6 +1541,9 @@ readonly fields: LessonFieldRefs;
 export interface Prisma__LessonClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   course<T extends Prisma.CourseDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CourseDefaultArgs<ExtArgs>>): Prisma.Prisma__CourseClient<runtime.Types.Result.GetResult<Prisma.$CoursePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  schedule<T extends Prisma.Lesson$scheduleArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Lesson$scheduleArgs<ExtArgs>>): Prisma.Prisma__ScheduleClient<runtime.Types.Result.GetResult<Prisma.$SchedulePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  timeSlot<T extends Prisma.Lesson$timeSlotArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Lesson$timeSlotArgs<ExtArgs>>): Prisma.Prisma__TimeSlotClient<runtime.Types.Result.GetResult<Prisma.$TimeSlotPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  teacher<T extends Prisma.Lesson$teacherArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Lesson$teacherArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   attendances<T extends Prisma.Lesson$attendancesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Lesson$attendancesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AttendancePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -1039,6 +1579,9 @@ export interface LessonFieldRefs {
   readonly courseId: Prisma.FieldRef<"Lesson", 'String'>
   readonly date: Prisma.FieldRef<"Lesson", 'DateTime'>
   readonly topic: Prisma.FieldRef<"Lesson", 'String'>
+  readonly scheduleId: Prisma.FieldRef<"Lesson", 'String'>
+  readonly timeSlotId: Prisma.FieldRef<"Lesson", 'String'>
+  readonly teacherId: Prisma.FieldRef<"Lesson", 'String'>
 }
     
 
@@ -1437,6 +1980,63 @@ export type LessonDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Intern
    * Limit how many Lessons to delete.
    */
   limit?: number
+}
+
+/**
+ * Lesson.schedule
+ */
+export type Lesson$scheduleArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Schedule
+   */
+  select?: Prisma.ScheduleSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Schedule
+   */
+  omit?: Prisma.ScheduleOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ScheduleInclude<ExtArgs> | null
+  where?: Prisma.ScheduleWhereInput
+}
+
+/**
+ * Lesson.timeSlot
+ */
+export type Lesson$timeSlotArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the TimeSlot
+   */
+  select?: Prisma.TimeSlotSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the TimeSlot
+   */
+  omit?: Prisma.TimeSlotOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TimeSlotInclude<ExtArgs> | null
+  where?: Prisma.TimeSlotWhereInput
+}
+
+/**
+ * Lesson.teacher
+ */
+export type Lesson$teacherArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the User
+   */
+  select?: Prisma.UserSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the User
+   */
+  omit?: Prisma.UserOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserInclude<ExtArgs> | null
+  where?: Prisma.UserWhereInput
 }
 
 /**

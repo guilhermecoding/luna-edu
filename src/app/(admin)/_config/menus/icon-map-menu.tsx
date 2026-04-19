@@ -1,4 +1,4 @@
-import { IconChartArcs, IconHome, IconUsers, IconBook, IconCalendar, IconSettings, IconFileText, IconBackpack, IconBlocks, IconBuildingEstate } from "@tabler/icons-react";
+import { IconChartArcs, IconHome, IconUsers, IconBook, IconCalendar, IconSettings, IconFileText, IconBackpack, IconBlocks, IconBuildingEstate, IconClock } from "@tabler/icons-react";
 
 export const iconMap: Record<string, React.ReactNode> = {
     home: <IconHome size={20} />,
@@ -11,4 +11,5 @@ export const iconMap: Record<string, React.ReactNode> = {
     "backpack": <IconBackpack size={20} />,
     "blocks": <IconBlocks size={20} />,
     "building-estate": <IconBuildingEstate size={20} />,
+    clock: <IconClock size={20} />,
 };

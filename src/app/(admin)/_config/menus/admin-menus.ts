@@ -37,6 +37,16 @@ export const adminMenus: ItemMenuSidebarAdmin[] = [
                 ],
             },
             {
+                title: "Grade de Horários",
+                url: "/admin/[program]/horarios",
+                icon: "clock",
+                isActive: false,
+                hiddenOnPaths: ["^/admin/programas"],
+                items: [
+                    { title: "Novo Horário", url: "/admin/[program]/horarios/novo" },
+                ],
+            },
+            {
                 title: "Programas",
                 url: "/admin/programas",
                 icon: "backpack",

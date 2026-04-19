@@ -13,6 +13,7 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import Link from "next/link";
 import { useForm, type SubmitHandler, useWatch, Controller, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Fragment } from "react";
@@ -369,8 +370,13 @@ export function EditCourseForm({
                 </div>
 
                 {timeSlots.length === 0 && (
-                    <div className="p-4 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 rounded-lg text-amber-900 dark:text-amber-200 text-sm">
-                        Nenhum horário cadastrado para este programa. Cadastre os horários primeiro para poder montar a grade.
+                    <div className="p-4 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 rounded-lg text-amber-900 dark:text-amber-200 text-sm flex flex-col sm:flex-row items-center justify-between gap-4">
+                        <span>Nenhum horário cadastrado para este programa. Cadastre os horários primeiro para poder montar a grade.</span>
+                        <Button variant="outline" size="sm" className="bg-background border-amber-300 hover:bg-amber-100" asChild>
+                            <Link href={`/admin/${programSlug}/horarios`}>
+                                Configurar Horários
+                            </Link>
+                        </Button>
                     </div>
                 )}
 

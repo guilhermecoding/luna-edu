@@ -637,10 +637,12 @@ export type UserCreateNestedOneWithoutSchedulesInput = {
   connect?: Prisma.UserWhereUniqueInput
 }
 
-export type UserUpdateOneRequiredWithoutSchedulesNestedInput = {
+export type UserUpdateOneWithoutSchedulesNestedInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutSchedulesInput, Prisma.UserUncheckedCreateWithoutSchedulesInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutSchedulesInput
   upsert?: Prisma.UserUpsertWithoutSchedulesInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
   connect?: Prisma.UserWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutSchedulesInput, Prisma.UserUpdateWithoutSchedulesInput>, Prisma.UserUncheckedUpdateWithoutSchedulesInput>
 }

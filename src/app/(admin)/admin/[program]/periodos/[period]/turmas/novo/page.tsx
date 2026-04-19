@@ -8,6 +8,7 @@ import SkeletonForm from "@/components/skeletons/skeleton-form";
 import { getPeriodByProgramAndSlug } from "@/services/periods/periods.service";
 import { getSubjectsByProgramSlug } from "@/services/subjects/subjects.service";
 import { getAllRooms } from "@/services/rooms/rooms.service";
+import { getTimeSlotsByProgramSlug, getTeachers } from "@/services/courses/schedules.service";
 import { notFound } from "next/navigation";
 
 export const metadata: Metadata = {
@@ -21,10 +22,12 @@ async function NewCourseContent({
 }) {
     const { program, period } = await params;
 
-    const [periodData, subjects, rooms] = await Promise.all([
+    const [periodData, subjects, rooms, timeSlots, teachers] = await Promise.all([
         getPeriodByProgramAndSlug(program, period),
         getSubjectsByProgramSlug(program),
         getAllRooms(),
+        getTimeSlotsByProgramSlug(program),
+        getTeachers(),
     ]);
 
     if (!periodData) {
@@ -45,6 +48,8 @@ async function NewCourseContent({
                                 periodSlug={period}
                                 subjects={subjects}
                                 rooms={rooms}
+                                timeSlots={timeSlots}
+                                teachers={teachers}
                             />
                         </Suspense>
                     </div>

@@ -1,4 +1,4 @@
-import { Course, Prisma, Shift } from "@/generated/prisma/client";
+import { Course, DayOfWeek, Prisma, Shift } from "@/generated/prisma/client";
 import prisma from "@/lib/prisma";
 import { cacheLife, cacheTag } from "next/cache";
 
@@ -50,12 +50,53 @@ export async function getCourseByCode(code: string) {
                 },
             },
             period: true,
+            schedules: {
+                include: {
+                    timeSlot: true,
+                    teacher: {
+                        select: {
+                            id: true,
+                            name: true,
+                        },
+                    },
+                    room: {
+                        include: {
+                            campus: true,
+                        },
+                    },
+                },
+                orderBy: [
+                    { dayOfWeek: "asc" },
+                    { timeSlot: { order: "asc" } },
+                ],
+            },
         },
     });
 }
 
 /**
- * Cria uma nova turma.
+ * Mapeia erros de unicidade (P2002) do Schedule para mensagens amigáveis.
+ * As constraints do Prisma incluem o nome dos campos violados.
+ */
+function mapScheduleUniqueError(error: Prisma.PrismaClientKnownRequestError): string {
+    const target = error.meta?.target as string[] | undefined;
+    const targetStr = target?.join(",") ?? "";
+
+    if (targetStr.includes("room_id")) {
+        return "Esta sala já está ocupada neste dia e horário por outra turma.";
+    }
+    if (targetStr.includes("teacher_id")) {
+        return "O professor selecionado já possui aula neste dia e horário.";
+    }
+    if (targetStr.includes("course_id")) {
+        return "Esta turma já possui uma aula cadastrada neste dia e horário.";
+    }
+
+    return "Conflito de horário detectado. Verifique os horários selecionados.";
+}
+
+/**
+ * Cria uma nova turma com horários opcionais.
  */
 export async function createCourse(data: {
     name: string;
@@ -63,6 +104,12 @@ export async function createCourse(data: {
     subjectId: string;
     roomId?: string | null;
     shift: Shift;
+    schedules?: {
+        dayOfWeek: DayOfWeek;
+        timeSlotId: string;
+        teacherId?: string | null;
+        roomId?: string | null;
+    }[];
 }): Promise<Course> {
     try {
         const course = await prisma.course.create({
@@ -72,19 +119,30 @@ export async function createCourse(data: {
                 subjectId: data.subjectId,
                 roomId: data.roomId || null,
                 shift: data.shift,
+                schedules: data.schedules && data.schedules.length > 0
+                    ? {
+                        create: data.schedules.map((s) => ({
+                            dayOfWeek: s.dayOfWeek,
+                            timeSlotId: s.timeSlotId,
+                            teacherId: s.teacherId || null,
+                            roomId: s.roomId || null,
+                        })),
+                    }
+                    : undefined,
             },
         });
         return course;
     } catch (error) {
         if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2002") {
-            throw new Error("Já existe uma turma com este código.");
+            throw new Error(mapScheduleUniqueError(error));
         }
         throw error;
     }
 }
 
 /**
- * Atualiza os dados de uma turma.
+ * Atualiza os dados de uma turma e seus horários.
+ * Usa deleteMany + createMany para substituir os schedules.
  */
 export async function updateCourse(
     id: string,
@@ -93,23 +151,48 @@ export async function updateCourse(
         subjectId: string;
         roomId?: string | null;
         shift: Shift;
+        schedules?: {
+            dayOfWeek: DayOfWeek;
+            timeSlotId: string;
+            teacherId?: string | null;
+            roomId?: string | null;
+        }[];
     },
 ): Promise<Course> {
     try {
-        const course = await prisma.course.update({
-            where: {
-                id,
-            },
-            data: {
-                name: data.name,
-                subjectId: data.subjectId,
-                roomId: data.roomId || null,
-                shift: data.shift,
-            },
+        const course = await prisma.$transaction(async (tx) => {
+            // Remove todos os schedules antigos
+            await tx.schedule.deleteMany({
+                where: { courseId: id },
+            });
+
+            // Atualiza a turma e cria novos schedules
+            return await tx.course.update({
+                where: { id },
+                data: {
+                    name: data.name,
+                    subjectId: data.subjectId,
+                    roomId: data.roomId || null,
+                    shift: data.shift,
+                    schedules: data.schedules && data.schedules.length > 0
+                        ? {
+                            create: data.schedules.map((s) => ({
+                                dayOfWeek: s.dayOfWeek,
+                                timeSlotId: s.timeSlotId,
+                                teacherId: s.teacherId || null,
+                                roomId: s.roomId || null,
+                            })),
+                        }
+                        : undefined,
+                },
+            });
         });
         return course;
     } catch (error) {
         if (error instanceof Prisma.PrismaClientKnownRequestError) {
+            if (error.code === "P2002") {
+                throw new Error(mapScheduleUniqueError(error));
+            }
             if (error.code === "P2025") {
                 throw new Error("Turma não encontrada.");
             }

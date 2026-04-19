@@ -1,29 +1,28 @@
 "use server";
 
-import { createCourse } from "@/services/courses/courses.service";
-import { getPeriodByProgramAndSlug } from "@/services/periods/periods.service";
+import { updateCourse, getCourseByCode } from "@/services/courses/courses.service";
 import { ZodError } from "zod";
-import { courseSchema, type CourseInput } from "../schema";
+import { courseSchema, type CourseInput } from "../../schema";
 import { revalidatePath, updateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import { DayOfWeek, Shift } from "@/generated/prisma/client";
 
-export async function createCourseAction(
+export async function updateCourseAction(
     programSlug: string,
     periodSlug: string,
+    courseCode: string,
     data: CourseInput,
 ) {
     try {
         const validatedData = courseSchema.parse(data);
-        const period = await getPeriodByProgramAndSlug(programSlug, periodSlug);
+        const course = await getCourseByCode(courseCode);
 
-        if (!period) {
-            throw new Error("Período não encontrado.");
+        if (!course) {
+            throw new Error("Turma não encontrada.");
         }
 
-        await createCourse({
+        await updateCourse(course.id, {
             name: validatedData.name,
-            periodId: period.id,
             subjectId: validatedData.subjectId,
             roomId: validatedData.roomId || null,
             shift: validatedData.shift as Shift,
@@ -35,7 +34,8 @@ export async function createCourseAction(
             })),
         });
 
-        updateTag(`period:${period.id}:courses`);
+        updateTag(`period:${course.periodId}:courses`);
+        updateTag(`course:${courseCode}`);
         updateTag(`program-periods:${programSlug}`);
         revalidatePath(`/admin/${programSlug}/periodos/${periodSlug}/turmas`);
     } catch (error) {
@@ -45,12 +45,12 @@ export async function createCourseAction(
         if (error instanceof Error) {
             return { success: false, error: error.message };
         }
-        return { success: false, error: "Erro ao criar turma" };
+        return { success: false, error: "Erro ao atualizar turma" };
     }
 
     const params = new URLSearchParams({
         toast: "success",
-        message: "Turma criada com sucesso",
+        message: "Turma atualizada com sucesso",
     });
 
     redirect(`/admin/${programSlug}/periodos/${periodSlug}/turmas?${params.toString()}`);

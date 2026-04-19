@@ -15,17 +15,18 @@ import {
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useForm, type SubmitHandler, useWatch, Controller, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Fragment, useEffect } from "react";
+import { Fragment } from "react";
 import { Separator } from "@/components/ui/separator";
-import { createCourseAction } from "../actions";
+import { updateCourseAction } from "../actions";
 import {
     courseSchema,
     type CourseInput,
+    type ScheduleEntryInput,
     SHIFTS,
     shiftLabels,
     DAYS_OF_WEEK,
     dayOfWeekLabels,
-} from "../../schema";
+} from "../../../schema";
 import { IconBuilding, IconLoader2, IconUsers, IconPlus, IconTrash, IconCalendarEvent } from "@tabler/icons-react";
 import { isRedirectError } from "@/lib/is-redirect-error";
 
@@ -66,16 +67,33 @@ type TeacherData = {
     email: string;
 };
 
-interface CreateCourseFormProps {
+interface EditCourseFormProps {
     programSlug: string;
     periodSlug: string;
+    courseCode: string;
+    defaultValues: {
+        name: string;
+        subjectId: string;
+        roomId: string;
+        shift: string;
+        schedules: ScheduleEntryInput[];
+    };
     subjects: SubjectWithDegree[];
     rooms: RoomWithCampus[];
     timeSlots: TimeSlotData[];
     teachers: TeacherData[];
 }
 
-export function CreateCourseForm({ programSlug, periodSlug, subjects, rooms, timeSlots, teachers }: CreateCourseFormProps) {
+export function EditCourseForm({
+    programSlug,
+    periodSlug,
+    courseCode,
+    defaultValues,
+    subjects,
+    rooms,
+    timeSlots,
+    teachers,
+}: EditCourseFormProps) {
     const router = useRouter();
     const pathname = usePathname();
     const searchParams = useSearchParams();
@@ -85,11 +103,11 @@ export function CreateCourseForm({ programSlug, periodSlug, subjects, rooms, tim
         resolver: zodResolver(courseSchema) as any,
         mode: "onChange",
         defaultValues: {
-            name: "",
-            subjectId: undefined,
-            roomId: "",
-            shift: undefined,
-            schedules: [],
+            name: defaultValues.name,
+            subjectId: defaultValues.subjectId,
+            roomId: defaultValues.roomId,
+            shift: defaultValues.shift as CourseInput["shift"],
+            schedules: defaultValues.schedules,
         },
     });
 
@@ -97,10 +115,8 @@ export function CreateCourseForm({ programSlug, periodSlug, subjects, rooms, tim
         register,
         control,
         formState: { errors, isSubmitting, isValid, isDirty },
-        setValue,
         setError,
         clearErrors,
-        reset,
     } = form;
 
     const { fields, append, remove } = useFieldArray({
@@ -111,26 +127,21 @@ export function CreateCourseForm({ programSlug, periodSlug, subjects, rooms, tim
     const nameValue = useWatch({ control, name: "name" });
     const canSubmit = isValid && isDirty && !isSubmitting && Boolean(nameValue?.trim());
 
-    useEffect(() => {
-        clearErrors();
-        reset();
-    }, [clearErrors, reset]);
-
     const onSubmit: SubmitHandler<CourseInput> = async (data) => {
         clearErrors("root");
 
         try {
-            const result = await createCourseAction(programSlug, periodSlug, data);
+            const result = await updateCourseAction(programSlug, periodSlug, courseCode, data);
 
             if (result?.success === false) {
                 const params = new URLSearchParams(searchParams.toString());
                 params.set("toast", "error");
-                params.set("message", result.error || "Erro ao criar turma");
+                params.set("message", result.error || "Erro ao atualizar turma");
                 router.replace(`${pathname}?${params.toString()}`, { scroll: false });
 
                 setError("root", {
                     type: "server",
-                    message: result.error || "Erro ao criar turma",
+                    message: result.error || "Erro ao atualizar turma",
                 });
                 return;
             }
@@ -141,12 +152,12 @@ export function CreateCourseForm({ programSlug, periodSlug, subjects, rooms, tim
 
             const params = new URLSearchParams(searchParams.toString());
             params.set("toast", "error");
-            params.set("message", "Erro fatal ao criar turma");
+            params.set("message", "Erro fatal ao atualizar turma");
             router.replace(`${pathname}?${params.toString()}`, { scroll: false });
 
             setError("root", {
                 type: "server",
-                message: "Erro fatal ao criar turma",
+                message: "Erro fatal ao atualizar turma",
             });
         }
     };
@@ -184,7 +195,7 @@ export function CreateCourseForm({ programSlug, periodSlug, subjects, rooms, tim
                     <Label htmlFor="name">Nome da Turma *</Label>
                     <Input
                         id="name"
-                        placeholder="Ex: Turma A - Cálculo I, Laboratório de Física Turma B"
+                        placeholder="Ex: Turma A - Cálculo I"
                         {...register("name")}
                         disabled={isSubmitting}
                         aria-invalid={errors.name ? "true" : "false"}
@@ -201,20 +212,7 @@ export function CreateCourseForm({ programSlug, periodSlug, subjects, rooms, tim
                         render={({ field }) => (
                             <Select
                                 value={field.value}
-                                onValueChange={(value) => {
-                                    field.onChange(value);
-                                    // Auto-fill name based on subject
-                                    const subject = subjects.find((s) => s.id === value);
-                                    if (subject) {
-                                        const currentName = form.getValues("name");
-                                        if (!currentName || currentName.trim() === "") {
-                                            setValue("name", subject.name, {
-                                                shouldDirty: true,
-                                                shouldValidate: true,
-                                            });
-                                        }
-                                    }
-                                }}
+                                onValueChange={field.onChange}
                                 disabled={isSubmitting}
                             >
                                 <SelectTrigger
@@ -347,7 +345,7 @@ export function CreateCourseForm({ programSlug, periodSlug, subjects, rooms, tim
                         <div>
                             <h3 className="text-sm font-bold">Grade de Horários</h3>
                             <p className="text-xs text-muted-foreground">
-                                Defina os dias e horários das aulas desta turma.
+                                Edite os dias e horários das aulas desta turma.
                             </p>
                         </div>
                     </div>
@@ -542,7 +540,7 @@ export function CreateCourseForm({ programSlug, periodSlug, subjects, rooms, tim
                 </Button>
                 <Button className="flex items-center gap-2" type="submit" disabled={!canSubmit}>
                     {isSubmitting && <IconLoader2 className="size-5 animate-spin" />}
-                    {isSubmitting ? "Criando..." : "Criar Turma"}
+                    {isSubmitting ? "Salvando..." : "Salvar Alterações"}
                 </Button>
             </div>
         </form>

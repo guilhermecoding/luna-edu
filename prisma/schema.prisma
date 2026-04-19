@@ -174,8 +174,9 @@ model Program {
     description String?
     slug        String
 
-    periods Period[]
-    degrees Degree[]
+    periods   Period[]
+    degrees   Degree[]
+    timeSlots TimeSlot[]
 
     @@unique([slug])
     @@map("programs")
@@ -278,10 +279,13 @@ model TimeSlot {
     endTime   String   @map("end_time")
     order     Int      @db.SmallInt
     shift     Shift
+    programId String   @map("program_id") @db.Uuid
 
+    program   Program    @relation(fields: [programId], references: [id])
     schedules Schedule[]
     lessons   Lesson[]
 
+    @@unique([programId, order])
     @@map("time_slots")
     @@schema("public")
 }
@@ -303,6 +307,7 @@ model Schedule {
 
     @@unique([courseId, dayOfWeek, timeSlotId])
     @@unique([teacherId, dayOfWeek, timeSlotId])
+    @@unique([roomId, dayOfWeek, timeSlotId])
     @@map("schedules")
     @@schema("public")
 }

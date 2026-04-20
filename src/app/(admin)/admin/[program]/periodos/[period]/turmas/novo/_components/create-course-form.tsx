@@ -196,23 +196,29 @@ export function CreateCourseForm({ programSlug, periodSlug, subjects, rooms, tim
                     {errors.name && <p className="text-sm text-red-600">{errors.name.message}</p>}
                 </div>
 
-                <div className="space-y-2 md:col-span-2">
+                <div className="space-y-2">
                     <Label htmlFor="code">Código da Turma *</Label>
                     <div className="flex gap-2">
                         <Input
                             id="code"
                             placeholder="Ex: turma-a-calculo-i"
-                            {...register("code")}
+                            {...register("code", {
+                                onChange: (e) => {
+                                    setValue("code", e.target.value.toUpperCase(), {
+                                        shouldValidate: true,
+                                    });
+                                },
+                            })}
                             disabled={isSubmitting}
                             aria-invalid={errors.code ? "true" : "false"}
-                            className="p-5 rounded-lg bg-background flex-1"
+                            className="p-5 rounded-lg bg-background flex-1 uppercase"
                         />
                         <Button
                             type="button"
                             variant="outline"
-                            className="px-4 bg-muted hover:bg-muted/80 text-foreground border-surface-border"
+                            className="px-4 py-1.5 bg-muted hover:bg-muted/80 text-foreground border-surface-border"
                             onClick={() => {
-                                const newCode = autoSlug(nameValue);
+                                const newCode = autoSlug(nameValue)?.toUpperCase();
                                 if (newCode) {
                                     setValue("code", newCode, {
                                         shouldDirty: true,

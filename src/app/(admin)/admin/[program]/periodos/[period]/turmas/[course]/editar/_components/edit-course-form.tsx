@@ -207,7 +207,7 @@ export function EditCourseForm({
                     {errors.name && <p className="text-sm text-red-600">{errors.name.message}</p>}
                 </div>
 
-                <div className="space-y-2 md:col-span-2">
+                <div className="space-y-2">
                     <Label htmlFor="code">Código da Turma *</Label>
                     <Input
                         id="code"
@@ -216,7 +216,7 @@ export function EditCourseForm({
                         readOnly
                         disabled={isSubmitting}
                         aria-invalid={errors.code ? "true" : "false"}
-                        className="p-5 rounded-lg bg-muted cursor-not-allowed opacity-70"
+                        className="p-5 rounded-lg bg-muted cursor-not-allowed opacity-70 uppercase"
                     />
                     <p className="text-[10px] text-muted-foreground italic">
                         O código da turma não pode ser alterado após a criação.

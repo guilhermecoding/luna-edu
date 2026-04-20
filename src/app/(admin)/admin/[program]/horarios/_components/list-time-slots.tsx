@@ -1,7 +1,7 @@
 "use client";
 
 import { Card } from "@/components/ui/card";
-import { IconClock, IconTrash, IconEdit, IconArrowsSort } from "@tabler/icons-react";
+import { IconClock, IconEdit } from "@tabler/icons-react";
 import { Button } from "@/components/ui/button";
 import { shiftLabels } from "../../periodos/[period]/turmas/schema";
 import Link from "next/link";
@@ -47,7 +47,7 @@ export default function ListTimeSlots({ timeSlots, programSlug }: ListTimeSlotsP
                         <span className="w-2 h-6 bg-primary rounded-full" />
                         {shiftLabels[shift as keyof typeof shiftLabels] || shift}
                     </h3>
-                    
+
                     <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
                         {slots.sort((a, b) => a.startTime.localeCompare(b.startTime)).map((slot, index) => (
                             <Card key={slot.id} className="p-5 border-surface-border bg-surface hover:border-primary/50 transition-colors group">
@@ -64,11 +64,11 @@ export default function ListTimeSlots({ timeSlots, programSlug }: ListTimeSlotsP
                                             </div>
                                         </div>
                                     </div>
-                                    
-                                    <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+
+                                    <div className="flex items-center gap-1 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
                                         <Button variant="ghost" size="icon" className="size-9 rounded-xl" asChild>
                                             <Link href={`/admin/${programSlug}/horarios/${slot.id}/editar`}>
-                                                <IconEdit className="size-4" />
+                                                <IconEdit className="size-5 text-muted-foreground" />
                                             </Link>
                                         </Button>
                                     </div>

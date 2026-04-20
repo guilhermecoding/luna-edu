@@ -1,10 +1,13 @@
-import { DayOfWeek, Shift, TimeSlot } from "@/generated/prisma/client";
+import { Shift, TimeSlot } from "@/generated/prisma/client";
 import prisma from "@/lib/prisma";
 import { cacheLife, cacheTag, revalidateTag } from "next/cache";
 
 /**
  * Retorna os time slots de um programa específico.
  * Cada programa tem sua própria grade de horários independente.
+ * 
+ * @param programSlug - Slug identificador do programa.
+ * @returns Array de objetos TimeSlot ordenados por horário de início.
  */
 export async function getTimeSlotsByProgramSlug(programSlug: string) {
     "use cache";
@@ -29,7 +32,9 @@ export async function getTimeSlotsByProgramSlug(programSlug: string) {
 }
 
 /**
- * Retorna todos os usuários que são professores.
+ * Retorna todos os usuários que possuem a flag de professor e estão ativos.
+ * 
+ * @returns Lista de professores (id, name, email).
  */
 export async function getTeachers() {
     "use cache";
@@ -53,7 +58,10 @@ export async function getTeachers() {
 }
 
 /**
- * Cria um novo time slot.
+ * Cria um novo time slot (horário de aula) vinculado a um programa.
+ * 
+ * @param data - Dados do horário incluindo nome, tempos, turno e ID do programa.
+ * @returns O TimeSlot recém-criado.
  */
 export async function createTimeSlot(data: {
     name: string;
@@ -71,7 +79,11 @@ export async function createTimeSlot(data: {
 }
 
 /**
- * Atualiza um time slot.
+ * Atualiza os dados de um horário existente.
+ * 
+ * @param id - UUID do TimeSlot.
+ * @param data - Novos dados do horário.
+ * @returns O TimeSlot atualizado.
  */
 export async function updateTimeSlot(
     id: string,
@@ -92,7 +104,10 @@ export async function updateTimeSlot(
 }
 
 /**
- * Deleta um time slot.
+ * Remove um horário do sistema.
+ * 
+ * @param id - UUID do TimeSlot a ser excluído.
+ * @returns O TimeSlot removido.
  */
 export async function deleteTimeSlot(id: string): Promise<TimeSlot> {
     const timeSlot = await prisma.timeSlot.delete({

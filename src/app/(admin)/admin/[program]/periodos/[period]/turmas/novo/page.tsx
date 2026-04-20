@@ -8,7 +8,7 @@ import SkeletonForm from "@/components/skeletons/skeleton-form";
 import { getPeriodByProgramAndSlug } from "@/services/periods/periods.service";
 import { getSubjectsByProgramSlug } from "@/services/subjects/subjects.service";
 import { getAllRooms } from "@/services/rooms/rooms.service";
-import { getTimeSlotsByProgramSlug, getTeachers } from "@/services/courses/schedules.service";
+import { getTimeSlotsByProgramSlug, getTeachers } from "@/services/schedules/schedules.service";
 import { notFound } from "next/navigation";
 
 export const metadata: Metadata = {

@@ -1,6 +1,6 @@
 "use server";
 
-import { createTimeSlot } from "@/services/courses/schedules.service";
+import { createTimeSlot } from "@/services/schedules/schedules.service";
 import { getProgramBySlug } from "@/services/programs/programs.service";
 import { ZodError } from "zod";
 import { timeSlotSchema, type TimeSlotInput } from "./schema";
@@ -30,7 +30,7 @@ export async function createTimeSlotAction(
         if (error instanceof ZodError) {
             return { success: false, error: error.issues[0]?.message || "Erro de validação" };
         }
-        
+
         // Trata erro de unicidade do Prisma (P2002)
         if (error instanceof Prisma.PrismaClientKnownRequestError) {
             if (error.code === "P2002") {

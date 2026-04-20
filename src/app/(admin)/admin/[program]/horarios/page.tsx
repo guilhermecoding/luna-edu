@@ -4,7 +4,7 @@ import TitlePage from "@/components/title-page";
 import { ButtonLink } from "@/components/ui/button-link";
 import { IconCirclePlusFilled, IconClock } from "@tabler/icons-react";
 import { Metadata } from "next";
-import { getTimeSlotsByProgramSlug } from "@/services/courses/schedules.service";
+import { getTimeSlotsByProgramSlug } from "@/services/schedules/schedules.service";
 import ListTimeSlots from "./_components/list-time-slots";
 
 export const metadata: Metadata = {

@@ -6,6 +6,7 @@ import { ZodError } from "zod";
 import { timeSlotSchema, type TimeSlotInput } from "./schema";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { Prisma } from "@/generated/prisma/client";
 
 export async function createTimeSlotAction(
     programSlug: string,
@@ -29,11 +30,19 @@ export async function createTimeSlotAction(
         if (error instanceof ZodError) {
             return { success: false, error: error.issues[0]?.message || "Erro de validação" };
         }
+        
+        // Trata erro de unicidade do Prisma (P2002)
+        if (error instanceof Prisma.PrismaClientKnownRequestError) {
+            if (error.code === "P2002") {
+                return { success: false, error: "Já existe um horário com esta ordem." };
+            }
+        }
+
         if (error instanceof Error) {
             return { success: false, error: error.message };
         }
         return { success: false, error: "Erro ao criar horário" };
     }
 
-    redirect(`/admin/${programSlug}/horarios?toast=success&message=Horário criado com sucesso`);
+    redirect(`/admin/${programSlug}/horarios?toast=success&message=${encodeURIComponent("Horário criado com sucesso")}`);
 }

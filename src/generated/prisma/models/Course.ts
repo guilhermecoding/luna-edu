@@ -169,7 +169,7 @@ export type CourseGroupByOutputType = {
   id: string
   createdAt: Date
   name: string
-  code: string | null
+  code: string
   periodId: string
   roomId: string | null
   subjectId: string
@@ -201,7 +201,7 @@ export type CourseWhereInput = {
   id?: Prisma.UuidFilter<"Course"> | string
   createdAt?: Prisma.DateTimeFilter<"Course"> | Date | string
   name?: Prisma.StringFilter<"Course"> | string
-  code?: Prisma.UuidNullableFilter<"Course"> | string | null
+  code?: Prisma.StringFilter<"Course"> | string
   periodId?: Prisma.UuidFilter<"Course"> | string
   roomId?: Prisma.UuidNullableFilter<"Course"> | string | null
   subjectId?: Prisma.UuidFilter<"Course"> | string
@@ -222,7 +222,7 @@ export type CourseOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   name?: Prisma.SortOrder
-  code?: Prisma.SortOrderInput | Prisma.SortOrder
+  code?: Prisma.SortOrder
   periodId?: Prisma.SortOrder
   roomId?: Prisma.SortOrderInput | Prisma.SortOrder
   subjectId?: Prisma.SortOrder
@@ -241,12 +241,13 @@ export type CourseOrderByWithRelationInput = {
 
 export type CourseWhereUniqueInput = Prisma.AtLeast<{
   id?: string
-  code?: string
+  periodId_code?: Prisma.CoursePeriodIdCodeCompoundUniqueInput
   AND?: Prisma.CourseWhereInput | Prisma.CourseWhereInput[]
   OR?: Prisma.CourseWhereInput[]
   NOT?: Prisma.CourseWhereInput | Prisma.CourseWhereInput[]
   createdAt?: Prisma.DateTimeFilter<"Course"> | Date | string
   name?: Prisma.StringFilter<"Course"> | string
+  code?: Prisma.StringFilter<"Course"> | string
   periodId?: Prisma.UuidFilter<"Course"> | string
   roomId?: Prisma.UuidNullableFilter<"Course"> | string | null
   subjectId?: Prisma.UuidFilter<"Course"> | string
@@ -261,13 +262,13 @@ export type CourseWhereUniqueInput = Prisma.AtLeast<{
   finalGrades?: Prisma.FinalGradeListRelationFilter
   stats?: Prisma.StudentCourseStatsListRelationFilter
   schedules?: Prisma.ScheduleListRelationFilter
-}, "id" | "code">
+}, "id" | "periodId_code">
 
 export type CourseOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   name?: Prisma.SortOrder
-  code?: Prisma.SortOrderInput | Prisma.SortOrder
+  code?: Prisma.SortOrder
   periodId?: Prisma.SortOrder
   roomId?: Prisma.SortOrderInput | Prisma.SortOrder
   subjectId?: Prisma.SortOrder
@@ -284,7 +285,7 @@ export type CourseScalarWhereWithAggregatesInput = {
   id?: Prisma.UuidWithAggregatesFilter<"Course"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Course"> | Date | string
   name?: Prisma.StringWithAggregatesFilter<"Course"> | string
-  code?: Prisma.UuidNullableWithAggregatesFilter<"Course"> | string | null
+  code?: Prisma.StringWithAggregatesFilter<"Course"> | string
   periodId?: Prisma.UuidWithAggregatesFilter<"Course"> | string
   roomId?: Prisma.UuidNullableWithAggregatesFilter<"Course"> | string | null
   subjectId?: Prisma.UuidWithAggregatesFilter<"Course"> | string
@@ -295,7 +296,7 @@ export type CourseCreateInput = {
   id?: string
   createdAt?: Date | string
   name: string
-  code?: string | null
+  code: string
   shift: $Enums.Shift
   period: Prisma.PeriodCreateNestedOneWithoutCoursesInput
   room?: Prisma.RoomCreateNestedOneWithoutCoursesInput
@@ -313,7 +314,7 @@ export type CourseUncheckedCreateInput = {
   id?: string
   createdAt?: Date | string
   name: string
-  code?: string | null
+  code: string
   periodId: string
   roomId?: string | null
   subjectId: string
@@ -331,7 +332,7 @@ export type CourseUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  code?: Prisma.StringFieldUpdateOperationsInput | string
   shift?: Prisma.EnumShiftFieldUpdateOperationsInput | $Enums.Shift
   period?: Prisma.PeriodUpdateOneRequiredWithoutCoursesNestedInput
   room?: Prisma.RoomUpdateOneWithoutCoursesNestedInput
@@ -349,7 +350,7 @@ export type CourseUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  code?: Prisma.StringFieldUpdateOperationsInput | string
   periodId?: Prisma.StringFieldUpdateOperationsInput | string
   roomId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subjectId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -367,7 +368,7 @@ export type CourseCreateManyInput = {
   id?: string
   createdAt?: Date | string
   name: string
-  code?: string | null
+  code: string
   periodId: string
   roomId?: string | null
   subjectId: string
@@ -378,7 +379,7 @@ export type CourseUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  code?: Prisma.StringFieldUpdateOperationsInput | string
   shift?: Prisma.EnumShiftFieldUpdateOperationsInput | $Enums.Shift
 }
 
@@ -386,7 +387,7 @@ export type CourseUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  code?: Prisma.StringFieldUpdateOperationsInput | string
   periodId?: Prisma.StringFieldUpdateOperationsInput | string
   roomId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subjectId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -406,6 +407,11 @@ export type CourseOrderByRelationAggregateInput = {
 export type CourseScalarRelationFilter = {
   is?: Prisma.CourseWhereInput
   isNot?: Prisma.CourseWhereInput
+}
+
+export type CoursePeriodIdCodeCompoundUniqueInput = {
+  periodId: string
+  code: string
 }
 
 export type CourseCountOrderByAggregateInput = {
@@ -669,7 +675,7 @@ export type CourseCreateWithoutSubjectInput = {
   id?: string
   createdAt?: Date | string
   name: string
-  code?: string | null
+  code: string
   shift: $Enums.Shift
   period: Prisma.PeriodCreateNestedOneWithoutCoursesInput
   room?: Prisma.RoomCreateNestedOneWithoutCoursesInput
@@ -686,7 +692,7 @@ export type CourseUncheckedCreateWithoutSubjectInput = {
   id?: string
   createdAt?: Date | string
   name: string
-  code?: string | null
+  code: string
   periodId: string
   roomId?: string | null
   shift: $Enums.Shift
@@ -732,7 +738,7 @@ export type CourseScalarWhereInput = {
   id?: Prisma.UuidFilter<"Course"> | string
   createdAt?: Prisma.DateTimeFilter<"Course"> | Date | string
   name?: Prisma.StringFilter<"Course"> | string
-  code?: Prisma.UuidNullableFilter<"Course"> | string | null
+  code?: Prisma.StringFilter<"Course"> | string
   periodId?: Prisma.UuidFilter<"Course"> | string
   roomId?: Prisma.UuidNullableFilter<"Course"> | string | null
   subjectId?: Prisma.UuidFilter<"Course"> | string
@@ -743,7 +749,7 @@ export type CourseCreateWithoutRoomInput = {
   id?: string
   createdAt?: Date | string
   name: string
-  code?: string | null
+  code: string
   shift: $Enums.Shift
   period: Prisma.PeriodCreateNestedOneWithoutCoursesInput
   subject: Prisma.SubjectCreateNestedOneWithoutCoursesInput
@@ -760,7 +766,7 @@ export type CourseUncheckedCreateWithoutRoomInput = {
   id?: string
   createdAt?: Date | string
   name: string
-  code?: string | null
+  code: string
   periodId: string
   subjectId: string
   shift: $Enums.Shift
@@ -803,7 +809,7 @@ export type CourseCreateWithoutPeriodInput = {
   id?: string
   createdAt?: Date | string
   name: string
-  code?: string | null
+  code: string
   shift: $Enums.Shift
   room?: Prisma.RoomCreateNestedOneWithoutCoursesInput
   subject: Prisma.SubjectCreateNestedOneWithoutCoursesInput
@@ -820,7 +826,7 @@ export type CourseUncheckedCreateWithoutPeriodInput = {
   id?: string
   createdAt?: Date | string
   name: string
-  code?: string | null
+  code: string
   roomId?: string | null
   subjectId: string
   shift: $Enums.Shift
@@ -863,7 +869,7 @@ export type CourseCreateWithoutSchedulesInput = {
   id?: string
   createdAt?: Date | string
   name: string
-  code?: string | null
+  code: string
   shift: $Enums.Shift
   period: Prisma.PeriodCreateNestedOneWithoutCoursesInput
   room?: Prisma.RoomCreateNestedOneWithoutCoursesInput
@@ -880,7 +886,7 @@ export type CourseUncheckedCreateWithoutSchedulesInput = {
   id?: string
   createdAt?: Date | string
   name: string
-  code?: string | null
+  code: string
   periodId: string
   roomId?: string | null
   subjectId: string
@@ -913,7 +919,7 @@ export type CourseUpdateWithoutSchedulesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  code?: Prisma.StringFieldUpdateOperationsInput | string
   shift?: Prisma.EnumShiftFieldUpdateOperationsInput | $Enums.Shift
   period?: Prisma.PeriodUpdateOneRequiredWithoutCoursesNestedInput
   room?: Prisma.RoomUpdateOneWithoutCoursesNestedInput
@@ -930,7 +936,7 @@ export type CourseUncheckedUpdateWithoutSchedulesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  code?: Prisma.StringFieldUpdateOperationsInput | string
   periodId?: Prisma.StringFieldUpdateOperationsInput | string
   roomId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subjectId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -947,7 +953,7 @@ export type CourseCreateWithoutEnrollmentsInput = {
   id?: string
   createdAt?: Date | string
   name: string
-  code?: string | null
+  code: string
   shift: $Enums.Shift
   period: Prisma.PeriodCreateNestedOneWithoutCoursesInput
   room?: Prisma.RoomCreateNestedOneWithoutCoursesInput
@@ -964,7 +970,7 @@ export type CourseUncheckedCreateWithoutEnrollmentsInput = {
   id?: string
   createdAt?: Date | string
   name: string
-  code?: string | null
+  code: string
   periodId: string
   roomId?: string | null
   subjectId: string
@@ -997,7 +1003,7 @@ export type CourseUpdateWithoutEnrollmentsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  code?: Prisma.StringFieldUpdateOperationsInput | string
   shift?: Prisma.EnumShiftFieldUpdateOperationsInput | $Enums.Shift
   period?: Prisma.PeriodUpdateOneRequiredWithoutCoursesNestedInput
   room?: Prisma.RoomUpdateOneWithoutCoursesNestedInput
@@ -1014,7 +1020,7 @@ export type CourseUncheckedUpdateWithoutEnrollmentsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  code?: Prisma.StringFieldUpdateOperationsInput | string
   periodId?: Prisma.StringFieldUpdateOperationsInput | string
   roomId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subjectId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1031,7 +1037,7 @@ export type CourseCreateWithoutLessonsInput = {
   id?: string
   createdAt?: Date | string
   name: string
-  code?: string | null
+  code: string
   shift: $Enums.Shift
   period: Prisma.PeriodCreateNestedOneWithoutCoursesInput
   room?: Prisma.RoomCreateNestedOneWithoutCoursesInput
@@ -1048,7 +1054,7 @@ export type CourseUncheckedCreateWithoutLessonsInput = {
   id?: string
   createdAt?: Date | string
   name: string
-  code?: string | null
+  code: string
   periodId: string
   roomId?: string | null
   subjectId: string
@@ -1081,7 +1087,7 @@ export type CourseUpdateWithoutLessonsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  code?: Prisma.StringFieldUpdateOperationsInput | string
   shift?: Prisma.EnumShiftFieldUpdateOperationsInput | $Enums.Shift
   period?: Prisma.PeriodUpdateOneRequiredWithoutCoursesNestedInput
   room?: Prisma.RoomUpdateOneWithoutCoursesNestedInput
@@ -1098,7 +1104,7 @@ export type CourseUncheckedUpdateWithoutLessonsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  code?: Prisma.StringFieldUpdateOperationsInput | string
   periodId?: Prisma.StringFieldUpdateOperationsInput | string
   roomId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subjectId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1115,7 +1121,7 @@ export type CourseCreateWithoutActivitiesInput = {
   id?: string
   createdAt?: Date | string
   name: string
-  code?: string | null
+  code: string
   shift: $Enums.Shift
   period: Prisma.PeriodCreateNestedOneWithoutCoursesInput
   room?: Prisma.RoomCreateNestedOneWithoutCoursesInput
@@ -1132,7 +1138,7 @@ export type CourseUncheckedCreateWithoutActivitiesInput = {
   id?: string
   createdAt?: Date | string
   name: string
-  code?: string | null
+  code: string
   periodId: string
   roomId?: string | null
   subjectId: string
@@ -1165,7 +1171,7 @@ export type CourseUpdateWithoutActivitiesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  code?: Prisma.StringFieldUpdateOperationsInput | string
   shift?: Prisma.EnumShiftFieldUpdateOperationsInput | $Enums.Shift
   period?: Prisma.PeriodUpdateOneRequiredWithoutCoursesNestedInput
   room?: Prisma.RoomUpdateOneWithoutCoursesNestedInput
@@ -1182,7 +1188,7 @@ export type CourseUncheckedUpdateWithoutActivitiesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  code?: Prisma.StringFieldUpdateOperationsInput | string
   periodId?: Prisma.StringFieldUpdateOperationsInput | string
   roomId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subjectId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1199,7 +1205,7 @@ export type CourseCreateWithoutFinalGradesInput = {
   id?: string
   createdAt?: Date | string
   name: string
-  code?: string | null
+  code: string
   shift: $Enums.Shift
   period: Prisma.PeriodCreateNestedOneWithoutCoursesInput
   room?: Prisma.RoomCreateNestedOneWithoutCoursesInput
@@ -1216,7 +1222,7 @@ export type CourseUncheckedCreateWithoutFinalGradesInput = {
   id?: string
   createdAt?: Date | string
   name: string
-  code?: string | null
+  code: string
   periodId: string
   roomId?: string | null
   subjectId: string
@@ -1249,7 +1255,7 @@ export type CourseUpdateWithoutFinalGradesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  code?: Prisma.StringFieldUpdateOperationsInput | string
   shift?: Prisma.EnumShiftFieldUpdateOperationsInput | $Enums.Shift
   period?: Prisma.PeriodUpdateOneRequiredWithoutCoursesNestedInput
   room?: Prisma.RoomUpdateOneWithoutCoursesNestedInput
@@ -1266,7 +1272,7 @@ export type CourseUncheckedUpdateWithoutFinalGradesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  code?: Prisma.StringFieldUpdateOperationsInput | string
   periodId?: Prisma.StringFieldUpdateOperationsInput | string
   roomId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subjectId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1283,7 +1289,7 @@ export type CourseCreateWithoutStatsInput = {
   id?: string
   createdAt?: Date | string
   name: string
-  code?: string | null
+  code: string
   shift: $Enums.Shift
   period: Prisma.PeriodCreateNestedOneWithoutCoursesInput
   room?: Prisma.RoomCreateNestedOneWithoutCoursesInput
@@ -1300,7 +1306,7 @@ export type CourseUncheckedCreateWithoutStatsInput = {
   id?: string
   createdAt?: Date | string
   name: string
-  code?: string | null
+  code: string
   periodId: string
   roomId?: string | null
   subjectId: string
@@ -1333,7 +1339,7 @@ export type CourseUpdateWithoutStatsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  code?: Prisma.StringFieldUpdateOperationsInput | string
   shift?: Prisma.EnumShiftFieldUpdateOperationsInput | $Enums.Shift
   period?: Prisma.PeriodUpdateOneRequiredWithoutCoursesNestedInput
   room?: Prisma.RoomUpdateOneWithoutCoursesNestedInput
@@ -1350,7 +1356,7 @@ export type CourseUncheckedUpdateWithoutStatsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  code?: Prisma.StringFieldUpdateOperationsInput | string
   periodId?: Prisma.StringFieldUpdateOperationsInput | string
   roomId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subjectId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1367,7 +1373,7 @@ export type CourseCreateWithoutCourseAssistantsInput = {
   id?: string
   createdAt?: Date | string
   name: string
-  code?: string | null
+  code: string
   shift: $Enums.Shift
   period: Prisma.PeriodCreateNestedOneWithoutCoursesInput
   room?: Prisma.RoomCreateNestedOneWithoutCoursesInput
@@ -1384,7 +1390,7 @@ export type CourseUncheckedCreateWithoutCourseAssistantsInput = {
   id?: string
   createdAt?: Date | string
   name: string
-  code?: string | null
+  code: string
   periodId: string
   roomId?: string | null
   subjectId: string
@@ -1417,7 +1423,7 @@ export type CourseUpdateWithoutCourseAssistantsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  code?: Prisma.StringFieldUpdateOperationsInput | string
   shift?: Prisma.EnumShiftFieldUpdateOperationsInput | $Enums.Shift
   period?: Prisma.PeriodUpdateOneRequiredWithoutCoursesNestedInput
   room?: Prisma.RoomUpdateOneWithoutCoursesNestedInput
@@ -1434,7 +1440,7 @@ export type CourseUncheckedUpdateWithoutCourseAssistantsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  code?: Prisma.StringFieldUpdateOperationsInput | string
   periodId?: Prisma.StringFieldUpdateOperationsInput | string
   roomId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subjectId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1451,7 +1457,7 @@ export type CourseCreateManySubjectInput = {
   id?: string
   createdAt?: Date | string
   name: string
-  code?: string | null
+  code: string
   periodId: string
   roomId?: string | null
   shift: $Enums.Shift
@@ -1461,7 +1467,7 @@ export type CourseUpdateWithoutSubjectInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  code?: Prisma.StringFieldUpdateOperationsInput | string
   shift?: Prisma.EnumShiftFieldUpdateOperationsInput | $Enums.Shift
   period?: Prisma.PeriodUpdateOneRequiredWithoutCoursesNestedInput
   room?: Prisma.RoomUpdateOneWithoutCoursesNestedInput
@@ -1478,7 +1484,7 @@ export type CourseUncheckedUpdateWithoutSubjectInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  code?: Prisma.StringFieldUpdateOperationsInput | string
   periodId?: Prisma.StringFieldUpdateOperationsInput | string
   roomId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   shift?: Prisma.EnumShiftFieldUpdateOperationsInput | $Enums.Shift
@@ -1495,7 +1501,7 @@ export type CourseUncheckedUpdateManyWithoutSubjectInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  code?: Prisma.StringFieldUpdateOperationsInput | string
   periodId?: Prisma.StringFieldUpdateOperationsInput | string
   roomId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   shift?: Prisma.EnumShiftFieldUpdateOperationsInput | $Enums.Shift
@@ -1505,7 +1511,7 @@ export type CourseCreateManyRoomInput = {
   id?: string
   createdAt?: Date | string
   name: string
-  code?: string | null
+  code: string
   periodId: string
   subjectId: string
   shift: $Enums.Shift
@@ -1515,7 +1521,7 @@ export type CourseUpdateWithoutRoomInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  code?: Prisma.StringFieldUpdateOperationsInput | string
   shift?: Prisma.EnumShiftFieldUpdateOperationsInput | $Enums.Shift
   period?: Prisma.PeriodUpdateOneRequiredWithoutCoursesNestedInput
   subject?: Prisma.SubjectUpdateOneRequiredWithoutCoursesNestedInput
@@ -1532,7 +1538,7 @@ export type CourseUncheckedUpdateWithoutRoomInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  code?: Prisma.StringFieldUpdateOperationsInput | string
   periodId?: Prisma.StringFieldUpdateOperationsInput | string
   subjectId?: Prisma.StringFieldUpdateOperationsInput | string
   shift?: Prisma.EnumShiftFieldUpdateOperationsInput | $Enums.Shift
@@ -1549,7 +1555,7 @@ export type CourseUncheckedUpdateManyWithoutRoomInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  code?: Prisma.StringFieldUpdateOperationsInput | string
   periodId?: Prisma.StringFieldUpdateOperationsInput | string
   subjectId?: Prisma.StringFieldUpdateOperationsInput | string
   shift?: Prisma.EnumShiftFieldUpdateOperationsInput | $Enums.Shift
@@ -1559,7 +1565,7 @@ export type CourseCreateManyPeriodInput = {
   id?: string
   createdAt?: Date | string
   name: string
-  code?: string | null
+  code: string
   roomId?: string | null
   subjectId: string
   shift: $Enums.Shift
@@ -1569,7 +1575,7 @@ export type CourseUpdateWithoutPeriodInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  code?: Prisma.StringFieldUpdateOperationsInput | string
   shift?: Prisma.EnumShiftFieldUpdateOperationsInput | $Enums.Shift
   room?: Prisma.RoomUpdateOneWithoutCoursesNestedInput
   subject?: Prisma.SubjectUpdateOneRequiredWithoutCoursesNestedInput
@@ -1586,7 +1592,7 @@ export type CourseUncheckedUpdateWithoutPeriodInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  code?: Prisma.StringFieldUpdateOperationsInput | string
   roomId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subjectId?: Prisma.StringFieldUpdateOperationsInput | string
   shift?: Prisma.EnumShiftFieldUpdateOperationsInput | $Enums.Shift
@@ -1603,7 +1609,7 @@ export type CourseUncheckedUpdateManyWithoutPeriodInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  code?: Prisma.StringFieldUpdateOperationsInput | string
   roomId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subjectId?: Prisma.StringFieldUpdateOperationsInput | string
   shift?: Prisma.EnumShiftFieldUpdateOperationsInput | $Enums.Shift
@@ -1798,7 +1804,7 @@ export type $CoursePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     id: string
     createdAt: Date
     name: string
-    code: string | null
+    code: string
     periodId: string
     roomId: string | null
     subjectId: string

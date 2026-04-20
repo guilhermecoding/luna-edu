@@ -5,10 +5,11 @@ import { Suspense } from "react";
 import { EditCourseForm } from "./_components/edit-course-form";
 import { Metadata } from "next";
 import SkeletonForm from "@/components/skeletons/skeleton-form";
-import { getCourseByCode } from "@/services/courses/courses.service";
+import { getCourseByPeriodIdAndCode } from "@/services/courses/courses.service";
 import { getSubjectsByProgramSlug } from "@/services/subjects/subjects.service";
 import { getAllRooms } from "@/services/rooms/rooms.service";
 import { getTimeSlotsByProgramSlug, getTeachers } from "@/services/schedules/schedules.service";
+import { getPeriodByProgramAndSlug } from "@/services/periods/periods.service";
 import { notFound } from "next/navigation";
 import type { ScheduleEntryInput } from "../../schema";
 
@@ -21,10 +22,16 @@ async function EditCourseContent({
 }: {
     params: Promise<{ program: string; period: string; course: string }>;
 }) {
-    const { program, period, course: courseCode } = await params;
+    const { program, period: periodSlug, course: courseCode } = await params;
+    
+    const period = await getPeriodByProgramAndSlug(program, periodSlug);
+    
+    if (!period) {
+        notFound();
+    }
 
     const [courseData, subjects, rooms, timeSlots, teachers] = await Promise.all([
-        getCourseByCode(courseCode),
+        getCourseByPeriodIdAndCode(period.id, courseCode),
         getSubjectsByProgramSlug(program),
         getAllRooms(),
         getTimeSlotsByProgramSlug(program),
@@ -54,10 +61,11 @@ async function EditCourseContent({
                         <Suspense fallback={<SkeletonForm />}>
                             <EditCourseForm
                                 programSlug={program}
-                                periodSlug={period}
+                                periodSlug={periodSlug}
                                 courseCode={courseCode}
                                 defaultValues={{
                                     name: courseData.name,
+                                    code: courseData.code ?? courseCode,
                                     subjectId: courseData.subjectId,
                                     roomId: courseData.roomId ?? "",
                                     shift: courseData.shift,

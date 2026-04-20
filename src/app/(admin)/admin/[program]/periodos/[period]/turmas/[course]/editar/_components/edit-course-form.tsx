@@ -76,6 +76,7 @@ interface EditCourseFormProps {
         subjectId: string;
         roomId: string;
         shift: string;
+        code: string;
         schedules: ScheduleEntryInput[];
     };
     subjects: SubjectWithDegree[];
@@ -104,6 +105,7 @@ export function EditCourseForm({
         mode: "onChange",
         defaultValues: {
             name: defaultValues.name,
+            code: defaultValues.code,
             subjectId: defaultValues.subjectId,
             roomId: defaultValues.roomId,
             shift: defaultValues.shift as CourseInput["shift"],
@@ -125,7 +127,8 @@ export function EditCourseForm({
     });
 
     const nameValue = useWatch({ control, name: "name" });
-    const canSubmit = isValid && isDirty && !isSubmitting && Boolean(nameValue?.trim());
+    const codeValue = useWatch({ control, name: "code" });
+    const canSubmit = isValid && isDirty && !isSubmitting && Boolean(nameValue?.trim()) && Boolean(codeValue?.trim());
 
     const onSubmit: SubmitHandler<CourseInput> = async (data) => {
         clearErrors("root");
@@ -202,6 +205,23 @@ export function EditCourseForm({
                         className="p-5 rounded-lg bg-background"
                     />
                     {errors.name && <p className="text-sm text-red-600">{errors.name.message}</p>}
+                </div>
+
+                <div className="space-y-2 md:col-span-2">
+                    <Label htmlFor="code">Código da Turma *</Label>
+                    <Input
+                        id="code"
+                        placeholder="Ex: turma-a-calculo-i"
+                        {...register("code")}
+                        readOnly
+                        disabled={isSubmitting}
+                        aria-invalid={errors.code ? "true" : "false"}
+                        className="p-5 rounded-lg bg-muted cursor-not-allowed opacity-70"
+                    />
+                    <p className="text-[10px] text-muted-foreground italic">
+                        O código da turma não pode ser alterado após a criação.
+                    </p>
+                    {errors.code && <p className="text-sm text-red-600">{errors.code.message}</p>}
                 </div>
 
                 <div className="space-y-2 md:col-span-2">

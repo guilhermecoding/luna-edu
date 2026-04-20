@@ -23,6 +23,7 @@ export async function createCourseAction(
 
         await createCourse({
             name: validatedData.name,
+            code: validatedData.code,
             periodId: period.id,
             subjectId: validatedData.subjectId,
             roomId: validatedData.roomId || null,

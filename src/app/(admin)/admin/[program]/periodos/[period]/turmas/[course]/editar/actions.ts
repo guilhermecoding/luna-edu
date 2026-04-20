@@ -1,6 +1,7 @@
 "use server";
 
-import { updateCourse, getCourseByCode } from "@/services/courses/courses.service";
+import { updateCourse, getCourseByPeriodIdAndCode } from "@/services/courses/courses.service";
+import { getPeriodByProgramAndSlug } from "@/services/periods/periods.service";
 import { ZodError } from "zod";
 import { courseSchema, type CourseInput } from "../../schema";
 import { revalidatePath, updateTag } from "next/cache";
@@ -15,14 +16,20 @@ export async function updateCourseAction(
 ) {
     try {
         const validatedData = courseSchema.parse(data);
-        const course = await getCourseByCode(courseCode);
+        
+        const period = await getPeriodByProgramAndSlug(programSlug, periodSlug);
+        if (!period) {
+            throw new Error("Período não encontrado.");
+        }
 
+        const course = await getCourseByPeriodIdAndCode(period.id, courseCode);
         if (!course) {
             throw new Error("Turma não encontrada.");
         }
 
         await updateCourse(course.id, {
             name: validatedData.name,
+            code: validatedData.code,
             subjectId: validatedData.subjectId,
             roomId: validatedData.roomId || null,
             shift: validatedData.shift as Shift,
@@ -35,7 +42,10 @@ export async function updateCourseAction(
         });
 
         updateTag(`period:${course.periodId}:courses`);
-        updateTag(`course:${courseCode}`);
+        updateTag(`period:${course.periodId}:course:${courseCode}`);
+        if (courseCode !== validatedData.code) {
+            updateTag(`period:${course.periodId}:course:${validatedData.code}`);
+        }
         updateTag(`program-periods:${programSlug}`);
         revalidatePath(`/admin/${programSlug}/periodos/${periodSlug}/turmas`);
     } catch (error) {

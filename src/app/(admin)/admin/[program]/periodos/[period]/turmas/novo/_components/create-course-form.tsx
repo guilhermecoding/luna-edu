@@ -27,8 +27,9 @@ import {
     DAYS_OF_WEEK,
     dayOfWeekLabels,
 } from "../../schema";
-import { IconBuilding, IconLoader2, IconUsers, IconPlus, IconTrash, IconCalendarEvent } from "@tabler/icons-react";
+import { IconBuilding, IconLoader2, IconUsers, IconPlus, IconTrash, IconCalendarEvent, IconArrowsShuffle } from "@tabler/icons-react";
 import { isRedirectError } from "@/lib/is-redirect-error";
+import autoSlug from "@/lib/auto-slug";
 
 type SubjectWithDegree = {
     id: string;
@@ -86,6 +87,7 @@ export function CreateCourseForm({ programSlug, periodSlug, subjects, rooms, tim
         mode: "onChange",
         defaultValues: {
             name: "",
+            code: "",
             subjectId: undefined,
             roomId: "",
             shift: undefined,
@@ -109,7 +111,8 @@ export function CreateCourseForm({ programSlug, periodSlug, subjects, rooms, tim
     });
 
     const nameValue = useWatch({ control, name: "name" });
-    const canSubmit = isValid && isDirty && !isSubmitting && Boolean(nameValue?.trim());
+    const codeValue = useWatch({ control, name: "code" });
+    const canSubmit = isValid && isDirty && !isSubmitting && Boolean(nameValue?.trim()) && Boolean(codeValue?.trim());
 
     useEffect(() => {
         clearErrors();
@@ -191,6 +194,42 @@ export function CreateCourseForm({ programSlug, periodSlug, subjects, rooms, tim
                         className="p-5 rounded-lg bg-background"
                     />
                     {errors.name && <p className="text-sm text-red-600">{errors.name.message}</p>}
+                </div>
+
+                <div className="space-y-2 md:col-span-2">
+                    <Label htmlFor="code">Código da Turma *</Label>
+                    <div className="flex gap-2">
+                        <Input
+                            id="code"
+                            placeholder="Ex: turma-a-calculo-i"
+                            {...register("code")}
+                            disabled={isSubmitting}
+                            aria-invalid={errors.code ? "true" : "false"}
+                            className="p-5 rounded-lg bg-background flex-1"
+                        />
+                        <Button
+                            type="button"
+                            variant="outline"
+                            className="px-4 bg-muted hover:bg-muted/80 text-foreground border-surface-border"
+                            onClick={() => {
+                                const newCode = autoSlug(nameValue);
+                                if (newCode) {
+                                    setValue("code", newCode, {
+                                        shouldDirty: true,
+                                        shouldTouch: true,
+                                        shouldValidate: true,
+                                    });
+                                }
+                            }}
+                            title="Gerar código a partir do nome"
+                        >
+                            <IconArrowsShuffle className="size-5" />
+                        </Button>
+                    </div>
+                    <p className="text-[10px] text-muted-foreground italic">
+                        Este código deve ser único e amigável (apenas letras, números e hífens).
+                    </p>
+                    {errors.code && <p className="text-sm text-red-600">{errors.code.message}</p>}
                 </div>
 
                 <div className="space-y-2 md:col-span-2">

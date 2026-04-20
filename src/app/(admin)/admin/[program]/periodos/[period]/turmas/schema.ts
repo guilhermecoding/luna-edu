@@ -49,6 +49,9 @@ export const scheduleEntrySchema = z.object({
 
 export const courseSchema = z.object({
     name: z.string().min(2, "O nome deve ter no mínimo 2 caracteres"),
+    code: z.string()
+        .min(2, "O código deve ter no mínimo 2 caracteres")
+        .regex(/^[a-z0-9-]+$/, "O código deve conter apenas letras minúsculas, números e hífens"),
     subjectId: z.string().min(1, "Selecione uma disciplina"),
     roomId: z.string().optional().or(z.literal("")),
     shift: z.enum(SHIFTS, {

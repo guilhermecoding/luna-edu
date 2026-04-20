@@ -1,6 +1,7 @@
 import { Course, DayOfWeek, Prisma, Shift } from "@/generated/prisma/client";
 import prisma from "@/lib/prisma";
 import { cacheLife, cacheTag } from "next/cache";
+import { CourseWithRelations } from "./courses.type";
 
 /**
  * Lista todas as turmas de um período específico.
@@ -31,16 +32,19 @@ export async function getCoursesByPeriodId(periodId: string) {
 }
 
 /**
- * Busca uma turma específica pelo código.
+ * Busca uma turma específica pelo período e código.
  */
-export async function getCourseByCode(code: string) {
+export async function getCourseByPeriodIdAndCode(periodId: string, code: string): Promise<CourseWithRelations | null> {
     "use cache";
     cacheLife("max");
-    cacheTag(`course:${code}`);
+    cacheTag(`period:${periodId}:course:${code}`);
 
     return await prisma.course.findUnique({
         where: {
-            code,
+            periodId_code: {
+                periodId,
+                code,
+            },
         },
         include: {
             subject: true,
@@ -100,6 +104,7 @@ function mapScheduleUniqueError(error: Prisma.PrismaClientKnownRequestError): st
  */
 export async function createCourse(data: {
     name: string;
+    code: string;
     periodId: string;
     subjectId: string;
     roomId?: string | null;
@@ -115,6 +120,7 @@ export async function createCourse(data: {
         const course = await prisma.course.create({
             data: {
                 name: data.name,
+                code: data.code,
                 periodId: data.periodId,
                 subjectId: data.subjectId,
                 roomId: data.roomId || null,
@@ -148,6 +154,7 @@ export async function updateCourse(
     id: string,
     data: {
         name: string;
+        code: string;
         subjectId: string;
         roomId?: string | null;
         shift: Shift;
@@ -171,6 +178,7 @@ export async function updateCourse(
                 where: { id },
                 data: {
                     name: data.name,
+                    code: data.code,
                     subjectId: data.subjectId,
                     roomId: data.roomId || null,
                     shift: data.shift,

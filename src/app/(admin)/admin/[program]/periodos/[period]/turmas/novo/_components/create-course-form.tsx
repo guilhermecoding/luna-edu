@@ -195,52 +195,60 @@ export function CreateCourseForm({ programSlug, periodSlug, subjects, rooms, tim
 
                 <div className="space-y-2 md:col-span-2">
                     <Label htmlFor="subjectId">Disciplina *</Label>
-                    <Controller
-                        control={control}
-                        name="subjectId"
-                        render={({ field }) => (
-                            <Select
-                                value={field.value}
-                                onValueChange={(value) => {
-                                    field.onChange(value);
-                                    // Auto-fill name based on subject
-                                    const subject = subjects.find((s) => s.id === value);
-                                    if (subject) {
-                                        const currentName = form.getValues("name");
-                                        if (!currentName || currentName.trim() === "") {
-                                            setValue("name", subject.name, {
-                                                shouldDirty: true,
-                                                shouldValidate: true,
-                                            });
+                    {subjects.length === 0 ? (
+                        <div className="p-4 border-2 border-dashed border-surface-border rounded-xl bg-surface/30 text-center">
+                            <p className="text-sm text-muted-foreground">
+                                Nenhuma disciplina cadastrada.
+                            </p>
+                        </div>
+                    ) : (
+                        <Controller
+                            control={control}
+                            name="subjectId"
+                            render={({ field }) => (
+                                <Select
+                                    value={field.value}
+                                    onValueChange={(value) => {
+                                        field.onChange(value);
+                                        // Auto-fill name based on subject
+                                        const subject = subjects.find((s) => s.id === value);
+                                        if (subject) {
+                                            const currentName = form.getValues("name");
+                                            if (!currentName || currentName.trim() === "") {
+                                                setValue("name", subject.name, {
+                                                    shouldDirty: true,
+                                                    shouldValidate: true,
+                                                });
+                                            }
                                         }
-                                    }
-                                }}
-                                disabled={isSubmitting}
-                            >
-                                <SelectTrigger
-                                    id="subjectId"
-                                    className="p-5 rounded-lg bg-background w-full"
-                                    aria-invalid={errors.subjectId ? "true" : "false"}
+                                    }}
+                                    disabled={isSubmitting}
                                 >
-                                    <SelectValue placeholder="Selecione uma disciplina" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    {Object.entries(subjectsByDegree).map(([degreeName, degreeSubjects]) => (
-                                        <SelectGroup key={degreeName}>
-                                            <SelectLabel className="text-xs text-muted-foreground uppercase font-semibold">
-                                                {degreeName}
-                                            </SelectLabel>
-                                            {degreeSubjects.map((subject) => (
-                                                <SelectItem key={subject.id} value={subject.id}>
-                                                    {subject.name} {subject.code ? `(${subject.code})` : ""}
-                                                </SelectItem>
-                                            ))}
-                                        </SelectGroup>
-                                    ))}
-                                </SelectContent>
-                            </Select>
-                        )}
-                    />
+                                    <SelectTrigger
+                                        id="subjectId"
+                                        className="p-5 rounded-lg bg-background w-full"
+                                        aria-invalid={errors.subjectId ? "true" : "false"}
+                                    >
+                                        <SelectValue placeholder="Selecione uma disciplina" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {Object.entries(subjectsByDegree).map(([degreeName, degreeSubjects]) => (
+                                            <SelectGroup key={degreeName}>
+                                                <SelectLabel className="text-xs text-muted-foreground uppercase font-semibold">
+                                                    {degreeName}
+                                                </SelectLabel>
+                                                {degreeSubjects.map((subject) => (
+                                                    <SelectItem key={subject.id} value={subject.id}>
+                                                        {subject.name} {subject.code ? `(${subject.code})` : ""}
+                                                    </SelectItem>
+                                                ))}
+                                            </SelectGroup>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                            )}
+                        />
+                    )}
                     {errors.subjectId && <p className="text-sm text-red-600">{errors.subjectId.message}</p>}
                 </div>
 
@@ -277,62 +285,70 @@ export function CreateCourseForm({ programSlug, periodSlug, subjects, rooms, tim
 
                 <div className="space-y-2 md:col-span-1">
                     <Label htmlFor="roomId">Sala padrão</Label>
-                    <Controller
-                        control={control}
-                        name="roomId"
-                        render={({ field }) => (
-                            <Select
-                                value={field.value || ""}
-                                onValueChange={field.onChange}
-                                disabled={isSubmitting}
-                            >
-                                <SelectTrigger
-                                    id="roomId"
-                                    className="p-5 rounded-lg bg-background w-full"
-                                    aria-invalid={errors.roomId ? "true" : "false"}
+                    {rooms.length === 0 ? (
+                        <div className="p-4 border-2 border-dashed border-surface-border rounded-xl bg-surface/30 text-center">
+                            <p className="text-sm text-muted-foreground">
+                                Nenhuma sala cadastrada.
+                            </p>
+                        </div>
+                    ) : (
+                        <Controller
+                            control={control}
+                            name="roomId"
+                            render={({ field }) => (
+                                <Select
+                                    value={field.value || ""}
+                                    onValueChange={field.onChange}
+                                    disabled={isSubmitting}
                                 >
-                                    <SelectValue placeholder="Selecione uma sala (opcional)">
-                                        {field.value ? (
-                                            <span key={field.value}>
-                                                {rooms.find((r) => r.id === field.value)?.name}
-                                            </span>
-                                        ) : null}
-                                    </SelectValue>
-                                </SelectTrigger>
-                                <SelectContent>
-                                    {Object.entries(roomsByCampus).map(([campusName, campusRooms]) => (
-                                        <SelectGroup key={campusName}>
-                                            <SelectLabel className="text-xs text-muted-foreground uppercase font-semibold">
-                                                {campusName}
-                                            </SelectLabel>
-                                            {campusRooms.map((room, index) => (
-                                                <Fragment key={room.id}>
-                                                    <SelectItem value={room.id}>
-                                                        <span className="flex flex-col gap-0.5 py-1">
-                                                            <span className="font-semibold text-sm">{room.name}</span>
-                                                            <span className="flex flex-wrap gap-2 mt-1">
-                                                                <span className="flex items-center gap-1 bg-muted px-2 py-0.5 rounded-md text-[10px] text-muted-foreground border border-surface-border">
-                                                                    <IconBuilding className="size-3" />
-                                                                    <span>Bloco {room.block || "S/B"}</span>
-                                                                </span>
-                                                                <span className="flex items-center gap-1 bg-muted px-2 py-0.5 rounded-md text-[10px] text-muted-foreground border border-surface-border">
-                                                                    <IconUsers className="size-3" />
-                                                                    <span>{Number(room.capacity)} vagas</span>
+                                    <SelectTrigger
+                                        id="roomId"
+                                        className="p-5 rounded-lg bg-background w-full"
+                                        aria-invalid={errors.roomId ? "true" : "false"}
+                                    >
+                                        <SelectValue placeholder="Selecione uma sala (opcional)">
+                                            {field.value ? (
+                                                <span key={field.value}>
+                                                    {rooms.find((r) => r.id === field.value)?.name}
+                                                </span>
+                                            ) : null}
+                                        </SelectValue>
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {Object.entries(roomsByCampus).map(([campusName, campusRooms]) => (
+                                            <SelectGroup key={campusName}>
+                                                <SelectLabel className="text-xs text-muted-foreground uppercase font-semibold">
+                                                    {campusName}
+                                                </SelectLabel>
+                                                {campusRooms.map((room, index) => (
+                                                    <Fragment key={room.id}>
+                                                        <SelectItem value={room.id}>
+                                                            <span className="flex flex-col gap-0.5 py-1">
+                                                                <span className="font-semibold text-sm">{room.name}</span>
+                                                                <span className="flex flex-wrap gap-2 mt-1">
+                                                                    <span className="flex items-center gap-1 bg-muted px-2 py-0.5 rounded-md text-[10px] text-muted-foreground border border-surface-border">
+                                                                        <IconBuilding className="size-3" />
+                                                                        <span>Bloco {room.block || "S/B"}</span>
+                                                                    </span>
+                                                                    <span className="flex items-center gap-1 bg-muted px-2 py-0.5 rounded-md text-[10px] text-muted-foreground border border-surface-border">
+                                                                        <IconUsers className="size-3" />
+                                                                        <span>{Number(room.capacity)} vagas</span>
+                                                                    </span>
                                                                 </span>
                                                             </span>
-                                                        </span>
-                                                    </SelectItem>
-                                                    {index < campusRooms.length - 1 && (
-                                                        <Separator className="my-1 opacity-50" />
-                                                    )}
-                                                </Fragment>
-                                            ))}
-                                        </SelectGroup>
-                                    ))}
-                                </SelectContent>
-                            </Select>
-                        )}
-                    />
+                                                        </SelectItem>
+                                                        {index < campusRooms.length - 1 && (
+                                                            <Separator className="my-1 opacity-50" />
+                                                        )}
+                                                    </Fragment>
+                                                ))}
+                                            </SelectGroup>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                            )}
+                        />
+                    )}
                     {errors.roomId && <p className="text-sm text-red-600">{errors.roomId.message}</p>}
                 </div>
             </div>
@@ -478,35 +494,41 @@ export function CreateCourseForm({ programSlug, periodSlug, subjects, rooms, tim
                                 {/* Sala (override) */}
                                 <div className="space-y-1.5">
                                     <Label className="text-xs text-muted-foreground">Sala</Label>
-                                    <Controller
-                                        control={control}
-                                        name={`schedules.${index}.roomId`}
-                                        render={({ field: roomField }) => (
-                                            <Select
-                                                value={roomField.value || ""}
-                                                onValueChange={roomField.onChange}
-                                                disabled={isSubmitting}
-                                            >
-                                                <SelectTrigger className="rounded-lg bg-background w-full h-10">
-                                                    <SelectValue placeholder="Sala padrão" />
-                                                </SelectTrigger>
-                                                <SelectContent>
-                                                    {Object.entries(roomsByCampus).map(([campusName, campusRooms]) => (
-                                                        <SelectGroup key={campusName}>
-                                                            <SelectLabel className="text-xs text-muted-foreground uppercase font-semibold">
-                                                                {campusName}
-                                                            </SelectLabel>
-                                                            {campusRooms.map((room) => (
-                                                                <SelectItem key={room.id} value={room.id}>
-                                                                    {room.name}
-                                                                </SelectItem>
-                                                            ))}
-                                                        </SelectGroup>
-                                                    ))}
-                                                </SelectContent>
-                                            </Select>
-                                        )}
-                                    />
+                                    {rooms.length === 0 ? (
+                                        <div className="p-3 border border-dashed border-surface-border rounded-lg bg-surface/30 text-center">
+                                            <p className="text-[10px] text-muted-foreground">Nenhuma sala</p>
+                                        </div>
+                                    ) : (
+                                        <Controller
+                                            control={control}
+                                            name={`schedules.${index}.roomId`}
+                                            render={({ field: roomField }) => (
+                                                <Select
+                                                    value={roomField.value || ""}
+                                                    onValueChange={roomField.onChange}
+                                                    disabled={isSubmitting}
+                                                >
+                                                    <SelectTrigger className="rounded-lg bg-background w-full h-10">
+                                                        <SelectValue placeholder="Sala padrão" />
+                                                    </SelectTrigger>
+                                                    <SelectContent>
+                                                        {Object.entries(roomsByCampus).map(([campusName, campusRooms]) => (
+                                                            <SelectGroup key={campusName}>
+                                                                <SelectLabel className="text-xs text-muted-foreground uppercase font-semibold">
+                                                                    {campusName}
+                                                                </SelectLabel>
+                                                                {campusRooms.map((room) => (
+                                                                    <SelectItem key={room.id} value={room.id}>
+                                                                        {room.name}
+                                                                    </SelectItem>
+                                                                ))}
+                                                            </SelectGroup>
+                                                        ))}
+                                                    </SelectContent>
+                                                </Select>
+                                            )}
+                                        />
+                                    )}
                                 </div>
 
                                 {/* Remover */}

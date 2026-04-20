@@ -17,7 +17,7 @@ import { createTimeSlotAction } from "../../actions";
 import { timeSlotSchema, type TimeSlotInput } from "../../schema";
 import { SHIFTS, shiftLabels } from "../../../periodos/[period]/turmas/schema";
 import { IconLoader2 } from "@tabler/icons-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 interface CreateTimeSlotFormProps {
     programSlug: string;
@@ -31,10 +31,13 @@ export function CreateTimeSlotForm({ programSlug }: CreateTimeSlotFormProps) {
         register,
         control,
         handleSubmit,
+        reset,
+        watch,
+        trigger,
         formState: { errors, isSubmitting, isValid },
     } = useForm<TimeSlotInput>({
         resolver: zodResolver(timeSlotSchema),
-        mode: "onChange",
+        mode: "onTouched",
         defaultValues: {
             name: "",
             startTime: "",
@@ -42,6 +45,15 @@ export function CreateTimeSlotForm({ programSlug }: CreateTimeSlotFormProps) {
             shift: "MORNING",
         },
     });
+
+    // Limpa o formulário toda vez que entrar nele (montagem do componente)
+    useEffect(() => {
+        reset();
+    }, [reset]);
+
+    const handleFieldChange = () => {
+        if (error) setError(null);
+    };
 
     const onSubmit: SubmitHandler<TimeSlotInput> = async (data) => {
         setError(null);
@@ -66,7 +78,7 @@ export function CreateTimeSlotForm({ programSlug }: CreateTimeSlotFormProps) {
                     <Input
                         id="name"
                         placeholder="Ex: 1ª Aula, Intervalo, 2ª Aula"
-                        {...register("name")}
+                        {...register("name", { onChange: handleFieldChange })}
                         disabled={isSubmitting}
                         className="p-5 rounded-lg bg-background"
                     />
@@ -78,7 +90,12 @@ export function CreateTimeSlotForm({ programSlug }: CreateTimeSlotFormProps) {
                     <Input
                         id="startTime"
                         type="time"
-                        {...register("startTime")}
+                        {...register("startTime", {
+                            onChange: (e) => {
+                                handleFieldChange();
+                                if (e.target.value && watch("endTime")) trigger("endTime");
+                            },
+                        })}
                         disabled={isSubmitting}
                         className="p-5 rounded-lg bg-background"
                     />
@@ -90,7 +107,12 @@ export function CreateTimeSlotForm({ programSlug }: CreateTimeSlotFormProps) {
                     <Input
                         id="endTime"
                         type="time"
-                        {...register("endTime")}
+                        {...register("endTime", {
+                            onChange: (e) => {
+                                handleFieldChange();
+                                if (e.target.value && watch("startTime")) trigger("startTime");
+                            },
+                        })}
                         disabled={isSubmitting}
                         className="p-5 rounded-lg bg-background"
                     />
@@ -105,7 +127,10 @@ export function CreateTimeSlotForm({ programSlug }: CreateTimeSlotFormProps) {
                         render={({ field }) => (
                             <Select
                                 value={field.value}
-                                onValueChange={field.onChange}
+                                onValueChange={(val) => {
+                                    field.onChange(val);
+                                    handleFieldChange();
+                                }}
                                 disabled={isSubmitting}
                             >
                                 <SelectTrigger className="p-5 rounded-lg bg-background">

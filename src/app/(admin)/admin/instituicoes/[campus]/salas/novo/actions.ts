@@ -27,6 +27,7 @@ export async function createRoomAction(campusSlug: string, data: RoomInput) {
         });
 
         updateTag(`campus:${campusSlug}:rooms`);
+        updateTag("all-rooms");
         revalidatePath(`/admin/instituicoes/${campusSlug}/salas`);
     } catch (error) {
         if (error instanceof ZodError) {

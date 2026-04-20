@@ -19,6 +19,7 @@ export async function updateRoomAction(campusSlug: string, roomId: string, data:
         });
 
         updateTag(`campus:${campusSlug}:rooms`);
+        updateTag("all-rooms");
         revalidatePath(`/admin/instituicoes/${campusSlug}/salas`);
         revalidatePath(`/admin/instituicoes/${campusSlug}/salas/${validatedData.slug}/editar`);
     } catch (error) {
@@ -44,6 +45,7 @@ export async function deleteRoomAction(campusSlug: string, roomId: string) {
         await deleteRoom(roomId);
 
         updateTag(`campus:${campusSlug}:rooms`);
+        updateTag("all-rooms");
         revalidatePath(`/admin/instituicoes/${campusSlug}/salas`);
     } catch (error) {
         if (error instanceof Error) {

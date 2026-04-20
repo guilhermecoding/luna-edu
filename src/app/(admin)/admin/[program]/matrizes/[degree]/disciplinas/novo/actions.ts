@@ -25,6 +25,7 @@ export async function createSubjectAction(programSlug: string, degreeSlug: strin
         });
 
         updateTag(`degree:${degree.id}:subjects`);
+        updateTag(`program:${programSlug}:subjects`);
         revalidatePath(`/admin/${programSlug}/matrizes/${degreeSlug}`);
     } catch (error) {
         if (error instanceof ZodError) {

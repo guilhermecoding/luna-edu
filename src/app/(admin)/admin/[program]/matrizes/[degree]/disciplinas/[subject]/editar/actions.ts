@@ -24,6 +24,7 @@ export async function editSubjectAction(subjectId: string, programSlug: string, 
         // Invalida cache de subjects e da disciplina especifica
         updateTag(`degree:${degreeId}:subjects`);
         updateTag(`subject:${subjectId}`);
+        updateTag(`program:${programSlug}:subjects`);
         revalidatePath(`/admin/${programSlug}/matrizes/${degreeSlug}`);
     } catch (error) {
         if (error instanceof ZodError) {
@@ -60,6 +61,7 @@ export async function deleteSubjectAction(subjectId: string, programSlug: string
 
         // Invalida cache da matriz q possui as materias
         updateTag(`degree:${degreeId}:subjects`);
+        updateTag(`program:${programSlug}:subjects`);
     } catch (error) {
         if (error instanceof Error) {
             return {

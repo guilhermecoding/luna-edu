@@ -32,6 +32,22 @@ export async function getTimeSlotsByProgramSlug(programSlug: string) {
 }
 
 /**
+ * Busca um horário específico pelo ID.
+ * 
+ * @param id - UUID do TimeSlot.
+ * @returns O TimeSlot encontrado ou null.
+ */
+export async function getTimeSlotById(id: string): Promise<TimeSlot | null> {
+    "use cache";
+    cacheLife("max");
+    cacheTag(`time-slot:${id}`);
+
+    return await prisma.timeSlot.findUnique({
+        where: { id },
+    });
+}
+
+/**
  * Retorna todos os usuários que possuem a flag de professor e estão ativos.
  * 
  * @returns Lista de professores (id, name, email).
@@ -89,8 +105,6 @@ export async function createTimeSlot(data: {
     const timeSlot = await prisma.timeSlot.create({
         data,
     });
-
-    revalidateTag(`program:${data.programId}:time-slots`, "max");
     return timeSlot;
 }
 

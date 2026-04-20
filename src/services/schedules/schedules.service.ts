@@ -70,6 +70,22 @@ export async function createTimeSlot(data: {
     shift: Shift;
     programId: string;
 }): Promise<TimeSlot> {
+    // Verifica sobreposição de horários no mesmo turno e programa
+    const conflict = await prisma.timeSlot.findFirst({
+        where: {
+            programId: data.programId,
+            shift: data.shift,
+            AND: [
+                { startTime: { lt: data.endTime } },
+                { endTime: { gt: data.startTime } },
+            ],
+        },
+    });
+
+    if (conflict) {
+        throw new Error(`Conflito de horário com "${conflict.name}" (${conflict.startTime} - ${conflict.endTime})`);
+    }
+
     const timeSlot = await prisma.timeSlot.create({
         data,
     });
@@ -94,6 +110,31 @@ export async function updateTimeSlot(
         shift: Shift;
     },
 ): Promise<TimeSlot> {
+    // Busca o registro atual para pegar o programId
+    const current = await prisma.timeSlot.findUnique({
+        where: { id },
+        select: { programId: true },
+    });
+
+    if (!current) throw new Error("Horário não encontrado.");
+
+    // Verifica sobreposição (excluindo o próprio registro)
+    const conflict = await prisma.timeSlot.findFirst({
+        where: {
+            programId: current.programId,
+            shift: data.shift,
+            id: { not: id },
+            AND: [
+                { startTime: { lt: data.endTime } },
+                { endTime: { gt: data.startTime } },
+            ],
+        },
+    });
+
+    if (conflict) {
+        throw new Error(`Conflito de horário com "${conflict.name}" (${conflict.startTime} - ${conflict.endTime})`);
+    }
+
     const timeSlot = await prisma.timeSlot.update({
         where: { id },
         data,

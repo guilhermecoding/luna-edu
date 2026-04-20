@@ -4,20 +4,10 @@ import { ItemMenuSidebarAdmin } from "@/@types/item-menu-sidebar.type";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { SheetClose } from "@/components/ui/sheet";
 import { SidebarGroup, SidebarGroupLabel, SidebarMenu, SidebarMenuAction, SidebarMenuButton, SidebarMenuItem, SidebarMenuSub, SidebarMenuSubButton, SidebarMenuSubItem } from "@/components/ui/sidebar";
-import { IconChevronRightFilled, IconHome, IconUsers, IconBook, IconCalendar, IconSettings, IconChartArcs, IconFileText, IconBackpack } from "@tabler/icons-react";
+import { IconChevronRightFilled } from "@tabler/icons-react";
 import Link from "next/link";
 import { useSidebar } from "@/components/ui/sidebar";
-
-const iconMap: Record<string, React.ReactNode> = {
-    home: <IconHome size={20} />,
-    users: <IconUsers size={20} />,
-    book: <IconBook size={20} />,
-    calendar: <IconCalendar size={20} />,
-    settings: <IconSettings size={20} />,
-    "chart-arcs": <IconChartArcs size={20} />,
-    "file-text": <IconFileText size={20} />,
-    "backpack": <IconBackpack size={20} />,
-};
+import { iconMap } from "@/app/(admin)/_config/menus/icon-map-menu";
 
 function getIcon(iconName: string): React.ReactNode {
     return iconMap[iconName] || null;

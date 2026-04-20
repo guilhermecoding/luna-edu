@@ -8,42 +8,42 @@ export const adminMenus: ItemMenuSidebarAdmin[] = [
                 title: "Dashboard",
                 url: "/admin",
                 icon: "home",
-                isActive: true,
+                isActive: false,
             },
         ],
     },
     {
-        group: "GERENCIAMENTO",
+        group: "ACADÊMICO",
         items: [
+
             {
-                title: "Usuários",
-                url: "/admin/usuarios",
-                icon: "users",
-                isActive: true,
+                title: "Matrizes Curriculares",
+                url: "/admin/[program]/matrizes",
+                icon: "blocks",
+                isActive: false,
+                hiddenOnPaths: ["^/admin/programas"],
                 items: [
-                    { title: "Listar Usuários", url: "/admin/usuarios" },
-                    { title: "Adicionar Usuário", url: "/admin/usuarios/novo" },
-                    { title: "Permissões", url: "/admin/usuarios/permissoes" },
+                    { title: "Nova Matriz", url: "/admin/[program]/matrizes/novo" },
                 ],
             },
             {
                 title: "Períodos",
-                url: "/admin/periodos",
+                url: "/admin/[program]/periodos",
                 icon: "calendar",
                 isActive: false,
+                hiddenOnPaths: ["^/admin/programas"],
                 items: [
-                    { title: "Listar Períodos", url: "/admin/periodos" },
-                    { title: "Criar Período", url: "/admin/periodos/novo" },
+                    { title: "Novo Período", url: "/admin/[program]/periodos/novo" },
                 ],
             },
             {
-                title: "Cursos",
-                url: "/admin/cursos",
-                icon: "book",
+                title: "Grade de Horários",
+                url: "/admin/[program]/horarios",
+                icon: "clock",
                 isActive: false,
+                hiddenOnPaths: ["^/admin/programas"],
                 items: [
-                    { title: "Listar Cursos", url: "/admin/cursos" },
-                    { title: "Novo Curso", url: "/admin/cursos/novo" },
+                    { title: "Novo Horário", url: "/admin/[program]/horarios/novo" },
                 ],
             },
             {
@@ -52,40 +52,41 @@ export const adminMenus: ItemMenuSidebarAdmin[] = [
                 icon: "backpack",
                 isActive: false,
                 items: [
-                    { title: "Criar Programa", url: "/admin/programas/criar" },
+                    { title: "Criar Programa", url: "/admin/programas/novo" },
+                ],
+            },
+            {
+                title: "Turmas",
+                url: "/admin/[program]/periodos/[period]/turmas",
+                icon: "book",
+                isActive: false,
+                items: [
+                    { title: "Nova Turma", url: "/admin/[program]/periodos/[period]/turmas/novo" },
+                ],
+            },
+            {
+                title: "Usuários",
+                url: "/admin/usuarios",
+                icon: "users",
+                isActive: false,
+                items: [
+                    { title: "Listar Usuários", url: "/admin/usuarios" },
+                    { title: "Adicionar Usuário", url: "/admin/usuarios/novo" },
+                    { title: "Permissões", url: "/admin/usuarios/permissoes" },
                 ],
             },
         ],
     },
     {
-        group: "RELATÓRIOS",
+        group: "GERENCIAMENTO",
         items: [
             {
-                title: "Estatísticas",
-                url: "/admin/estatisticas",
-                icon: "chart-arcs",
-                isActive: false,
-            },
-            {
-                title: "Relatórios",
-                url: "/admin/relatorios",
-                icon: "file-text",
-                isActive: false,
-            },
-        ],
-    },
-    {
-        group: "SISTEMA",
-        items: [
-            {
-                title: "Configurações",
-                url: "/admin/configuracoes",
-                icon: "settings",
+                title: "Instituições",
+                url: "/admin/instituicoes",
+                icon: "building-estate",
                 isActive: false,
                 items: [
-                    { title: "Geral", url: "/admin/configuracoes" },
-                    { title: "Segurança", url: "/admin/configuracoes/seguranca" },
-                    { title: "Email", url: "/admin/configuracoes/email" },
+                    { title: "Adicionar Instituição", url: "/admin/instituicoes/novo" },
                 ],
             },
         ],

@@ -1,9 +1,7 @@
 import { getProgramBySlug } from "@/services/programs/programs.service";
-import { adminMenus } from "../../_config/menus/admin-menus";
-import SidebarAdminBase from "../_components/sidebar-admin/sidebar-admin-base";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
-import SidebarAndPageSkeleton from "@/components/skeletons/sidebar-and-page-skeleton";
+import PageSkeleton from "@/components/skeletons/page-skeleton";
 
 async function ProgramLayoutContent({
     children,
@@ -21,9 +19,9 @@ async function ProgramLayoutContent({
     }
 
     return (
-        <SidebarAdminBase menus={adminMenus}>
+        <>
             {children}
-        </SidebarAdminBase>
+        </>
     );
 }
 
@@ -35,7 +33,7 @@ export default function ProgramLayout({
     params: Promise<{ program: string }>
 }>) {
     return (
-        <Suspense fallback={<SidebarAndPageSkeleton />}>
+        <Suspense fallback={<PageSkeleton />}>
             <ProgramLayoutContent params={params}>
                 {children}
             </ProgramLayoutContent>

@@ -22,7 +22,7 @@ export default function ProgramsPage() {
                         />
                     </div>
                     <div className="flex flex-1 justify-end items-end">
-                        <ButtonLink className="w-full sm:w-auto" href="/admin/programas/criar">
+                        <ButtonLink className="w-full sm:w-auto" href="/admin/programas/novo">
                             <IconCirclePlusFilled className="size-5" />
                             Criar Programa
                         </ButtonLink>

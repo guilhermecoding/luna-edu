@@ -5,7 +5,7 @@ import { getProgramBySlug } from "@/services/programs/programs.service";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { EditProgramForm } from "./_components/edit-program-form";
-import SkeletonForm from "./_components/skeleton-form";
+import SkeletonForm from "../../../../../../components/skeletons/skeleton-form";
 import { Suspense } from "react";
 
 
@@ -26,7 +26,7 @@ async function EditProgramPageContent({ params }: Omit<PageProps<"/admin/program
             <Section>
                 <BaseForm title="Editar Programa" description="Atualize os dados do programa">
                     <div className="mt-6">
-                        <Suspense fallback={null}>
+                        <Suspense fallback={<SkeletonForm />}>
                             <EditProgramForm
                                 slug={program.slug}
                                 name={program.name}
@@ -43,7 +43,7 @@ async function EditProgramPageContent({ params }: Omit<PageProps<"/admin/program
 // @COMPONENTE PRINCIPAL
 export default function EditProgramPage({ params }: PageProps<"/admin/programas/[slug]/editar">) {
     return (
-        <Suspense fallback={<Section><SkeletonForm /></Section>}>
+        <Suspense fallback={null}>
             <EditProgramPageContent params={params} />
         </Suspense>
     );

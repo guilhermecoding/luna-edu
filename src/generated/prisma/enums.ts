@@ -46,6 +46,16 @@ export const ActivityType = {
 export type ActivityType = (typeof ActivityType)[keyof typeof ActivityType]
 
 
+export const RoomType = {
+  CLASSROOM: 'CLASSROOM',
+  LABORATORY: 'LABORATORY',
+  AUDITORIUM: 'AUDITORIUM',
+  OTHERS: 'OTHERS'
+} as const
+
+export type RoomType = (typeof RoomType)[keyof typeof RoomType]
+
+
 export const NotificationType = {
   INFO: 'INFO',
   WARNING: 'WARNING',
@@ -53,3 +63,16 @@ export const NotificationType = {
 } as const
 
 export type NotificationType = (typeof NotificationType)[keyof typeof NotificationType]
+
+
+export const DayOfWeek = {
+  MONDAY: 'MONDAY',
+  TUESDAY: 'TUESDAY',
+  WEDNESDAY: 'WEDNESDAY',
+  THURSDAY: 'THURSDAY',
+  FRIDAY: 'FRIDAY',
+  SATURDAY: 'SATURDAY',
+  SUNDAY: 'SUNDAY'
+} as const
+
+export type DayOfWeek = (typeof DayOfWeek)[keyof typeof DayOfWeek]

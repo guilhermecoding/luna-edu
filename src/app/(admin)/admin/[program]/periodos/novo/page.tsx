@@ -1,25 +1,29 @@
 import BaseForm from "@/components/base-form";
 import Page from "@/components/page";
 import Section from "@/components/section";
-import { Metadata } from "next";
-import { CreateProgramForm } from "./_components/create-program-form";
 import { Suspense } from "react";
+import { CreatePeriodForm } from "./_components/create-period-form";
+import { Metadata } from "next";
 
 export const metadata: Metadata = {
-    title: "Criar Programa",
+    title: "Novo Período",
 };
 
-export default function CreateProgramPage() {
+export default async function NewPeriodPage({
+    params,
+}: PageProps<"/admin/[program]/periodos/novo">) {
+    const { program } = await params;
+
     return (
         <Page>
             <Section>
                 <BaseForm
-                    title="Criar Programa"
-                    description="Adicione um novo programa ao sistema"
+                    title="Novo Período"
+                    description="Adicione um novo período letivo ao sistema"
                 >
                     <div className="mt-6">
                         <Suspense fallback={null}>
-                            <CreateProgramForm />
+                            <CreatePeriodForm programSlug={program} />
                         </Suspense>
                     </div>
                 </BaseForm>

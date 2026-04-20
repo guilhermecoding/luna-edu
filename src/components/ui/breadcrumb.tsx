@@ -3,6 +3,7 @@ import { Slot } from "radix-ui";
 
 import { cn } from "@/lib/utils";
 import { IconArrowBadgeRightFilled } from "@tabler/icons-react";
+import Link from "next/link";
 
 function Breadcrumb({ className, ...props }: React.ComponentProps<"nav">) {
   return (
@@ -42,10 +43,10 @@ function BreadcrumbLink({
   asChild,
   className,
   ...props
-}: React.ComponentProps<"a"> & {
+}: React.ComponentProps<typeof Link> & {
   asChild?: boolean
 }) {
-  const Comp = asChild ? Slot.Root : "a";
+  const Comp = asChild ? Slot.Root : Link;
 
   return (
     <Comp

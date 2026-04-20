@@ -24,7 +24,7 @@ export const viewport: Viewport = {
     maximumScale: 1,
 };
 
-const APP_NAME = "LUNA";
+const APP_NAME = "LUNA ACADEMY";
 
 export const metadata: Metadata = {
     title: {

@@ -39,7 +39,6 @@ export function CreateTimeSlotForm({ programSlug }: CreateTimeSlotFormProps) {
             name: "",
             startTime: "",
             endTime: "",
-            order: 1,
             shift: "MORNING",
         },
     });
@@ -123,18 +122,6 @@ export function CreateTimeSlotForm({ programSlug }: CreateTimeSlotFormProps) {
                         )}
                     />
                     {errors.shift && <p className="text-sm text-red-600">{errors.shift.message}</p>}
-                </div>
-
-                <div className="space-y-2">
-                    <Label htmlFor="order">Ordem (posição na grade) *</Label>
-                    <Input
-                        id="order"
-                        type="number"
-                        {...register("order")}
-                        disabled={isSubmitting}
-                        className="p-5 rounded-lg bg-background"
-                    />
-                    {errors.order && <p className="text-sm text-red-600">{errors.order.message}</p>}
                 </div>
             </div>
 

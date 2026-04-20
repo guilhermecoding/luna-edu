@@ -67,7 +67,7 @@ export async function getCourseByCode(code: string) {
                 },
                 orderBy: [
                     { dayOfWeek: "asc" },
-                    { timeSlot: { order: "asc" } },
+                    { timeSlot: { startTime: "asc" } },
                 ],
             },
         },

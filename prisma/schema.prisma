@@ -277,15 +277,14 @@ model TimeSlot {
     name      String
     startTime String   @map("start_time")
     endTime   String   @map("end_time")
-    order     Int      @db.SmallInt
     shift     Shift
     programId String   @map("program_id") @db.Uuid
-
+    
     program   Program    @relation(fields: [programId], references: [id])
     schedules Schedule[]
     lessons   Lesson[]
 
-    @@unique([programId, order])
+    @@unique([programId, startTime])
     @@map("time_slots")
     @@schema("public")
 }

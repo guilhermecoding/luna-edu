@@ -5,7 +5,6 @@ export const timeSlotSchema = z.object({
     name: z.string().min(2, "O nome deve ter no mínimo 2 caracteres"),
     startTime: z.string().regex(/^([01]\d|2[0-3]):([0-5]\d)$/, "Formato inválido (HH:MM)"),
     endTime: z.string().regex(/^([01]\d|2[0-3]):([0-5]\d)$/, "Formato inválido (HH:MM)"),
-    order: z.coerce.number().min(1, "A ordem deve ser no mínimo 1"),
     shift: z.enum(SHIFTS, {
         message: "Selecione um turno",
     }),

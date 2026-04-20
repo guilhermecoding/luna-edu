@@ -243,7 +243,6 @@ export const TimeSlotScalarFieldEnum = {
   name: 'name',
   startTime: 'startTime',
   endTime: 'endTime',
-  order: 'order',
   shift: 'shift',
   programId: 'programId'
 } as const

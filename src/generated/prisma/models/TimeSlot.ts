@@ -20,18 +20,8 @@ export type TimeSlotModel = runtime.Types.Result.DefaultSelection<Prisma.$TimeSl
 
 export type AggregateTimeSlot = {
   _count: TimeSlotCountAggregateOutputType | null
-  _avg: TimeSlotAvgAggregateOutputType | null
-  _sum: TimeSlotSumAggregateOutputType | null
   _min: TimeSlotMinAggregateOutputType | null
   _max: TimeSlotMaxAggregateOutputType | null
-}
-
-export type TimeSlotAvgAggregateOutputType = {
-  order: number | null
-}
-
-export type TimeSlotSumAggregateOutputType = {
-  order: number | null
 }
 
 export type TimeSlotMinAggregateOutputType = {
@@ -39,7 +29,6 @@ export type TimeSlotMinAggregateOutputType = {
   name: string | null
   startTime: string | null
   endTime: string | null
-  order: number | null
   shift: $Enums.Shift | null
   programId: string | null
 }
@@ -49,7 +38,6 @@ export type TimeSlotMaxAggregateOutputType = {
   name: string | null
   startTime: string | null
   endTime: string | null
-  order: number | null
   shift: $Enums.Shift | null
   programId: string | null
 }
@@ -59,27 +47,17 @@ export type TimeSlotCountAggregateOutputType = {
   name: number
   startTime: number
   endTime: number
-  order: number
   shift: number
   programId: number
   _all: number
 }
 
 
-export type TimeSlotAvgAggregateInputType = {
-  order?: true
-}
-
-export type TimeSlotSumAggregateInputType = {
-  order?: true
-}
-
 export type TimeSlotMinAggregateInputType = {
   id?: true
   name?: true
   startTime?: true
   endTime?: true
-  order?: true
   shift?: true
   programId?: true
 }
@@ -89,7 +67,6 @@ export type TimeSlotMaxAggregateInputType = {
   name?: true
   startTime?: true
   endTime?: true
-  order?: true
   shift?: true
   programId?: true
 }
@@ -99,7 +76,6 @@ export type TimeSlotCountAggregateInputType = {
   name?: true
   startTime?: true
   endTime?: true
-  order?: true
   shift?: true
   programId?: true
   _all?: true
@@ -143,18 +119,6 @@ export type TimeSlotAggregateArgs<ExtArgs extends runtime.Types.Extensions.Inter
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
-   * Select which fields to average
-  **/
-  _avg?: TimeSlotAvgAggregateInputType
-  /**
-   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-   * 
-   * Select which fields to sum
-  **/
-  _sum?: TimeSlotSumAggregateInputType
-  /**
-   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-   * 
    * Select which fields to find the minimum value
   **/
   _min?: TimeSlotMinAggregateInputType
@@ -185,8 +149,6 @@ export type TimeSlotGroupByArgs<ExtArgs extends runtime.Types.Extensions.Interna
   take?: number
   skip?: number
   _count?: TimeSlotCountAggregateInputType | true
-  _avg?: TimeSlotAvgAggregateInputType
-  _sum?: TimeSlotSumAggregateInputType
   _min?: TimeSlotMinAggregateInputType
   _max?: TimeSlotMaxAggregateInputType
 }
@@ -196,12 +158,9 @@ export type TimeSlotGroupByOutputType = {
   name: string
   startTime: string
   endTime: string
-  order: number
   shift: $Enums.Shift
   programId: string
   _count: TimeSlotCountAggregateOutputType | null
-  _avg: TimeSlotAvgAggregateOutputType | null
-  _sum: TimeSlotSumAggregateOutputType | null
   _min: TimeSlotMinAggregateOutputType | null
   _max: TimeSlotMaxAggregateOutputType | null
 }
@@ -229,7 +188,6 @@ export type TimeSlotWhereInput = {
   name?: Prisma.StringFilter<"TimeSlot"> | string
   startTime?: Prisma.StringFilter<"TimeSlot"> | string
   endTime?: Prisma.StringFilter<"TimeSlot"> | string
-  order?: Prisma.IntFilter<"TimeSlot"> | number
   shift?: Prisma.EnumShiftFilter<"TimeSlot"> | $Enums.Shift
   programId?: Prisma.UuidFilter<"TimeSlot"> | string
   program?: Prisma.XOR<Prisma.ProgramScalarRelationFilter, Prisma.ProgramWhereInput>
@@ -242,7 +200,6 @@ export type TimeSlotOrderByWithRelationInput = {
   name?: Prisma.SortOrder
   startTime?: Prisma.SortOrder
   endTime?: Prisma.SortOrder
-  order?: Prisma.SortOrder
   shift?: Prisma.SortOrder
   programId?: Prisma.SortOrder
   program?: Prisma.ProgramOrderByWithRelationInput
@@ -252,34 +209,30 @@ export type TimeSlotOrderByWithRelationInput = {
 
 export type TimeSlotWhereUniqueInput = Prisma.AtLeast<{
   id?: string
-  programId_order?: Prisma.TimeSlotProgramIdOrderCompoundUniqueInput
+  programId_startTime?: Prisma.TimeSlotProgramIdStartTimeCompoundUniqueInput
   AND?: Prisma.TimeSlotWhereInput | Prisma.TimeSlotWhereInput[]
   OR?: Prisma.TimeSlotWhereInput[]
   NOT?: Prisma.TimeSlotWhereInput | Prisma.TimeSlotWhereInput[]
   name?: Prisma.StringFilter<"TimeSlot"> | string
   startTime?: Prisma.StringFilter<"TimeSlot"> | string
   endTime?: Prisma.StringFilter<"TimeSlot"> | string
-  order?: Prisma.IntFilter<"TimeSlot"> | number
   shift?: Prisma.EnumShiftFilter<"TimeSlot"> | $Enums.Shift
   programId?: Prisma.UuidFilter<"TimeSlot"> | string
   program?: Prisma.XOR<Prisma.ProgramScalarRelationFilter, Prisma.ProgramWhereInput>
   schedules?: Prisma.ScheduleListRelationFilter
   lessons?: Prisma.LessonListRelationFilter
-}, "id" | "programId_order">
+}, "id" | "programId_startTime">
 
 export type TimeSlotOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   startTime?: Prisma.SortOrder
   endTime?: Prisma.SortOrder
-  order?: Prisma.SortOrder
   shift?: Prisma.SortOrder
   programId?: Prisma.SortOrder
   _count?: Prisma.TimeSlotCountOrderByAggregateInput
-  _avg?: Prisma.TimeSlotAvgOrderByAggregateInput
   _max?: Prisma.TimeSlotMaxOrderByAggregateInput
   _min?: Prisma.TimeSlotMinOrderByAggregateInput
-  _sum?: Prisma.TimeSlotSumOrderByAggregateInput
 }
 
 export type TimeSlotScalarWhereWithAggregatesInput = {
@@ -290,7 +243,6 @@ export type TimeSlotScalarWhereWithAggregatesInput = {
   name?: Prisma.StringWithAggregatesFilter<"TimeSlot"> | string
   startTime?: Prisma.StringWithAggregatesFilter<"TimeSlot"> | string
   endTime?: Prisma.StringWithAggregatesFilter<"TimeSlot"> | string
-  order?: Prisma.IntWithAggregatesFilter<"TimeSlot"> | number
   shift?: Prisma.EnumShiftWithAggregatesFilter<"TimeSlot"> | $Enums.Shift
   programId?: Prisma.UuidWithAggregatesFilter<"TimeSlot"> | string
 }
@@ -300,7 +252,6 @@ export type TimeSlotCreateInput = {
   name: string
   startTime: string
   endTime: string
-  order: number
   shift: $Enums.Shift
   program: Prisma.ProgramCreateNestedOneWithoutTimeSlotsInput
   schedules?: Prisma.ScheduleCreateNestedManyWithoutTimeSlotInput
@@ -312,7 +263,6 @@ export type TimeSlotUncheckedCreateInput = {
   name: string
   startTime: string
   endTime: string
-  order: number
   shift: $Enums.Shift
   programId: string
   schedules?: Prisma.ScheduleUncheckedCreateNestedManyWithoutTimeSlotInput
@@ -324,7 +274,6 @@ export type TimeSlotUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   startTime?: Prisma.StringFieldUpdateOperationsInput | string
   endTime?: Prisma.StringFieldUpdateOperationsInput | string
-  order?: Prisma.IntFieldUpdateOperationsInput | number
   shift?: Prisma.EnumShiftFieldUpdateOperationsInput | $Enums.Shift
   program?: Prisma.ProgramUpdateOneRequiredWithoutTimeSlotsNestedInput
   schedules?: Prisma.ScheduleUpdateManyWithoutTimeSlotNestedInput
@@ -336,7 +285,6 @@ export type TimeSlotUncheckedUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   startTime?: Prisma.StringFieldUpdateOperationsInput | string
   endTime?: Prisma.StringFieldUpdateOperationsInput | string
-  order?: Prisma.IntFieldUpdateOperationsInput | number
   shift?: Prisma.EnumShiftFieldUpdateOperationsInput | $Enums.Shift
   programId?: Prisma.StringFieldUpdateOperationsInput | string
   schedules?: Prisma.ScheduleUncheckedUpdateManyWithoutTimeSlotNestedInput
@@ -348,7 +296,6 @@ export type TimeSlotCreateManyInput = {
   name: string
   startTime: string
   endTime: string
-  order: number
   shift: $Enums.Shift
   programId: string
 }
@@ -358,7 +305,6 @@ export type TimeSlotUpdateManyMutationInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   startTime?: Prisma.StringFieldUpdateOperationsInput | string
   endTime?: Prisma.StringFieldUpdateOperationsInput | string
-  order?: Prisma.IntFieldUpdateOperationsInput | number
   shift?: Prisma.EnumShiftFieldUpdateOperationsInput | $Enums.Shift
 }
 
@@ -367,7 +313,6 @@ export type TimeSlotUncheckedUpdateManyInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   startTime?: Prisma.StringFieldUpdateOperationsInput | string
   endTime?: Prisma.StringFieldUpdateOperationsInput | string
-  order?: Prisma.IntFieldUpdateOperationsInput | number
   shift?: Prisma.EnumShiftFieldUpdateOperationsInput | $Enums.Shift
   programId?: Prisma.StringFieldUpdateOperationsInput | string
 }
@@ -382,9 +327,9 @@ export type TimeSlotOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
-export type TimeSlotProgramIdOrderCompoundUniqueInput = {
+export type TimeSlotProgramIdStartTimeCompoundUniqueInput = {
   programId: string
-  order: number
+  startTime: string
 }
 
 export type TimeSlotCountOrderByAggregateInput = {
@@ -392,13 +337,8 @@ export type TimeSlotCountOrderByAggregateInput = {
   name?: Prisma.SortOrder
   startTime?: Prisma.SortOrder
   endTime?: Prisma.SortOrder
-  order?: Prisma.SortOrder
   shift?: Prisma.SortOrder
   programId?: Prisma.SortOrder
-}
-
-export type TimeSlotAvgOrderByAggregateInput = {
-  order?: Prisma.SortOrder
 }
 
 export type TimeSlotMaxOrderByAggregateInput = {
@@ -406,7 +346,6 @@ export type TimeSlotMaxOrderByAggregateInput = {
   name?: Prisma.SortOrder
   startTime?: Prisma.SortOrder
   endTime?: Prisma.SortOrder
-  order?: Prisma.SortOrder
   shift?: Prisma.SortOrder
   programId?: Prisma.SortOrder
 }
@@ -416,13 +355,8 @@ export type TimeSlotMinOrderByAggregateInput = {
   name?: Prisma.SortOrder
   startTime?: Prisma.SortOrder
   endTime?: Prisma.SortOrder
-  order?: Prisma.SortOrder
   shift?: Prisma.SortOrder
   programId?: Prisma.SortOrder
-}
-
-export type TimeSlotSumOrderByAggregateInput = {
-  order?: Prisma.SortOrder
 }
 
 export type TimeSlotScalarRelationFilter = {
@@ -477,14 +411,6 @@ export type TimeSlotUncheckedUpdateManyWithoutProgramNestedInput = {
   deleteMany?: Prisma.TimeSlotScalarWhereInput | Prisma.TimeSlotScalarWhereInput[]
 }
 
-export type IntFieldUpdateOperationsInput = {
-  set?: number
-  increment?: number
-  decrement?: number
-  multiply?: number
-  divide?: number
-}
-
 export type EnumShiftFieldUpdateOperationsInput = {
   set?: $Enums.Shift
 }
@@ -524,7 +450,6 @@ export type TimeSlotCreateWithoutProgramInput = {
   name: string
   startTime: string
   endTime: string
-  order: number
   shift: $Enums.Shift
   schedules?: Prisma.ScheduleCreateNestedManyWithoutTimeSlotInput
   lessons?: Prisma.LessonCreateNestedManyWithoutTimeSlotInput
@@ -535,7 +460,6 @@ export type TimeSlotUncheckedCreateWithoutProgramInput = {
   name: string
   startTime: string
   endTime: string
-  order: number
   shift: $Enums.Shift
   schedules?: Prisma.ScheduleUncheckedCreateNestedManyWithoutTimeSlotInput
   lessons?: Prisma.LessonUncheckedCreateNestedManyWithoutTimeSlotInput
@@ -575,7 +499,6 @@ export type TimeSlotScalarWhereInput = {
   name?: Prisma.StringFilter<"TimeSlot"> | string
   startTime?: Prisma.StringFilter<"TimeSlot"> | string
   endTime?: Prisma.StringFilter<"TimeSlot"> | string
-  order?: Prisma.IntFilter<"TimeSlot"> | number
   shift?: Prisma.EnumShiftFilter<"TimeSlot"> | $Enums.Shift
   programId?: Prisma.UuidFilter<"TimeSlot"> | string
 }
@@ -585,7 +508,6 @@ export type TimeSlotCreateWithoutSchedulesInput = {
   name: string
   startTime: string
   endTime: string
-  order: number
   shift: $Enums.Shift
   program: Prisma.ProgramCreateNestedOneWithoutTimeSlotsInput
   lessons?: Prisma.LessonCreateNestedManyWithoutTimeSlotInput
@@ -596,7 +518,6 @@ export type TimeSlotUncheckedCreateWithoutSchedulesInput = {
   name: string
   startTime: string
   endTime: string
-  order: number
   shift: $Enums.Shift
   programId: string
   lessons?: Prisma.LessonUncheckedCreateNestedManyWithoutTimeSlotInput
@@ -623,7 +544,6 @@ export type TimeSlotUpdateWithoutSchedulesInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   startTime?: Prisma.StringFieldUpdateOperationsInput | string
   endTime?: Prisma.StringFieldUpdateOperationsInput | string
-  order?: Prisma.IntFieldUpdateOperationsInput | number
   shift?: Prisma.EnumShiftFieldUpdateOperationsInput | $Enums.Shift
   program?: Prisma.ProgramUpdateOneRequiredWithoutTimeSlotsNestedInput
   lessons?: Prisma.LessonUpdateManyWithoutTimeSlotNestedInput
@@ -634,7 +554,6 @@ export type TimeSlotUncheckedUpdateWithoutSchedulesInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   startTime?: Prisma.StringFieldUpdateOperationsInput | string
   endTime?: Prisma.StringFieldUpdateOperationsInput | string
-  order?: Prisma.IntFieldUpdateOperationsInput | number
   shift?: Prisma.EnumShiftFieldUpdateOperationsInput | $Enums.Shift
   programId?: Prisma.StringFieldUpdateOperationsInput | string
   lessons?: Prisma.LessonUncheckedUpdateManyWithoutTimeSlotNestedInput
@@ -645,7 +564,6 @@ export type TimeSlotCreateWithoutLessonsInput = {
   name: string
   startTime: string
   endTime: string
-  order: number
   shift: $Enums.Shift
   program: Prisma.ProgramCreateNestedOneWithoutTimeSlotsInput
   schedules?: Prisma.ScheduleCreateNestedManyWithoutTimeSlotInput
@@ -656,7 +574,6 @@ export type TimeSlotUncheckedCreateWithoutLessonsInput = {
   name: string
   startTime: string
   endTime: string
-  order: number
   shift: $Enums.Shift
   programId: string
   schedules?: Prisma.ScheduleUncheckedCreateNestedManyWithoutTimeSlotInput
@@ -683,7 +600,6 @@ export type TimeSlotUpdateWithoutLessonsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   startTime?: Prisma.StringFieldUpdateOperationsInput | string
   endTime?: Prisma.StringFieldUpdateOperationsInput | string
-  order?: Prisma.IntFieldUpdateOperationsInput | number
   shift?: Prisma.EnumShiftFieldUpdateOperationsInput | $Enums.Shift
   program?: Prisma.ProgramUpdateOneRequiredWithoutTimeSlotsNestedInput
   schedules?: Prisma.ScheduleUpdateManyWithoutTimeSlotNestedInput
@@ -694,7 +610,6 @@ export type TimeSlotUncheckedUpdateWithoutLessonsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   startTime?: Prisma.StringFieldUpdateOperationsInput | string
   endTime?: Prisma.StringFieldUpdateOperationsInput | string
-  order?: Prisma.IntFieldUpdateOperationsInput | number
   shift?: Prisma.EnumShiftFieldUpdateOperationsInput | $Enums.Shift
   programId?: Prisma.StringFieldUpdateOperationsInput | string
   schedules?: Prisma.ScheduleUncheckedUpdateManyWithoutTimeSlotNestedInput
@@ -705,7 +620,6 @@ export type TimeSlotCreateManyProgramInput = {
   name: string
   startTime: string
   endTime: string
-  order: number
   shift: $Enums.Shift
 }
 
@@ -714,7 +628,6 @@ export type TimeSlotUpdateWithoutProgramInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   startTime?: Prisma.StringFieldUpdateOperationsInput | string
   endTime?: Prisma.StringFieldUpdateOperationsInput | string
-  order?: Prisma.IntFieldUpdateOperationsInput | number
   shift?: Prisma.EnumShiftFieldUpdateOperationsInput | $Enums.Shift
   schedules?: Prisma.ScheduleUpdateManyWithoutTimeSlotNestedInput
   lessons?: Prisma.LessonUpdateManyWithoutTimeSlotNestedInput
@@ -725,7 +638,6 @@ export type TimeSlotUncheckedUpdateWithoutProgramInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   startTime?: Prisma.StringFieldUpdateOperationsInput | string
   endTime?: Prisma.StringFieldUpdateOperationsInput | string
-  order?: Prisma.IntFieldUpdateOperationsInput | number
   shift?: Prisma.EnumShiftFieldUpdateOperationsInput | $Enums.Shift
   schedules?: Prisma.ScheduleUncheckedUpdateManyWithoutTimeSlotNestedInput
   lessons?: Prisma.LessonUncheckedUpdateManyWithoutTimeSlotNestedInput
@@ -736,7 +648,6 @@ export type TimeSlotUncheckedUpdateManyWithoutProgramInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   startTime?: Prisma.StringFieldUpdateOperationsInput | string
   endTime?: Prisma.StringFieldUpdateOperationsInput | string
-  order?: Prisma.IntFieldUpdateOperationsInput | number
   shift?: Prisma.EnumShiftFieldUpdateOperationsInput | $Enums.Shift
 }
 
@@ -785,7 +696,6 @@ export type TimeSlotSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   name?: boolean
   startTime?: boolean
   endTime?: boolean
-  order?: boolean
   shift?: boolean
   programId?: boolean
   program?: boolean | Prisma.ProgramDefaultArgs<ExtArgs>
@@ -799,7 +709,6 @@ export type TimeSlotSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   name?: boolean
   startTime?: boolean
   endTime?: boolean
-  order?: boolean
   shift?: boolean
   programId?: boolean
   program?: boolean | Prisma.ProgramDefaultArgs<ExtArgs>
@@ -810,7 +719,6 @@ export type TimeSlotSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   name?: boolean
   startTime?: boolean
   endTime?: boolean
-  order?: boolean
   shift?: boolean
   programId?: boolean
   program?: boolean | Prisma.ProgramDefaultArgs<ExtArgs>
@@ -821,12 +729,11 @@ export type TimeSlotSelectScalar = {
   name?: boolean
   startTime?: boolean
   endTime?: boolean
-  order?: boolean
   shift?: boolean
   programId?: boolean
 }
 
-export type TimeSlotOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "startTime" | "endTime" | "order" | "shift" | "programId", ExtArgs["result"]["timeSlot"]>
+export type TimeSlotOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "startTime" | "endTime" | "shift" | "programId", ExtArgs["result"]["timeSlot"]>
 export type TimeSlotInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   program?: boolean | Prisma.ProgramDefaultArgs<ExtArgs>
   schedules?: boolean | Prisma.TimeSlot$schedulesArgs<ExtArgs>
@@ -852,7 +759,6 @@ export type $TimeSlotPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     name: string
     startTime: string
     endTime: string
-    order: number
     shift: $Enums.Shift
     programId: string
   }, ExtArgs["result"]["timeSlot"]>
@@ -1285,7 +1191,6 @@ export interface TimeSlotFieldRefs {
   readonly name: Prisma.FieldRef<"TimeSlot", 'String'>
   readonly startTime: Prisma.FieldRef<"TimeSlot", 'String'>
   readonly endTime: Prisma.FieldRef<"TimeSlot", 'String'>
-  readonly order: Prisma.FieldRef<"TimeSlot", 'Int'>
   readonly shift: Prisma.FieldRef<"TimeSlot", 'Shift'>
   readonly programId: Prisma.FieldRef<"TimeSlot", 'String'>
 }

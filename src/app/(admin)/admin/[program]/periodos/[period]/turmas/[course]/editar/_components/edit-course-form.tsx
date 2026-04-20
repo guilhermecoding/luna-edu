@@ -58,7 +58,6 @@ type TimeSlotData = {
     name: string;
     startTime: string;
     endTime: string;
-    order: number;
     shift: string;
 };
 

@@ -34,7 +34,7 @@ export async function createTimeSlotAction(
         // Trata erro de unicidade do Prisma (P2002)
         if (error instanceof Prisma.PrismaClientKnownRequestError) {
             if (error.code === "P2002") {
-                return { success: false, error: "Já existe um horário com esta ordem." };
+                return { success: false, error: "Já existe um horário começando neste mesmo horário." };
             }
         }
 

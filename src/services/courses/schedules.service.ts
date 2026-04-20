@@ -19,8 +19,7 @@ export async function getTimeSlotsByProgramSlug(programSlug: string) {
                 },
             },
             orderBy: [
-                { shift: "asc" },
-                { order: "asc" },
+                { startTime: "asc" },
             ],
         });
     } catch {
@@ -60,7 +59,6 @@ export async function createTimeSlot(data: {
     name: string;
     startTime: string;
     endTime: string;
-    order: number;
     shift: Shift;
     programId: string;
 }): Promise<TimeSlot> {
@@ -81,7 +79,6 @@ export async function updateTimeSlot(
         name: string;
         startTime: string;
         endTime: string;
-        order: number;
         shift: Shift;
     },
 ): Promise<TimeSlot> {

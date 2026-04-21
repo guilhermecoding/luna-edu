@@ -109,7 +109,7 @@ export async function createClassGroup(data: {
             if (subjects.length > 0) {
                 await tx.course.createMany({
                     data: subjects.map((subject) => ({
-                        name: `${data.name} - ${subject.name}`,
+                        name: subject.name,
                         code: `${data.slug}-${subject.code}`.toUpperCase(),
                         periodId: data.periodId,
                         subjectId: subject.id,

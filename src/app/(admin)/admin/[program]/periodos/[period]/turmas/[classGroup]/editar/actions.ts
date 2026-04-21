@@ -58,6 +58,7 @@ export async function updateCourseAction(
     courseCode: string,
     data: CourseInput,
 ) {
+    let redirectClassGroupId: string | undefined;
     try {
         const validatedData = courseSchema.parse(data);
         
@@ -97,6 +98,7 @@ export async function updateCourseAction(
             validatedData.classGroupId || null,
         ]);
         revalidateTurmasRelatedPaths(programSlug, periodSlug, classGroupSlugs);
+        redirectClassGroupId = validatedData.classGroupId || course.classGroupId || undefined;
     } catch (error) {
         if (error instanceof ZodError) {
             return { success: false, error: error.issues[0]?.message || "Erro de validação" };
@@ -111,6 +113,13 @@ export async function updateCourseAction(
         toast: "success",
         message: "Disciplina atualizada com sucesso",
     });
+    const [targetClassGroupSlug] = await getClassGroupSlugsByIds([redirectClassGroupId || ""]);
+
+    if (targetClassGroupSlug) {
+        redirect(
+            `/admin/${programSlug}/periodos/${periodSlug}/turmas/${targetClassGroupSlug}/disciplinas?${params.toString()}`,
+        );
+    }
 
     redirect(`/admin/${programSlug}/periodos/${periodSlug}/turmas?${params.toString()}`);
 }
@@ -121,6 +130,7 @@ export async function deleteCourseAction(
     courseCode: string,
     confirmationName: string,
 ) {
+    let redirectClassGroupId: string | undefined;
     try {
         const validatedData = deleteCourseSchema.parse({ confirmationName });
         const period = await getPeriodByProgramAndSlug(programSlug, periodSlug);
@@ -146,6 +156,7 @@ export async function deleteCourseAction(
             course.classGroupId,
         ]);
         revalidateTurmasRelatedPaths(programSlug, periodSlug, classGroupSlugs);
+        redirectClassGroupId = course.classGroupId || undefined;
     } catch (error) {
         if (error instanceof ZodError) {
             return { success: false, error: error.issues[0]?.message || "Erro de validação" };
@@ -160,6 +171,13 @@ export async function deleteCourseAction(
         toast: "success",
         message: "Disciplina apagada com sucesso",
     });
+    const [targetClassGroupSlug] = await getClassGroupSlugsByIds([redirectClassGroupId || ""]);
+
+    if (targetClassGroupSlug) {
+        redirect(
+            `/admin/${programSlug}/periodos/${periodSlug}/turmas/${targetClassGroupSlug}/disciplinas?${params.toString()}`,
+        );
+    }
 
     redirect(`/admin/${programSlug}/periodos/${periodSlug}/turmas?${params.toString()}`);
 }

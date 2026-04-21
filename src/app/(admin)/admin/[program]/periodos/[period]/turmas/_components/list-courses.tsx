@@ -177,11 +177,10 @@ async function ListCoursesContent({
                     {sortedGroupNames.map((groupName) => (
                         <Fragment key={groupName}>
                             {/* Separador de Grupo */}
-                            <tr className="bg-muted/20">
+                            <tr className="bg-surface-border">
                                 <td colSpan={6} className="px-4 sm:px-6 py-3">
                                     <div className="flex items-center gap-2">
-                                        <div className="size-2 rounded-full bg-primary" />
-                                        <span className="font-bold text-xs uppercase tracking-wider text-muted-foreground">
+                                        <span className="font-bold text-xs uppercase tracking-wider text-foreground/80">
                                             {groupName === "Avulsas" ? "Turmas Avulsas" : `${groupName}`}
                                         </span>
                                     </div>

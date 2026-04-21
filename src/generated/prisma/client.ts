@@ -92,6 +92,18 @@ export type Room = Prisma.RoomModel
  */
 export type Period = Prisma.PeriodModel
 /**
+ * Model SubPeriod
+ * Sub-períodos representam etapas avaliativas dentro de um período letivo,
+ * como Bimestres, Trimestres ou Semestres.
+ */
+export type SubPeriod = Prisma.SubPeriodModel
+/**
+ * Model ClassGroup
+ * Turma Física — agrupa as turmas disciplinares (Course) que compartilham
+ * os mesmos alunos. Ex: "1º Ano A" contém as turmas de Matemática, Português, etc.
+ */
+export type ClassGroup = Prisma.ClassGroupModel
+/**
  * Model TimeSlot
  * 
  */

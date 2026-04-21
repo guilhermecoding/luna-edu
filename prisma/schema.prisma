@@ -193,6 +193,10 @@ model Degree {
     level       String?
     totalHours  Int?     @map("total_hours")
 
+    /// JSON map of basePeriod number -> display label.
+    /// Ex: {"1": "1º Ano", "2": "2º Ano", "3": "3º Ano"}
+    gradeLevelLabels Json? @map("grade_level_labels")
+
     programId String  @map("program_id") @db.Uuid
     program   Program @relation(fields: [programId], references: [id])
 
@@ -263,12 +267,54 @@ model Period {
     slug          String
     canonicalCode String?   @unique @default(dbgenerated("gen_random_uuid()")) @map("canonical_code") @db.Uuid
 
-    program Program  @relation(fields: [programId], references: [id])
-    courses Course[]
+    program     Program      @relation(fields: [programId], references: [id])
+    courses     Course[]
+    subPeriods  SubPeriod[]
+    classGroups ClassGroup[]
 
     @@unique([programId, slug])
     @@index([programId, completedAt, startDate, endDate])
     @@map("periods")
+    @@schema("public")
+}
+
+/// Sub-períodos representam etapas avaliativas dentro de um período letivo,
+/// como Bimestres, Trimestres ou Semestres.
+model SubPeriod {
+    id        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+    createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz
+    name      String
+    slug      String
+    order     Int       @db.SmallInt
+    startDate DateTime  @map("start_date") @db.Date
+    endDate   DateTime  @map("end_date") @db.Date
+    weight    Float     @default(1.0)
+    closedAt  DateTime? @map("closed_at") @db.Timestamptz
+    periodId  String    @map("period_id") @db.Uuid
+
+    period     Period     @relation(fields: [periodId], references: [id])
+    activities Activity[]
+
+    @@unique([periodId, slug])
+    @@unique([periodId, order])
+    @@map("sub_periods")
+    @@schema("public")
+}
+
+/// Turma Física — agrupa as turmas disciplinares (Course) que compartilham
+/// os mesmos alunos. Ex: "1º Ano A" contém as turmas de Matemática, Português, etc.
+model ClassGroup {
+    id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+    createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+    name      String
+    slug      String
+    periodId  String   @map("period_id") @db.Uuid
+
+    period  Period   @relation(fields: [periodId], references: [id])
+    courses Course[]
+
+    @@unique([periodId, slug])
+    @@map("class_groups")
     @@schema("public")
 }
 
@@ -312,18 +358,20 @@ model Schedule {
 }
 
 model Course {
-    id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-    createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
-    name      String
-    code      String
-    periodId  String   @map("period_id") @db.Uuid
-    roomId    String?  @map("room_id") @db.Uuid
-    subjectId String   @map("subject_id") @db.Uuid
-    shift     Shift
+    id           String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+    createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz
+    name         String
+    code         String
+    periodId     String  @map("period_id") @db.Uuid
+    roomId       String? @map("room_id") @db.Uuid
+    subjectId    String  @map("subject_id") @db.Uuid
+    shift        Shift
+    classGroupId String? @map("class_group_id") @db.Uuid
 
-    period  Period  @relation(fields: [periodId], references: [id])
-    room    Room?   @relation(fields: [roomId], references: [id])
-    subject Subject @relation(fields: [subjectId], references: [id])
+    period     Period      @relation(fields: [periodId], references: [id])
+    room       Room?       @relation(fields: [roomId], references: [id])
+    subject    Subject     @relation(fields: [subjectId], references: [id])
+    classGroup ClassGroup? @relation(fields: [classGroupId], references: [id])
 
     enrollments      Enrollment[]
     lessons          Lesson[]
@@ -410,18 +458,20 @@ model Attendance {
 }
 
 model Activity {
-    id          String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-    createdAt   DateTime     @default(now()) @map("created_at") @db.Timestamptz
-    courseId    String       @map("course_id") @db.Uuid
-    title       String
-    gradingType GradingType  @default(NONE) @map("grading_type")
-    minValue    Float?       @map("min_value")
-    maxValue    Float?       @map("max_value")
-    type        ActivityType @default(HOMEWORK)
-    weight      Float        @default(1.0)
-    dueDate     DateTime?    @map("due_date") @db.Timestamptz
+    id           String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+    createdAt    DateTime     @default(now()) @map("created_at") @db.Timestamptz
+    courseId     String       @map("course_id") @db.Uuid
+    subPeriodId  String?      @map("sub_period_id") @db.Uuid
+    title        String
+    gradingType  GradingType  @default(NONE) @map("grading_type")
+    minValue     Float?       @map("min_value")
+    maxValue     Float?       @map("max_value")
+    type         ActivityType @default(HOMEWORK)
+    weight       Float        @default(1.0)
+    dueDate      DateTime?    @map("due_date") @db.Timestamptz
 
     course         Course          @relation(fields: [courseId], references: [id])
+    subPeriod      SubPeriod?      @relation(fields: [subPeriodId], references: [id])
     activityGrades ActivityGrade[]
 
     @@map("activities")

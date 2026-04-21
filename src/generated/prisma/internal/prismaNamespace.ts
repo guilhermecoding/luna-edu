@@ -394,6 +394,8 @@ export const ModelName = {
   Campus: 'Campus',
   Room: 'Room',
   Period: 'Period',
+  SubPeriod: 'SubPeriod',
+  ClassGroup: 'ClassGroup',
   TimeSlot: 'TimeSlot',
   Schedule: 'Schedule',
   Course: 'Course',
@@ -422,7 +424,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "session" | "account" | "verification" | "program" | "degree" | "subject" | "campus" | "room" | "period" | "timeSlot" | "schedule" | "course" | "student" | "enrollment" | "lesson" | "attendance" | "activity" | "activityGrade" | "finalGrade" | "studentCourseStats" | "notification" | "courseAssistant"
+    modelProps: "user" | "session" | "account" | "verification" | "program" | "degree" | "subject" | "campus" | "room" | "period" | "subPeriod" | "classGroup" | "timeSlot" | "schedule" | "course" | "student" | "enrollment" | "lesson" | "attendance" | "activity" | "activityGrade" | "finalGrade" | "studentCourseStats" | "notification" | "courseAssistant"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1163,6 +1165,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.PeriodCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.PeriodCountAggregateOutputType> | number
+        }
+      }
+    }
+    SubPeriod: {
+      payload: Prisma.$SubPeriodPayload<ExtArgs>
+      fields: Prisma.SubPeriodFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.SubPeriodFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SubPeriodPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.SubPeriodFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SubPeriodPayload>
+        }
+        findFirst: {
+          args: Prisma.SubPeriodFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SubPeriodPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.SubPeriodFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SubPeriodPayload>
+        }
+        findMany: {
+          args: Prisma.SubPeriodFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SubPeriodPayload>[]
+        }
+        create: {
+          args: Prisma.SubPeriodCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SubPeriodPayload>
+        }
+        createMany: {
+          args: Prisma.SubPeriodCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.SubPeriodCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SubPeriodPayload>[]
+        }
+        delete: {
+          args: Prisma.SubPeriodDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SubPeriodPayload>
+        }
+        update: {
+          args: Prisma.SubPeriodUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SubPeriodPayload>
+        }
+        deleteMany: {
+          args: Prisma.SubPeriodDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.SubPeriodUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.SubPeriodUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SubPeriodPayload>[]
+        }
+        upsert: {
+          args: Prisma.SubPeriodUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SubPeriodPayload>
+        }
+        aggregate: {
+          args: Prisma.SubPeriodAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateSubPeriod>
+        }
+        groupBy: {
+          args: Prisma.SubPeriodGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SubPeriodGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.SubPeriodCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SubPeriodCountAggregateOutputType> | number
+        }
+      }
+    }
+    ClassGroup: {
+      payload: Prisma.$ClassGroupPayload<ExtArgs>
+      fields: Prisma.ClassGroupFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ClassGroupFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClassGroupPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ClassGroupFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClassGroupPayload>
+        }
+        findFirst: {
+          args: Prisma.ClassGroupFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClassGroupPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ClassGroupFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClassGroupPayload>
+        }
+        findMany: {
+          args: Prisma.ClassGroupFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClassGroupPayload>[]
+        }
+        create: {
+          args: Prisma.ClassGroupCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClassGroupPayload>
+        }
+        createMany: {
+          args: Prisma.ClassGroupCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ClassGroupCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClassGroupPayload>[]
+        }
+        delete: {
+          args: Prisma.ClassGroupDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClassGroupPayload>
+        }
+        update: {
+          args: Prisma.ClassGroupUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClassGroupPayload>
+        }
+        deleteMany: {
+          args: Prisma.ClassGroupDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ClassGroupUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ClassGroupUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClassGroupPayload>[]
+        }
+        upsert: {
+          args: Prisma.ClassGroupUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClassGroupPayload>
+        }
+        aggregate: {
+          args: Prisma.ClassGroupAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateClassGroup>
+        }
+        groupBy: {
+          args: Prisma.ClassGroupGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ClassGroupGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ClassGroupCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ClassGroupCountAggregateOutputType> | number
         }
       }
     }
@@ -2254,6 +2404,7 @@ export const DegreeScalarFieldEnum = {
   modality: 'modality',
   level: 'level',
   totalHours: 'totalHours',
+  gradeLevelLabels: 'gradeLevelLabels',
   programId: 'programId'
 } as const
 
@@ -2313,6 +2464,33 @@ export const PeriodScalarFieldEnum = {
 export type PeriodScalarFieldEnum = (typeof PeriodScalarFieldEnum)[keyof typeof PeriodScalarFieldEnum]
 
 
+export const SubPeriodScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  name: 'name',
+  slug: 'slug',
+  order: 'order',
+  startDate: 'startDate',
+  endDate: 'endDate',
+  weight: 'weight',
+  closedAt: 'closedAt',
+  periodId: 'periodId'
+} as const
+
+export type SubPeriodScalarFieldEnum = (typeof SubPeriodScalarFieldEnum)[keyof typeof SubPeriodScalarFieldEnum]
+
+
+export const ClassGroupScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  name: 'name',
+  slug: 'slug',
+  periodId: 'periodId'
+} as const
+
+export type ClassGroupScalarFieldEnum = (typeof ClassGroupScalarFieldEnum)[keyof typeof ClassGroupScalarFieldEnum]
+
+
 export const TimeSlotScalarFieldEnum = {
   id: 'id',
   name: 'name',
@@ -2346,7 +2524,8 @@ export const CourseScalarFieldEnum = {
   periodId: 'periodId',
   roomId: 'roomId',
   subjectId: 'subjectId',
-  shift: 'shift'
+  shift: 'shift',
+  classGroupId: 'classGroupId'
 } as const
 
 export type CourseScalarFieldEnum = (typeof CourseScalarFieldEnum)[keyof typeof CourseScalarFieldEnum]
@@ -2407,6 +2586,7 @@ export const ActivityScalarFieldEnum = {
   id: 'id',
   createdAt: 'createdAt',
   courseId: 'courseId',
+  subPeriodId: 'subPeriodId',
   title: 'title',
   gradingType: 'gradingType',
   minValue: 'minValue',
@@ -2490,6 +2670,14 @@ export const SortOrder = {
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
 
 
+export const NullableJsonNullValueInput = {
+  DbNull: DbNull,
+  JsonNull: JsonNull
+} as const
+
+export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
+
+
 export const QueryMode = {
   default: 'default',
   insensitive: 'insensitive'
@@ -2504,6 +2692,15 @@ export const NullsOrder = {
 } as const
 
 export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
+export const JsonNullValueFilter = {
+  DbNull: DbNull,
+  JsonNull: JsonNull,
+  AnyNull: AnyNull
+} as const
+
+export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
 
 
 
@@ -2576,6 +2773,20 @@ export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel,
 
 
 /**
+ * Reference to a field of type 'Json'
+ */
+export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
+    
+
+
+/**
+ * Reference to a field of type 'QueryMode'
+ */
+export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
+    
+
+
+/**
  * Reference to a field of type 'BigInt'
  */
 export type BigIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BigInt'>
@@ -2600,6 +2811,20 @@ export type EnumRoomTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaM
  * Reference to a field of type 'RoomType[]'
  */
 export type ListEnumRoomTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RoomType[]'>
+    
+
+
+/**
+ * Reference to a field of type 'Float'
+ */
+export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
+    
+
+
+/**
+ * Reference to a field of type 'Float[]'
+ */
+export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
     
 
 
@@ -2642,20 +2867,6 @@ export type EnumGradingTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$Pris
  * Reference to a field of type 'GradingType[]'
  */
 export type ListEnumGradingTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'GradingType[]'>
-    
-
-
-/**
- * Reference to a field of type 'Float'
- */
-export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
-    
-
-
-/**
- * Reference to a field of type 'Float[]'
- */
-export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
     
 
 
@@ -2791,6 +3002,8 @@ export type GlobalOmitConfig = {
   campus?: Prisma.CampusOmit
   room?: Prisma.RoomOmit
   period?: Prisma.PeriodOmit
+  subPeriod?: Prisma.SubPeriodOmit
+  classGroup?: Prisma.ClassGroupOmit
   timeSlot?: Prisma.TimeSlotOmit
   schedule?: Prisma.ScheduleOmit
   course?: Prisma.CourseOmit

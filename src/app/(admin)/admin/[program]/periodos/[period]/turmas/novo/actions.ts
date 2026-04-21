@@ -28,6 +28,7 @@ export async function createCourseAction(
             subjectId: validatedData.subjectId,
             roomId: validatedData.roomId || null,
             shift: validatedData.shift as Shift,
+            classGroupId: validatedData.classGroupId || null,
             schedules: validatedData.schedules.map((s) => ({
                 dayOfWeek: s.dayOfWeek as DayOfWeek,
                 timeSlotId: s.timeSlotId,

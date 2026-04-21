@@ -28,7 +28,7 @@ import {
     DAYS_OF_WEEK,
     dayOfWeekLabels,
 } from "../../../schema";
-import { IconBuilding, IconLoader2, IconUsers, IconPlus, IconTrash, IconCalendarEvent } from "@tabler/icons-react";
+import { IconBuilding, IconLoader2, IconUsers, IconPlus, IconTrash, IconCalendarEvent, IconUsersGroup } from "@tabler/icons-react";
 import { isRedirectError } from "@/lib/is-redirect-error";
 
 type SubjectWithDegree = {
@@ -67,6 +67,15 @@ type TeacherData = {
     email: string;
 };
 
+type ClassGroupData = {
+    id: string;
+    name: string;
+    slug: string;
+    _count: {
+        courses: number;
+    };
+};
+
 interface EditCourseFormProps {
     programSlug: string;
     periodSlug: string;
@@ -77,12 +86,14 @@ interface EditCourseFormProps {
         roomId: string;
         shift: string;
         code: string;
+        classGroupId: string;
         schedules: ScheduleEntryInput[];
     };
     subjects: SubjectWithDegree[];
     rooms: RoomWithCampus[];
     timeSlots: TimeSlotData[];
     teachers: TeacherData[];
+    classGroups: ClassGroupData[];
 }
 
 export function EditCourseForm({
@@ -94,6 +105,7 @@ export function EditCourseForm({
     rooms,
     timeSlots,
     teachers,
+    classGroups,
 }: EditCourseFormProps) {
     const router = useRouter();
     const pathname = usePathname();
@@ -109,6 +121,7 @@ export function EditCourseForm({
             subjectId: defaultValues.subjectId,
             roomId: defaultValues.roomId,
             shift: defaultValues.shift as CourseInput["shift"],
+            classGroupId: defaultValues.classGroupId,
             schedules: defaultValues.schedules,
         },
     });
@@ -260,6 +273,50 @@ export function EditCourseForm({
                         )}
                     />
                     {errors.subjectId && <p className="text-sm text-red-600">{errors.subjectId.message}</p>}
+                </div>
+
+                <div className="space-y-2 md:col-span-1">
+                    <Label htmlFor="classGroupId">Grupo (Turma Física)</Label>
+                    {classGroups.length === 0 ? (
+                        <div className="p-4 border-2 border-dashed border-surface-border rounded-xl bg-surface/30 text-center">
+                            <p className="text-sm text-muted-foreground">
+                                Nenhum grupo cadastrado.
+                            </p>
+                        </div>
+                    ) : (
+                        <Controller
+                            control={control}
+                            name="classGroupId"
+                            render={({ field }) => (
+                                <Select
+                                    value={field.value || ""}
+                                    onValueChange={field.onChange}
+                                    disabled={isSubmitting}
+                                >
+                                    <SelectTrigger
+                                        id="classGroupId"
+                                        className="p-5 rounded-lg bg-background w-full"
+                                    >
+                                        <SelectValue placeholder="Selecione um grupo (opcional)" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {classGroups.map((group) => (
+                                            <SelectItem key={group.id} value={group.id}>
+                                                <span className="flex items-center gap-2">
+                                                    <IconUsersGroup className="size-4 text-muted-foreground" />
+                                                    {group.name}
+                                                    <span className="text-xs text-muted-foreground">({group._count.courses} turmas)</span>
+                                                </span>
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                            )}
+                        />
+                    )}
+                    <p className="text-[10px] text-muted-foreground italic">
+                        Agrupe turmas disciplinares na mesma turma física (ex: &quot;1º Ano A&quot;).
+                    </p>
                 </div>
 
                 <div className="space-y-2 md:col-span-1">

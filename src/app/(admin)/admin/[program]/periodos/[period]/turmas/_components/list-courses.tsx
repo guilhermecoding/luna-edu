@@ -127,9 +127,17 @@ async function ListCoursesContent({
                                     <div className="flex justify-center items-center bg-background border border-surface-border size-8 sm:size-10 rounded-lg text-primary shrink-0 transition-transform group-hover:scale-105">
                                         <IconUsersGroup className="size-4 sm:size-5" />
                                     </div>
-                                    <span className="font-bold text-sm sm:text-base text-foreground uppercase" title={course.name}>
-                                        {course.name}
-                                    </span>
+                                    <div className="flex flex-col gap-0.5">
+                                        <span className="font-bold text-sm sm:text-base text-foreground uppercase" title={course.name}>
+                                            {course.name}
+                                        </span>
+                                        {course.classGroup && (
+                                            <span className="inline-flex items-center gap-1 text-[10px] text-muted-foreground">
+                                                <IconUsersGroup className="size-3" />
+                                                {course.classGroup.name}
+                                            </span>
+                                        )}
+                                    </div>
                                 </div>
                             </td>
                             <td className="px-4 sm:px-6 py-4">

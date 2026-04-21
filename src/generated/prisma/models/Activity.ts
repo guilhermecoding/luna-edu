@@ -42,6 +42,7 @@ export type ActivityMinAggregateOutputType = {
   id: string | null
   createdAt: Date | null
   courseId: string | null
+  subPeriodId: string | null
   title: string | null
   gradingType: $Enums.GradingType | null
   minValue: number | null
@@ -55,6 +56,7 @@ export type ActivityMaxAggregateOutputType = {
   id: string | null
   createdAt: Date | null
   courseId: string | null
+  subPeriodId: string | null
   title: string | null
   gradingType: $Enums.GradingType | null
   minValue: number | null
@@ -68,6 +70,7 @@ export type ActivityCountAggregateOutputType = {
   id: number
   createdAt: number
   courseId: number
+  subPeriodId: number
   title: number
   gradingType: number
   minValue: number
@@ -95,6 +98,7 @@ export type ActivityMinAggregateInputType = {
   id?: true
   createdAt?: true
   courseId?: true
+  subPeriodId?: true
   title?: true
   gradingType?: true
   minValue?: true
@@ -108,6 +112,7 @@ export type ActivityMaxAggregateInputType = {
   id?: true
   createdAt?: true
   courseId?: true
+  subPeriodId?: true
   title?: true
   gradingType?: true
   minValue?: true
@@ -121,6 +126,7 @@ export type ActivityCountAggregateInputType = {
   id?: true
   createdAt?: true
   courseId?: true
+  subPeriodId?: true
   title?: true
   gradingType?: true
   minValue?: true
@@ -221,6 +227,7 @@ export type ActivityGroupByOutputType = {
   id: string
   createdAt: Date
   courseId: string
+  subPeriodId: string | null
   title: string
   gradingType: $Enums.GradingType
   minValue: number | null
@@ -257,6 +264,7 @@ export type ActivityWhereInput = {
   id?: Prisma.UuidFilter<"Activity"> | string
   createdAt?: Prisma.DateTimeFilter<"Activity"> | Date | string
   courseId?: Prisma.UuidFilter<"Activity"> | string
+  subPeriodId?: Prisma.UuidNullableFilter<"Activity"> | string | null
   title?: Prisma.StringFilter<"Activity"> | string
   gradingType?: Prisma.EnumGradingTypeFilter<"Activity"> | $Enums.GradingType
   minValue?: Prisma.FloatNullableFilter<"Activity"> | number | null
@@ -265,6 +273,7 @@ export type ActivityWhereInput = {
   weight?: Prisma.FloatFilter<"Activity"> | number
   dueDate?: Prisma.DateTimeNullableFilter<"Activity"> | Date | string | null
   course?: Prisma.XOR<Prisma.CourseScalarRelationFilter, Prisma.CourseWhereInput>
+  subPeriod?: Prisma.XOR<Prisma.SubPeriodNullableScalarRelationFilter, Prisma.SubPeriodWhereInput> | null
   activityGrades?: Prisma.ActivityGradeListRelationFilter
 }
 
@@ -272,6 +281,7 @@ export type ActivityOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   courseId?: Prisma.SortOrder
+  subPeriodId?: Prisma.SortOrderInput | Prisma.SortOrder
   title?: Prisma.SortOrder
   gradingType?: Prisma.SortOrder
   minValue?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -280,6 +290,7 @@ export type ActivityOrderByWithRelationInput = {
   weight?: Prisma.SortOrder
   dueDate?: Prisma.SortOrderInput | Prisma.SortOrder
   course?: Prisma.CourseOrderByWithRelationInput
+  subPeriod?: Prisma.SubPeriodOrderByWithRelationInput
   activityGrades?: Prisma.ActivityGradeOrderByRelationAggregateInput
 }
 
@@ -290,6 +301,7 @@ export type ActivityWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.ActivityWhereInput | Prisma.ActivityWhereInput[]
   createdAt?: Prisma.DateTimeFilter<"Activity"> | Date | string
   courseId?: Prisma.UuidFilter<"Activity"> | string
+  subPeriodId?: Prisma.UuidNullableFilter<"Activity"> | string | null
   title?: Prisma.StringFilter<"Activity"> | string
   gradingType?: Prisma.EnumGradingTypeFilter<"Activity"> | $Enums.GradingType
   minValue?: Prisma.FloatNullableFilter<"Activity"> | number | null
@@ -298,6 +310,7 @@ export type ActivityWhereUniqueInput = Prisma.AtLeast<{
   weight?: Prisma.FloatFilter<"Activity"> | number
   dueDate?: Prisma.DateTimeNullableFilter<"Activity"> | Date | string | null
   course?: Prisma.XOR<Prisma.CourseScalarRelationFilter, Prisma.CourseWhereInput>
+  subPeriod?: Prisma.XOR<Prisma.SubPeriodNullableScalarRelationFilter, Prisma.SubPeriodWhereInput> | null
   activityGrades?: Prisma.ActivityGradeListRelationFilter
 }, "id">
 
@@ -305,6 +318,7 @@ export type ActivityOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   courseId?: Prisma.SortOrder
+  subPeriodId?: Prisma.SortOrderInput | Prisma.SortOrder
   title?: Prisma.SortOrder
   gradingType?: Prisma.SortOrder
   minValue?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -326,6 +340,7 @@ export type ActivityScalarWhereWithAggregatesInput = {
   id?: Prisma.UuidWithAggregatesFilter<"Activity"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Activity"> | Date | string
   courseId?: Prisma.UuidWithAggregatesFilter<"Activity"> | string
+  subPeriodId?: Prisma.UuidNullableWithAggregatesFilter<"Activity"> | string | null
   title?: Prisma.StringWithAggregatesFilter<"Activity"> | string
   gradingType?: Prisma.EnumGradingTypeWithAggregatesFilter<"Activity"> | $Enums.GradingType
   minValue?: Prisma.FloatNullableWithAggregatesFilter<"Activity"> | number | null
@@ -346,6 +361,7 @@ export type ActivityCreateInput = {
   weight?: number
   dueDate?: Date | string | null
   course: Prisma.CourseCreateNestedOneWithoutActivitiesInput
+  subPeriod?: Prisma.SubPeriodCreateNestedOneWithoutActivitiesInput
   activityGrades?: Prisma.ActivityGradeCreateNestedManyWithoutActivityInput
 }
 
@@ -353,6 +369,7 @@ export type ActivityUncheckedCreateInput = {
   id?: string
   createdAt?: Date | string
   courseId: string
+  subPeriodId?: string | null
   title: string
   gradingType?: $Enums.GradingType
   minValue?: number | null
@@ -374,6 +391,7 @@ export type ActivityUpdateInput = {
   weight?: Prisma.FloatFieldUpdateOperationsInput | number
   dueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   course?: Prisma.CourseUpdateOneRequiredWithoutActivitiesNestedInput
+  subPeriod?: Prisma.SubPeriodUpdateOneWithoutActivitiesNestedInput
   activityGrades?: Prisma.ActivityGradeUpdateManyWithoutActivityNestedInput
 }
 
@@ -381,6 +399,7 @@ export type ActivityUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   courseId?: Prisma.StringFieldUpdateOperationsInput | string
+  subPeriodId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   title?: Prisma.StringFieldUpdateOperationsInput | string
   gradingType?: Prisma.EnumGradingTypeFieldUpdateOperationsInput | $Enums.GradingType
   minValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -395,6 +414,7 @@ export type ActivityCreateManyInput = {
   id?: string
   createdAt?: Date | string
   courseId: string
+  subPeriodId?: string | null
   title: string
   gradingType?: $Enums.GradingType
   minValue?: number | null
@@ -420,6 +440,7 @@ export type ActivityUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   courseId?: Prisma.StringFieldUpdateOperationsInput | string
+  subPeriodId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   title?: Prisma.StringFieldUpdateOperationsInput | string
   gradingType?: Prisma.EnumGradingTypeFieldUpdateOperationsInput | $Enums.GradingType
   minValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -443,6 +464,7 @@ export type ActivityCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   courseId?: Prisma.SortOrder
+  subPeriodId?: Prisma.SortOrder
   title?: Prisma.SortOrder
   gradingType?: Prisma.SortOrder
   minValue?: Prisma.SortOrder
@@ -462,6 +484,7 @@ export type ActivityMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   courseId?: Prisma.SortOrder
+  subPeriodId?: Prisma.SortOrder
   title?: Prisma.SortOrder
   gradingType?: Prisma.SortOrder
   minValue?: Prisma.SortOrder
@@ -475,6 +498,7 @@ export type ActivityMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   courseId?: Prisma.SortOrder
+  subPeriodId?: Prisma.SortOrder
   title?: Prisma.SortOrder
   gradingType?: Prisma.SortOrder
   minValue?: Prisma.SortOrder
@@ -493,6 +517,48 @@ export type ActivitySumOrderByAggregateInput = {
 export type ActivityScalarRelationFilter = {
   is?: Prisma.ActivityWhereInput
   isNot?: Prisma.ActivityWhereInput
+}
+
+export type ActivityCreateNestedManyWithoutSubPeriodInput = {
+  create?: Prisma.XOR<Prisma.ActivityCreateWithoutSubPeriodInput, Prisma.ActivityUncheckedCreateWithoutSubPeriodInput> | Prisma.ActivityCreateWithoutSubPeriodInput[] | Prisma.ActivityUncheckedCreateWithoutSubPeriodInput[]
+  connectOrCreate?: Prisma.ActivityCreateOrConnectWithoutSubPeriodInput | Prisma.ActivityCreateOrConnectWithoutSubPeriodInput[]
+  createMany?: Prisma.ActivityCreateManySubPeriodInputEnvelope
+  connect?: Prisma.ActivityWhereUniqueInput | Prisma.ActivityWhereUniqueInput[]
+}
+
+export type ActivityUncheckedCreateNestedManyWithoutSubPeriodInput = {
+  create?: Prisma.XOR<Prisma.ActivityCreateWithoutSubPeriodInput, Prisma.ActivityUncheckedCreateWithoutSubPeriodInput> | Prisma.ActivityCreateWithoutSubPeriodInput[] | Prisma.ActivityUncheckedCreateWithoutSubPeriodInput[]
+  connectOrCreate?: Prisma.ActivityCreateOrConnectWithoutSubPeriodInput | Prisma.ActivityCreateOrConnectWithoutSubPeriodInput[]
+  createMany?: Prisma.ActivityCreateManySubPeriodInputEnvelope
+  connect?: Prisma.ActivityWhereUniqueInput | Prisma.ActivityWhereUniqueInput[]
+}
+
+export type ActivityUpdateManyWithoutSubPeriodNestedInput = {
+  create?: Prisma.XOR<Prisma.ActivityCreateWithoutSubPeriodInput, Prisma.ActivityUncheckedCreateWithoutSubPeriodInput> | Prisma.ActivityCreateWithoutSubPeriodInput[] | Prisma.ActivityUncheckedCreateWithoutSubPeriodInput[]
+  connectOrCreate?: Prisma.ActivityCreateOrConnectWithoutSubPeriodInput | Prisma.ActivityCreateOrConnectWithoutSubPeriodInput[]
+  upsert?: Prisma.ActivityUpsertWithWhereUniqueWithoutSubPeriodInput | Prisma.ActivityUpsertWithWhereUniqueWithoutSubPeriodInput[]
+  createMany?: Prisma.ActivityCreateManySubPeriodInputEnvelope
+  set?: Prisma.ActivityWhereUniqueInput | Prisma.ActivityWhereUniqueInput[]
+  disconnect?: Prisma.ActivityWhereUniqueInput | Prisma.ActivityWhereUniqueInput[]
+  delete?: Prisma.ActivityWhereUniqueInput | Prisma.ActivityWhereUniqueInput[]
+  connect?: Prisma.ActivityWhereUniqueInput | Prisma.ActivityWhereUniqueInput[]
+  update?: Prisma.ActivityUpdateWithWhereUniqueWithoutSubPeriodInput | Prisma.ActivityUpdateWithWhereUniqueWithoutSubPeriodInput[]
+  updateMany?: Prisma.ActivityUpdateManyWithWhereWithoutSubPeriodInput | Prisma.ActivityUpdateManyWithWhereWithoutSubPeriodInput[]
+  deleteMany?: Prisma.ActivityScalarWhereInput | Prisma.ActivityScalarWhereInput[]
+}
+
+export type ActivityUncheckedUpdateManyWithoutSubPeriodNestedInput = {
+  create?: Prisma.XOR<Prisma.ActivityCreateWithoutSubPeriodInput, Prisma.ActivityUncheckedCreateWithoutSubPeriodInput> | Prisma.ActivityCreateWithoutSubPeriodInput[] | Prisma.ActivityUncheckedCreateWithoutSubPeriodInput[]
+  connectOrCreate?: Prisma.ActivityCreateOrConnectWithoutSubPeriodInput | Prisma.ActivityCreateOrConnectWithoutSubPeriodInput[]
+  upsert?: Prisma.ActivityUpsertWithWhereUniqueWithoutSubPeriodInput | Prisma.ActivityUpsertWithWhereUniqueWithoutSubPeriodInput[]
+  createMany?: Prisma.ActivityCreateManySubPeriodInputEnvelope
+  set?: Prisma.ActivityWhereUniqueInput | Prisma.ActivityWhereUniqueInput[]
+  disconnect?: Prisma.ActivityWhereUniqueInput | Prisma.ActivityWhereUniqueInput[]
+  delete?: Prisma.ActivityWhereUniqueInput | Prisma.ActivityWhereUniqueInput[]
+  connect?: Prisma.ActivityWhereUniqueInput | Prisma.ActivityWhereUniqueInput[]
+  update?: Prisma.ActivityUpdateWithWhereUniqueWithoutSubPeriodInput | Prisma.ActivityUpdateWithWhereUniqueWithoutSubPeriodInput[]
+  updateMany?: Prisma.ActivityUpdateManyWithWhereWithoutSubPeriodInput | Prisma.ActivityUpdateManyWithWhereWithoutSubPeriodInput[]
+  deleteMany?: Prisma.ActivityScalarWhereInput | Prisma.ActivityScalarWhereInput[]
 }
 
 export type ActivityCreateNestedManyWithoutCourseInput = {
@@ -553,14 +619,6 @@ export type EnumActivityTypeFieldUpdateOperationsInput = {
   set?: $Enums.ActivityType
 }
 
-export type FloatFieldUpdateOperationsInput = {
-  set?: number
-  increment?: number
-  decrement?: number
-  multiply?: number
-  divide?: number
-}
-
 export type ActivityCreateNestedOneWithoutActivityGradesInput = {
   create?: Prisma.XOR<Prisma.ActivityCreateWithoutActivityGradesInput, Prisma.ActivityUncheckedCreateWithoutActivityGradesInput>
   connectOrCreate?: Prisma.ActivityCreateOrConnectWithoutActivityGradesInput
@@ -575,6 +633,77 @@ export type ActivityUpdateOneRequiredWithoutActivityGradesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.ActivityUpdateToOneWithWhereWithoutActivityGradesInput, Prisma.ActivityUpdateWithoutActivityGradesInput>, Prisma.ActivityUncheckedUpdateWithoutActivityGradesInput>
 }
 
+export type ActivityCreateWithoutSubPeriodInput = {
+  id?: string
+  createdAt?: Date | string
+  title: string
+  gradingType?: $Enums.GradingType
+  minValue?: number | null
+  maxValue?: number | null
+  type?: $Enums.ActivityType
+  weight?: number
+  dueDate?: Date | string | null
+  course: Prisma.CourseCreateNestedOneWithoutActivitiesInput
+  activityGrades?: Prisma.ActivityGradeCreateNestedManyWithoutActivityInput
+}
+
+export type ActivityUncheckedCreateWithoutSubPeriodInput = {
+  id?: string
+  createdAt?: Date | string
+  courseId: string
+  title: string
+  gradingType?: $Enums.GradingType
+  minValue?: number | null
+  maxValue?: number | null
+  type?: $Enums.ActivityType
+  weight?: number
+  dueDate?: Date | string | null
+  activityGrades?: Prisma.ActivityGradeUncheckedCreateNestedManyWithoutActivityInput
+}
+
+export type ActivityCreateOrConnectWithoutSubPeriodInput = {
+  where: Prisma.ActivityWhereUniqueInput
+  create: Prisma.XOR<Prisma.ActivityCreateWithoutSubPeriodInput, Prisma.ActivityUncheckedCreateWithoutSubPeriodInput>
+}
+
+export type ActivityCreateManySubPeriodInputEnvelope = {
+  data: Prisma.ActivityCreateManySubPeriodInput | Prisma.ActivityCreateManySubPeriodInput[]
+  skipDuplicates?: boolean
+}
+
+export type ActivityUpsertWithWhereUniqueWithoutSubPeriodInput = {
+  where: Prisma.ActivityWhereUniqueInput
+  update: Prisma.XOR<Prisma.ActivityUpdateWithoutSubPeriodInput, Prisma.ActivityUncheckedUpdateWithoutSubPeriodInput>
+  create: Prisma.XOR<Prisma.ActivityCreateWithoutSubPeriodInput, Prisma.ActivityUncheckedCreateWithoutSubPeriodInput>
+}
+
+export type ActivityUpdateWithWhereUniqueWithoutSubPeriodInput = {
+  where: Prisma.ActivityWhereUniqueInput
+  data: Prisma.XOR<Prisma.ActivityUpdateWithoutSubPeriodInput, Prisma.ActivityUncheckedUpdateWithoutSubPeriodInput>
+}
+
+export type ActivityUpdateManyWithWhereWithoutSubPeriodInput = {
+  where: Prisma.ActivityScalarWhereInput
+  data: Prisma.XOR<Prisma.ActivityUpdateManyMutationInput, Prisma.ActivityUncheckedUpdateManyWithoutSubPeriodInput>
+}
+
+export type ActivityScalarWhereInput = {
+  AND?: Prisma.ActivityScalarWhereInput | Prisma.ActivityScalarWhereInput[]
+  OR?: Prisma.ActivityScalarWhereInput[]
+  NOT?: Prisma.ActivityScalarWhereInput | Prisma.ActivityScalarWhereInput[]
+  id?: Prisma.UuidFilter<"Activity"> | string
+  createdAt?: Prisma.DateTimeFilter<"Activity"> | Date | string
+  courseId?: Prisma.UuidFilter<"Activity"> | string
+  subPeriodId?: Prisma.UuidNullableFilter<"Activity"> | string | null
+  title?: Prisma.StringFilter<"Activity"> | string
+  gradingType?: Prisma.EnumGradingTypeFilter<"Activity"> | $Enums.GradingType
+  minValue?: Prisma.FloatNullableFilter<"Activity"> | number | null
+  maxValue?: Prisma.FloatNullableFilter<"Activity"> | number | null
+  type?: Prisma.EnumActivityTypeFilter<"Activity"> | $Enums.ActivityType
+  weight?: Prisma.FloatFilter<"Activity"> | number
+  dueDate?: Prisma.DateTimeNullableFilter<"Activity"> | Date | string | null
+}
+
 export type ActivityCreateWithoutCourseInput = {
   id?: string
   createdAt?: Date | string
@@ -585,12 +714,14 @@ export type ActivityCreateWithoutCourseInput = {
   type?: $Enums.ActivityType
   weight?: number
   dueDate?: Date | string | null
+  subPeriod?: Prisma.SubPeriodCreateNestedOneWithoutActivitiesInput
   activityGrades?: Prisma.ActivityGradeCreateNestedManyWithoutActivityInput
 }
 
 export type ActivityUncheckedCreateWithoutCourseInput = {
   id?: string
   createdAt?: Date | string
+  subPeriodId?: string | null
   title: string
   gradingType?: $Enums.GradingType
   minValue?: number | null
@@ -627,22 +758,6 @@ export type ActivityUpdateManyWithWhereWithoutCourseInput = {
   data: Prisma.XOR<Prisma.ActivityUpdateManyMutationInput, Prisma.ActivityUncheckedUpdateManyWithoutCourseInput>
 }
 
-export type ActivityScalarWhereInput = {
-  AND?: Prisma.ActivityScalarWhereInput | Prisma.ActivityScalarWhereInput[]
-  OR?: Prisma.ActivityScalarWhereInput[]
-  NOT?: Prisma.ActivityScalarWhereInput | Prisma.ActivityScalarWhereInput[]
-  id?: Prisma.UuidFilter<"Activity"> | string
-  createdAt?: Prisma.DateTimeFilter<"Activity"> | Date | string
-  courseId?: Prisma.UuidFilter<"Activity"> | string
-  title?: Prisma.StringFilter<"Activity"> | string
-  gradingType?: Prisma.EnumGradingTypeFilter<"Activity"> | $Enums.GradingType
-  minValue?: Prisma.FloatNullableFilter<"Activity"> | number | null
-  maxValue?: Prisma.FloatNullableFilter<"Activity"> | number | null
-  type?: Prisma.EnumActivityTypeFilter<"Activity"> | $Enums.ActivityType
-  weight?: Prisma.FloatFilter<"Activity"> | number
-  dueDate?: Prisma.DateTimeNullableFilter<"Activity"> | Date | string | null
-}
-
 export type ActivityCreateWithoutActivityGradesInput = {
   id?: string
   createdAt?: Date | string
@@ -654,12 +769,14 @@ export type ActivityCreateWithoutActivityGradesInput = {
   weight?: number
   dueDate?: Date | string | null
   course: Prisma.CourseCreateNestedOneWithoutActivitiesInput
+  subPeriod?: Prisma.SubPeriodCreateNestedOneWithoutActivitiesInput
 }
 
 export type ActivityUncheckedCreateWithoutActivityGradesInput = {
   id?: string
   createdAt?: Date | string
   courseId: string
+  subPeriodId?: string | null
   title: string
   gradingType?: $Enums.GradingType
   minValue?: number | null
@@ -696,9 +813,65 @@ export type ActivityUpdateWithoutActivityGradesInput = {
   weight?: Prisma.FloatFieldUpdateOperationsInput | number
   dueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   course?: Prisma.CourseUpdateOneRequiredWithoutActivitiesNestedInput
+  subPeriod?: Prisma.SubPeriodUpdateOneWithoutActivitiesNestedInput
 }
 
 export type ActivityUncheckedUpdateWithoutActivityGradesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  courseId?: Prisma.StringFieldUpdateOperationsInput | string
+  subPeriodId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  gradingType?: Prisma.EnumGradingTypeFieldUpdateOperationsInput | $Enums.GradingType
+  minValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  maxValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  type?: Prisma.EnumActivityTypeFieldUpdateOperationsInput | $Enums.ActivityType
+  weight?: Prisma.FloatFieldUpdateOperationsInput | number
+  dueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+}
+
+export type ActivityCreateManySubPeriodInput = {
+  id?: string
+  createdAt?: Date | string
+  courseId: string
+  title: string
+  gradingType?: $Enums.GradingType
+  minValue?: number | null
+  maxValue?: number | null
+  type?: $Enums.ActivityType
+  weight?: number
+  dueDate?: Date | string | null
+}
+
+export type ActivityUpdateWithoutSubPeriodInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  gradingType?: Prisma.EnumGradingTypeFieldUpdateOperationsInput | $Enums.GradingType
+  minValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  maxValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  type?: Prisma.EnumActivityTypeFieldUpdateOperationsInput | $Enums.ActivityType
+  weight?: Prisma.FloatFieldUpdateOperationsInput | number
+  dueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  course?: Prisma.CourseUpdateOneRequiredWithoutActivitiesNestedInput
+  activityGrades?: Prisma.ActivityGradeUpdateManyWithoutActivityNestedInput
+}
+
+export type ActivityUncheckedUpdateWithoutSubPeriodInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  courseId?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  gradingType?: Prisma.EnumGradingTypeFieldUpdateOperationsInput | $Enums.GradingType
+  minValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  maxValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  type?: Prisma.EnumActivityTypeFieldUpdateOperationsInput | $Enums.ActivityType
+  weight?: Prisma.FloatFieldUpdateOperationsInput | number
+  dueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  activityGrades?: Prisma.ActivityGradeUncheckedUpdateManyWithoutActivityNestedInput
+}
+
+export type ActivityUncheckedUpdateManyWithoutSubPeriodInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   courseId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -714,6 +887,7 @@ export type ActivityUncheckedUpdateWithoutActivityGradesInput = {
 export type ActivityCreateManyCourseInput = {
   id?: string
   createdAt?: Date | string
+  subPeriodId?: string | null
   title: string
   gradingType?: $Enums.GradingType
   minValue?: number | null
@@ -733,12 +907,14 @@ export type ActivityUpdateWithoutCourseInput = {
   type?: Prisma.EnumActivityTypeFieldUpdateOperationsInput | $Enums.ActivityType
   weight?: Prisma.FloatFieldUpdateOperationsInput | number
   dueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  subPeriod?: Prisma.SubPeriodUpdateOneWithoutActivitiesNestedInput
   activityGrades?: Prisma.ActivityGradeUpdateManyWithoutActivityNestedInput
 }
 
 export type ActivityUncheckedUpdateWithoutCourseInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  subPeriodId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   title?: Prisma.StringFieldUpdateOperationsInput | string
   gradingType?: Prisma.EnumGradingTypeFieldUpdateOperationsInput | $Enums.GradingType
   minValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -752,6 +928,7 @@ export type ActivityUncheckedUpdateWithoutCourseInput = {
 export type ActivityUncheckedUpdateManyWithoutCourseInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  subPeriodId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   title?: Prisma.StringFieldUpdateOperationsInput | string
   gradingType?: Prisma.EnumGradingTypeFieldUpdateOperationsInput | $Enums.GradingType
   minValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -796,6 +973,7 @@ export type ActivitySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   id?: boolean
   createdAt?: boolean
   courseId?: boolean
+  subPeriodId?: boolean
   title?: boolean
   gradingType?: boolean
   minValue?: boolean
@@ -804,6 +982,7 @@ export type ActivitySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   weight?: boolean
   dueDate?: boolean
   course?: boolean | Prisma.CourseDefaultArgs<ExtArgs>
+  subPeriod?: boolean | Prisma.Activity$subPeriodArgs<ExtArgs>
   activityGrades?: boolean | Prisma.Activity$activityGradesArgs<ExtArgs>
   _count?: boolean | Prisma.ActivityCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["activity"]>
@@ -812,6 +991,7 @@ export type ActivitySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   id?: boolean
   createdAt?: boolean
   courseId?: boolean
+  subPeriodId?: boolean
   title?: boolean
   gradingType?: boolean
   minValue?: boolean
@@ -820,12 +1000,14 @@ export type ActivitySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   weight?: boolean
   dueDate?: boolean
   course?: boolean | Prisma.CourseDefaultArgs<ExtArgs>
+  subPeriod?: boolean | Prisma.Activity$subPeriodArgs<ExtArgs>
 }, ExtArgs["result"]["activity"]>
 
 export type ActivitySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   createdAt?: boolean
   courseId?: boolean
+  subPeriodId?: boolean
   title?: boolean
   gradingType?: boolean
   minValue?: boolean
@@ -834,12 +1016,14 @@ export type ActivitySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   weight?: boolean
   dueDate?: boolean
   course?: boolean | Prisma.CourseDefaultArgs<ExtArgs>
+  subPeriod?: boolean | Prisma.Activity$subPeriodArgs<ExtArgs>
 }, ExtArgs["result"]["activity"]>
 
 export type ActivitySelectScalar = {
   id?: boolean
   createdAt?: boolean
   courseId?: boolean
+  subPeriodId?: boolean
   title?: boolean
   gradingType?: boolean
   minValue?: boolean
@@ -849,29 +1033,34 @@ export type ActivitySelectScalar = {
   dueDate?: boolean
 }
 
-export type ActivityOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "courseId" | "title" | "gradingType" | "minValue" | "maxValue" | "type" | "weight" | "dueDate", ExtArgs["result"]["activity"]>
+export type ActivityOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "courseId" | "subPeriodId" | "title" | "gradingType" | "minValue" | "maxValue" | "type" | "weight" | "dueDate", ExtArgs["result"]["activity"]>
 export type ActivityInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   course?: boolean | Prisma.CourseDefaultArgs<ExtArgs>
+  subPeriod?: boolean | Prisma.Activity$subPeriodArgs<ExtArgs>
   activityGrades?: boolean | Prisma.Activity$activityGradesArgs<ExtArgs>
   _count?: boolean | Prisma.ActivityCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type ActivityIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   course?: boolean | Prisma.CourseDefaultArgs<ExtArgs>
+  subPeriod?: boolean | Prisma.Activity$subPeriodArgs<ExtArgs>
 }
 export type ActivityIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   course?: boolean | Prisma.CourseDefaultArgs<ExtArgs>
+  subPeriod?: boolean | Prisma.Activity$subPeriodArgs<ExtArgs>
 }
 
 export type $ActivityPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Activity"
   objects: {
     course: Prisma.$CoursePayload<ExtArgs>
+    subPeriod: Prisma.$SubPeriodPayload<ExtArgs> | null
     activityGrades: Prisma.$ActivityGradePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     createdAt: Date
     courseId: string
+    subPeriodId: string | null
     title: string
     gradingType: $Enums.GradingType
     minValue: number | null
@@ -1274,6 +1463,7 @@ readonly fields: ActivityFieldRefs;
 export interface Prisma__ActivityClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   course<T extends Prisma.CourseDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CourseDefaultArgs<ExtArgs>>): Prisma.Prisma__CourseClient<runtime.Types.Result.GetResult<Prisma.$CoursePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  subPeriod<T extends Prisma.Activity$subPeriodArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Activity$subPeriodArgs<ExtArgs>>): Prisma.Prisma__SubPeriodClient<runtime.Types.Result.GetResult<Prisma.$SubPeriodPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   activityGrades<T extends Prisma.Activity$activityGradesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Activity$activityGradesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ActivityGradePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -1307,6 +1497,7 @@ export interface ActivityFieldRefs {
   readonly id: Prisma.FieldRef<"Activity", 'String'>
   readonly createdAt: Prisma.FieldRef<"Activity", 'DateTime'>
   readonly courseId: Prisma.FieldRef<"Activity", 'String'>
+  readonly subPeriodId: Prisma.FieldRef<"Activity", 'String'>
   readonly title: Prisma.FieldRef<"Activity", 'String'>
   readonly gradingType: Prisma.FieldRef<"Activity", 'GradingType'>
   readonly minValue: Prisma.FieldRef<"Activity", 'Float'>
@@ -1712,6 +1903,25 @@ export type ActivityDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Inte
    * Limit how many Activities to delete.
    */
   limit?: number
+}
+
+/**
+ * Activity.subPeriod
+ */
+export type Activity$subPeriodArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the SubPeriod
+   */
+  select?: Prisma.SubPeriodSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the SubPeriod
+   */
+  omit?: Prisma.SubPeriodOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SubPeriodInclude<ExtArgs> | null
+  where?: Prisma.SubPeriodWhereInput
 }
 
 /**

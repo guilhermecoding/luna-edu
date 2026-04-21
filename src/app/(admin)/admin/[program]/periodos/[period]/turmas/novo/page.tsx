@@ -9,6 +9,7 @@ import { getPeriodByProgramAndSlug } from "@/services/periods/periods.service";
 import { getSubjectsByProgramSlug } from "@/services/subjects/subjects.service";
 import { getAllRooms } from "@/services/rooms/rooms.service";
 import { getTimeSlotsByProgramSlug, getTeachers } from "@/services/schedules/schedules.service";
+import { getClassGroupsByPeriodId } from "@/services/class-groups/class-groups.service";
 import { notFound } from "next/navigation";
 
 export const metadata: Metadata = {
@@ -22,17 +23,19 @@ async function NewCourseContent({
 }) {
     const { program, period } = await params;
 
-    const [periodData, subjects, rooms, timeSlots, teachers] = await Promise.all([
-        getPeriodByProgramAndSlug(program, period),
-        getSubjectsByProgramSlug(program),
-        getAllRooms(),
-        getTimeSlotsByProgramSlug(program),
-        getTeachers(),
-    ]);
+    const periodData = await getPeriodByProgramAndSlug(program, period);
 
     if (!periodData) {
         notFound();
     }
+
+    const [subjects, rooms, timeSlots, teachers, classGroups] = await Promise.all([
+        getSubjectsByProgramSlug(program),
+        getAllRooms(),
+        getTimeSlotsByProgramSlug(program),
+        getTeachers(),
+        getClassGroupsByPeriodId(periodData.id),
+    ]);
 
     return (
         <Page>
@@ -50,6 +53,7 @@ async function NewCourseContent({
                                 rooms={rooms}
                                 timeSlots={timeSlots}
                                 teachers={teachers}
+                                classGroups={classGroups}
                             />
                         </Suspense>
                     </div>

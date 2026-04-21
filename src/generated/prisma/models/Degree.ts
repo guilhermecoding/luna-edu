@@ -67,6 +67,7 @@ export type DegreeCountAggregateOutputType = {
   modality: number
   level: number
   totalHours: number
+  gradeLevelLabels: number
   programId: number
   _all: number
 }
@@ -113,6 +114,7 @@ export type DegreeCountAggregateInputType = {
   modality?: true
   level?: true
   totalHours?: true
+  gradeLevelLabels?: true
   programId?: true
   _all?: true
 }
@@ -212,6 +214,7 @@ export type DegreeGroupByOutputType = {
   modality: string | null
   level: string | null
   totalHours: number | null
+  gradeLevelLabels: runtime.JsonValue | null
   programId: string
   _count: DegreeCountAggregateOutputType | null
   _avg: DegreeAvgAggregateOutputType | null
@@ -247,6 +250,7 @@ export type DegreeWhereInput = {
   modality?: Prisma.StringNullableFilter<"Degree"> | string | null
   level?: Prisma.StringNullableFilter<"Degree"> | string | null
   totalHours?: Prisma.IntNullableFilter<"Degree"> | number | null
+  gradeLevelLabels?: Prisma.JsonNullableFilter<"Degree">
   programId?: Prisma.UuidFilter<"Degree"> | string
   program?: Prisma.XOR<Prisma.ProgramScalarRelationFilter, Prisma.ProgramWhereInput>
   subjects?: Prisma.SubjectListRelationFilter
@@ -261,6 +265,7 @@ export type DegreeOrderByWithRelationInput = {
   modality?: Prisma.SortOrderInput | Prisma.SortOrder
   level?: Prisma.SortOrderInput | Prisma.SortOrder
   totalHours?: Prisma.SortOrderInput | Prisma.SortOrder
+  gradeLevelLabels?: Prisma.SortOrderInput | Prisma.SortOrder
   programId?: Prisma.SortOrder
   program?: Prisma.ProgramOrderByWithRelationInput
   subjects?: Prisma.SubjectOrderByRelationAggregateInput
@@ -279,6 +284,7 @@ export type DegreeWhereUniqueInput = Prisma.AtLeast<{
   modality?: Prisma.StringNullableFilter<"Degree"> | string | null
   level?: Prisma.StringNullableFilter<"Degree"> | string | null
   totalHours?: Prisma.IntNullableFilter<"Degree"> | number | null
+  gradeLevelLabels?: Prisma.JsonNullableFilter<"Degree">
   programId?: Prisma.UuidFilter<"Degree"> | string
   program?: Prisma.XOR<Prisma.ProgramScalarRelationFilter, Prisma.ProgramWhereInput>
   subjects?: Prisma.SubjectListRelationFilter
@@ -293,6 +299,7 @@ export type DegreeOrderByWithAggregationInput = {
   modality?: Prisma.SortOrderInput | Prisma.SortOrder
   level?: Prisma.SortOrderInput | Prisma.SortOrder
   totalHours?: Prisma.SortOrderInput | Prisma.SortOrder
+  gradeLevelLabels?: Prisma.SortOrderInput | Prisma.SortOrder
   programId?: Prisma.SortOrder
   _count?: Prisma.DegreeCountOrderByAggregateInput
   _avg?: Prisma.DegreeAvgOrderByAggregateInput
@@ -313,6 +320,7 @@ export type DegreeScalarWhereWithAggregatesInput = {
   modality?: Prisma.StringNullableWithAggregatesFilter<"Degree"> | string | null
   level?: Prisma.StringNullableWithAggregatesFilter<"Degree"> | string | null
   totalHours?: Prisma.IntNullableWithAggregatesFilter<"Degree"> | number | null
+  gradeLevelLabels?: Prisma.JsonNullableWithAggregatesFilter<"Degree">
   programId?: Prisma.UuidWithAggregatesFilter<"Degree"> | string
 }
 
@@ -325,6 +333,7 @@ export type DegreeCreateInput = {
   modality?: string | null
   level?: string | null
   totalHours?: number | null
+  gradeLevelLabels?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   program: Prisma.ProgramCreateNestedOneWithoutDegreesInput
   subjects?: Prisma.SubjectCreateNestedManyWithoutDegreeInput
 }
@@ -338,6 +347,7 @@ export type DegreeUncheckedCreateInput = {
   modality?: string | null
   level?: string | null
   totalHours?: number | null
+  gradeLevelLabels?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   programId: string
   subjects?: Prisma.SubjectUncheckedCreateNestedManyWithoutDegreeInput
 }
@@ -351,6 +361,7 @@ export type DegreeUpdateInput = {
   modality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalHours?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  gradeLevelLabels?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   program?: Prisma.ProgramUpdateOneRequiredWithoutDegreesNestedInput
   subjects?: Prisma.SubjectUpdateManyWithoutDegreeNestedInput
 }
@@ -364,6 +375,7 @@ export type DegreeUncheckedUpdateInput = {
   modality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalHours?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  gradeLevelLabels?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   programId?: Prisma.StringFieldUpdateOperationsInput | string
   subjects?: Prisma.SubjectUncheckedUpdateManyWithoutDegreeNestedInput
 }
@@ -377,6 +389,7 @@ export type DegreeCreateManyInput = {
   modality?: string | null
   level?: string | null
   totalHours?: number | null
+  gradeLevelLabels?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   programId: string
 }
 
@@ -389,6 +402,7 @@ export type DegreeUpdateManyMutationInput = {
   modality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalHours?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  gradeLevelLabels?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
 }
 
 export type DegreeUncheckedUpdateManyInput = {
@@ -400,6 +414,7 @@ export type DegreeUncheckedUpdateManyInput = {
   modality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalHours?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  gradeLevelLabels?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   programId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
@@ -427,6 +442,7 @@ export type DegreeCountOrderByAggregateInput = {
   modality?: Prisma.SortOrder
   level?: Prisma.SortOrder
   totalHours?: Prisma.SortOrder
+  gradeLevelLabels?: Prisma.SortOrder
   programId?: Prisma.SortOrder
 }
 
@@ -540,6 +556,7 @@ export type DegreeCreateWithoutProgramInput = {
   modality?: string | null
   level?: string | null
   totalHours?: number | null
+  gradeLevelLabels?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   subjects?: Prisma.SubjectCreateNestedManyWithoutDegreeInput
 }
 
@@ -552,6 +569,7 @@ export type DegreeUncheckedCreateWithoutProgramInput = {
   modality?: string | null
   level?: string | null
   totalHours?: number | null
+  gradeLevelLabels?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   subjects?: Prisma.SubjectUncheckedCreateNestedManyWithoutDegreeInput
 }
 
@@ -593,6 +611,7 @@ export type DegreeScalarWhereInput = {
   modality?: Prisma.StringNullableFilter<"Degree"> | string | null
   level?: Prisma.StringNullableFilter<"Degree"> | string | null
   totalHours?: Prisma.IntNullableFilter<"Degree"> | number | null
+  gradeLevelLabels?: Prisma.JsonNullableFilter<"Degree">
   programId?: Prisma.UuidFilter<"Degree"> | string
 }
 
@@ -605,6 +624,7 @@ export type DegreeCreateWithoutSubjectsInput = {
   modality?: string | null
   level?: string | null
   totalHours?: number | null
+  gradeLevelLabels?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   program: Prisma.ProgramCreateNestedOneWithoutDegreesInput
 }
 
@@ -617,6 +637,7 @@ export type DegreeUncheckedCreateWithoutSubjectsInput = {
   modality?: string | null
   level?: string | null
   totalHours?: number | null
+  gradeLevelLabels?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   programId: string
 }
 
@@ -645,6 +666,7 @@ export type DegreeUpdateWithoutSubjectsInput = {
   modality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalHours?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  gradeLevelLabels?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   program?: Prisma.ProgramUpdateOneRequiredWithoutDegreesNestedInput
 }
 
@@ -657,6 +679,7 @@ export type DegreeUncheckedUpdateWithoutSubjectsInput = {
   modality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalHours?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  gradeLevelLabels?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   programId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
@@ -669,6 +692,7 @@ export type DegreeCreateManyProgramInput = {
   modality?: string | null
   level?: string | null
   totalHours?: number | null
+  gradeLevelLabels?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
 }
 
 export type DegreeUpdateWithoutProgramInput = {
@@ -680,6 +704,7 @@ export type DegreeUpdateWithoutProgramInput = {
   modality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalHours?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  gradeLevelLabels?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   subjects?: Prisma.SubjectUpdateManyWithoutDegreeNestedInput
 }
 
@@ -692,6 +717,7 @@ export type DegreeUncheckedUpdateWithoutProgramInput = {
   modality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalHours?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  gradeLevelLabels?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   subjects?: Prisma.SubjectUncheckedUpdateManyWithoutDegreeNestedInput
 }
 
@@ -704,6 +730,7 @@ export type DegreeUncheckedUpdateManyWithoutProgramInput = {
   modality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalHours?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  gradeLevelLabels?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
 }
 
 
@@ -746,6 +773,7 @@ export type DegreeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   modality?: boolean
   level?: boolean
   totalHours?: boolean
+  gradeLevelLabels?: boolean
   programId?: boolean
   program?: boolean | Prisma.ProgramDefaultArgs<ExtArgs>
   subjects?: boolean | Prisma.Degree$subjectsArgs<ExtArgs>
@@ -761,6 +789,7 @@ export type DegreeSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   modality?: boolean
   level?: boolean
   totalHours?: boolean
+  gradeLevelLabels?: boolean
   programId?: boolean
   program?: boolean | Prisma.ProgramDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["degree"]>
@@ -774,6 +803,7 @@ export type DegreeSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
   modality?: boolean
   level?: boolean
   totalHours?: boolean
+  gradeLevelLabels?: boolean
   programId?: boolean
   program?: boolean | Prisma.ProgramDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["degree"]>
@@ -787,10 +817,11 @@ export type DegreeSelectScalar = {
   modality?: boolean
   level?: boolean
   totalHours?: boolean
+  gradeLevelLabels?: boolean
   programId?: boolean
 }
 
-export type DegreeOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "name" | "slug" | "description" | "modality" | "level" | "totalHours" | "programId", ExtArgs["result"]["degree"]>
+export type DegreeOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "name" | "slug" | "description" | "modality" | "level" | "totalHours" | "gradeLevelLabels" | "programId", ExtArgs["result"]["degree"]>
 export type DegreeInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   program?: boolean | Prisma.ProgramDefaultArgs<ExtArgs>
   subjects?: boolean | Prisma.Degree$subjectsArgs<ExtArgs>
@@ -818,6 +849,11 @@ export type $DegreePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     modality: string | null
     level: string | null
     totalHours: number | null
+    /**
+     * JSON map of basePeriod number -> display label.
+     * Ex: {"1": "1º Ano", "2": "2º Ano", "3": "3º Ano"}
+     */
+    gradeLevelLabels: runtime.JsonValue | null
     programId: string
   }, ExtArgs["result"]["degree"]>
   composites: {}
@@ -1252,6 +1288,7 @@ export interface DegreeFieldRefs {
   readonly modality: Prisma.FieldRef<"Degree", 'String'>
   readonly level: Prisma.FieldRef<"Degree", 'String'>
   readonly totalHours: Prisma.FieldRef<"Degree", 'Int'>
+  readonly gradeLevelLabels: Prisma.FieldRef<"Degree", 'Json'>
   readonly programId: Prisma.FieldRef<"Degree", 'String'>
 }
     

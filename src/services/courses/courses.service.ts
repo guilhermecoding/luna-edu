@@ -23,8 +23,16 @@ export async function getCoursesByPeriodId(periodId: string) {
                     campus: true,
                 },
             },
+            classGroup: {
+                select: {
+                    id: true,
+                    name: true,
+                    slug: true,
+                },
+            },
         },
         orderBy: [
+            { classGroup: { name: "asc" } },
             { name: "asc" },
             { createdAt: "desc" },
         ],
@@ -109,6 +117,7 @@ export async function createCourse(data: {
     subjectId: string;
     roomId?: string | null;
     shift: Shift;
+    classGroupId?: string | null;
     schedules?: {
         dayOfWeek: DayOfWeek;
         timeSlotId: string;
@@ -125,6 +134,7 @@ export async function createCourse(data: {
                 subjectId: data.subjectId,
                 roomId: data.roomId || null,
                 shift: data.shift,
+                classGroupId: data.classGroupId || null,
                 schedules: data.schedules && data.schedules.length > 0
                     ? {
                         create: data.schedules.map((s) => ({
@@ -158,6 +168,7 @@ export async function updateCourse(
         subjectId: string;
         roomId?: string | null;
         shift: Shift;
+        classGroupId?: string | null;
         schedules?: {
             dayOfWeek: DayOfWeek;
             timeSlotId: string;
@@ -182,6 +193,7 @@ export async function updateCourse(
                     subjectId: data.subjectId,
                     roomId: data.roomId || null,
                     shift: data.shift,
+                    classGroupId: data.classGroupId || null,
                     schedules: data.schedules && data.schedules.length > 0
                         ? {
                             create: data.schedules.map((s) => ({

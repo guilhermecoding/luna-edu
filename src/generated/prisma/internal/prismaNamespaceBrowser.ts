@@ -61,6 +61,8 @@ export const ModelName = {
   Campus: 'Campus',
   Room: 'Room',
   Period: 'Period',
+  SubPeriod: 'SubPeriod',
+  ClassGroup: 'ClassGroup',
   TimeSlot: 'TimeSlot',
   Schedule: 'Schedule',
   Course: 'Course',
@@ -179,6 +181,7 @@ export const DegreeScalarFieldEnum = {
   modality: 'modality',
   level: 'level',
   totalHours: 'totalHours',
+  gradeLevelLabels: 'gradeLevelLabels',
   programId: 'programId'
 } as const
 
@@ -238,6 +241,33 @@ export const PeriodScalarFieldEnum = {
 export type PeriodScalarFieldEnum = (typeof PeriodScalarFieldEnum)[keyof typeof PeriodScalarFieldEnum]
 
 
+export const SubPeriodScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  name: 'name',
+  slug: 'slug',
+  order: 'order',
+  startDate: 'startDate',
+  endDate: 'endDate',
+  weight: 'weight',
+  closedAt: 'closedAt',
+  periodId: 'periodId'
+} as const
+
+export type SubPeriodScalarFieldEnum = (typeof SubPeriodScalarFieldEnum)[keyof typeof SubPeriodScalarFieldEnum]
+
+
+export const ClassGroupScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  name: 'name',
+  slug: 'slug',
+  periodId: 'periodId'
+} as const
+
+export type ClassGroupScalarFieldEnum = (typeof ClassGroupScalarFieldEnum)[keyof typeof ClassGroupScalarFieldEnum]
+
+
 export const TimeSlotScalarFieldEnum = {
   id: 'id',
   name: 'name',
@@ -271,7 +301,8 @@ export const CourseScalarFieldEnum = {
   periodId: 'periodId',
   roomId: 'roomId',
   subjectId: 'subjectId',
-  shift: 'shift'
+  shift: 'shift',
+  classGroupId: 'classGroupId'
 } as const
 
 export type CourseScalarFieldEnum = (typeof CourseScalarFieldEnum)[keyof typeof CourseScalarFieldEnum]
@@ -332,6 +363,7 @@ export const ActivityScalarFieldEnum = {
   id: 'id',
   createdAt: 'createdAt',
   courseId: 'courseId',
+  subPeriodId: 'subPeriodId',
   title: 'title',
   gradingType: 'gradingType',
   minValue: 'minValue',
@@ -415,6 +447,14 @@ export const SortOrder = {
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
 
 
+export const NullableJsonNullValueInput = {
+  DbNull: DbNull,
+  JsonNull: JsonNull
+} as const
+
+export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
+
+
 export const QueryMode = {
   default: 'default',
   insensitive: 'insensitive'
@@ -429,4 +469,13 @@ export const NullsOrder = {
 } as const
 
 export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
+export const JsonNullValueFilter = {
+  DbNull: DbNull,
+  JsonNull: JsonNull,
+  AnyNull: AnyNull
+} as const
+
+export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
 

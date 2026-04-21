@@ -60,6 +60,27 @@ export async function getSubjectsByProgramSlug(programSlug: string) {
 }
 
 /**
+ * Lista disciplinas de uma matriz/série específicas.
+ * Usado para ofertar novas disciplinas dentro de uma turma física.
+ */
+export async function getSubjectsByDegreeAndBasePeriod(
+    degreeId: string,
+    basePeriod: number,
+): Promise<Subject[]> {
+    "use cache";
+    cacheLife("max");
+    cacheTag(`degree:${degreeId}:subjects`);
+
+    return await prisma.subject.findMany({
+        where: {
+            degreeId,
+            basePeriod,
+        },
+        orderBy: { name: "asc" },
+    });
+}
+
+/**
  * Busca uma disciplina específica pelo ID.
  *
  * @param id ID da disciplina.

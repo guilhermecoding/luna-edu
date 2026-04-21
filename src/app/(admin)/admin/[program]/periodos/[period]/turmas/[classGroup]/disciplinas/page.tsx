@@ -1,7 +1,7 @@
 import Page from "@/components/page";
 import Section from "@/components/section";
 import TitlePage from "@/components/title-page";
-import { IconBooks, IconChevronLeft } from "@tabler/icons-react";
+import { IconBooks, IconChevronLeft, IconCirclePlusFilled } from "@tabler/icons-react";
 import { ButtonLink } from "@/components/ui/button-link";
 import { Metadata } from "next";
 import { getPeriodByProgramAndSlug } from "@/services/periods/periods.service";
@@ -39,6 +39,14 @@ export default async function TurmaDisciplinasPage({
                     title={classGroup.name}
                     description={`${classGroup.degree.name} • ${classGroup.basePeriod}ª Série • ${classGroup.shift === "MORNING" ? "Manhã" : classGroup.shift === "AFTERNOON" ? "Tarde" : "Noite"}`}
                 />
+                <div className="flex justify-end mt-4">
+                    <ButtonLink
+                        href={`/admin/${program}/periodos/${period}/turmas/${classGroupSlug}/disciplinas/novo`}
+                    >
+                        <IconCirclePlusFilled className="size-5" />
+                        Adicionar Disciplina
+                    </ButtonLink>
+                </div>
             </Section>
 
             <Section className="mt-12">

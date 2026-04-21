@@ -200,7 +200,8 @@ model Degree {
     programId String  @map("program_id") @db.Uuid
     program   Program @relation(fields: [programId], references: [id])
 
-    subjects Subject[]
+    subjects    Subject[]
+    classGroups ClassGroup[]
 
     @@unique([programId, slug])
     @@map("degrees")
@@ -303,14 +304,20 @@ model SubPeriod {
 
 /// Turma Física — agrupa as turmas disciplinares (Course) que compartilham
 /// os mesmos alunos. Ex: "1º Ano A" contém as turmas de Matemática, Português, etc.
+/// Ao criar um ClassGroup, o sistema auto-gera os Course records baseado nas
+/// disciplinas da Matriz (Degree) + Série (basePeriod).
 model ClassGroup {
-    id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-    createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
-    name      String
-    slug      String
-    periodId  String   @map("period_id") @db.Uuid
+    id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+    createdAt  DateTime @default(now()) @map("created_at") @db.Timestamptz
+    name       String
+    slug       String
+    periodId   String   @map("period_id") @db.Uuid
+    degreeId   String   @map("degree_id") @db.Uuid
+    basePeriod Int      @map("base_period") @db.SmallInt
+    shift      Shift
 
     period  Period   @relation(fields: [periodId], references: [id])
+    degree  Degree   @relation(fields: [degreeId], references: [id])
     courses Course[]
 
     @@unique([periodId, slug])

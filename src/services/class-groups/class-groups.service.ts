@@ -1,10 +1,10 @@
-import { ClassGroup, Prisma } from "@/generated/prisma/client";
+import { ClassGroup, Prisma, Shift } from "@/generated/prisma/client";
 import prisma from "@/lib/prisma";
 import { cacheLife, cacheTag } from "next/cache";
 
 /**
  * Lista todos os grupos (turmas físicas) de um período.
- * Inclui contagem de turmas disciplinares vinculadas.
+ * Inclui contagem de turmas disciplinares, dados da Matriz e turno.
  */
 export async function getClassGroupsByPeriodId(periodId: string) {
     "use cache";
@@ -15,6 +15,13 @@ export async function getClassGroupsByPeriodId(periodId: string) {
         where: { periodId },
         orderBy: [{ name: "asc" }, { createdAt: "desc" }],
         include: {
+            degree: {
+                select: {
+                    id: true,
+                    name: true,
+                    slug: true,
+                },
+            },
             _count: {
                 select: {
                     courses: true,
@@ -43,6 +50,7 @@ export async function getClassGroupByPeriodIdAndSlug(
             },
         },
         include: {
+            degree: true,
             courses: {
                 include: {
                     subject: true,
@@ -59,20 +67,59 @@ export async function getClassGroupByPeriodIdAndSlug(
 }
 
 /**
- * Cria um novo grupo (turma física) dentro de um período.
+ * Cria um novo grupo (turma física) e auto-gera as turmas disciplinares
+ * baseado nas disciplinas da Matriz (Degree) + Série (basePeriod).
+ *
+ * Ex: Criar "1º Ano A" com Matriz "Ensino Médio" + basePeriod 1
+ * → busca todas as disciplinas do 1º ano do Ensino Médio
+ * → cria um Course para cada uma, vinculado ao grupo.
  */
 export async function createClassGroup(data: {
     name: string;
     slug: string;
     periodId: string;
+    degreeId: string;
+    basePeriod: number;
+    shift: Shift;
 }): Promise<ClassGroup> {
     try {
-        return await prisma.classGroup.create({
-            data: {
-                name: data.name,
-                slug: data.slug,
-                periodId: data.periodId,
-            },
+        return await prisma.$transaction(async (tx) => {
+            // 1. Criar o grupo
+            const group = await tx.classGroup.create({
+                data: {
+                    name: data.name,
+                    slug: data.slug,
+                    periodId: data.periodId,
+                    degreeId: data.degreeId,
+                    basePeriod: data.basePeriod,
+                    shift: data.shift,
+                },
+            });
+
+            // 2. Buscar disciplinas da Matriz + Série
+            const subjects = await tx.subject.findMany({
+                where: {
+                    degreeId: data.degreeId,
+                    basePeriod: data.basePeriod,
+                },
+                orderBy: { name: "asc" },
+            });
+
+            // 3. Auto-gerar turmas disciplinares
+            if (subjects.length > 0) {
+                await tx.course.createMany({
+                    data: subjects.map((subject) => ({
+                        name: `${data.name} - ${subject.name}`,
+                        code: `${data.slug}-${subject.code}`.toUpperCase(),
+                        periodId: data.periodId,
+                        subjectId: subject.id,
+                        shift: data.shift,
+                        classGroupId: group.id,
+                    })),
+                });
+            }
+
+            return group;
         });
     } catch (error) {
         if (

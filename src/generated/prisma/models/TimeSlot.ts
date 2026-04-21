@@ -411,10 +411,6 @@ export type TimeSlotUncheckedUpdateManyWithoutProgramNestedInput = {
   deleteMany?: Prisma.TimeSlotScalarWhereInput | Prisma.TimeSlotScalarWhereInput[]
 }
 
-export type EnumShiftFieldUpdateOperationsInput = {
-  set?: $Enums.Shift
-}
-
 export type TimeSlotCreateNestedOneWithoutSchedulesInput = {
   create?: Prisma.XOR<Prisma.TimeSlotCreateWithoutSchedulesInput, Prisma.TimeSlotUncheckedCreateWithoutSchedulesInput>
   connectOrCreate?: Prisma.TimeSlotCreateOrConnectWithoutSchedulesInput

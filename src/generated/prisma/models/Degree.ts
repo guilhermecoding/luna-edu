@@ -254,6 +254,7 @@ export type DegreeWhereInput = {
   programId?: Prisma.UuidFilter<"Degree"> | string
   program?: Prisma.XOR<Prisma.ProgramScalarRelationFilter, Prisma.ProgramWhereInput>
   subjects?: Prisma.SubjectListRelationFilter
+  classGroups?: Prisma.ClassGroupListRelationFilter
 }
 
 export type DegreeOrderByWithRelationInput = {
@@ -269,6 +270,7 @@ export type DegreeOrderByWithRelationInput = {
   programId?: Prisma.SortOrder
   program?: Prisma.ProgramOrderByWithRelationInput
   subjects?: Prisma.SubjectOrderByRelationAggregateInput
+  classGroups?: Prisma.ClassGroupOrderByRelationAggregateInput
 }
 
 export type DegreeWhereUniqueInput = Prisma.AtLeast<{
@@ -288,6 +290,7 @@ export type DegreeWhereUniqueInput = Prisma.AtLeast<{
   programId?: Prisma.UuidFilter<"Degree"> | string
   program?: Prisma.XOR<Prisma.ProgramScalarRelationFilter, Prisma.ProgramWhereInput>
   subjects?: Prisma.SubjectListRelationFilter
+  classGroups?: Prisma.ClassGroupListRelationFilter
 }, "id" | "programId_slug">
 
 export type DegreeOrderByWithAggregationInput = {
@@ -336,6 +339,7 @@ export type DegreeCreateInput = {
   gradeLevelLabels?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   program: Prisma.ProgramCreateNestedOneWithoutDegreesInput
   subjects?: Prisma.SubjectCreateNestedManyWithoutDegreeInput
+  classGroups?: Prisma.ClassGroupCreateNestedManyWithoutDegreeInput
 }
 
 export type DegreeUncheckedCreateInput = {
@@ -350,6 +354,7 @@ export type DegreeUncheckedCreateInput = {
   gradeLevelLabels?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   programId: string
   subjects?: Prisma.SubjectUncheckedCreateNestedManyWithoutDegreeInput
+  classGroups?: Prisma.ClassGroupUncheckedCreateNestedManyWithoutDegreeInput
 }
 
 export type DegreeUpdateInput = {
@@ -364,6 +369,7 @@ export type DegreeUpdateInput = {
   gradeLevelLabels?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   program?: Prisma.ProgramUpdateOneRequiredWithoutDegreesNestedInput
   subjects?: Prisma.SubjectUpdateManyWithoutDegreeNestedInput
+  classGroups?: Prisma.ClassGroupUpdateManyWithoutDegreeNestedInput
 }
 
 export type DegreeUncheckedUpdateInput = {
@@ -378,6 +384,7 @@ export type DegreeUncheckedUpdateInput = {
   gradeLevelLabels?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   programId?: Prisma.StringFieldUpdateOperationsInput | string
   subjects?: Prisma.SubjectUncheckedUpdateManyWithoutDegreeNestedInput
+  classGroups?: Prisma.ClassGroupUncheckedUpdateManyWithoutDegreeNestedInput
 }
 
 export type DegreeCreateManyInput = {
@@ -547,6 +554,20 @@ export type DegreeUpdateOneRequiredWithoutSubjectsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.DegreeUpdateToOneWithWhereWithoutSubjectsInput, Prisma.DegreeUpdateWithoutSubjectsInput>, Prisma.DegreeUncheckedUpdateWithoutSubjectsInput>
 }
 
+export type DegreeCreateNestedOneWithoutClassGroupsInput = {
+  create?: Prisma.XOR<Prisma.DegreeCreateWithoutClassGroupsInput, Prisma.DegreeUncheckedCreateWithoutClassGroupsInput>
+  connectOrCreate?: Prisma.DegreeCreateOrConnectWithoutClassGroupsInput
+  connect?: Prisma.DegreeWhereUniqueInput
+}
+
+export type DegreeUpdateOneRequiredWithoutClassGroupsNestedInput = {
+  create?: Prisma.XOR<Prisma.DegreeCreateWithoutClassGroupsInput, Prisma.DegreeUncheckedCreateWithoutClassGroupsInput>
+  connectOrCreate?: Prisma.DegreeCreateOrConnectWithoutClassGroupsInput
+  upsert?: Prisma.DegreeUpsertWithoutClassGroupsInput
+  connect?: Prisma.DegreeWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.DegreeUpdateToOneWithWhereWithoutClassGroupsInput, Prisma.DegreeUpdateWithoutClassGroupsInput>, Prisma.DegreeUncheckedUpdateWithoutClassGroupsInput>
+}
+
 export type DegreeCreateWithoutProgramInput = {
   id?: string
   createdAt?: Date | string
@@ -558,6 +579,7 @@ export type DegreeCreateWithoutProgramInput = {
   totalHours?: number | null
   gradeLevelLabels?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   subjects?: Prisma.SubjectCreateNestedManyWithoutDegreeInput
+  classGroups?: Prisma.ClassGroupCreateNestedManyWithoutDegreeInput
 }
 
 export type DegreeUncheckedCreateWithoutProgramInput = {
@@ -571,6 +593,7 @@ export type DegreeUncheckedCreateWithoutProgramInput = {
   totalHours?: number | null
   gradeLevelLabels?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   subjects?: Prisma.SubjectUncheckedCreateNestedManyWithoutDegreeInput
+  classGroups?: Prisma.ClassGroupUncheckedCreateNestedManyWithoutDegreeInput
 }
 
 export type DegreeCreateOrConnectWithoutProgramInput = {
@@ -626,6 +649,7 @@ export type DegreeCreateWithoutSubjectsInput = {
   totalHours?: number | null
   gradeLevelLabels?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   program: Prisma.ProgramCreateNestedOneWithoutDegreesInput
+  classGroups?: Prisma.ClassGroupCreateNestedManyWithoutDegreeInput
 }
 
 export type DegreeUncheckedCreateWithoutSubjectsInput = {
@@ -639,6 +663,7 @@ export type DegreeUncheckedCreateWithoutSubjectsInput = {
   totalHours?: number | null
   gradeLevelLabels?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   programId: string
+  classGroups?: Prisma.ClassGroupUncheckedCreateNestedManyWithoutDegreeInput
 }
 
 export type DegreeCreateOrConnectWithoutSubjectsInput = {
@@ -668,6 +693,7 @@ export type DegreeUpdateWithoutSubjectsInput = {
   totalHours?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   gradeLevelLabels?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   program?: Prisma.ProgramUpdateOneRequiredWithoutDegreesNestedInput
+  classGroups?: Prisma.ClassGroupUpdateManyWithoutDegreeNestedInput
 }
 
 export type DegreeUncheckedUpdateWithoutSubjectsInput = {
@@ -681,6 +707,79 @@ export type DegreeUncheckedUpdateWithoutSubjectsInput = {
   totalHours?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   gradeLevelLabels?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   programId?: Prisma.StringFieldUpdateOperationsInput | string
+  classGroups?: Prisma.ClassGroupUncheckedUpdateManyWithoutDegreeNestedInput
+}
+
+export type DegreeCreateWithoutClassGroupsInput = {
+  id?: string
+  createdAt?: Date | string
+  name: string
+  slug: string
+  description?: string | null
+  modality?: string | null
+  level?: string | null
+  totalHours?: number | null
+  gradeLevelLabels?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  program: Prisma.ProgramCreateNestedOneWithoutDegreesInput
+  subjects?: Prisma.SubjectCreateNestedManyWithoutDegreeInput
+}
+
+export type DegreeUncheckedCreateWithoutClassGroupsInput = {
+  id?: string
+  createdAt?: Date | string
+  name: string
+  slug: string
+  description?: string | null
+  modality?: string | null
+  level?: string | null
+  totalHours?: number | null
+  gradeLevelLabels?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  programId: string
+  subjects?: Prisma.SubjectUncheckedCreateNestedManyWithoutDegreeInput
+}
+
+export type DegreeCreateOrConnectWithoutClassGroupsInput = {
+  where: Prisma.DegreeWhereUniqueInput
+  create: Prisma.XOR<Prisma.DegreeCreateWithoutClassGroupsInput, Prisma.DegreeUncheckedCreateWithoutClassGroupsInput>
+}
+
+export type DegreeUpsertWithoutClassGroupsInput = {
+  update: Prisma.XOR<Prisma.DegreeUpdateWithoutClassGroupsInput, Prisma.DegreeUncheckedUpdateWithoutClassGroupsInput>
+  create: Prisma.XOR<Prisma.DegreeCreateWithoutClassGroupsInput, Prisma.DegreeUncheckedCreateWithoutClassGroupsInput>
+  where?: Prisma.DegreeWhereInput
+}
+
+export type DegreeUpdateToOneWithWhereWithoutClassGroupsInput = {
+  where?: Prisma.DegreeWhereInput
+  data: Prisma.XOR<Prisma.DegreeUpdateWithoutClassGroupsInput, Prisma.DegreeUncheckedUpdateWithoutClassGroupsInput>
+}
+
+export type DegreeUpdateWithoutClassGroupsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  modality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  totalHours?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  gradeLevelLabels?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  program?: Prisma.ProgramUpdateOneRequiredWithoutDegreesNestedInput
+  subjects?: Prisma.SubjectUpdateManyWithoutDegreeNestedInput
+}
+
+export type DegreeUncheckedUpdateWithoutClassGroupsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  modality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  totalHours?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  gradeLevelLabels?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  programId?: Prisma.StringFieldUpdateOperationsInput | string
+  subjects?: Prisma.SubjectUncheckedUpdateManyWithoutDegreeNestedInput
 }
 
 export type DegreeCreateManyProgramInput = {
@@ -706,6 +805,7 @@ export type DegreeUpdateWithoutProgramInput = {
   totalHours?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   gradeLevelLabels?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   subjects?: Prisma.SubjectUpdateManyWithoutDegreeNestedInput
+  classGroups?: Prisma.ClassGroupUpdateManyWithoutDegreeNestedInput
 }
 
 export type DegreeUncheckedUpdateWithoutProgramInput = {
@@ -719,6 +819,7 @@ export type DegreeUncheckedUpdateWithoutProgramInput = {
   totalHours?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   gradeLevelLabels?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   subjects?: Prisma.SubjectUncheckedUpdateManyWithoutDegreeNestedInput
+  classGroups?: Prisma.ClassGroupUncheckedUpdateManyWithoutDegreeNestedInput
 }
 
 export type DegreeUncheckedUpdateManyWithoutProgramInput = {
@@ -740,10 +841,12 @@ export type DegreeUncheckedUpdateManyWithoutProgramInput = {
 
 export type DegreeCountOutputType = {
   subjects: number
+  classGroups: number
 }
 
 export type DegreeCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   subjects?: boolean | DegreeCountOutputTypeCountSubjectsArgs
+  classGroups?: boolean | DegreeCountOutputTypeCountClassGroupsArgs
 }
 
 /**
@@ -763,6 +866,13 @@ export type DegreeCountOutputTypeCountSubjectsArgs<ExtArgs extends runtime.Types
   where?: Prisma.SubjectWhereInput
 }
 
+/**
+ * DegreeCountOutputType without action
+ */
+export type DegreeCountOutputTypeCountClassGroupsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ClassGroupWhereInput
+}
+
 
 export type DegreeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -777,6 +887,7 @@ export type DegreeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   programId?: boolean
   program?: boolean | Prisma.ProgramDefaultArgs<ExtArgs>
   subjects?: boolean | Prisma.Degree$subjectsArgs<ExtArgs>
+  classGroups?: boolean | Prisma.Degree$classGroupsArgs<ExtArgs>
   _count?: boolean | Prisma.DegreeCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["degree"]>
 
@@ -825,6 +936,7 @@ export type DegreeOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
 export type DegreeInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   program?: boolean | Prisma.ProgramDefaultArgs<ExtArgs>
   subjects?: boolean | Prisma.Degree$subjectsArgs<ExtArgs>
+  classGroups?: boolean | Prisma.Degree$classGroupsArgs<ExtArgs>
   _count?: boolean | Prisma.DegreeCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type DegreeIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -839,6 +951,7 @@ export type $DegreePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
   objects: {
     program: Prisma.$ProgramPayload<ExtArgs>
     subjects: Prisma.$SubjectPayload<ExtArgs>[]
+    classGroups: Prisma.$ClassGroupPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1251,6 +1364,7 @@ export interface Prisma__DegreeClient<T, Null = never, ExtArgs extends runtime.T
   readonly [Symbol.toStringTag]: "PrismaPromise"
   program<T extends Prisma.ProgramDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ProgramDefaultArgs<ExtArgs>>): Prisma.Prisma__ProgramClient<runtime.Types.Result.GetResult<Prisma.$ProgramPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   subjects<T extends Prisma.Degree$subjectsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Degree$subjectsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SubjectPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  classGroups<T extends Prisma.Degree$classGroupsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Degree$classGroupsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ClassGroupPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1712,6 +1826,30 @@ export type Degree$subjectsArgs<ExtArgs extends runtime.Types.Extensions.Interna
   take?: number
   skip?: number
   distinct?: Prisma.SubjectScalarFieldEnum | Prisma.SubjectScalarFieldEnum[]
+}
+
+/**
+ * Degree.classGroups
+ */
+export type Degree$classGroupsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ClassGroup
+   */
+  select?: Prisma.ClassGroupSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ClassGroup
+   */
+  omit?: Prisma.ClassGroupOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ClassGroupInclude<ExtArgs> | null
+  where?: Prisma.ClassGroupWhereInput
+  orderBy?: Prisma.ClassGroupOrderByWithRelationInput | Prisma.ClassGroupOrderByWithRelationInput[]
+  cursor?: Prisma.ClassGroupWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ClassGroupScalarFieldEnum | Prisma.ClassGroupScalarFieldEnum[]
 }
 
 /**

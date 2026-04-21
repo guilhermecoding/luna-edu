@@ -16,13 +16,25 @@ import type * as Prisma from "../internal/prismaNamespace"
  * Model ClassGroup
  * Turma Física — agrupa as turmas disciplinares (Course) que compartilham
  * os mesmos alunos. Ex: "1º Ano A" contém as turmas de Matemática, Português, etc.
+ * Ao criar um ClassGroup, o sistema auto-gera os Course records baseado nas
+ * disciplinas da Matriz (Degree) + Série (basePeriod).
  */
 export type ClassGroupModel = runtime.Types.Result.DefaultSelection<Prisma.$ClassGroupPayload>
 
 export type AggregateClassGroup = {
   _count: ClassGroupCountAggregateOutputType | null
+  _avg: ClassGroupAvgAggregateOutputType | null
+  _sum: ClassGroupSumAggregateOutputType | null
   _min: ClassGroupMinAggregateOutputType | null
   _max: ClassGroupMaxAggregateOutputType | null
+}
+
+export type ClassGroupAvgAggregateOutputType = {
+  basePeriod: number | null
+}
+
+export type ClassGroupSumAggregateOutputType = {
+  basePeriod: number | null
 }
 
 export type ClassGroupMinAggregateOutputType = {
@@ -31,6 +43,9 @@ export type ClassGroupMinAggregateOutputType = {
   name: string | null
   slug: string | null
   periodId: string | null
+  degreeId: string | null
+  basePeriod: number | null
+  shift: $Enums.Shift | null
 }
 
 export type ClassGroupMaxAggregateOutputType = {
@@ -39,6 +54,9 @@ export type ClassGroupMaxAggregateOutputType = {
   name: string | null
   slug: string | null
   periodId: string | null
+  degreeId: string | null
+  basePeriod: number | null
+  shift: $Enums.Shift | null
 }
 
 export type ClassGroupCountAggregateOutputType = {
@@ -47,9 +65,20 @@ export type ClassGroupCountAggregateOutputType = {
   name: number
   slug: number
   periodId: number
+  degreeId: number
+  basePeriod: number
+  shift: number
   _all: number
 }
 
+
+export type ClassGroupAvgAggregateInputType = {
+  basePeriod?: true
+}
+
+export type ClassGroupSumAggregateInputType = {
+  basePeriod?: true
+}
 
 export type ClassGroupMinAggregateInputType = {
   id?: true
@@ -57,6 +86,9 @@ export type ClassGroupMinAggregateInputType = {
   name?: true
   slug?: true
   periodId?: true
+  degreeId?: true
+  basePeriod?: true
+  shift?: true
 }
 
 export type ClassGroupMaxAggregateInputType = {
@@ -65,6 +97,9 @@ export type ClassGroupMaxAggregateInputType = {
   name?: true
   slug?: true
   periodId?: true
+  degreeId?: true
+  basePeriod?: true
+  shift?: true
 }
 
 export type ClassGroupCountAggregateInputType = {
@@ -73,6 +108,9 @@ export type ClassGroupCountAggregateInputType = {
   name?: true
   slug?: true
   periodId?: true
+  degreeId?: true
+  basePeriod?: true
+  shift?: true
   _all?: true
 }
 
@@ -114,6 +152,18 @@ export type ClassGroupAggregateArgs<ExtArgs extends runtime.Types.Extensions.Int
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: ClassGroupAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: ClassGroupSumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: ClassGroupMinAggregateInputType
@@ -144,6 +194,8 @@ export type ClassGroupGroupByArgs<ExtArgs extends runtime.Types.Extensions.Inter
   take?: number
   skip?: number
   _count?: ClassGroupCountAggregateInputType | true
+  _avg?: ClassGroupAvgAggregateInputType
+  _sum?: ClassGroupSumAggregateInputType
   _min?: ClassGroupMinAggregateInputType
   _max?: ClassGroupMaxAggregateInputType
 }
@@ -154,7 +206,12 @@ export type ClassGroupGroupByOutputType = {
   name: string
   slug: string
   periodId: string
+  degreeId: string
+  basePeriod: number
+  shift: $Enums.Shift
   _count: ClassGroupCountAggregateOutputType | null
+  _avg: ClassGroupAvgAggregateOutputType | null
+  _sum: ClassGroupSumAggregateOutputType | null
   _min: ClassGroupMinAggregateOutputType | null
   _max: ClassGroupMaxAggregateOutputType | null
 }
@@ -183,7 +240,11 @@ export type ClassGroupWhereInput = {
   name?: Prisma.StringFilter<"ClassGroup"> | string
   slug?: Prisma.StringFilter<"ClassGroup"> | string
   periodId?: Prisma.UuidFilter<"ClassGroup"> | string
+  degreeId?: Prisma.UuidFilter<"ClassGroup"> | string
+  basePeriod?: Prisma.IntFilter<"ClassGroup"> | number
+  shift?: Prisma.EnumShiftFilter<"ClassGroup"> | $Enums.Shift
   period?: Prisma.XOR<Prisma.PeriodScalarRelationFilter, Prisma.PeriodWhereInput>
+  degree?: Prisma.XOR<Prisma.DegreeScalarRelationFilter, Prisma.DegreeWhereInput>
   courses?: Prisma.CourseListRelationFilter
 }
 
@@ -193,7 +254,11 @@ export type ClassGroupOrderByWithRelationInput = {
   name?: Prisma.SortOrder
   slug?: Prisma.SortOrder
   periodId?: Prisma.SortOrder
+  degreeId?: Prisma.SortOrder
+  basePeriod?: Prisma.SortOrder
+  shift?: Prisma.SortOrder
   period?: Prisma.PeriodOrderByWithRelationInput
+  degree?: Prisma.DegreeOrderByWithRelationInput
   courses?: Prisma.CourseOrderByRelationAggregateInput
 }
 
@@ -207,7 +272,11 @@ export type ClassGroupWhereUniqueInput = Prisma.AtLeast<{
   name?: Prisma.StringFilter<"ClassGroup"> | string
   slug?: Prisma.StringFilter<"ClassGroup"> | string
   periodId?: Prisma.UuidFilter<"ClassGroup"> | string
+  degreeId?: Prisma.UuidFilter<"ClassGroup"> | string
+  basePeriod?: Prisma.IntFilter<"ClassGroup"> | number
+  shift?: Prisma.EnumShiftFilter<"ClassGroup"> | $Enums.Shift
   period?: Prisma.XOR<Prisma.PeriodScalarRelationFilter, Prisma.PeriodWhereInput>
+  degree?: Prisma.XOR<Prisma.DegreeScalarRelationFilter, Prisma.DegreeWhereInput>
   courses?: Prisma.CourseListRelationFilter
 }, "id" | "periodId_slug">
 
@@ -217,9 +286,14 @@ export type ClassGroupOrderByWithAggregationInput = {
   name?: Prisma.SortOrder
   slug?: Prisma.SortOrder
   periodId?: Prisma.SortOrder
+  degreeId?: Prisma.SortOrder
+  basePeriod?: Prisma.SortOrder
+  shift?: Prisma.SortOrder
   _count?: Prisma.ClassGroupCountOrderByAggregateInput
+  _avg?: Prisma.ClassGroupAvgOrderByAggregateInput
   _max?: Prisma.ClassGroupMaxOrderByAggregateInput
   _min?: Prisma.ClassGroupMinOrderByAggregateInput
+  _sum?: Prisma.ClassGroupSumOrderByAggregateInput
 }
 
 export type ClassGroupScalarWhereWithAggregatesInput = {
@@ -231,6 +305,9 @@ export type ClassGroupScalarWhereWithAggregatesInput = {
   name?: Prisma.StringWithAggregatesFilter<"ClassGroup"> | string
   slug?: Prisma.StringWithAggregatesFilter<"ClassGroup"> | string
   periodId?: Prisma.UuidWithAggregatesFilter<"ClassGroup"> | string
+  degreeId?: Prisma.UuidWithAggregatesFilter<"ClassGroup"> | string
+  basePeriod?: Prisma.IntWithAggregatesFilter<"ClassGroup"> | number
+  shift?: Prisma.EnumShiftWithAggregatesFilter<"ClassGroup"> | $Enums.Shift
 }
 
 export type ClassGroupCreateInput = {
@@ -238,7 +315,10 @@ export type ClassGroupCreateInput = {
   createdAt?: Date | string
   name: string
   slug: string
+  basePeriod: number
+  shift: $Enums.Shift
   period: Prisma.PeriodCreateNestedOneWithoutClassGroupsInput
+  degree: Prisma.DegreeCreateNestedOneWithoutClassGroupsInput
   courses?: Prisma.CourseCreateNestedManyWithoutClassGroupInput
 }
 
@@ -248,6 +328,9 @@ export type ClassGroupUncheckedCreateInput = {
   name: string
   slug: string
   periodId: string
+  degreeId: string
+  basePeriod: number
+  shift: $Enums.Shift
   courses?: Prisma.CourseUncheckedCreateNestedManyWithoutClassGroupInput
 }
 
@@ -256,7 +339,10 @@ export type ClassGroupUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
+  basePeriod?: Prisma.IntFieldUpdateOperationsInput | number
+  shift?: Prisma.EnumShiftFieldUpdateOperationsInput | $Enums.Shift
   period?: Prisma.PeriodUpdateOneRequiredWithoutClassGroupsNestedInput
+  degree?: Prisma.DegreeUpdateOneRequiredWithoutClassGroupsNestedInput
   courses?: Prisma.CourseUpdateManyWithoutClassGroupNestedInput
 }
 
@@ -266,6 +352,9 @@ export type ClassGroupUncheckedUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   periodId?: Prisma.StringFieldUpdateOperationsInput | string
+  degreeId?: Prisma.StringFieldUpdateOperationsInput | string
+  basePeriod?: Prisma.IntFieldUpdateOperationsInput | number
+  shift?: Prisma.EnumShiftFieldUpdateOperationsInput | $Enums.Shift
   courses?: Prisma.CourseUncheckedUpdateManyWithoutClassGroupNestedInput
 }
 
@@ -275,6 +364,9 @@ export type ClassGroupCreateManyInput = {
   name: string
   slug: string
   periodId: string
+  degreeId: string
+  basePeriod: number
+  shift: $Enums.Shift
 }
 
 export type ClassGroupUpdateManyMutationInput = {
@@ -282,6 +374,8 @@ export type ClassGroupUpdateManyMutationInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
+  basePeriod?: Prisma.IntFieldUpdateOperationsInput | number
+  shift?: Prisma.EnumShiftFieldUpdateOperationsInput | $Enums.Shift
 }
 
 export type ClassGroupUncheckedUpdateManyInput = {
@@ -290,6 +384,9 @@ export type ClassGroupUncheckedUpdateManyInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   periodId?: Prisma.StringFieldUpdateOperationsInput | string
+  degreeId?: Prisma.StringFieldUpdateOperationsInput | string
+  basePeriod?: Prisma.IntFieldUpdateOperationsInput | number
+  shift?: Prisma.EnumShiftFieldUpdateOperationsInput | $Enums.Shift
 }
 
 export type ClassGroupListRelationFilter = {
@@ -313,6 +410,13 @@ export type ClassGroupCountOrderByAggregateInput = {
   name?: Prisma.SortOrder
   slug?: Prisma.SortOrder
   periodId?: Prisma.SortOrder
+  degreeId?: Prisma.SortOrder
+  basePeriod?: Prisma.SortOrder
+  shift?: Prisma.SortOrder
+}
+
+export type ClassGroupAvgOrderByAggregateInput = {
+  basePeriod?: Prisma.SortOrder
 }
 
 export type ClassGroupMaxOrderByAggregateInput = {
@@ -321,6 +425,9 @@ export type ClassGroupMaxOrderByAggregateInput = {
   name?: Prisma.SortOrder
   slug?: Prisma.SortOrder
   periodId?: Prisma.SortOrder
+  degreeId?: Prisma.SortOrder
+  basePeriod?: Prisma.SortOrder
+  shift?: Prisma.SortOrder
 }
 
 export type ClassGroupMinOrderByAggregateInput = {
@@ -329,11 +436,60 @@ export type ClassGroupMinOrderByAggregateInput = {
   name?: Prisma.SortOrder
   slug?: Prisma.SortOrder
   periodId?: Prisma.SortOrder
+  degreeId?: Prisma.SortOrder
+  basePeriod?: Prisma.SortOrder
+  shift?: Prisma.SortOrder
+}
+
+export type ClassGroupSumOrderByAggregateInput = {
+  basePeriod?: Prisma.SortOrder
 }
 
 export type ClassGroupNullableScalarRelationFilter = {
   is?: Prisma.ClassGroupWhereInput | null
   isNot?: Prisma.ClassGroupWhereInput | null
+}
+
+export type ClassGroupCreateNestedManyWithoutDegreeInput = {
+  create?: Prisma.XOR<Prisma.ClassGroupCreateWithoutDegreeInput, Prisma.ClassGroupUncheckedCreateWithoutDegreeInput> | Prisma.ClassGroupCreateWithoutDegreeInput[] | Prisma.ClassGroupUncheckedCreateWithoutDegreeInput[]
+  connectOrCreate?: Prisma.ClassGroupCreateOrConnectWithoutDegreeInput | Prisma.ClassGroupCreateOrConnectWithoutDegreeInput[]
+  createMany?: Prisma.ClassGroupCreateManyDegreeInputEnvelope
+  connect?: Prisma.ClassGroupWhereUniqueInput | Prisma.ClassGroupWhereUniqueInput[]
+}
+
+export type ClassGroupUncheckedCreateNestedManyWithoutDegreeInput = {
+  create?: Prisma.XOR<Prisma.ClassGroupCreateWithoutDegreeInput, Prisma.ClassGroupUncheckedCreateWithoutDegreeInput> | Prisma.ClassGroupCreateWithoutDegreeInput[] | Prisma.ClassGroupUncheckedCreateWithoutDegreeInput[]
+  connectOrCreate?: Prisma.ClassGroupCreateOrConnectWithoutDegreeInput | Prisma.ClassGroupCreateOrConnectWithoutDegreeInput[]
+  createMany?: Prisma.ClassGroupCreateManyDegreeInputEnvelope
+  connect?: Prisma.ClassGroupWhereUniqueInput | Prisma.ClassGroupWhereUniqueInput[]
+}
+
+export type ClassGroupUpdateManyWithoutDegreeNestedInput = {
+  create?: Prisma.XOR<Prisma.ClassGroupCreateWithoutDegreeInput, Prisma.ClassGroupUncheckedCreateWithoutDegreeInput> | Prisma.ClassGroupCreateWithoutDegreeInput[] | Prisma.ClassGroupUncheckedCreateWithoutDegreeInput[]
+  connectOrCreate?: Prisma.ClassGroupCreateOrConnectWithoutDegreeInput | Prisma.ClassGroupCreateOrConnectWithoutDegreeInput[]
+  upsert?: Prisma.ClassGroupUpsertWithWhereUniqueWithoutDegreeInput | Prisma.ClassGroupUpsertWithWhereUniqueWithoutDegreeInput[]
+  createMany?: Prisma.ClassGroupCreateManyDegreeInputEnvelope
+  set?: Prisma.ClassGroupWhereUniqueInput | Prisma.ClassGroupWhereUniqueInput[]
+  disconnect?: Prisma.ClassGroupWhereUniqueInput | Prisma.ClassGroupWhereUniqueInput[]
+  delete?: Prisma.ClassGroupWhereUniqueInput | Prisma.ClassGroupWhereUniqueInput[]
+  connect?: Prisma.ClassGroupWhereUniqueInput | Prisma.ClassGroupWhereUniqueInput[]
+  update?: Prisma.ClassGroupUpdateWithWhereUniqueWithoutDegreeInput | Prisma.ClassGroupUpdateWithWhereUniqueWithoutDegreeInput[]
+  updateMany?: Prisma.ClassGroupUpdateManyWithWhereWithoutDegreeInput | Prisma.ClassGroupUpdateManyWithWhereWithoutDegreeInput[]
+  deleteMany?: Prisma.ClassGroupScalarWhereInput | Prisma.ClassGroupScalarWhereInput[]
+}
+
+export type ClassGroupUncheckedUpdateManyWithoutDegreeNestedInput = {
+  create?: Prisma.XOR<Prisma.ClassGroupCreateWithoutDegreeInput, Prisma.ClassGroupUncheckedCreateWithoutDegreeInput> | Prisma.ClassGroupCreateWithoutDegreeInput[] | Prisma.ClassGroupUncheckedCreateWithoutDegreeInput[]
+  connectOrCreate?: Prisma.ClassGroupCreateOrConnectWithoutDegreeInput | Prisma.ClassGroupCreateOrConnectWithoutDegreeInput[]
+  upsert?: Prisma.ClassGroupUpsertWithWhereUniqueWithoutDegreeInput | Prisma.ClassGroupUpsertWithWhereUniqueWithoutDegreeInput[]
+  createMany?: Prisma.ClassGroupCreateManyDegreeInputEnvelope
+  set?: Prisma.ClassGroupWhereUniqueInput | Prisma.ClassGroupWhereUniqueInput[]
+  disconnect?: Prisma.ClassGroupWhereUniqueInput | Prisma.ClassGroupWhereUniqueInput[]
+  delete?: Prisma.ClassGroupWhereUniqueInput | Prisma.ClassGroupWhereUniqueInput[]
+  connect?: Prisma.ClassGroupWhereUniqueInput | Prisma.ClassGroupWhereUniqueInput[]
+  update?: Prisma.ClassGroupUpdateWithWhereUniqueWithoutDegreeInput | Prisma.ClassGroupUpdateWithWhereUniqueWithoutDegreeInput[]
+  updateMany?: Prisma.ClassGroupUpdateManyWithWhereWithoutDegreeInput | Prisma.ClassGroupUpdateManyWithWhereWithoutDegreeInput[]
+  deleteMany?: Prisma.ClassGroupScalarWhereInput | Prisma.ClassGroupScalarWhereInput[]
 }
 
 export type ClassGroupCreateNestedManyWithoutPeriodInput = {
@@ -378,6 +534,10 @@ export type ClassGroupUncheckedUpdateManyWithoutPeriodNestedInput = {
   deleteMany?: Prisma.ClassGroupScalarWhereInput | Prisma.ClassGroupScalarWhereInput[]
 }
 
+export type EnumShiftFieldUpdateOperationsInput = {
+  set?: $Enums.Shift
+}
+
 export type ClassGroupCreateNestedOneWithoutCoursesInput = {
   create?: Prisma.XOR<Prisma.ClassGroupCreateWithoutCoursesInput, Prisma.ClassGroupUncheckedCreateWithoutCoursesInput>
   connectOrCreate?: Prisma.ClassGroupCreateOrConnectWithoutCoursesInput
@@ -394,11 +554,76 @@ export type ClassGroupUpdateOneWithoutCoursesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.ClassGroupUpdateToOneWithWhereWithoutCoursesInput, Prisma.ClassGroupUpdateWithoutCoursesInput>, Prisma.ClassGroupUncheckedUpdateWithoutCoursesInput>
 }
 
+export type ClassGroupCreateWithoutDegreeInput = {
+  id?: string
+  createdAt?: Date | string
+  name: string
+  slug: string
+  basePeriod: number
+  shift: $Enums.Shift
+  period: Prisma.PeriodCreateNestedOneWithoutClassGroupsInput
+  courses?: Prisma.CourseCreateNestedManyWithoutClassGroupInput
+}
+
+export type ClassGroupUncheckedCreateWithoutDegreeInput = {
+  id?: string
+  createdAt?: Date | string
+  name: string
+  slug: string
+  periodId: string
+  basePeriod: number
+  shift: $Enums.Shift
+  courses?: Prisma.CourseUncheckedCreateNestedManyWithoutClassGroupInput
+}
+
+export type ClassGroupCreateOrConnectWithoutDegreeInput = {
+  where: Prisma.ClassGroupWhereUniqueInput
+  create: Prisma.XOR<Prisma.ClassGroupCreateWithoutDegreeInput, Prisma.ClassGroupUncheckedCreateWithoutDegreeInput>
+}
+
+export type ClassGroupCreateManyDegreeInputEnvelope = {
+  data: Prisma.ClassGroupCreateManyDegreeInput | Prisma.ClassGroupCreateManyDegreeInput[]
+  skipDuplicates?: boolean
+}
+
+export type ClassGroupUpsertWithWhereUniqueWithoutDegreeInput = {
+  where: Prisma.ClassGroupWhereUniqueInput
+  update: Prisma.XOR<Prisma.ClassGroupUpdateWithoutDegreeInput, Prisma.ClassGroupUncheckedUpdateWithoutDegreeInput>
+  create: Prisma.XOR<Prisma.ClassGroupCreateWithoutDegreeInput, Prisma.ClassGroupUncheckedCreateWithoutDegreeInput>
+}
+
+export type ClassGroupUpdateWithWhereUniqueWithoutDegreeInput = {
+  where: Prisma.ClassGroupWhereUniqueInput
+  data: Prisma.XOR<Prisma.ClassGroupUpdateWithoutDegreeInput, Prisma.ClassGroupUncheckedUpdateWithoutDegreeInput>
+}
+
+export type ClassGroupUpdateManyWithWhereWithoutDegreeInput = {
+  where: Prisma.ClassGroupScalarWhereInput
+  data: Prisma.XOR<Prisma.ClassGroupUpdateManyMutationInput, Prisma.ClassGroupUncheckedUpdateManyWithoutDegreeInput>
+}
+
+export type ClassGroupScalarWhereInput = {
+  AND?: Prisma.ClassGroupScalarWhereInput | Prisma.ClassGroupScalarWhereInput[]
+  OR?: Prisma.ClassGroupScalarWhereInput[]
+  NOT?: Prisma.ClassGroupScalarWhereInput | Prisma.ClassGroupScalarWhereInput[]
+  id?: Prisma.UuidFilter<"ClassGroup"> | string
+  createdAt?: Prisma.DateTimeFilter<"ClassGroup"> | Date | string
+  name?: Prisma.StringFilter<"ClassGroup"> | string
+  slug?: Prisma.StringFilter<"ClassGroup"> | string
+  periodId?: Prisma.UuidFilter<"ClassGroup"> | string
+  degreeId?: Prisma.UuidFilter<"ClassGroup"> | string
+  basePeriod?: Prisma.IntFilter<"ClassGroup"> | number
+  shift?: Prisma.EnumShiftFilter<"ClassGroup"> | $Enums.Shift
+}
+
 export type ClassGroupCreateWithoutPeriodInput = {
   id?: string
   createdAt?: Date | string
   name: string
   slug: string
+  basePeriod: number
+  shift: $Enums.Shift
+  degree: Prisma.DegreeCreateNestedOneWithoutClassGroupsInput
   courses?: Prisma.CourseCreateNestedManyWithoutClassGroupInput
 }
 
@@ -407,6 +632,9 @@ export type ClassGroupUncheckedCreateWithoutPeriodInput = {
   createdAt?: Date | string
   name: string
   slug: string
+  degreeId: string
+  basePeriod: number
+  shift: $Enums.Shift
   courses?: Prisma.CourseUncheckedCreateNestedManyWithoutClassGroupInput
 }
 
@@ -436,23 +664,15 @@ export type ClassGroupUpdateManyWithWhereWithoutPeriodInput = {
   data: Prisma.XOR<Prisma.ClassGroupUpdateManyMutationInput, Prisma.ClassGroupUncheckedUpdateManyWithoutPeriodInput>
 }
 
-export type ClassGroupScalarWhereInput = {
-  AND?: Prisma.ClassGroupScalarWhereInput | Prisma.ClassGroupScalarWhereInput[]
-  OR?: Prisma.ClassGroupScalarWhereInput[]
-  NOT?: Prisma.ClassGroupScalarWhereInput | Prisma.ClassGroupScalarWhereInput[]
-  id?: Prisma.UuidFilter<"ClassGroup"> | string
-  createdAt?: Prisma.DateTimeFilter<"ClassGroup"> | Date | string
-  name?: Prisma.StringFilter<"ClassGroup"> | string
-  slug?: Prisma.StringFilter<"ClassGroup"> | string
-  periodId?: Prisma.UuidFilter<"ClassGroup"> | string
-}
-
 export type ClassGroupCreateWithoutCoursesInput = {
   id?: string
   createdAt?: Date | string
   name: string
   slug: string
+  basePeriod: number
+  shift: $Enums.Shift
   period: Prisma.PeriodCreateNestedOneWithoutClassGroupsInput
+  degree: Prisma.DegreeCreateNestedOneWithoutClassGroupsInput
 }
 
 export type ClassGroupUncheckedCreateWithoutCoursesInput = {
@@ -461,6 +681,9 @@ export type ClassGroupUncheckedCreateWithoutCoursesInput = {
   name: string
   slug: string
   periodId: string
+  degreeId: string
+  basePeriod: number
+  shift: $Enums.Shift
 }
 
 export type ClassGroupCreateOrConnectWithoutCoursesInput = {
@@ -484,7 +707,10 @@ export type ClassGroupUpdateWithoutCoursesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
+  basePeriod?: Prisma.IntFieldUpdateOperationsInput | number
+  shift?: Prisma.EnumShiftFieldUpdateOperationsInput | $Enums.Shift
   period?: Prisma.PeriodUpdateOneRequiredWithoutClassGroupsNestedInput
+  degree?: Prisma.DegreeUpdateOneRequiredWithoutClassGroupsNestedInput
 }
 
 export type ClassGroupUncheckedUpdateWithoutCoursesInput = {
@@ -493,6 +719,51 @@ export type ClassGroupUncheckedUpdateWithoutCoursesInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   periodId?: Prisma.StringFieldUpdateOperationsInput | string
+  degreeId?: Prisma.StringFieldUpdateOperationsInput | string
+  basePeriod?: Prisma.IntFieldUpdateOperationsInput | number
+  shift?: Prisma.EnumShiftFieldUpdateOperationsInput | $Enums.Shift
+}
+
+export type ClassGroupCreateManyDegreeInput = {
+  id?: string
+  createdAt?: Date | string
+  name: string
+  slug: string
+  periodId: string
+  basePeriod: number
+  shift: $Enums.Shift
+}
+
+export type ClassGroupUpdateWithoutDegreeInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  basePeriod?: Prisma.IntFieldUpdateOperationsInput | number
+  shift?: Prisma.EnumShiftFieldUpdateOperationsInput | $Enums.Shift
+  period?: Prisma.PeriodUpdateOneRequiredWithoutClassGroupsNestedInput
+  courses?: Prisma.CourseUpdateManyWithoutClassGroupNestedInput
+}
+
+export type ClassGroupUncheckedUpdateWithoutDegreeInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  periodId?: Prisma.StringFieldUpdateOperationsInput | string
+  basePeriod?: Prisma.IntFieldUpdateOperationsInput | number
+  shift?: Prisma.EnumShiftFieldUpdateOperationsInput | $Enums.Shift
+  courses?: Prisma.CourseUncheckedUpdateManyWithoutClassGroupNestedInput
+}
+
+export type ClassGroupUncheckedUpdateManyWithoutDegreeInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  periodId?: Prisma.StringFieldUpdateOperationsInput | string
+  basePeriod?: Prisma.IntFieldUpdateOperationsInput | number
+  shift?: Prisma.EnumShiftFieldUpdateOperationsInput | $Enums.Shift
 }
 
 export type ClassGroupCreateManyPeriodInput = {
@@ -500,6 +771,9 @@ export type ClassGroupCreateManyPeriodInput = {
   createdAt?: Date | string
   name: string
   slug: string
+  degreeId: string
+  basePeriod: number
+  shift: $Enums.Shift
 }
 
 export type ClassGroupUpdateWithoutPeriodInput = {
@@ -507,6 +781,9 @@ export type ClassGroupUpdateWithoutPeriodInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
+  basePeriod?: Prisma.IntFieldUpdateOperationsInput | number
+  shift?: Prisma.EnumShiftFieldUpdateOperationsInput | $Enums.Shift
+  degree?: Prisma.DegreeUpdateOneRequiredWithoutClassGroupsNestedInput
   courses?: Prisma.CourseUpdateManyWithoutClassGroupNestedInput
 }
 
@@ -515,6 +792,9 @@ export type ClassGroupUncheckedUpdateWithoutPeriodInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
+  degreeId?: Prisma.StringFieldUpdateOperationsInput | string
+  basePeriod?: Prisma.IntFieldUpdateOperationsInput | number
+  shift?: Prisma.EnumShiftFieldUpdateOperationsInput | $Enums.Shift
   courses?: Prisma.CourseUncheckedUpdateManyWithoutClassGroupNestedInput
 }
 
@@ -523,6 +803,9 @@ export type ClassGroupUncheckedUpdateManyWithoutPeriodInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
+  degreeId?: Prisma.StringFieldUpdateOperationsInput | string
+  basePeriod?: Prisma.IntFieldUpdateOperationsInput | number
+  shift?: Prisma.EnumShiftFieldUpdateOperationsInput | $Enums.Shift
 }
 
 
@@ -562,7 +845,11 @@ export type ClassGroupSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   name?: boolean
   slug?: boolean
   periodId?: boolean
+  degreeId?: boolean
+  basePeriod?: boolean
+  shift?: boolean
   period?: boolean | Prisma.PeriodDefaultArgs<ExtArgs>
+  degree?: boolean | Prisma.DegreeDefaultArgs<ExtArgs>
   courses?: boolean | Prisma.ClassGroup$coursesArgs<ExtArgs>
   _count?: boolean | Prisma.ClassGroupCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["classGroup"]>
@@ -573,7 +860,11 @@ export type ClassGroupSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ex
   name?: boolean
   slug?: boolean
   periodId?: boolean
+  degreeId?: boolean
+  basePeriod?: boolean
+  shift?: boolean
   period?: boolean | Prisma.PeriodDefaultArgs<ExtArgs>
+  degree?: boolean | Prisma.DegreeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["classGroup"]>
 
 export type ClassGroupSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -582,7 +873,11 @@ export type ClassGroupSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ex
   name?: boolean
   slug?: boolean
   periodId?: boolean
+  degreeId?: boolean
+  basePeriod?: boolean
+  shift?: boolean
   period?: boolean | Prisma.PeriodDefaultArgs<ExtArgs>
+  degree?: boolean | Prisma.DegreeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["classGroup"]>
 
 export type ClassGroupSelectScalar = {
@@ -591,25 +886,32 @@ export type ClassGroupSelectScalar = {
   name?: boolean
   slug?: boolean
   periodId?: boolean
+  degreeId?: boolean
+  basePeriod?: boolean
+  shift?: boolean
 }
 
-export type ClassGroupOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "name" | "slug" | "periodId", ExtArgs["result"]["classGroup"]>
+export type ClassGroupOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "name" | "slug" | "periodId" | "degreeId" | "basePeriod" | "shift", ExtArgs["result"]["classGroup"]>
 export type ClassGroupInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   period?: boolean | Prisma.PeriodDefaultArgs<ExtArgs>
+  degree?: boolean | Prisma.DegreeDefaultArgs<ExtArgs>
   courses?: boolean | Prisma.ClassGroup$coursesArgs<ExtArgs>
   _count?: boolean | Prisma.ClassGroupCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type ClassGroupIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   period?: boolean | Prisma.PeriodDefaultArgs<ExtArgs>
+  degree?: boolean | Prisma.DegreeDefaultArgs<ExtArgs>
 }
 export type ClassGroupIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   period?: boolean | Prisma.PeriodDefaultArgs<ExtArgs>
+  degree?: boolean | Prisma.DegreeDefaultArgs<ExtArgs>
 }
 
 export type $ClassGroupPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "ClassGroup"
   objects: {
     period: Prisma.$PeriodPayload<ExtArgs>
+    degree: Prisma.$DegreePayload<ExtArgs>
     courses: Prisma.$CoursePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -618,6 +920,9 @@ export type $ClassGroupPayload<ExtArgs extends runtime.Types.Extensions.Internal
     name: string
     slug: string
     periodId: string
+    degreeId: string
+    basePeriod: number
+    shift: $Enums.Shift
   }, ExtArgs["result"]["classGroup"]>
   composites: {}
 }
@@ -1013,6 +1318,7 @@ readonly fields: ClassGroupFieldRefs;
 export interface Prisma__ClassGroupClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   period<T extends Prisma.PeriodDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.PeriodDefaultArgs<ExtArgs>>): Prisma.Prisma__PeriodClient<runtime.Types.Result.GetResult<Prisma.$PeriodPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  degree<T extends Prisma.DegreeDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.DegreeDefaultArgs<ExtArgs>>): Prisma.Prisma__DegreeClient<runtime.Types.Result.GetResult<Prisma.$DegreePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   courses<T extends Prisma.ClassGroup$coursesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ClassGroup$coursesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CoursePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -1048,6 +1354,9 @@ export interface ClassGroupFieldRefs {
   readonly name: Prisma.FieldRef<"ClassGroup", 'String'>
   readonly slug: Prisma.FieldRef<"ClassGroup", 'String'>
   readonly periodId: Prisma.FieldRef<"ClassGroup", 'String'>
+  readonly degreeId: Prisma.FieldRef<"ClassGroup", 'String'>
+  readonly basePeriod: Prisma.FieldRef<"ClassGroup", 'Int'>
+  readonly shift: Prisma.FieldRef<"ClassGroup", 'Shift'>
 }
     
 

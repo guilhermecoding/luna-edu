@@ -77,6 +77,8 @@ export type SubPeriod = Prisma.SubPeriodModel
  * Model ClassGroup
  * Turma Física — agrupa as turmas disciplinares (Course) que compartilham
  * os mesmos alunos. Ex: "1º Ano A" contém as turmas de Matemática, Português, etc.
+ * Ao criar um ClassGroup, o sistema auto-gera os Course records baseado nas
+ * disciplinas da Matriz (Degree) + Série (basePeriod).
  */
 export type ClassGroup = Prisma.ClassGroupModel
 /**

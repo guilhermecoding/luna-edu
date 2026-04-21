@@ -3,7 +3,7 @@
 import { revalidatePath, updateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import { ZodError } from "zod";
-import { createCourse, getCoursesByClassGroupId } from "@/services/courses/courses.service";
+import { createCourse, getCourseByPeriodIdAndCode, getCoursesByClassGroupId } from "@/services/courses/courses.service";
 import { getClassGroupByPeriodIdAndSlug } from "@/services/class-groups/class-groups.service";
 import { getPeriodByProgramAndSlug } from "@/services/periods/periods.service";
 import { getSubjectById } from "@/services/subjects/subjects.service";
@@ -46,12 +46,17 @@ export async function createClassGroupSubjectAction(
             return { success: false, error: "Esta disciplina já está ofertada nesta turma." };
         }
 
+        const codeAlreadyUsed = await getCourseByPeriodIdAndCode(period.id, validatedData.code);
+        if (codeAlreadyUsed) {
+            return { success: false, error: "Já existe uma disciplina com este código neste período." };
+        }
+
         await createCourse({
-            name: subject.name,
-            code: `${classGroup.slug}-${subject.code}`.toUpperCase(),
+            name: validatedData.name,
+            code: validatedData.code,
             periodId: period.id,
             subjectId: subject.id,
-            shift: classGroup.shift,
+            shift: validatedData.shift,
             classGroupId: classGroup.id,
         });
 

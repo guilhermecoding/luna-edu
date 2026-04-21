@@ -3,9 +3,10 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { IconLoader2 } from "@tabler/icons-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { Controller, type SubmitHandler, useForm, useWatch } from "react-hook-form";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
     Select,
@@ -21,7 +22,7 @@ import {
     createClassGroupSubjectSchema,
     type CreateClassGroupSubjectInput,
 } from "../schema";
-import { shiftLabels } from "../../../../schema";
+import { SHIFTS, shiftLabels } from "../../../../schema";
 
 type SubjectData = {
     id: string;
@@ -60,21 +61,38 @@ export function CreateClassGroupSubjectForm({
         mode: "onChange",
         defaultValues: {
             subjectId: "",
+            name: "",
+            code: "",
+            shift: classGroup.shift,
         },
     });
 
     const {
         control,
+        register,
+        setValue,
         formState: { errors, isSubmitting, isValid, isDirty },
         setError,
         clearErrors,
     } = form;
 
     const subjectIdValue = useWatch({ control, name: "subjectId" });
+    const nameValue = useWatch({ control, name: "name" });
+    const codeValue = useWatch({ control, name: "code" });
     const selectedSubject = useMemo(
         () => subjects.find((subject) => subject.id === subjectIdValue),
         [subjects, subjectIdValue],
     );
+
+    useEffect(() => {
+        if (!selectedSubject) return;
+
+        setValue("name", selectedSubject.name, { shouldDirty: true, shouldValidate: true });
+        setValue("code", `${classGroup.slug}-${selectedSubject.code}`.toUpperCase(), {
+            shouldDirty: true,
+            shouldValidate: true,
+        });
+    }, [selectedSubject, classGroup.slug, setValue]);
 
     const canSubmit = isValid && isDirty && !isSubmitting && subjects.length > 0;
 
@@ -169,20 +187,81 @@ export function CreateClassGroupSubjectForm({
             </div>
 
             {selectedSubject && (
-                <div className="p-4 border border-blue-200 dark:border-blue-800 rounded-xl bg-blue-50 dark:bg-blue-950/30 space-y-1.5 text-sm">
-                    <p>
-                        <span className="font-semibold">Turma:</span> {classGroup.name}
-                    </p>
-                    <p>
-                        <span className="font-semibold">Disciplina:</span> {selectedSubject.name}
-                    </p>
-                    <p>
-                        <span className="font-semibold">Codigo gerado:</span>{" "}
-                        {`${classGroup.slug}-${selectedSubject.code}`.toUpperCase()}
-                    </p>
-                    <p>
-                        <span className="font-semibold">Turno:</span> {shiftLabels[classGroup.shift]}
-                    </p>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="space-y-2 md:col-span-2">
+                        <Label htmlFor="name">Nome da Disciplina na Turma *</Label>
+                        <Input
+                            id="name"
+                            placeholder="Ex: Matemática"
+                            {...register("name")}
+                            disabled={isSubmitting}
+                            aria-invalid={errors.name ? "true" : "false"}
+                            className="p-5 rounded-lg bg-background"
+                        />
+                        {errors.name && <p className="text-sm text-red-600">{errors.name.message}</p>}
+                    </div>
+
+                    <div className="space-y-2">
+                        <Label htmlFor="code">Código da Disciplina na Turma *</Label>
+                        <Input
+                            id="code"
+                            placeholder="Ex: 1A-MAT01"
+                            {...register("code", {
+                                onChange: (event) =>
+                                    setValue("code", event.target.value.toUpperCase(), {
+                                        shouldDirty: true,
+                                        shouldTouch: true,
+                                        shouldValidate: true,
+                                    }),
+                            })}
+                            disabled={isSubmitting}
+                            aria-invalid={errors.code ? "true" : "false"}
+                            className="p-5 rounded-lg bg-background uppercase"
+                        />
+                        {errors.code && <p className="text-sm text-red-600">{errors.code.message}</p>}
+                    </div>
+
+                    <div className="space-y-2">
+                        <Label htmlFor="shift">Turno *</Label>
+                        <Controller
+                            control={control}
+                            name="shift"
+                            render={({ field }) => (
+                                <Select
+                                    value={field.value}
+                                    onValueChange={field.onChange}
+                                    disabled={isSubmitting}
+                                >
+                                    <SelectTrigger id="shift" className="p-5 rounded-lg bg-background w-full">
+                                        <SelectValue placeholder="Selecione o turno" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {SHIFTS.map((shift) => (
+                                            <SelectItem key={shift} value={shift}>
+                                                {shiftLabels[shift]}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                            )}
+                        />
+                        {errors.shift && <p className="text-sm text-red-600">{errors.shift.message}</p>}
+                    </div>
+
+                    <div className="p-4 border border-blue-200 dark:border-blue-800 rounded-xl bg-blue-50 dark:bg-blue-950/30 space-y-1.5 text-sm md:col-span-2">
+                        <p>
+                            <span className="font-semibold">Turma:</span> {classGroup.name}
+                        </p>
+                        <p>
+                            <span className="font-semibold">Disciplina Curricular:</span> {selectedSubject.name}
+                        </p>
+                        <p>
+                            <span className="font-semibold">Nome final:</span> {nameValue || "-"}
+                        </p>
+                        <p>
+                            <span className="font-semibold">Código final:</span> {codeValue || "-"}
+                        </p>
+                    </div>
                 </div>
             )}
 

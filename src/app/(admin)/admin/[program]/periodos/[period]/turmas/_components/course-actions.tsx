@@ -35,7 +35,7 @@ export function CourseActions({ programSlug, periodSlug, courseCode }: CourseAct
                         className="flex items-center gap-2 cursor-pointer py-2"
                     >
                         <IconEdit className="size-4 text-muted-foreground" />
-                        <span className="font-medium">Editar Turma</span>
+                        <span className="font-medium">Editar Disciplina</span>
                     </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>

@@ -2,39 +2,38 @@ import BaseForm from "@/components/base-form";
 import Page from "@/components/page";
 import Section from "@/components/section";
 import { Suspense } from "react";
-import { CreateCourseForm } from "./_components/create-course-form";
+import { CreateTurmaForm } from "./_components/create-turma-form";
 import { Metadata } from "next";
 import SkeletonForm from "@/components/skeletons/skeleton-form";
 import { getPeriodByProgramAndSlug } from "@/services/periods/periods.service";
 import { getSubjectsByProgramSlug } from "@/services/subjects/subjects.service";
-import { getAllRooms } from "@/services/rooms/rooms.service";
-import { getTimeSlotsByProgramSlug, getTeachers } from "@/services/schedules/schedules.service";
-import { getClassGroupsByPeriodId } from "@/services/class-groups/class-groups.service";
+import { getProgramBySlug } from "@/services/programs/programs.service";
+import { getDegreesByProgramId } from "@/services/degrees/degrees.service";
 import { notFound } from "next/navigation";
 
 export const metadata: Metadata = {
     title: "Nova Turma",
 };
 
-async function NewCourseContent({
+async function NewTurmaContent({
     params,
 }: {
     params: Promise<{ program: string; period: string }>;
 }) {
     const { program, period } = await params;
 
-    const periodData = await getPeriodByProgramAndSlug(program, period);
+    const [periodData, programData] = await Promise.all([
+        getPeriodByProgramAndSlug(program, period),
+        getProgramBySlug(program),
+    ]);
 
-    if (!periodData) {
+    if (!periodData || !programData) {
         notFound();
     }
 
-    const [subjects, rooms, timeSlots, teachers, classGroups] = await Promise.all([
+    const [degrees, subjects] = await Promise.all([
+        getDegreesByProgramId(programData.id),
         getSubjectsByProgramSlug(program),
-        getAllRooms(),
-        getTimeSlotsByProgramSlug(program),
-        getTeachers(),
-        getClassGroupsByPeriodId(periodData.id),
     ]);
 
     return (
@@ -42,18 +41,25 @@ async function NewCourseContent({
             <Section>
                 <BaseForm
                     title="Nova Turma"
-                    description={`Cadastre uma nova turma para o período ${periodData.name}.`}
+                    description={"Selecione a Matriz e a Série. O sistema criará automaticamente as disciplinas ofertadas."}
                 >
                     <div className="mt-6">
                         <Suspense fallback={<SkeletonForm />}>
-                            <CreateCourseForm
+                            <CreateTurmaForm
                                 programSlug={program}
                                 periodSlug={period}
-                                subjects={subjects}
-                                rooms={rooms}
-                                timeSlots={timeSlots}
-                                teachers={teachers}
-                                classGroups={classGroups}
+                                degrees={degrees.map((d) => ({
+                                    id: d.id,
+                                    name: d.name,
+                                    slug: d.slug,
+                                }))}
+                                subjects={subjects.map((s) => ({
+                                    id: s.id,
+                                    name: s.name,
+                                    code: s.code,
+                                    basePeriod: s.basePeriod,
+                                    degreeId: s.degreeId,
+                                }))}
                             />
                         </Suspense>
                     </div>
@@ -63,10 +69,10 @@ async function NewCourseContent({
     );
 }
 
-export default function NewCoursePage({
+export default function NewTurmaPage({
     params,
 }: {
     params: Promise<{ program: string; period: string }>;
 }) {
-    return <NewCourseContent params={params} />;
+    return <NewTurmaContent params={params} />;
 }

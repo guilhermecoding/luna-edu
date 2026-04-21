@@ -40,6 +40,39 @@ export async function getCoursesByPeriodId(periodId: string) {
 }
 
 /**
+ * Lista todas as disciplinas (ofertas) de uma turma física específica.
+ */
+export async function getCoursesByClassGroupId(classGroupId: string) {
+    "use cache";
+    cacheLife("max");
+    cacheTag(`class-group:${classGroupId}:courses`);
+
+    return await prisma.course.findMany({
+        where: {
+            classGroupId,
+        },
+        include: {
+            subject: true,
+            room: {
+                include: {
+                    campus: true,
+                },
+            },
+            classGroup: {
+                select: {
+                    id: true,
+                    name: true,
+                    slug: true,
+                },
+            },
+        },
+        orderBy: {
+            name: "asc",
+        },
+    });
+}
+
+/**
  * Busca uma turma específica pelo período e código.
  */
 export async function getCourseByPeriodIdAndCode(periodId: string, code: string): Promise<CourseWithRelations | null> {

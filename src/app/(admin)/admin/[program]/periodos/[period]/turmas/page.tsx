@@ -6,13 +6,13 @@ import { ButtonLink } from "@/components/ui/button-link";
 import { Metadata } from "next";
 import { getPeriodByProgramAndSlug } from "@/services/periods/periods.service";
 import { notFound } from "next/navigation";
-import ListCourses from "./_components/list-courses";
+import ListClassGroups from "./_components/list-class-groups";
 
 export const metadata: Metadata = {
     title: "Gerenciar Turmas",
 };
 
-export default async function CoursesPage({
+export default async function ClassGroupsPage({
     params,
 }: {
     params: Promise<{ program: string; period: string }>;
@@ -35,7 +35,7 @@ export default async function CoursesPage({
                     <div className="flex-1">
                         <TitlePage
                             title={periodData.name}
-                            description="Gerencie as turmas ofertadas neste período letivo."
+                            description="Gerencie as turmas deste período letivo."
                         />
                     </div>
                     <div className="flex flex-1 justify-end items-end">
@@ -48,7 +48,7 @@ export default async function CoursesPage({
             </Section>
 
             <Section className="mt-18">
-                <ListCourses periodId={periodData.id} programSlug={program} periodSlug={period} />
+                <ListClassGroups periodId={periodData.id} programSlug={program} periodSlug={period} />
             </Section>
         </Page>
     );

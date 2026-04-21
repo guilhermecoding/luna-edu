@@ -1,44 +1,37 @@
 "use server";
 
-import { createCourse } from "@/services/courses/courses.service";
+import { createClassGroup } from "@/services/class-groups/class-groups.service";
 import { getPeriodByProgramAndSlug } from "@/services/periods/periods.service";
 import { ZodError } from "zod";
-import { courseSchema, type CourseInput } from "../schema";
+import { classGroupSchema, type ClassGroupInput } from "../schema";
 import { revalidatePath, updateTag } from "next/cache";
 import { redirect } from "next/navigation";
-import { DayOfWeek, Shift } from "@/generated/prisma/client";
+import { Shift } from "@/generated/prisma/client";
 
-export async function createCourseAction(
+export async function createTurmaAction(
     programSlug: string,
     periodSlug: string,
-    data: CourseInput,
+    data: ClassGroupInput,
 ) {
     try {
-        const validatedData = courseSchema.parse(data);
+        const validatedData = classGroupSchema.parse(data);
         const period = await getPeriodByProgramAndSlug(programSlug, periodSlug);
 
         if (!period) {
             throw new Error("Período não encontrado.");
         }
 
-        await createCourse({
+        await createClassGroup({
             name: validatedData.name,
-            code: validatedData.code,
+            slug: validatedData.slug,
             periodId: period.id,
-            subjectId: validatedData.subjectId,
-            roomId: validatedData.roomId || null,
+            degreeId: validatedData.degreeId,
+            basePeriod: validatedData.basePeriod,
             shift: validatedData.shift as Shift,
-            classGroupId: validatedData.classGroupId || null,
-            schedules: validatedData.schedules.map((s) => ({
-                dayOfWeek: s.dayOfWeek as DayOfWeek,
-                timeSlotId: s.timeSlotId,
-                teacherId: s.teacherId || null,
-                roomId: s.roomId || null,
-            })),
         });
 
+        updateTag(`period:${period.id}:class-groups`);
         updateTag(`period:${period.id}:courses`);
-        updateTag(`program-periods:${programSlug}`);
         revalidatePath(`/admin/${programSlug}/periodos/${periodSlug}/turmas`);
     } catch (error) {
         if (error instanceof ZodError) {
@@ -52,7 +45,7 @@ export async function createCourseAction(
 
     const params = new URLSearchParams({
         toast: "success",
-        message: "Turma criada com sucesso",
+        message: "Turma criada com sucesso! As disciplinas foram geradas automaticamente.",
     });
 
     redirect(`/admin/${programSlug}/periodos/${periodSlug}/turmas?${params.toString()}`);

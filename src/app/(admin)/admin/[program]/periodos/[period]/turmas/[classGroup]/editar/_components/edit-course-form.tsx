@@ -1,6 +1,15 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -16,9 +25,9 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { useForm, type SubmitHandler, useWatch, Controller, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Fragment } from "react";
+import { Fragment, useState } from "react";
 import { Separator } from "@/components/ui/separator";
-import { updateCourseAction } from "../actions";
+import { deleteCourseAction, updateCourseAction } from "../actions";
 import {
     courseSchema,
     type CourseInput,
@@ -30,6 +39,9 @@ import {
 } from "../../../schema";
 import { IconBuilding, IconLoader2, IconUsers, IconPlus, IconTrash, IconCalendarEvent, IconUsersGroup } from "@tabler/icons-react";
 import { isRedirectError } from "@/lib/is-redirect-error";
+import Image from "next/image";
+import imgGibbyDuvida from "@/assets/images/logo-gibby-duvida.svg";
+import { IconAlertTriangle } from "@tabler/icons-react";
 
 type SubjectWithDegree = {
     id: string;
@@ -110,6 +122,10 @@ export function EditCourseForm({
     const router = useRouter();
     const pathname = usePathname();
     const searchParams = useSearchParams();
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [deleteConfirmationName, setDeleteConfirmationName] = useState("");
+    const [deleteError, setDeleteError] = useState<string | null>(null);
+    const [isDeleting, setIsDeleting] = useState(false);
 
     const form = useForm<CourseInput>({
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -142,6 +158,7 @@ export function EditCourseForm({
     const nameValue = useWatch({ control, name: "name" });
     const codeValue = useWatch({ control, name: "code" });
     const canSubmit = isValid && isDirty && !isSubmitting && Boolean(nameValue?.trim()) && Boolean(codeValue?.trim());
+    const canDelete = deleteConfirmationName === defaultValues.name && !isDeleting;
 
     const onSubmit: SubmitHandler<CourseInput> = async (data) => {
         clearErrors("root");
@@ -175,6 +192,34 @@ export function EditCourseForm({
                 type: "server",
                 message: "Erro fatal ao atualizar turma",
             });
+        }
+    };
+
+    const onDeleteCourse = async () => {
+        setDeleteError(null);
+        setIsDeleting(true);
+
+        try {
+            const result = await deleteCourseAction(programSlug, periodSlug, courseCode, deleteConfirmationName);
+            if (result?.success === false) {
+                const params = new URLSearchParams(searchParams.toString());
+                params.set("toast", "error");
+                params.set("message", result.error || "Erro ao apagar disciplina");
+                router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+                setDeleteError(result.error || "Erro ao apagar disciplina");
+            }
+        } catch (error) {
+            if (isRedirectError(error)) {
+                throw error;
+            }
+
+            const params = new URLSearchParams(searchParams.toString());
+            params.set("toast", "error");
+            params.set("message", "Erro ao apagar disciplina");
+            router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+            setDeleteError("Erro ao apagar disciplina");
+        } finally {
+            setIsDeleting(false);
         }
     };
 
@@ -624,6 +669,84 @@ export function EditCourseForm({
                     {isSubmitting && <IconLoader2 className="size-5 animate-spin" />}
                     {isSubmitting ? "Salvando..." : "Salvar Alterações"}
                 </Button>
+            </div>
+
+            <div className="border border-destructive/25 bg-destructive/5 rounded-2xl p-4 sm:p-5 space-y-4">
+                <div>
+                    <div className="flex flex-row items-center gap-2">
+                        <IconAlertTriangle className="size-5 text-red-600" />
+                        <h3 className="text-xl font-semibold text-destructive">Zona de Perigo</h3>
+                    </div>
+                    <p className="text-sm text-muted-foreground mt-1">
+                        Esta ação remove esta disciplina da turma <b>permanentemente</b>, incluindo seus horários, e não pode ser desfeita.
+                    </p>
+                </div>
+
+                <Dialog
+                    open={isDeleteModalOpen}
+                    onOpenChange={(open) => {
+                        setIsDeleteModalOpen(open);
+                        if (!open) {
+                            setDeleteConfirmationName("");
+                            setDeleteError(null);
+                        }
+                    }}
+                >
+                    <div className="w-full flex justify-end">
+                        <DialogTrigger asChild>
+                            <Button type="button" variant="destructive" className="w-full sm:w-auto" disabled={isSubmitting || isDeleting}>
+                                Excluir Disciplina da Turma
+                            </Button>
+                        </DialogTrigger>
+                    </div>
+                    <DialogContent>
+                        <DialogHeader>
+                            <DialogTitle>Excluir Disciplina da Turma</DialogTitle>
+                            <DialogDescription>
+                                Deseja realmente excluir esta disciplina da turma?
+                            </DialogDescription>
+                        </DialogHeader>
+
+                        <div className="flex flex-col items-center">
+                            <Image className="w-32 h-32" src={imgGibbyDuvida} alt="Gibby Duvida" width={100} height={100} />
+                            <span>Para confirmar, digite exatamente o nome da disciplina: <strong>{defaultValues.name}</strong></span>
+                        </div>
+
+                        <div className="space-y-2">
+                            <Label htmlFor="confirm-delete-course-name">Nome da disciplina</Label>
+                            <Input
+                                id="confirm-delete-course-name"
+                                value={deleteConfirmationName}
+                                onChange={(event) => setDeleteConfirmationName(event.target.value)}
+                                placeholder="Digite o nome exato para confirmar"
+                                className="rounded-lg"
+                                disabled={isDeleting}
+                            />
+                            {deleteError && <p className="text-sm text-red-600">{deleteError}</p>}
+                        </div>
+
+                        <DialogFooter>
+                            <Button
+                                type="button"
+                                variant="outline"
+                                onClick={() => setIsDeleteModalOpen(false)}
+                                disabled={isDeleting}
+                            >
+                                Cancelar
+                            </Button>
+                            <Button
+                                type="button"
+                                variant="destructive"
+                                onClick={onDeleteCourse}
+                                disabled={!canDelete}
+                                className="flex items-center gap-2"
+                            >
+                                {isDeleting && <IconLoader2 className="size-5 animate-spin" />}
+                                {isDeleting ? "Excluindo..." : "Excluir"}
+                            </Button>
+                        </DialogFooter>
+                    </DialogContent>
+                </Dialog>
             </div>
         </form>
     );

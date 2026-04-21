@@ -43,7 +43,7 @@ export default async function PeriodPage({
                     <div className="flex-1">
                         <TitlePage
                             title={periodData.name}
-                            description={`${new Date(periodData.startDate).toLocaleDateString("pt-BR")} — ${new Date(periodData.endDate).toLocaleDateString("pt-BR")}`}
+                            description={`${new Date(periodData.startDate).toLocaleDateString("pt-BR")} à ${new Date(periodData.endDate).toLocaleDateString("pt-BR")}`}
                         />
                         <div className="mt-3">
                             <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold ${isActive ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400" : "bg-muted text-muted-foreground"}`}>

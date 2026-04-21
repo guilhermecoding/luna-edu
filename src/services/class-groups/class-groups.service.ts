@@ -84,6 +84,23 @@ export async function getClassGroupByPeriodIdAndSlug(
 }
 
 /**
+ * Retorna os slugs dos grupos informados, na mesma ordem dos ids únicos.
+ * Usado após mutações de curso para invalidar tags `period:…:class-group:…` sem usar Prisma nas server actions.
+ */
+export async function getClassGroupSlugsByIds(classGroupIds: string[]): Promise<string[]> {
+    const uniqueIds = [...new Set(classGroupIds.filter(Boolean))];
+    if (uniqueIds.length === 0) {
+        return [];
+    }
+    const rows = await prisma.classGroup.findMany({
+        where: { id: { in: uniqueIds } },
+        select: { id: true, slug: true },
+    });
+    const byId = new Map(rows.map((r) => [r.id, r.slug] as const));
+    return uniqueIds.map((id) => byId.get(id)).filter((s): s is string => s != null);
+}
+
+/**
  * Cria um novo grupo (turma física) e auto-gera as turmas disciplinares
  * baseado nas disciplinas da Matriz (Degree) + Série (basePeriod).
  *

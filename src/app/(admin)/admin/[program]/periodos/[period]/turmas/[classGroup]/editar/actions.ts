@@ -3,6 +3,7 @@
 import { updateCourse, getCourseByPeriodIdAndCode } from "@/services/courses/courses.service";
 import { deleteCourse } from "@/services/courses/courses.service";
 import { getPeriodByProgramAndSlug } from "@/services/periods/periods.service";
+import { getClassGroupSlugsByIds } from "@/services/class-groups/class-groups.service";
 import { ZodError, z } from "zod";
 import { courseSchema, type CourseInput } from "../../schema";
 import { revalidatePath, updateTag } from "next/cache";
@@ -12,6 +13,44 @@ import { DayOfWeek, Shift } from "@/generated/prisma/client";
 const deleteCourseSchema = z.object({
     confirmationName: z.string().min(1, "Digite o nome da disciplina para confirmar"),
 });
+
+/**
+ * Caches a invalidar:
+ * - `getCoursesByClassGroupId` → `class-group:${id}:courses`
+ * - `getClassGroupByPeriodIdAndSlug` (página `.../turmas/[slug]/disciplinas`) → `period:${periodId}:class-group:${slug}`
+ * - `getClassGroupsByPeriodId` (contagem de turmas no card) → `period:${periodId}:class-groups`
+ *
+ * A omissão da tag `period:…:class-group:…` era a causa de a listagem de disciplinas continuar
+ * com dados antigos após excluir/editar a turma.
+ */
+async function invalidateCachesForCourseClassGroups(
+    periodId: string,
+    classGroupIds: (string | null | undefined)[],
+): Promise<string[]> {
+    const uniqueIds = [...new Set(classGroupIds.filter((id): id is string => Boolean(id)))];
+    for (const id of uniqueIds) {
+        updateTag(`class-group:${id}:courses`);
+    }
+    const slugs = await getClassGroupSlugsByIds(uniqueIds);
+    for (const slug of slugs) {
+        updateTag(`period:${periodId}:class-group:${slug}`);
+    }
+    if (uniqueIds.length > 0) {
+        updateTag(`period:${periodId}:class-groups`);
+    }
+    return slugs;
+}
+
+function revalidateTurmasRelatedPaths(
+    programSlug: string,
+    periodSlug: string,
+    classGroupSlugs: string[],
+) {
+    for (const slug of classGroupSlugs) {
+        revalidatePath(`/admin/${programSlug}/periodos/${periodSlug}/turmas/${slug}/disciplinas`);
+    }
+    revalidatePath(`/admin/${programSlug}/periodos/${periodSlug}/turmas`);
+}
 
 export async function updateCourseAction(
     programSlug: string,
@@ -53,7 +92,11 @@ export async function updateCourseAction(
             updateTag(`period:${course.periodId}:course:${validatedData.code}`);
         }
         updateTag(`program-periods:${programSlug}`);
-        revalidatePath(`/admin/${programSlug}/periodos/${periodSlug}/turmas`);
+        const classGroupSlugs = await invalidateCachesForCourseClassGroups(course.periodId, [
+            course.classGroupId,
+            validatedData.classGroupId || null,
+        ]);
+        revalidateTurmasRelatedPaths(programSlug, periodSlug, classGroupSlugs);
     } catch (error) {
         if (error instanceof ZodError) {
             return { success: false, error: error.issues[0]?.message || "Erro de validação" };
@@ -99,10 +142,10 @@ export async function deleteCourseAction(
         updateTag(`period:${course.periodId}:courses`);
         updateTag(`period:${course.periodId}:course:${course.code}`);
         updateTag(`program-periods:${programSlug}`);
-        if (course.classGroupId) {
-            updateTag(`class-group:${course.classGroupId}:courses`);
-        }
-        revalidatePath(`/admin/${programSlug}/periodos/${periodSlug}/turmas`);
+        const classGroupSlugs = await invalidateCachesForCourseClassGroups(course.periodId, [
+            course.classGroupId,
+        ]);
+        revalidateTurmasRelatedPaths(programSlug, periodSlug, classGroupSlugs);
     } catch (error) {
         if (error instanceof ZodError) {
             return { success: false, error: error.issues[0]?.message || "Erro de validação" };

@@ -11,7 +11,7 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useForm, type SubmitHandler, useWatch, Controller } from "react-hook-form";
+import { useForm, type SubmitHandler, useWatch, Controller, type Resolver } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useMemo } from "react";
 import { createClassGroupAction } from "../actions";
@@ -42,8 +42,8 @@ interface CreateClassGroupFormProps {
 }
 
 const shiftIcons = {
-    MORNING: IconSun,
-    AFTERNOON: IconSunset2,
+    MORNING: IconSunset2,
+    AFTERNOON: IconSun,
     EVENING: IconMoon,
 } as const;
 
@@ -58,8 +58,7 @@ export function CreateClassGroupForm({
     const searchParams = useSearchParams();
 
     const form = useForm<ClassGroupInput>({
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        resolver: zodResolver(classGroupSchema) as any,
+        resolver: zodResolver(classGroupSchema) as Resolver<ClassGroupInput>,
         mode: "onChange",
         defaultValues: {
             name: "",

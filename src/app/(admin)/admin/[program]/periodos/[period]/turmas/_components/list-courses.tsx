@@ -1,10 +1,10 @@
 import { getCoursesByPeriodId } from "@/services/courses/courses.service";
-import { IconUsersGroup, IconEdit, IconChevronRight, IconSun, IconSunset2, IconMoon, IconUser } from "@tabler/icons-react";
+import { IconSun, IconSunset2, IconMoon, IconCodeAsterisk, IconUsersGroup } from "@tabler/icons-react";
 import Link from "next/link";
 import { Suspense, Fragment } from "react";
-import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Shift } from "@/generated/prisma/enums";
+import { CourseActions } from "./course-actions";
 
 import { getAvatarColor, getInitials, hashString } from "@/lib/avatar-utils";
 
@@ -33,9 +33,9 @@ function shiftLabel(shift: Shift) {
 
 function ShiftIcon({ shift }: { shift: Shift }) {
     switch (shift) {
-        case Shift.MORNING: return <IconSun className="size-3 sm:size-3.5" />;
-        case Shift.AFTERNOON: return <IconSunset2 className="size-3 sm:size-3.5" />;
-        case Shift.EVENING: return <IconMoon className="size-3 sm:size-3.5" />;
+        case Shift.MORNING: return <IconSun className="size-4 sm:size-4.5" />;
+        case Shift.AFTERNOON: return <IconSunset2 className="size-4 sm:size-4.5" />;
+        case Shift.EVENING: return <IconMoon className="size-4 sm:size-4.5" />;
     }
 }
 
@@ -165,11 +165,11 @@ async function ListCoursesContent({
             <table className="w-full text-left border-collapse">
                 <thead className="bg-primary/5 text-muted-foreground uppercase text-[10px] sm:text-xs">
                     <tr>
-                        <th className="px-4 sm:px-6 py-4 font-medium min-w-[200px]">Turma</th>
-                        <th className="px-4 sm:px-6 py-4 font-medium text-center min-w-[140px]">Disciplina</th>
+                        <th className="px-4 sm:px-6 py-4 font-medium min-w-[200px]">Disciplina</th>
                         <th className="px-4 sm:px-6 py-4 font-medium text-center min-w-[150px]">Professor</th>
                         <th className="px-4 sm:px-6 py-4 font-medium text-center min-w-[90px]">Turno</th>
-                        <th className="px-4 sm:px-6 py-4 font-medium text-center min-w-[160px]">Ocupação</th>
+                        <th className="px-4 sm:px-6 py-4 font-medium text-center min-w-[120px]">Sala</th>
+                        <th className="px-4 sm:px-6 py-4 font-medium text-center min-w-[140px]">Ocupação</th>
                         <th className="px-4 sm:px-6 py-4 font-medium text-center whitespace-nowrap min-w-[120px]">Ações</th>
                     </tr>
                 </thead>
@@ -182,7 +182,7 @@ async function ListCoursesContent({
                                     <div className="flex items-center gap-2">
                                         <div className="size-2 rounded-full bg-primary" />
                                         <span className="font-bold text-xs uppercase tracking-wider text-muted-foreground">
-                                            {groupName === "Avulsas" ? "Turmas Avulsas" : `Grupo: ${groupName}`}
+                                            {groupName === "Avulsas" ? "Turmas Avulsas" : `${groupName}`}
                                         </span>
                                     </div>
                                 </td>
@@ -198,7 +198,7 @@ async function ListCoursesContent({
 
                                 return (
                                     <tr key={course.id} className="hover:bg-muted/50 transition-colors group">
-                                        {/* ── Turma (avatar colorido + nome) ── */}
+                                        {/* ── Disciplina (avatar colorido + nome) ── */}
                                         <td className="px-4 sm:px-6 py-4">
                                             <div className="flex items-center gap-3">
                                                 <span
@@ -206,28 +206,22 @@ async function ListCoursesContent({
                                                 >
                                                     {getInitials(course.subject.name)}
                                                 </span>
-                                                <div className="flex flex-col gap-0.5">
+                                                <div className="flex flex-col">
                                                     <span className="font-bold text-sm sm:text-base text-foreground" title={course.name}>
-                                                        {course.code} - {course.name}
+                                                        {course.name}
                                                     </span>
+                                                    <div className="shrink-0 text-muted-foreground font-medium mt-1 flex items-start gap-1">
+                                                        <IconCodeAsterisk className="size-4 shrink-0" />
+                                                        <span className="text-xs">{course.code}</span>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </td>
-
-                                        {/* ── Disciplina ── */}
-                                        <td className="px-4 sm:px-6 py-4">
-                                            <div className="flex justify-center">
-                                                <span className="text-muted-foreground text-[10px] sm:text-xs whitespace-nowrap" title={course.subject.name}>
-                                                    {course.subject.name}
-                                                </span>
                                             </div>
                                         </td>
 
                                         {/* ── Professor (estático) ── */}
                                         <td className="px-4 sm:px-6 py-4">
                                             <div className="flex justify-center">
-                                                <span className="inline-flex items-center gap-1.5 text-[10px] sm:text-xs text-foreground whitespace-nowrap">
-                                                    <IconUser className="size-3 sm:size-3.5 text-muted-foreground" />
+                                                <span className="inline-flex items-center gap-1.5 text-sm sm:text-base text-foreground whitespace-nowrap">
                                                     {teacher}
                                                 </span>
                                             </div>
@@ -236,25 +230,46 @@ async function ListCoursesContent({
                                         {/* ── Turno ── */}
                                         <td className="px-4 sm:px-6 py-4">
                                             <div className="flex justify-center">
-                                                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary font-medium text-[10px] sm:text-xs whitespace-nowrap">
+                                                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary font-medium text-sm sm:text-base whitespace-nowrap">
                                                     <ShiftIcon shift={course.shift} />
                                                     {shiftLabel(course.shift)}
                                                 </div>
                                             </div>
                                         </td>
 
-                                        {/* ── Ocupação da Sala ── */}
+                                        {/* ── Sala ── */}
+                                        <td className="px-4 sm:px-6 py-4">
+                                            <div className="flex justify-center text-center">
+                                                {course.room ? (
+                                                    <div className="flex flex-col items-center max-w-[150px]">
+                                                        <span
+                                                            className="text-sm sm:text-base font-medium truncate w-full"
+                                                            title={course.room.name}
+                                                        >
+                                                            {course.room.name}
+                                                        </span>
+                                                        <span className="text-[12px] text-muted-foreground truncate w-full">
+                                                            {course.room.campus.name}
+                                                        </span>
+                                                    </div>
+                                                ) : (
+                                                    <span className="text-muted-foreground/50 text-[10px] sm:text-xs italic whitespace-nowrap">Não definida</span>
+                                                )}
+                                            </div>
+                                        </td>
+
+                                        {/* ── Ocupação ── */}
                                         <td className="px-4 sm:px-6 py-4">
                                             <div className="flex justify-center">
                                                 {course.room ? (
-                                                    <div className="w-full max-w-[140px] space-y-1">
-                                                        <div className="flex items-center justify-between text-[10px]">
-                                                            <span className="font-medium truncate" title={course.room.name}>
-                                                                {course.room.name}
-                                                            </span>
+                                                    <div className="w-full max-w-[120px] space-y-1">
+                                                        <div className="flex items-center justify-center gap-2 text-[10px]">
                                                             <span className={`font-bold ${roomColor?.text}`}>
-                                                                {enrolled}/{roomCapacity}
+                                                                <span className="text-base">{enrolled}</span>
+                                                                <span className="text-base text-muted-foreground px-0.5">/</span>
+                                                                <span className="text-sm text-muted-foreground">{roomCapacity}</span>
                                                             </span>
+                                                            <span className="text-muted-foreground">({Math.round(occupancyPct)}%)</span>
                                                         </div>
                                                         <div className="h-1.5 w-full bg-muted rounded-full overflow-hidden">
                                                             <div
@@ -262,37 +277,20 @@ async function ListCoursesContent({
                                                                 style={{ width: `${occupancyPct}%` }}
                                                             />
                                                         </div>
-                                                        <span className="text-[9px] text-muted-foreground block text-center">
-                                                            {course.room.campus.name}
-                                                        </span>
                                                     </div>
                                                 ) : (
-                                                    <span className="text-muted-foreground/50 text-[10px] sm:text-xs italic whitespace-nowrap">Sem sala</span>
+                                                    <span className="text-muted-foreground/30 text-[10px]">—</span>
                                                 )}
                                             </div>
                                         </td>
 
                                         {/* ── Ações ── */}
-                                        <td className="px-4 sm:px-6 py-4">
-                                            <div className="flex flex-row items-center justify-center sm:justify-end gap-1 sm:gap-2">
-                                                <Link
-                                                    href={`/admin/${programSlug}/periodos/${periodSlug}/turmas/${course.code}/editar`}
-                                                    className="p-2 inline-flex rounded-lg hover:bg-black/5 dark:hover:bg-white/10 text-muted-foreground transition-colors shrink-0"
-                                                    title="Editar turma"
-                                                >
-                                                    <IconEdit className="size-4 sm:size-5" />
-                                                </Link>
-
-                                                <Separator orientation="vertical" className="h-4 bg-surface-border block mt-2.5" />
-
-                                                <Link
-                                                    href={`/admin/${programSlug}/periodos/${periodSlug}/turmas/${course.code}/editar`}
-                                                    className="text-primary hover:text-primary/80 text-[10px] sm:text-sm font-bold flex items-center gap-1 transition-colors px-2 py-1 rounded-lg hover:bg-primary/5 whitespace-nowrap shrink-0"
-                                                >
-                                                    <span>Detalhes</span>
-                                                    <IconChevronRight className="size-3 sm:size-4" />
-                                                </Link>
-                                            </div>
+                                        <td className="px-4 sm:px-6 py-4 text-right">
+                                            <CourseActions
+                                                programSlug={programSlug}
+                                                periodSlug={periodSlug}
+                                                courseCode={course.code}
+                                            />
                                         </td>
                                     </tr>
                                 );

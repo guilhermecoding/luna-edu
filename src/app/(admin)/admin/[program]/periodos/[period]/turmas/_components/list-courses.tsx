@@ -1,7 +1,7 @@
 import { getCoursesByPeriodId } from "@/services/courses/courses.service";
 import { IconUsersGroup, IconEdit, IconChevronRight, IconSun, IconSunset2, IconMoon, IconUser } from "@tabler/icons-react";
 import Link from "next/link";
-import { Suspense } from "react";
+import { Suspense, Fragment } from "react";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Shift } from "@/generated/prisma/enums";
@@ -146,6 +146,20 @@ async function ListCoursesContent({
         return <EmptyCoursesList programSlug={programSlug} periodSlug={periodSlug} />;
     }
 
+    const groups = courses.reduce((acc, course) => {
+        const groupName = course.classGroup?.name || "Avulsas";
+        if (!acc[groupName]) acc[groupName] = [];
+        acc[groupName].push(course);
+        return acc;
+    }, {} as Record<string, typeof courses>);
+
+    // Ordenar grupos: Primeiro os com nome, depois "Avulsas"
+    const sortedGroupNames = Object.keys(groups).sort((a, b) => {
+        if (a === "Avulsas") return 1;
+        if (b === "Avulsas") return -1;
+        return a.localeCompare(b);
+    });
+
     return (
         <div className="overflow-x-auto rounded-4xl border border-surface-border bg-surface text-sm">
             <table className="w-full text-left border-collapse">
@@ -160,120 +174,131 @@ async function ListCoursesContent({
                     </tr>
                 </thead>
                 <tbody className="divide-y divide-surface-border">
-                    {courses.map((course) => {
-                        const avatarColor = getAvatarColor(course.subject.name);
-                        const teacher = getStaticTeacher(course.name);
-                        const enrolled = getStaticEnrollment(course.name);
-                        const roomCapacity = course.room ? Number(course.room.capacity) : 0;
-                        const occupancyPct = roomCapacity > 0 ? Math.min((enrolled / roomCapacity) * 100, 100) : 0;
-                        const roomColor = course.room ? getOccupancyColor(course.room.name) : null;
-
-                        return (
-                            <tr key={course.id} className="hover:bg-muted/50 transition-colors group">
-                                {/* ── Turma (avatar colorido + nome + grupo) ── */}
-                                <td className="px-4 sm:px-6 py-4">
-                                    <div className="flex items-center gap-3">
-                                        <span
-                                            className={`${avatarColor} border size-9 sm:size-10 flex items-center justify-center shrink-0 rounded-full text-[10px] sm:text-xs font-bold transition-transform group-hover:scale-105`}
-                                        >
-                                            {getInitials(course.subject.name)}
+                    {sortedGroupNames.map((groupName) => (
+                        <Fragment key={groupName}>
+                            {/* Separador de Grupo */}
+                            <tr className="bg-muted/20">
+                                <td colSpan={6} className="px-4 sm:px-6 py-3">
+                                    <div className="flex items-center gap-2">
+                                        <div className="size-2 rounded-full bg-primary" />
+                                        <span className="font-bold text-xs uppercase tracking-wider text-muted-foreground">
+                                            {groupName === "Avulsas" ? "Turmas Avulsas" : `Grupo: ${groupName}`}
                                         </span>
-                                        <div className="flex flex-col gap-0.5">
-                                            <span className="font-bold text-sm sm:text-base text-foreground" title={course.name}>
-                                                {course.code} - {course.name}
-                                            </span>
-                                            {course.classGroup && (
-                                                <span className="inline-flex items-center gap-1 mt-1 text-[13px] text-muted-foreground">
-                                                    {course.classGroup.name}
-                                                </span>
-                                            )}
-                                        </div>
-                                    </div>
-                                </td>
-
-                                {/* ── Disciplina ── */}
-                                <td className="px-4 sm:px-6 py-4">
-                                    <div className="flex justify-center">
-                                        <span className="text-muted-foreground text-[10px] sm:text-xs whitespace-nowrap" title={course.subject.name}>
-                                            {course.subject.name}
-                                        </span>
-                                    </div>
-                                </td>
-
-                                {/* ── Professor (estático) ── */}
-                                <td className="px-4 sm:px-6 py-4">
-                                    <div className="flex justify-center">
-                                        <span className="inline-flex items-center gap-1.5 text-[10px] sm:text-xs text-foreground whitespace-nowrap">
-                                            <IconUser className="size-3 sm:size-3.5 text-muted-foreground" />
-                                            {teacher}
-                                        </span>
-                                    </div>
-                                </td>
-
-                                {/* ── Turno ── */}
-                                <td className="px-4 sm:px-6 py-4">
-                                    <div className="flex justify-center">
-                                        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary font-medium text-[10px] sm:text-xs whitespace-nowrap">
-                                            <ShiftIcon shift={course.shift} />
-                                            {shiftLabel(course.shift)}
-                                        </div>
-                                    </div>
-                                </td>
-
-                                {/* ── Ocupação da Sala ── */}
-                                <td className="px-4 sm:px-6 py-4">
-                                    <div className="flex justify-center">
-                                        {course.room ? (
-                                            <div className="w-full max-w-[140px] space-y-1">
-                                                <div className="flex items-center justify-between text-[10px]">
-                                                    <span className="font-medium truncate" title={course.room.name}>
-                                                        {course.room.name}
-                                                    </span>
-                                                    <span className={`font-bold ${roomColor?.text}`}>
-                                                        {enrolled}/{roomCapacity}
-                                                    </span>
-                                                </div>
-                                                <div className="h-1.5 w-full bg-muted rounded-full overflow-hidden">
-                                                    <div
-                                                        className={`h-full rounded-full transition-all ${roomColor?.bar}`}
-                                                        style={{ width: `${occupancyPct}%` }}
-                                                    />
-                                                </div>
-                                                <span className="text-[9px] text-muted-foreground block text-center">
-                                                    {course.room.campus.name}
-                                                </span>
-                                            </div>
-                                        ) : (
-                                            <span className="text-muted-foreground/50 text-[10px] sm:text-xs italic whitespace-nowrap">Sem sala</span>
-                                        )}
-                                    </div>
-                                </td>
-
-                                {/* ── Ações ── */}
-                                <td className="px-4 sm:px-6 py-4">
-                                    <div className="flex flex-row items-center justify-center sm:justify-end gap-1 sm:gap-2">
-                                        <Link
-                                            href={`/admin/${programSlug}/periodos/${periodSlug}/turmas/${course.code}/editar`}
-                                            className="p-2 inline-flex rounded-lg hover:bg-black/5 dark:hover:bg-white/10 text-muted-foreground transition-colors shrink-0"
-                                            title="Editar turma"
-                                        >
-                                            <IconEdit className="size-4 sm:size-5" />
-                                        </Link>
-
-                                        <Separator orientation="vertical" className="h-4 bg-surface-border block mt-2.5" />
-
-                                        <Link
-                                            href={`/admin/${programSlug}/periodos/${periodSlug}/turmas/${course.code}/editar`}
-                                            className="text-primary hover:text-primary/80 text-[10px] sm:text-sm font-bold flex items-center gap-1 transition-colors px-2 py-1 rounded-lg hover:bg-primary/5 whitespace-nowrap shrink-0"
-                                        >
-                                            <span>Detalhes</span>
-                                            <IconChevronRight className="size-3 sm:size-4" />
-                                        </Link>
                                     </div>
                                 </td>
                             </tr>
-                        );
-                    })}
+
+                            {groups[groupName].map((course) => {
+                                const avatarColor = getAvatarColor(course.subject.name);
+                                const teacher = getStaticTeacher(course.name);
+                                const enrolled = getStaticEnrollment(course.name);
+                                const roomCapacity = course.room ? Number(course.room.capacity) : 0;
+                                const occupancyPct = roomCapacity > 0 ? Math.min((enrolled / roomCapacity) * 100, 100) : 0;
+                                const roomColor = course.room ? getOccupancyColor(course.room.name) : null;
+
+                                return (
+                                    <tr key={course.id} className="hover:bg-muted/50 transition-colors group">
+                                        {/* ── Turma (avatar colorido + nome) ── */}
+                                        <td className="px-4 sm:px-6 py-4">
+                                            <div className="flex items-center gap-3">
+                                                <span
+                                                    className={`${avatarColor} border size-9 sm:size-10 flex items-center justify-center shrink-0 rounded-full text-[10px] sm:text-xs font-bold transition-transform group-hover:scale-105`}
+                                                >
+                                                    {getInitials(course.subject.name)}
+                                                </span>
+                                                <div className="flex flex-col gap-0.5">
+                                                    <span className="font-bold text-sm sm:text-base text-foreground" title={course.name}>
+                                                        {course.code} - {course.name}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </td>
+
+                                        {/* ── Disciplina ── */}
+                                        <td className="px-4 sm:px-6 py-4">
+                                            <div className="flex justify-center">
+                                                <span className="text-muted-foreground text-[10px] sm:text-xs whitespace-nowrap" title={course.subject.name}>
+                                                    {course.subject.name}
+                                                </span>
+                                            </div>
+                                        </td>
+
+                                        {/* ── Professor (estático) ── */}
+                                        <td className="px-4 sm:px-6 py-4">
+                                            <div className="flex justify-center">
+                                                <span className="inline-flex items-center gap-1.5 text-[10px] sm:text-xs text-foreground whitespace-nowrap">
+                                                    <IconUser className="size-3 sm:size-3.5 text-muted-foreground" />
+                                                    {teacher}
+                                                </span>
+                                            </div>
+                                        </td>
+
+                                        {/* ── Turno ── */}
+                                        <td className="px-4 sm:px-6 py-4">
+                                            <div className="flex justify-center">
+                                                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary font-medium text-[10px] sm:text-xs whitespace-nowrap">
+                                                    <ShiftIcon shift={course.shift} />
+                                                    {shiftLabel(course.shift)}
+                                                </div>
+                                            </div>
+                                        </td>
+
+                                        {/* ── Ocupação da Sala ── */}
+                                        <td className="px-4 sm:px-6 py-4">
+                                            <div className="flex justify-center">
+                                                {course.room ? (
+                                                    <div className="w-full max-w-[140px] space-y-1">
+                                                        <div className="flex items-center justify-between text-[10px]">
+                                                            <span className="font-medium truncate" title={course.room.name}>
+                                                                {course.room.name}
+                                                            </span>
+                                                            <span className={`font-bold ${roomColor?.text}`}>
+                                                                {enrolled}/{roomCapacity}
+                                                            </span>
+                                                        </div>
+                                                        <div className="h-1.5 w-full bg-muted rounded-full overflow-hidden">
+                                                            <div
+                                                                className={`h-full rounded-full transition-all ${roomColor?.bar}`}
+                                                                style={{ width: `${occupancyPct}%` }}
+                                                            />
+                                                        </div>
+                                                        <span className="text-[9px] text-muted-foreground block text-center">
+                                                            {course.room.campus.name}
+                                                        </span>
+                                                    </div>
+                                                ) : (
+                                                    <span className="text-muted-foreground/50 text-[10px] sm:text-xs italic whitespace-nowrap">Sem sala</span>
+                                                )}
+                                            </div>
+                                        </td>
+
+                                        {/* ── Ações ── */}
+                                        <td className="px-4 sm:px-6 py-4">
+                                            <div className="flex flex-row items-center justify-center sm:justify-end gap-1 sm:gap-2">
+                                                <Link
+                                                    href={`/admin/${programSlug}/periodos/${periodSlug}/turmas/${course.code}/editar`}
+                                                    className="p-2 inline-flex rounded-lg hover:bg-black/5 dark:hover:bg-white/10 text-muted-foreground transition-colors shrink-0"
+                                                    title="Editar turma"
+                                                >
+                                                    <IconEdit className="size-4 sm:size-5" />
+                                                </Link>
+
+                                                <Separator orientation="vertical" className="h-4 bg-surface-border block mt-2.5" />
+
+                                                <Link
+                                                    href={`/admin/${programSlug}/periodos/${periodSlug}/turmas/${course.code}/editar`}
+                                                    className="text-primary hover:text-primary/80 text-[10px] sm:text-sm font-bold flex items-center gap-1 transition-colors px-2 py-1 rounded-lg hover:bg-primary/5 whitespace-nowrap shrink-0"
+                                                >
+                                                    <span>Detalhes</span>
+                                                    <IconChevronRight className="size-3 sm:size-4" />
+                                                </Link>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                );
+                            })}
+                        </Fragment>
+                    ))}
                 </tbody>
             </table>
         </div>

@@ -180,11 +180,10 @@ async function ListCoursesContent({
                                         </span>
                                         <div className="flex flex-col gap-0.5">
                                             <span className="font-bold text-sm sm:text-base text-foreground" title={course.name}>
-                                                {course.name}
+                                                {course.code} - {course.name}
                                             </span>
                                             {course.classGroup && (
                                                 <span className="inline-flex items-center gap-1 mt-1 text-[13px] text-muted-foreground">
-
                                                     {course.classGroup.name}
                                                 </span>
                                             )}

@@ -61,11 +61,13 @@ export async function createClassGroupSubjectAction(
         });
 
         updateTag(`period:${period.id}:courses`);
+        updateTag(`period:${period.id}:course:${validatedData.code}`);
         updateTag(`class-group:${classGroup.id}:courses`);
         updateTag(`period:${period.id}:class-group:${classGroup.slug}`);
         updateTag(`period:${period.id}:class-groups`);
         updateTag(`program-periods:${programSlug}`);
         revalidatePath(`/admin/${programSlug}/periodos/${periodSlug}/turmas/${classGroupSlug}/disciplinas`);
+        revalidatePath(`/admin/${programSlug}/periodos/${periodSlug}/turmas/${validatedData.code}/editar`);
     } catch (error) {
         if (error instanceof ZodError) {
             return { success: false, error: error.issues[0]?.message || "Erro de validação" };

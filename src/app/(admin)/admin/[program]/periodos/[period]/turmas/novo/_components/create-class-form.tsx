@@ -14,11 +14,11 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useForm, type SubmitHandler, useWatch, Controller, type Resolver } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useMemo } from "react";
-import { createTurmaAction } from "../actions";
 import { classGroupSchema, shiftLabels, type ClassGroupInput } from "../../schema";
 import { IconLoader2, IconArrowsShuffle, IconSun, IconSunset2, IconMoon, IconBooks } from "@tabler/icons-react";
 import { isRedirectError } from "@/lib/is-redirect-error";
 import autoSlug from "@/lib/auto-slug";
+import { createClassAction } from "../actions";
 
 type DegreeData = {
     id: string;
@@ -34,7 +34,7 @@ type SubjectData = {
     degreeId: string;
 };
 
-interface CreateTurmaFormProps {
+interface CreateClassFormProps {
     programSlug: string;
     periodSlug: string;
     degrees: DegreeData[];
@@ -47,12 +47,12 @@ const shiftIcons = {
     EVENING: IconMoon,
 } as const;
 
-export function CreateTurmaForm({
+export function CreateClassForm({
     programSlug,
     periodSlug,
     degrees,
     subjects,
-}: CreateTurmaFormProps) {
+}: CreateClassFormProps) {
     const router = useRouter();
     const pathname = usePathname();
     const searchParams = useSearchParams();
@@ -119,17 +119,17 @@ export function CreateTurmaForm({
         clearErrors("root");
 
         try {
-            const result = await createTurmaAction(programSlug, periodSlug, data);
+            const result = await createClassAction(programSlug, periodSlug, data);
 
             if (result?.success === false) {
                 const params = new URLSearchParams(searchParams.toString());
                 params.set("toast", "error");
-                params.set("message", result.error || "Erro ao criar turma");
+                params.set("message", result.error || "Erro ao criar classe");
                 router.replace(`${pathname}?${params.toString()}`, { scroll: false });
 
                 setError("root", {
                     type: "server",
-                    message: result.error || "Erro ao criar turma",
+                    message: result.error || "Erro ao criar classe",
                 });
                 return;
             }
@@ -140,12 +140,12 @@ export function CreateTurmaForm({
 
             const params = new URLSearchParams(searchParams.toString());
             params.set("toast", "error");
-            params.set("message", "Erro fatal ao criar turma");
+            params.set("message", "Erro fatal ao criar classe");
             router.replace(`${pathname}?${params.toString()}`, { scroll: false });
 
             setError("root", {
                 type: "server",
-                message: "Erro fatal ao criar turma",
+                message: "Erro fatal ao criar classe",
             });
         }
     };
@@ -161,7 +161,7 @@ export function CreateTurmaForm({
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* Nome */}
                 <div className="space-y-2 md:col-span-2">
-                    <Label htmlFor="name">Nome da Turma *</Label>
+                    <Label htmlFor="name">Nome da Classe *</Label>
                     <Input
                         id="name"
                         placeholder="Ex: 1º Ano A, 2ª Série B"
@@ -177,7 +177,7 @@ export function CreateTurmaForm({
 
                 {/* Código */}
                 <div className="space-y-2 md:col-span-2">
-                    <Label htmlFor="slug">Código da Turma *</Label>
+                    <Label htmlFor="slug">Código da Classe *</Label>
                     <div className="flex gap-2">
                         <Input
                             id="slug"
@@ -372,7 +372,7 @@ export function CreateTurmaForm({
                 </Button>
                 <Button className="flex items-center gap-2" type="submit" disabled={!canSubmit}>
                     {isSubmitting && <IconLoader2 className="size-5 animate-spin" />}
-                    {isSubmitting ? "Criando..." : "Criar Turma"}
+                    {isSubmitting ? "Criando..." : "Criar Classe"}
                 </Button>
             </div>
         </form>

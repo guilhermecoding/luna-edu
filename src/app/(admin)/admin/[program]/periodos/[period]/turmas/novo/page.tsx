@@ -2,7 +2,7 @@ import BaseForm from "@/components/base-form";
 import Page from "@/components/page";
 import Section from "@/components/section";
 import { Suspense } from "react";
-import { CreateTurmaForm } from "./_components/create-turma-form";
+import { CreateClassForm } from "./_components/create-class-form";
 import { Metadata } from "next";
 import SkeletonForm from "@/components/skeletons/skeleton-form";
 import { getPeriodByProgramAndSlug } from "@/services/periods/periods.service";
@@ -12,10 +12,10 @@ import { getDegreesByProgramId } from "@/services/degrees/degrees.service";
 import { notFound } from "next/navigation";
 
 export const metadata: Metadata = {
-    title: "Nova Turma",
+    title: "Nova Classe",
 };
 
-async function NewTurmaContent({
+async function NewClassContent({
     params,
 }: {
     params: Promise<{ program: string; period: string }>;
@@ -40,12 +40,12 @@ async function NewTurmaContent({
         <Page>
             <Section>
                 <BaseForm
-                    title="Nova Turma"
+                    title="Nova Classe"
                     description={"Selecione a Matriz e a Série. O sistema criará automaticamente as disciplinas ofertadas."}
                 >
                     <div className="mt-6">
                         <Suspense fallback={<SkeletonForm />}>
-                            <CreateTurmaForm
+                            <CreateClassForm
                                 programSlug={program}
                                 periodSlug={period}
                                 degrees={degrees.map((d) => ({
@@ -69,10 +69,10 @@ async function NewTurmaContent({
     );
 }
 
-export default function NewTurmaPage({
+export default function NewClassPage({
     params,
 }: {
     params: Promise<{ program: string; period: string }>;
 }) {
-    return <NewTurmaContent params={params} />;
+    return <NewClassContent params={params} />;
 }

@@ -16,30 +16,19 @@ export const metadata: Metadata = {
 export default async function TurmaDisciplinasPage({
     params,
 }: {
-    params: Promise<{ program: string; period: string; turma: string }>;
+    params: Promise<{ program: string; period: string; classGroup: string }>;
 }) {
-    const { program, period, turma } = await params;
+    const { program, period, classGroup: classGroupSlug } = await params;
 
     const periodData = await getPeriodByProgramAndSlug(program, period);
     if (!periodData) notFound();
 
-    const classGroup = await getClassGroupByPeriodIdAndSlug(periodData.id, turma);
+    const classGroup = await getClassGroupByPeriodIdAndSlug(periodData.id, classGroupSlug);
     if (!classGroup) notFound();
 
     return (
         <Page>
             <Section>
-                <div className="mb-6">
-                    <ButtonLink
-                        href={`/admin/${program}/periodos/${period}/turmas`}
-                        variant="ghost"
-                        size="sm"
-                        className="-ml-2 text-muted-foreground hover:text-foreground"
-                    >
-                        <IconChevronLeft className="size-4" />
-                        Voltar para Turmas
-                    </ButtonLink>
-                </div>
 
                 <div className="flex flex-row items-center gap-1 mb-3">
                     <IconBooks className="size-4 text-muted-foreground" />

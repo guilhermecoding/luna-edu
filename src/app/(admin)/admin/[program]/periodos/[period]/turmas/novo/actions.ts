@@ -8,7 +8,7 @@ import { revalidatePath, updateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import { Shift } from "@/generated/prisma/client";
 
-export async function createTurmaAction(
+export async function createClassAction(
     programSlug: string,
     periodSlug: string,
     data: ClassGroupInput,
@@ -40,12 +40,12 @@ export async function createTurmaAction(
         if (error instanceof Error) {
             return { success: false, error: error.message };
         }
-        return { success: false, error: "Erro ao criar turma" };
+        return { success: false, error: "Erro ao criar classe" };
     }
 
     const params = new URLSearchParams({
         toast: "success",
-        message: "Turma criada com sucesso! As disciplinas foram geradas automaticamente.",
+        message: "Classe criada com sucesso! As disciplinas foram geradas automaticamente.",
     });
 
     redirect(`/admin/${programSlug}/periodos/${periodSlug}/turmas?${params.toString()}`);

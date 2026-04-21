@@ -52,15 +52,15 @@ function EmptyClassGroupsList({
     return (
         <div className="flex flex-col items-center justify-center p-12 text-center border-2 border-dashed border-surface-border rounded-4xl">
             <IconUsersGroup className="size-12 text-muted-foreground mb-4 opacity-50" />
-            <h3 className="text-lg font-semibold">Nenhuma turma cadastrada</h3>
+            <h3 className="text-lg font-semibold">Nenhuma classe cadastrada</h3>
             <p className="text-muted-foreground mt-2 max-w-sm mb-6">
-                Crie uma turma selecionando a Matriz e a Série. O sistema criará automaticamente as disciplinas ofertadas.
+                Crie uma classe selecionando a Matriz e a Série. O sistema criará automaticamente as disciplinas ofertadas.
             </p>
             <Link
                 href={`/admin/${programSlug}/periodos/${periodSlug}/turmas/novo`}
                 className="text-primary hover:underline text-sm font-medium"
             >
-                + Criar a primeira turma
+                + Criar a primeira classe
             </Link>
         </div>
     );
@@ -136,7 +136,7 @@ async function ListClassGroupsContent({
                         <Link
                             href={`/admin/${programSlug}/periodos/${periodSlug}/turmas/${group.slug}/editar`}
                             className="p-2 inline-flex rounded-lg hover:bg-black/5 dark:hover:bg-white/10 text-muted-foreground transition-colors shrink-0"
-                            title="Editar turma"
+                            title="Editar classe"
                         >
                             <IconEdit className="size-4" />
                         </Link>

@@ -54,6 +54,23 @@ export async function getClassGroupByPeriodIdAndSlug(
             courses: {
                 include: {
                     subject: true,
+                    period: true,
+                    schedules: {
+                        include: {
+                            timeSlot: true,
+                            teacher: {
+                                select: {
+                                    id: true,
+                                    name: true,
+                                },
+                            },
+                            room: {
+                                include: {
+                                    campus: true,
+                                },
+                            },
+                        },
+                    },
                     room: {
                         include: {
                             campus: true,

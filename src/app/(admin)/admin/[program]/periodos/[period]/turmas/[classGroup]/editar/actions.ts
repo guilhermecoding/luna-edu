@@ -24,7 +24,7 @@ export async function updateCourseAction(
 
         const course = await getCourseByPeriodIdAndCode(period.id, courseCode);
         if (!course) {
-            throw new Error("Turma não encontrada.");
+            throw new Error("Disciplina não encontrada.");
         }
 
         await updateCourse(course.id, {
@@ -56,12 +56,12 @@ export async function updateCourseAction(
         if (error instanceof Error) {
             return { success: false, error: error.message };
         }
-        return { success: false, error: "Erro ao atualizar turma" };
+        return { success: false, error: "Erro ao atualizar disciplina" };
     }
 
     const params = new URLSearchParams({
         toast: "success",
-        message: "Turma atualizada com sucesso",
+        message: "Disciplina atualizada com sucesso",
     });
 
     redirect(`/admin/${programSlug}/periodos/${periodSlug}/turmas?${params.toString()}`);

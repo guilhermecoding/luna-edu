@@ -15,15 +15,15 @@ import { notFound } from "next/navigation";
 import type { ScheduleEntryInput } from "../../schema";
 
 export const metadata: Metadata = {
-    title: "Editar Turma",
+    title: "Editar Disciplina",
 };
 
 async function EditCourseContent({
     params,
 }: {
-    params: Promise<{ program: string; period: string; course: string }>;
+    params: Promise<{ program: string; period: string; classGroup: string }>;
 }) {
-    const { program, period: periodSlug, course: courseCode } = await params;
+    const { program, period: periodSlug, classGroup: courseCode } = await params;
     
     const period = await getPeriodByProgramAndSlug(program, periodSlug);
     
@@ -56,8 +56,8 @@ async function EditCourseContent({
         <Page>
             <Section>
                 <BaseForm
-                    title="Editar Turma"
-                    description={`Atualize os dados da turma ${courseData.name}.`}
+                    title="Editar Disciplina"
+                    description={`Atualize os dados da disciplina ${courseData.name}.`}
                 >
                     <div className="mt-6">
                         <Suspense fallback={<SkeletonForm />}>
@@ -91,7 +91,7 @@ async function EditCourseContent({
 export default function EditCoursePage({
     params,
 }: {
-    params: Promise<{ program: string; period: string; course: string }>;
+    params: Promise<{ program: string; period: string; classGroup: string }>;
 }) {
     return (
         <Suspense fallback={<SkeletonForm />}>

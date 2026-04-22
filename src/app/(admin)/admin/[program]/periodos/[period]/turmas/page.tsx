@@ -34,7 +34,7 @@ export default async function ClassGroupsPage({
                 <div className="flex flex-col lg:flex-row gap-y-6">
                     <div className="flex-1">
                         <TitlePage
-                            title={periodData.name}
+                            title={`Turmas do ${periodData.name}`}
                             description="Gerencie as turmas deste período letivo."
                         />
                     </div>

@@ -118,11 +118,11 @@ async function ListClassGroupsContent({
             {sections.map(({ degreeId, degree, degreeGroups }) => (
                 <div key={degreeId} className="space-y-4">
                     <h3 className="text-lg font-bold flex items-center gap-2 px-2">
-                        <span className="w-2 h-6 bg-primary rounded-full" />
+                        <span className="w-2 h-9 bg-primary rounded-full" />
                         <div className="flex flex-col min-w-0">
                             <span className="truncate">{degree.name}</span>
-                            <span className="text-xs font-mono font-normal text-muted-foreground uppercase tracking-wide">
-                                {degree.slug}
+                            <span className="text-xs font-mono flex flex-row gap-1 items-center font-normal text-muted-foreground uppercase tracking-wide">
+                                <IconCodeAsterisk className="size-4" /> {degree.slug}
                             </span>
                         </div>
                     </h3>

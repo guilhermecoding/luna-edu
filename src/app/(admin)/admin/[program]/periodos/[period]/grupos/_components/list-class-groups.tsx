@@ -135,9 +135,9 @@ async function ListClassGroupsContent({
                     {/* Actions */}
                     <div className="flex items-center justify-between mt-auto pt-3 border-t border-surface-border">
                         <Link
-                            href={`/admin/${programSlug}/periodos/${periodSlug}/grupos/${group.slug}/editar`}
+                            href={`/admin/${programSlug}/periodos/${periodSlug}/turmas/${group.slug}/editar`}
                             className="p-2 inline-flex rounded-lg hover:bg-black/5 dark:hover:bg-white/10 text-muted-foreground transition-colors shrink-0"
-                            title="Editar grupo"
+                            title="Editar turma"
                         >
                             <IconEdit className="size-4" />
                         </Link>

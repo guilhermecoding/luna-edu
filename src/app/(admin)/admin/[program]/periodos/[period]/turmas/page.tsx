@@ -29,19 +29,19 @@ export default async function ClassGroupsPage({
             <Section>
                 <div className="flex flex-row items-center gap-1 mb-3">
                     <IconUsersGroup className="size-4 text-muted-foreground" />
-                    <p className="text-muted-foreground font-bold">Classes</p>
+                    <p className="text-muted-foreground font-bold">Turmas</p>
                 </div>
                 <div className="flex flex-col lg:flex-row gap-y-6">
                     <div className="flex-1">
                         <TitlePage
                             title={periodData.name}
-                            description="Gerencie as classes deste período letivo."
+                            description="Gerencie as turmas deste período letivo."
                         />
                     </div>
                     <div className="flex flex-1 justify-end items-end">
                         <ButtonLink className="w-full sm:w-auto" href={`/admin/${program}/periodos/${period}/turmas/novo`}>
                             <IconCirclePlusFilled className="size-5" />
-                            Adicionar Classe
+                            Criar Turma
                         </ButtonLink>
                     </div>
                 </div>

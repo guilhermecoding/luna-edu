@@ -3,12 +3,13 @@
 import { updateCourse, getCourseByPeriodIdAndCode } from "@/services/courses/courses.service";
 import { deleteCourse } from "@/services/courses/courses.service";
 import { getPeriodByProgramAndSlug } from "@/services/periods/periods.service";
-import { getClassGroupSlugsByIds } from "@/services/class-groups/class-groups.service";
+import { getClassGroupByPeriodIdAndSlug, getClassGroupSlugsByIds, updateClassGroup } from "@/services/class-groups/class-groups.service";
 import { ZodError, z } from "zod";
 import { courseUpdateSchema, type CourseUpdateInput } from "../../schema";
 import { revalidatePath, updateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import { DayOfWeek, Shift } from "@/generated/prisma/client";
+import { editClassGroupSchema, type EditClassGroupInput } from "./schema";
 
 const deleteCourseSchema = z.object({
     confirmationName: z.string().min(1, "Digite o nome da disciplina para confirmar"),
@@ -178,4 +179,45 @@ export async function deleteCourseAction(
     }
 
     redirect(`/admin/${programSlug}/periodos/${periodSlug}/turmas?${params.toString()}`);
+}
+
+export async function updateClassGroupAction(
+    programSlug: string,
+    periodSlug: string,
+    classGroupSlug: string,
+    data: EditClassGroupInput,
+) {
+    try {
+        const validatedData = editClassGroupSchema.parse(data);
+        const period = await getPeriodByProgramAndSlug(programSlug, periodSlug);
+        if (!period) {
+            return { success: false, error: "Período não encontrado." };
+        }
+
+        const classGroup = await getClassGroupByPeriodIdAndSlug(period.id, classGroupSlug);
+        if (!classGroup) {
+            return { success: false, error: "Turma não encontrada." };
+        }
+
+        await updateClassGroup(classGroup.id, { name: validatedData.name });
+
+        updateTag(`period:${period.id}:class-groups`);
+        updateTag(`period:${period.id}:class-group:${classGroupSlug}`);
+        revalidatePath(`/admin/${programSlug}/periodos/${periodSlug}/turmas`);
+        revalidatePath(`/admin/${programSlug}/periodos/${periodSlug}/turmas/${classGroupSlug}/disciplinas`);
+    } catch (error) {
+        if (error instanceof ZodError) {
+            return { success: false, error: error.issues[0]?.message || "Erro de validação" };
+        }
+        if (error instanceof Error) {
+            return { success: false, error: error.message };
+        }
+        return { success: false, error: "Erro ao atualizar turma" };
+    }
+
+    const params = new URLSearchParams({
+        toast: "success",
+        message: "Turma atualizada com sucesso",
+    });
+    redirect(`/admin/${programSlug}/periodos/${periodSlug}/turmas/${classGroupSlug}/disciplinas?${params.toString()}`);
 }

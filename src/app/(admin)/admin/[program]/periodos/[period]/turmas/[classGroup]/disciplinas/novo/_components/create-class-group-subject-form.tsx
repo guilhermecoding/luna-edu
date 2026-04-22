@@ -145,7 +145,7 @@ export function CreateClassGroupSubjectForm({
                     </p>
                 </div>
                 <div className="flex justify-end pt-4 border-t">
-                    <Button type="button" variant="outline" onClick={() => router.back()}>
+                    <Button type="button" variant="outline" onClick={() => router.back()} className="w-full sm:w-auto">
                         Voltar
                     </Button>
                 </div>
@@ -266,10 +266,10 @@ export function CreateClassGroupSubjectForm({
             )}
 
             <div className="flex flex-col-reverse sm:flex-row gap-3 justify-end pt-4 border-t items-center mt-6">
-                <Button type="button" variant="outline" onClick={() => router.back()} disabled={isSubmitting}>
+                <Button type="button" variant="outline" onClick={() => router.back()} className="w-full sm:w-auto" disabled={isSubmitting}>
                     Cancelar
                 </Button>
-                <Button className="flex items-center gap-2" type="submit" disabled={!canSubmit}>
+                <Button className="flex w-full sm:w-auto items-center gap-2" type="submit" disabled={!canSubmit}>
                     {isSubmitting && <IconLoader2 className="size-5 animate-spin" />}
                     {isSubmitting ? "Adicionando..." : "Adicionar Disciplina"}
                 </Button>

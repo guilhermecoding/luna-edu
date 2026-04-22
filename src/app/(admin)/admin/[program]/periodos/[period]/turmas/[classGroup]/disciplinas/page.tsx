@@ -1,7 +1,7 @@
 import Page from "@/components/page";
 import Section from "@/components/section";
 import TitlePage from "@/components/title-page";
-import { IconBooks, IconChevronLeft, IconCirclePlusFilled } from "@tabler/icons-react";
+import { IconBooks, IconCirclePlusFilled } from "@tabler/icons-react";
 import { ButtonLink } from "@/components/ui/button-link";
 import { Metadata } from "next";
 import { getPeriodByProgramAndSlug } from "@/services/periods/periods.service";
@@ -42,6 +42,7 @@ export default async function TurmaDisciplinasPage({
                 <div className="flex justify-end mt-4">
                     <ButtonLink
                         href={`/admin/${program}/periodos/${period}/turmas/${classGroupSlug}/disciplinas/novo`}
+                        className="w-full sm:w-auto"
                     >
                         <IconCirclePlusFilled className="size-5" />
                         Adicionar Disciplina

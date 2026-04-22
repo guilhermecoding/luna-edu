@@ -50,7 +50,7 @@ export default function ListTimeSlots({ timeSlots, programSlug }: ListTimeSlotsP
 
                     <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
                         {slots.sort((a, b) => a.startTime.localeCompare(b.startTime)).map((slot, index) => (
-                            <Card key={slot.id} className="p-5 border-surface-border bg-surface hover:border-primary/50 transition-colors group">
+                            <Card key={slot.id} className="p-5 border border-surface-border bg-surface hover:border-primary/50 transition-colors group">
                                 <div className="flex items-center justify-between">
                                     <div className="flex items-center gap-4">
                                         <div className="size-12 rounded-2xl bg-muted flex items-center justify-center font-bold text-primary border border-surface-border">

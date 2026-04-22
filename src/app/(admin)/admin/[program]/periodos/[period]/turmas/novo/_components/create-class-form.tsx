@@ -176,7 +176,7 @@ export function CreateClassForm({
                 </div>
 
                 {/* Código */}
-                <div className="space-y-2 md:col-span-2">
+                <div className="space-y-2 col-span-1">
                     <Label htmlFor="slug">Código da Classe *</Label>
                     <div className="flex gap-2">
                         <Input
@@ -196,7 +196,7 @@ export function CreateClassForm({
                         <Button
                             type="button"
                             variant="outline"
-                            className="px-4 py-1.5 bg-muted hover:bg-muted/80 text-foreground border-surface-border"
+                            className="px-4 py-1.5 bg-muted mt-0.5 hover:bg-muted/80 text-foreground border-surface-border"
                             onClick={() => {
                                 const newSlug = autoSlug(nameValue)?.toUpperCase();
                                 if (newSlug) {
@@ -365,12 +365,13 @@ export function CreateClassForm({
                 <Button
                     type="button"
                     variant="outline"
+                    className="w-full sm:w-auto"
                     onClick={() => router.back()}
                     disabled={isSubmitting}
                 >
                     Cancelar
                 </Button>
-                <Button className="flex items-center gap-2" type="submit" disabled={!canSubmit}>
+                <Button className="flex items-center gap-2 w-full sm:w-auto" type="submit" disabled={!canSubmit}>
                     {isSubmitting && <IconLoader2 className="size-5 animate-spin" />}
                     {isSubmitting ? "Criando..." : "Criar Classe"}
                 </Button>

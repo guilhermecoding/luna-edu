@@ -1,8 +1,7 @@
-import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import { hashString } from "@/lib/avatar-utils";
 import { getClassGroupsByPeriodId } from "@/services/class-groups/class-groups.service";
-import { IconBook, IconChevronRight, IconClock, IconEdit, IconSchool, IconUsersGroup } from "@tabler/icons-react";
+import { IconBook, IconChevronRight, IconClock, IconCodeAsterisk, IconSchool, IconUser, IconUsersGroup } from "@tabler/icons-react";
 import Link from "next/link";
 import { Suspense } from "react";
 import { shiftLabels } from "../schema";
@@ -141,8 +140,8 @@ async function ListClassGroupsContent({
                                     <div className="flex items-center gap-3 w-full z-20">
                                         <div className="flex flex-1 flex-col items-start justify-center px-3 py-1 min-w-0">
                                             <h3 className="font-bold text-2xl">{group.name}</h3>
-                                            <p className="text-[10px] text-muted-foreground uppercase">
-                                                {group.slug}
+                                            <p className="text-xs flex flex-row gap-1 items-center font-mono text-muted-foreground uppercase">
+                                                <IconCodeAsterisk className="size-4" /> {group.slug}
                                             </p>
                                         </div>
                                     </div>
@@ -165,26 +164,22 @@ async function ListClassGroupsContent({
                                                 {group._count.courses} disciplina{group._count.courses !== 1 ? "s" : ""}
                                             </span>
                                         </div>
+                                        <div className="flex flex-row gap-1 items-center border border-surface-border rounded-full px-2 py-1 whitespace-nowrap">
+                                            <IconUser className="size-4" />
+                                            <span className="font-medium text-xs">
+                                                23 alunos
+                                            </span>
+                                        </div>
                                     </div>
 
                                     {/* Actions */}
-                                    <div className="flex items-center justify-between mt-auto pt-3 border-t border-surface-border z-20">
-                                        <Link
-                                            href={`/admin/${programSlug}/periodos/${periodSlug}/turmas/${group.slug}/editar`}
-                                            className="p-2 inline-flex rounded-lg hover:bg-black/5 dark:hover:bg-white/10 text-muted-foreground transition-colors shrink-0"
-                                            title="Editar turma"
-                                        >
-                                            <IconEdit className="size-4" />
-                                        </Link>
-
-                                        <Separator orientation="vertical" className="h-4 bg-surface-border" />
-
+                                    <div className="mt-auto pt-3 border-t border-surface-border z-20">
                                         <Link
                                             href={`/admin/${programSlug}/periodos/${periodSlug}/turmas/${group.slug}/disciplinas`}
-                                            className="text-primary hover:text-primary/80 text-xs font-bold flex items-center gap-1 transition-colors px-2 py-1 rounded-lg hover:bg-primary/5"
+                                            className="text-primary hover:text-primary/80 text-sm font-bold flex flex-row justify-center items-center gap-1 transition-colors px-2 py-1 rounded-lg hover:bg-primary/5"
                                         >
-                                            <span>Ver Disciplinas</span>
-                                            <IconChevronRight className="size-3.5" />
+                                            <span>Expandir Turma</span>
+                                            <IconChevronRight className="size-4.5" />
                                         </Link>
                                     </div>
                                     <div className={`absolute -top-10 -right-10 size-42 blur-3xl opacity-15 rounded-full ${accent.blur}`} />

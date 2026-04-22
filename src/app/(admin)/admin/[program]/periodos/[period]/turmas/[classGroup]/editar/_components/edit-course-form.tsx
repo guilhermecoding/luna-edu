@@ -461,9 +461,9 @@ export function EditCourseForm({
             <Separator className="my-2" />
 
             <div className="space-y-4">
-                <div className="flex items-center justify-between">
+                <div className="flex flex-col sm:flex-row gap-y-3 items-center justify-between">
                     <div className="flex items-center gap-2">
-                        <IconCalendarEvent className="size-5 text-primary" />
+                        <IconCalendarEvent className="size-5 text-primary shrink-0" />
                         <div>
                             <h3 className="text-sm font-bold">Grade de Horários</h3>
                             <p className="text-xs text-muted-foreground">
@@ -475,6 +475,7 @@ export function EditCourseForm({
                         type="button"
                         variant="outline"
                         size="sm"
+                        className="w-full sm:w-auto"
                         disabled={isSubmitting || timeSlots.length === 0}
                         onClick={() =>
                             append({
@@ -648,7 +649,7 @@ export function EditCourseForm({
 
                 {fields.length === 0 && timeSlots.length > 0 && (
                     <div className="flex flex-col items-center justify-center p-8 text-center border-2 border-dashed border-surface-border rounded-xl">
-                        <IconCalendarEvent className="size-8 text-muted-foreground mb-2 opacity-50" />
+                        <IconCalendarEvent className="size-8 text-muted-foreground mb-2 opacity-50 shrink-0" />
                         <p className="text-sm text-muted-foreground">
                             Nenhum horário adicionado. Clique em &quot;Adicionar Horário&quot; para montar a grade.
                         </p>
@@ -660,12 +661,13 @@ export function EditCourseForm({
                 <Button
                     type="button"
                     variant="outline"
+                    className="w-full sm:w-auto"
                     onClick={() => router.back()}
                     disabled={isSubmitting}
                 >
                     Cancelar
                 </Button>
-                <Button className="flex items-center gap-2" type="submit" disabled={!canSubmit}>
+                <Button className="flex w-full sm:w-auto items-center gap-2" type="submit" disabled={!canSubmit}>
                     {isSubmitting && <IconLoader2 className="size-5 animate-spin" />}
                     {isSubmitting ? "Salvando..." : "Salvar Alterações"}
                 </Button>

@@ -1,10 +1,38 @@
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
+import { hashString } from "@/lib/avatar-utils";
 import { getClassGroupsByPeriodId } from "@/services/class-groups/class-groups.service";
 import { IconBook, IconChevronRight, IconClock, IconEdit, IconSchool, IconUsersGroup } from "@tabler/icons-react";
 import Link from "next/link";
 import { Suspense } from "react";
 import { shiftLabels } from "../schema";
+
+const CLASS_GROUP_ACCENTS = [
+    {
+        border: "border-l-red-400 dark:border-l-red-900",
+        blur: "bg-red-400 dark:bg-red-900",
+    },
+    {
+        border: "border-l-blue-400 dark:border-l-blue-900",
+        blur: "bg-blue-400 dark:bg-blue-900",
+    },
+    {
+        border: "border-l-emerald-400 dark:border-l-emerald-900",
+        blur: "bg-emerald-400 dark:bg-emerald-900",
+    },
+    {
+        border: "border-l-violet-400 dark:border-l-violet-900",
+        blur: "bg-violet-400 dark:bg-violet-900",
+    },
+    {
+        border: "border-l-amber-400 dark:border-l-amber-900",
+        blur: "bg-amber-400 dark:bg-amber-900",
+    },
+    {
+        border: "border-l-cyan-400 dark:border-l-cyan-900",
+        blur: "bg-cyan-400 dark:bg-cyan-900",
+    },
+];
 
 function ListClassGroupsSkeleton() {
     return (
@@ -101,65 +129,69 @@ async function ListClassGroupsContent({
                     </h3>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-                        {degreeGroups.map((group) => (
-                            <div
-                                key={group.id}
-                                className="border border-surface-border border-l-4 border-l-red-400 dark:border-l-green-900 rounded-4xl relative top-0 bg-surface p-6 flex flex-col gap-4 hover:border-primary/30 overflow-hidden transition-all group/card"
-                            >
-                                {/* Header */}
-                                <div className="flex items-center gap-3 w-full z-20">
-                                    <div className="flex flex-1 flex-col items-start justify-center px-3 py-1 min-w-0">
-                                        <h3 className="font-bold text-2xl">{group.name}</h3>
-                                        <p className="text-[10px] text-muted-foreground uppercase">
-                                            {group.slug}
-                                        </p>
+                        {degreeGroups.map((group) => {
+                            const accent = CLASS_GROUP_ACCENTS[hashString(group.name) % CLASS_GROUP_ACCENTS.length];
+
+                            return (
+                                <div
+                                    key={group.id}
+                                    className={`border border-surface-border border-l-4 ${accent.border} rounded-4xl relative top-0 bg-surface p-6 flex flex-col gap-4 hover:border-primary/30 overflow-hidden transition-all group/card`}
+                                >
+                                    {/* Header */}
+                                    <div className="flex items-center gap-3 w-full z-20">
+                                        <div className="flex flex-1 flex-col items-start justify-center px-3 py-1 min-w-0">
+                                            <h3 className="font-bold text-2xl">{group.name}</h3>
+                                            <p className="text-[10px] text-muted-foreground uppercase">
+                                                {group.slug}
+                                            </p>
+                                        </div>
                                     </div>
+
+                                    {/* Informações */}
+                                    <div className="flex flex-row gap-2 flex-wrap z-20">
+                                        <div className="flex flex-row gap-1 items-center border border-surface-border rounded-full px-2 py-1 whitespace-nowrap">
+                                            <IconSchool className="size-4" />
+                                            <span className="font-medium text-xs">{group.basePeriod}ª Série / {group.basePeriod}º Ano</span>
+                                        </div>
+                                        <div className="flex flex-row gap-1 items-center border border-surface-border rounded-full px-2 py-1 whitespace-nowrap">
+                                            <IconClock className="size-4" />
+                                            <span className="font-medium text-xs">
+                                                {shiftLabels[group.shift as keyof typeof shiftLabels]}
+                                            </span>
+                                        </div>
+                                        <div className="flex flex-row gap-1 items-center border border-surface-border rounded-full px-2 py-1 whitespace-nowrap">
+                                            <IconBook className="size-4" />
+                                            <span className="font-medium text-xs">
+                                                {group._count.courses} disciplina{group._count.courses !== 1 ? "s" : ""}
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    {/* Actions */}
+                                    <div className="flex items-center justify-between mt-auto pt-3 border-t border-surface-border z-20">
+                                        <Link
+                                            href={`/admin/${programSlug}/periodos/${periodSlug}/turmas/${group.slug}/editar`}
+                                            className="p-2 inline-flex rounded-lg hover:bg-black/5 dark:hover:bg-white/10 text-muted-foreground transition-colors shrink-0"
+                                            title="Editar turma"
+                                        >
+                                            <IconEdit className="size-4" />
+                                        </Link>
+
+                                        <Separator orientation="vertical" className="h-4 bg-surface-border" />
+
+                                        <Link
+                                            href={`/admin/${programSlug}/periodos/${periodSlug}/turmas/${group.slug}/disciplinas`}
+                                            className="text-primary hover:text-primary/80 text-xs font-bold flex items-center gap-1 transition-colors px-2 py-1 rounded-lg hover:bg-primary/5"
+                                        >
+                                            <span>Ver Disciplinas</span>
+                                            <IconChevronRight className="size-3.5" />
+                                        </Link>
+                                    </div>
+                                    <div className={`absolute -top-10 -right-10 size-42 blur-3xl opacity-15 rounded-full ${accent.blur}`} />
                                 </div>
+                            );
 
-                                {/* Informações */}
-                                <div className="flex flex-row gap-2 flex-wrap z-20">
-                                    <div className="flex flex-row gap-1 items-center border border-surface-border rounded-full px-2 py-1 whitespace-nowrap">
-                                        <IconSchool className="size-4" />
-                                        <span className="font-medium text-xs">{group.basePeriod}ª Série / {group.basePeriod}º Ano</span>
-                                    </div>
-                                    <div className="flex flex-row gap-1 items-center border border-surface-border rounded-full px-2 py-1 whitespace-nowrap">
-                                        <IconClock className="size-4" />
-                                        <span className="font-medium text-xs">
-                                            {shiftLabels[group.shift as keyof typeof shiftLabels]}
-                                        </span>
-                                    </div>
-                                    <div className="flex flex-row gap-1 items-center border border-surface-border rounded-full px-2 py-1 whitespace-nowrap">
-                                        <IconBook className="size-4" />
-                                        <span className="font-medium text-xs">
-                                            {group._count.courses} disciplina{group._count.courses !== 1 ? "s" : ""}
-                                        </span>
-                                    </div>
-                                </div>
-
-                                {/* Actions */}
-                                <div className="flex items-center justify-between mt-auto pt-3 border-t border-surface-border z-20">
-                                    <Link
-                                        href={`/admin/${programSlug}/periodos/${periodSlug}/turmas/${group.slug}/editar`}
-                                        className="p-2 inline-flex rounded-lg hover:bg-black/5 dark:hover:bg-white/10 text-muted-foreground transition-colors shrink-0"
-                                        title="Editar turma"
-                                    >
-                                        <IconEdit className="size-4" />
-                                    </Link>
-
-                                    <Separator orientation="vertical" className="h-4 bg-surface-border" />
-
-                                    <Link
-                                        href={`/admin/${programSlug}/periodos/${periodSlug}/turmas/${group.slug}/disciplinas`}
-                                        className="text-primary hover:text-primary/80 text-xs font-bold flex items-center gap-1 transition-colors px-2 py-1 rounded-lg hover:bg-primary/5"
-                                    >
-                                        <span>Ver Disciplinas</span>
-                                        <IconChevronRight className="size-3.5" />
-                                    </Link>
-                                </div>
-                                <div className="absolute -top-10 -right-10 size-42 blur-3xl bg-red-400 dark:bg-green-900 opacity-35 rounded-full" />
-                            </div>
-
-                        ))}
+                        })}
                     </div>
                 </div>
             ))}

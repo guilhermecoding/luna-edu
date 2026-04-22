@@ -1,9 +1,9 @@
-import { getClassGroupsByPeriodId } from "@/services/class-groups/class-groups.service";
-import { IconUsersGroup, IconEdit, IconChevronRight, IconBlocks, IconBook, IconClock } from "@tabler/icons-react";
-import Link from "next/link";
-import { Fragment, Suspense } from "react";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
+import { getClassGroupsByPeriodId } from "@/services/class-groups/class-groups.service";
+import { IconBook, IconChevronRight, IconClock, IconEdit, IconSchool, IconUsersGroup } from "@tabler/icons-react";
+import Link from "next/link";
+import { Suspense } from "react";
 import { shiftLabels } from "../schema";
 
 function ListClassGroupsSkeleton() {
@@ -104,7 +104,7 @@ async function ListClassGroupsContent({
                         {degreeGroups.map((group) => (
                             <div
                                 key={group.id}
-                                className="border border-surface-border rounded-4xl relative top-0 bg-surface p-6 flex flex-col gap-4 hover:border-primary/30 overflow-hidden transition-all group/card"
+                                className="border border-surface-border border-l-4 border-l-red-400 dark:border-l-green-900 rounded-4xl relative top-0 bg-surface p-6 flex flex-col gap-4 hover:border-primary/30 overflow-hidden transition-all group/card"
                             >
                                 {/* Header */}
                                 <div className="flex items-center gap-3 w-full z-20">
@@ -119,7 +119,7 @@ async function ListClassGroupsContent({
                                 {/* Informações */}
                                 <div className="flex flex-row gap-2 flex-wrap z-20">
                                     <div className="flex flex-row gap-1 items-center border border-surface-border rounded-full px-2 py-1 whitespace-nowrap">
-                                        <IconBook className="size-4" />
+                                        <IconSchool className="size-4" />
                                         <span className="font-medium text-xs">{group.basePeriod}ª Série / {group.basePeriod}º Ano</span>
                                     </div>
                                     <div className="flex flex-row gap-1 items-center border border-surface-border rounded-full px-2 py-1 whitespace-nowrap">
@@ -156,7 +156,7 @@ async function ListClassGroupsContent({
                                         <IconChevronRight className="size-3.5" />
                                     </Link>
                                 </div>
-                                <div className="absolute -top-10 -right-10 size-36 blur-3xl bg-red-400 dark:bg-green-900 opacity-35 rounded-full" />
+                                <div className="absolute -top-10 -right-10 size-42 blur-3xl bg-red-400 dark:bg-green-900 opacity-35 rounded-full" />
                             </div>
 
                         ))}

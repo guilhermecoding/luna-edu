@@ -1,5 +1,5 @@
 import { getClassGroupsByPeriodId } from "@/services/class-groups/class-groups.service";
-import { IconUsersGroup, IconEdit, IconChevronRight, IconSun, IconSunset2, IconMoon } from "@tabler/icons-react";
+import { IconUsersGroup, IconEdit, IconChevronRight, IconSun, IconSunset2, IconMoon, IconBlocks, IconBook, IconClock } from "@tabler/icons-react";
 import Link from "next/link";
 import { Suspense } from "react";
 import { Separator } from "@/components/ui/separator";
@@ -11,14 +11,6 @@ function shiftLabel(shift: Shift) {
         case Shift.MORNING: return "Manhã";
         case Shift.AFTERNOON: return "Tarde";
         case Shift.EVENING: return "Noite";
-    }
-}
-
-function ShiftIcon({ shift }: { shift: Shift }) {
-    switch (shift) {
-        case Shift.MORNING: return <IconSun className="size-3" />;
-        case Shift.AFTERNOON: return <IconSunset2 className="size-3" />;
-        case Shift.EVENING: return <IconMoon className="size-3" />;
     }
 }
 
@@ -94,12 +86,9 @@ async function ListClassGroupsContent({
                     className="border border-surface-border rounded-2xl bg-surface p-6 flex flex-col gap-4 hover:border-primary/30 transition-all group/card"
                 >
                     {/* Header */}
-                    <div className="flex items-center gap-3">
-                        <div className="flex justify-center items-center bg-blue-100 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-800 size-10 rounded-xl text-blue-600 dark:text-blue-400 shrink-0 transition-transform group-hover/card:scale-105">
-                            <IconUsersGroup className="size-5" />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                            <h3 className="font-bold text-sm truncate">{group.name}</h3>
+                    <div className="flex items-center gap-3 bg-background/80 rounded-3xl w-full">
+                        <div className="flex flex-1 flex-col items-center justify-center px-2 py-6 min-w-0">
+                            <h3 className="font-bold text-3xl truncate">{group.name}</h3>
                             <p className="text-[10px] text-muted-foreground font-mono uppercase">
                                 {group.slug}
                             </p>
@@ -108,24 +97,35 @@ async function ListClassGroupsContent({
 
                     {/* Informações */}
                     <div className="space-y-2 text-xs">
-                        <div className="flex items-center justify-between">
-                            <span className="text-muted-foreground">Matriz</span>
-                            <span className="font-medium truncate ml-2">{group.degree.name}</span>
+                        <div className="flex flex-col justify-center">
+                            <div className="flex items-center gap-1.5 text-muted-foreground">
+                                <IconBlocks className="size-4" />
+                                <span className="text-sm">Matriz</span>
+                            </div>
+                            <span className="font-medium text-lg truncate">{group.degree.name}</span>
                         </div>
-                        <div className="flex items-center justify-between">
-                            <span className="text-muted-foreground">Série</span>
-                            <span className="font-medium">{group.basePeriod}ª Série / {group.basePeriod}º Ano</span>
+                        <div className="flex flex-col justify-center">
+                            <div className="flex items-center gap-1.5 text-muted-foreground">
+                                <IconBook className="size-4" />
+                                <span className="text-sm">Série</span>
+                            </div>
+                            <span className="font-medium text-lg">{group.basePeriod}ª Série / {group.basePeriod}º Ano</span>
                         </div>
-                        <div className="flex items-center justify-between">
-                            <span className="text-muted-foreground">Turno</span>
-                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-primary/10 text-primary font-medium text-[10px]">
-                                <ShiftIcon shift={group.shift} />
+                        <div className="flex flex-col justify-center">
+                            <div className="flex items-center gap-1.5 text-muted-foreground">
+                                <IconClock className="size-4" />
+                                <span className="text-sm">Turno</span>
+                            </div>
+                            <span className="text-lg font-medium">
                                 {shiftLabel(group.shift)}
                             </span>
                         </div>
-                        <div className="flex items-center justify-between">
-                            <span className="text-muted-foreground">Disciplinas</span>
-                            <span className="inline-flex items-center gap-1 font-medium">
+                        <div className="flex flex-col justify-center">
+                            <div className="flex items-center gap-1.5 text-muted-foreground">
+                                <IconBook className="size-4" />
+                                <span className="text-sm">Disciplinas</span>
+                            </div>
+                            <span className="text-lg font-medium">
                                 {group._count.courses} disciplina{group._count.courses !== 1 ? "s" : ""}
                             </span>
                         </div>

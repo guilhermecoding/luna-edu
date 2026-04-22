@@ -29,3 +29,7 @@ export const roomSchema = z.object({
 
 export type RoomInput = z.infer<typeof roomSchema>;
 
+/** Edição: slug da sala não vem do cliente. */
+export const roomUpdateSchema = roomSchema.omit({ slug: true });
+export type RoomUpdateInput = z.infer<typeof roomUpdateSchema>;
+

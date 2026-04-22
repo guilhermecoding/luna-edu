@@ -1,15 +1,15 @@
 "use server";
 
-import { updateRoom, deleteRoom } from "@/services/rooms/rooms.service";
+import { updateRoom, deleteRoom, getRoomSlugById } from "@/services/rooms/rooms.service";
 import { ZodError } from "zod";
-import { roomSchema, type RoomInput } from "../../schema";
+import { roomUpdateSchema, type RoomUpdateInput } from "../../schema";
 import { revalidatePath, updateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import { RoomType } from "@/generated/prisma/client";
 
-export async function updateRoomAction(campusSlug: string, roomId: string, data: RoomInput) {
+export async function updateRoomAction(campusSlug: string, roomId: string, data: RoomUpdateInput) {
     try {
-        const validatedData = roomSchema.parse(data);
+        const validatedData = roomUpdateSchema.parse(data);
 
         await updateRoom(roomId, {
             name: validatedData.name,
@@ -20,8 +20,11 @@ export async function updateRoomAction(campusSlug: string, roomId: string, data:
 
         updateTag(`campus:${campusSlug}:rooms`);
         updateTag("all-rooms");
+        const roomSlug = await getRoomSlugById(roomId);
         revalidatePath(`/admin/instituicoes/${campusSlug}/salas`);
-        revalidatePath(`/admin/instituicoes/${campusSlug}/salas/${validatedData.slug}/editar`);
+        if (roomSlug) {
+            revalidatePath(`/admin/instituicoes/${campusSlug}/salas/${roomSlug}/editar`);
+        }
     } catch (error) {
         if (error instanceof ZodError) {
             return { success: false, error: error.issues[0]?.message || "Erro de validação" };

@@ -1,18 +1,21 @@
 "use server";
 
-import { updateCampus, deleteCampus } from "@/services/campuses/campuses.service";
+import { updateCampus, deleteCampus, getCampusSlugById } from "@/services/campuses/campuses.service";
 import { ZodError } from "zod";
-import { createCampusSchema, type CreateCampusInput } from "../../novo/schema";
+import { editCampusSchema, type EditCampusInput } from "./schema";
 import { revalidatePath, updateTag } from "next/cache";
 import { redirect } from "next/navigation";
 
-export async function editCampusAction(id: string, data: CreateCampusInput) {
+export async function editCampusAction(id: string, data: EditCampusInput) {
     try {
-        const validatedData = createCampusSchema.parse(data);
+        const validatedData = editCampusSchema.parse(data);
         await updateCampus(id, validatedData);
 
         updateTag("campuses:list");
-        updateTag(`campus:${validatedData.slug}`);
+        const slug = await getCampusSlugById(id);
+        if (slug) {
+            updateTag(`campus:${slug}`);
+        }
         revalidatePath("/admin/instituicoes");
     } catch (error) {
         if (error instanceof ZodError) {

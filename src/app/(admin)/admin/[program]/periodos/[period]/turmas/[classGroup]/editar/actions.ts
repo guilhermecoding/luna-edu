@@ -5,7 +5,7 @@ import { deleteCourse } from "@/services/courses/courses.service";
 import { getPeriodByProgramAndSlug } from "@/services/periods/periods.service";
 import { getClassGroupSlugsByIds } from "@/services/class-groups/class-groups.service";
 import { ZodError, z } from "zod";
-import { courseSchema, type CourseInput } from "../../schema";
+import { courseUpdateSchema, type CourseUpdateInput } from "../../schema";
 import { revalidatePath, updateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import { DayOfWeek, Shift } from "@/generated/prisma/client";
@@ -56,11 +56,11 @@ export async function updateCourseAction(
     programSlug: string,
     periodSlug: string,
     courseCode: string,
-    data: CourseInput,
+    data: CourseUpdateInput,
 ) {
     let redirectClassGroupId: string | undefined;
     try {
-        const validatedData = courseSchema.parse(data);
+        const validatedData = courseUpdateSchema.parse(data);
         
         const period = await getPeriodByProgramAndSlug(programSlug, periodSlug);
         if (!period) {
@@ -74,7 +74,7 @@ export async function updateCourseAction(
 
         await updateCourse(course.id, {
             name: validatedData.name,
-            code: validatedData.code,
+            code: course.code,
             subjectId: validatedData.subjectId,
             roomId: validatedData.roomId || null,
             shift: validatedData.shift as Shift,
@@ -89,9 +89,7 @@ export async function updateCourseAction(
 
         updateTag(`period:${course.periodId}:courses`);
         updateTag(`period:${course.periodId}:course:${courseCode}`);
-        if (courseCode !== validatedData.code) {
-            updateTag(`period:${course.periodId}:course:${validatedData.code}`);
-        }
+        updateTag(`period:${course.periodId}:course:${course.code}`);
         updateTag(`program-periods:${programSlug}`);
         const classGroupSlugs = await invalidateCachesForCourseClassGroups(course.periodId, [
             course.classGroupId,

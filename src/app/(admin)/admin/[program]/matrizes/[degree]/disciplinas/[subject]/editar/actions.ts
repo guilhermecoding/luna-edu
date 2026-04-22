@@ -1,22 +1,25 @@
 "use server";
 
-import { deleteSubject, updateSubject } from "@/services/subjects/subjects.service";
+import { deleteSubject, getSubjectById, updateSubject } from "@/services/subjects/subjects.service";
 import { ZodError } from "zod";
-import { createSubjectSchema } from "../../novo/schema";
 import { revalidatePath, updateTag } from "next/cache";
 import { redirect } from "next/navigation";
-import z from "zod";
-
-const editSubjectSchema = createSubjectSchema;
-export type EditSubjectInput = z.infer<typeof editSubjectSchema>;
+import { editSubjectSchema, type EditSubjectInput } from "./schema";
 
 export async function editSubjectAction(subjectId: string, programSlug: string, degreeSlug: string, degreeId: string, data: EditSubjectInput) {
     try {
         const validatedData = editSubjectSchema.parse(data);
+        const existing = await getSubjectById(subjectId);
+        if (!existing) {
+            return {
+                success: false,
+                error: "Disciplina não encontrada.",
+            };
+        }
 
         await updateSubject(subjectId, {
             name: validatedData.name,
-            code: validatedData.code,
+            code: existing.code,
             workload: validatedData.workload,
             basePeriod: validatedData.basePeriod,
         });

@@ -64,6 +64,10 @@ export const courseSchema = z.object({
 export type ScheduleEntryInput = z.infer<typeof scheduleEntrySchema>;
 export type CourseInput = z.output<typeof courseSchema>;
 
+/** Atualização de turma disciplinar: código vem do banco, não do cliente. */
+export const courseUpdateSchema = courseSchema.omit({ code: true });
+export type CourseUpdateInput = z.output<typeof courseUpdateSchema>;
+
 export const classGroupSchema = z.object({
     name: z.string().min(2, "O nome deve ter no mínimo 2 caracteres"),
     slug: z.string()

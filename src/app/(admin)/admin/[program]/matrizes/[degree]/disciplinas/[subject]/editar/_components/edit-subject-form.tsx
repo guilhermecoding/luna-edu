@@ -19,14 +19,13 @@ import z from "zod";
 import { useEffect, useState } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { deleteSubjectAction, editSubjectAction } from "../actions";
-import { createSubjectSchema } from "../../../novo/schema";
+import { editSubjectSchema } from "../schema";
 import { IconAlertTriangle, IconLoader2 } from "@tabler/icons-react";
 import Image from "next/image";
 import imgGibbyDuvida from "@/assets/images/logo-gibby-duvida.svg";
 import { isRedirectError } from "@/lib/is-redirect-error";
 import { Subject } from "@/generated/prisma/client";
 
-const editSubjectSchema = createSubjectSchema;
 type FormInput = z.input<typeof editSubjectSchema>;
 type FormOutput = z.output<typeof editSubjectSchema>;
 
@@ -57,7 +56,6 @@ export function EditSubjectForm({ programSlug, degreeSlug, degreeId, subjectId, 
         mode: "onChange",
         defaultValues: {
             name: initialData.name,
-            code: initialData.code || "",
             workload: initialData.workload || undefined,
             basePeriod: initialData.basePeriod || undefined,
         },
@@ -163,8 +161,10 @@ export function EditSubjectForm({ programSlug, degreeSlug, degreeId, subjectId, 
                     <Label htmlFor="code">Código Interno Único</Label>
                     <Input
                         id="code"
-                        {...register("code")}
+                        defaultValue={initialData.code}
                         readOnly
+                        tabIndex={-1}
+                        autoComplete="off"
                         disabled={isSubmitting}
                         className="p-5 h-[62px] rounded-lg bg-background font-mono text-sm opacity-70 cursor-not-allowed uppercase"
                     />

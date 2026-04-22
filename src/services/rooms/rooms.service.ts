@@ -66,6 +66,17 @@ export async function getRoomBySlug(campusSlug: string, roomSlug: string): Promi
 }
 
 /**
+ * Slug atual da sala por ID (para revalidação de cache sem confiar no form).
+ */
+export async function getRoomSlugById(id: string): Promise<string | null> {
+    const row = await prisma.room.findUnique({
+        where: { id },
+        select: { slug: true },
+    });
+    return row?.slug ?? null;
+}
+
+/**
  * Cria uma nova sala.
  */
 export async function createRoom(data: {

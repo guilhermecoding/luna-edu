@@ -24,7 +24,7 @@ import { useForm, type SubmitHandler, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import { updateRoomAction, deleteRoomAction } from "../actions";
-import { roomSchema, type RoomInput, ROOM_TYPES, roomTypeLabels } from "../../../schema";
+import { roomUpdateSchema, type RoomUpdateInput, ROOM_TYPES, roomTypeLabels } from "../../../schema";
 import { IconAlertTriangle, IconLoader2, IconTrash } from "@tabler/icons-react";
 import Image from "next/image";
 import imgGibbyDuvida from "@/assets/images/logo-gibby-duvida.svg";
@@ -46,15 +46,14 @@ export function EditRoomForm({ campusSlug, initialData }: EditRoomFormProps) {
     const [deleteError, setDeleteError] = useState<string | null>(null);
     const [isDeleting, setIsDeleting] = useState(false);
 
-    const form = useForm<RoomInput>({
-        resolver: zodResolver(roomSchema),
+    const form = useForm<RoomUpdateInput>({
+        resolver: zodResolver(roomUpdateSchema),
         mode: "onChange",
         defaultValues: {
             name: initialData.name,
             capacity: String(initialData.capacity),
             block: initialData.block || "",
             type: initialData.type,
-            slug: initialData.slug,
         },
     });
 
@@ -75,7 +74,7 @@ export function EditRoomForm({ campusSlug, initialData }: EditRoomFormProps) {
         reset(form.getValues());
     }, [clearErrors, reset, form]);
 
-    const onSubmit: SubmitHandler<RoomInput> = async (data) => {
+    const onSubmit: SubmitHandler<RoomUpdateInput> = async (data) => {
         clearErrors("root");
 
         try {
@@ -158,7 +157,10 @@ export function EditRoomForm({ campusSlug, initialData }: EditRoomFormProps) {
                     <Label htmlFor="slug">Slug</Label>
                     <Input
                         id="slug"
-                        {...register("slug")}
+                        defaultValue={initialData.slug}
+                        readOnly
+                        tabIndex={-1}
+                        autoComplete="off"
                         disabled
                         className="p-5 rounded-lg bg-muted text-muted-foreground flex-1"
                     />

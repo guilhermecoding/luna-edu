@@ -29,8 +29,8 @@ import { Fragment, useState } from "react";
 import { Separator } from "@/components/ui/separator";
 import { deleteCourseAction, updateCourseAction } from "../actions";
 import {
-    courseSchema,
-    type CourseInput,
+    courseUpdateSchema,
+    type CourseUpdateInput,
     type ScheduleEntryInput,
     SHIFTS,
     shiftLabels,
@@ -127,16 +127,15 @@ export function EditCourseForm({
     const [deleteError, setDeleteError] = useState<string | null>(null);
     const [isDeleting, setIsDeleting] = useState(false);
 
-    const form = useForm<CourseInput>({
+    const form = useForm<CourseUpdateInput>({
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        resolver: zodResolver(courseSchema) as any,
+        resolver: zodResolver(courseUpdateSchema) as any,
         mode: "onChange",
         defaultValues: {
             name: defaultValues.name,
-            code: defaultValues.code,
             subjectId: defaultValues.subjectId,
             roomId: defaultValues.roomId,
-            shift: defaultValues.shift as CourseInput["shift"],
+            shift: defaultValues.shift as CourseUpdateInput["shift"],
             classGroupId: defaultValues.classGroupId,
             schedules: defaultValues.schedules,
         },
@@ -156,11 +155,10 @@ export function EditCourseForm({
     });
 
     const nameValue = useWatch({ control, name: "name" });
-    const codeValue = useWatch({ control, name: "code" });
-    const canSubmit = isValid && isDirty && !isSubmitting && Boolean(nameValue?.trim()) && Boolean(codeValue?.trim());
+    const canSubmit = isValid && isDirty && !isSubmitting && Boolean(nameValue?.trim());
     const canDelete = deleteConfirmationName === defaultValues.name && !isDeleting;
 
-    const onSubmit: SubmitHandler<CourseInput> = async (data) => {
+    const onSubmit: SubmitHandler<CourseUpdateInput> = async (data) => {
         clearErrors("root");
 
         try {
@@ -270,16 +268,16 @@ export function EditCourseForm({
                     <Input
                         id="code"
                         placeholder="Ex: turma-a-calculo-i"
-                        {...register("code")}
+                        defaultValue={defaultValues.code}
                         readOnly
+                        tabIndex={-1}
+                        autoComplete="off"
                         disabled={isSubmitting}
-                        aria-invalid={errors.code ? "true" : "false"}
                         className="p-5 rounded-lg bg-muted cursor-not-allowed opacity-70 uppercase"
                     />
                     <p className="text-[10px] text-muted-foreground italic">
                         O código da turma não pode ser alterado após a criação.
                     </p>
-                    {errors.code && <p className="text-sm text-red-600">{errors.code.message}</p>}
                 </div>
 
                 <div className="space-y-2 md:col-span-2">

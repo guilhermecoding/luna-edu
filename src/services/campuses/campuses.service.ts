@@ -80,6 +80,17 @@ export async function getCampusBySlug(slug: string): Promise<Campus | null> {
 }
 
 /**
+ * Retorna o slug atual do campus (uso em actions após update, sem depender do payload do form).
+ */
+export async function getCampusSlugById(id: string): Promise<string | null> {
+    const row = await prisma.campus.findUnique({
+        where: { id },
+        select: { slug: true },
+    });
+    return row?.slug ?? null;
+}
+
+/**
  * Atualiza dados editáveis de uma instituição pelo ID.
  *
  * @param id ID da instituição a ser atualizada.

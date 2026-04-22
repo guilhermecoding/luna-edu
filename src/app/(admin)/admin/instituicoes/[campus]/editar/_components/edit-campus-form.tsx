@@ -8,7 +8,7 @@ import { useForm, type SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import { deleteCampusAction, editCampusAction } from "../actions";
-import { createCampusSchema, type CreateCampusInput } from "../../../novo/schema";
+import { editCampusSchema, type EditCampusInput } from "../schema";
 import { IconAlertTriangle, IconLoader2 } from "@tabler/icons-react";
 import Image from "next/image";
 import imgGibbyDuvida from "@/assets/images/logo-gibby-duvida.svg";
@@ -38,12 +38,11 @@ export function EditCampusForm({ initialData }: EditCampusFormProps) {
     const [deleteConfirmationName, setDeleteConfirmationName] = useState("");
     const [deleteError, setDeleteError] = useState<string | null>(null);
 
-    const form = useForm<CreateCampusInput>({
-        resolver: zodResolver(createCampusSchema),
+    const form = useForm<EditCampusInput>({
+        resolver: zodResolver(editCampusSchema),
         mode: "onChange",
         defaultValues: {
             name: initialData.name,
-            slug: initialData.slug,
             address: initialData.address || "",
         },
     });
@@ -63,7 +62,7 @@ export function EditCampusForm({ initialData }: EditCampusFormProps) {
         clearErrors();
     }, [clearErrors, reset]);
 
-    const onSubmit: SubmitHandler<CreateCampusInput> = async (data) => {
+    const onSubmit: SubmitHandler<EditCampusInput> = async (data) => {
         clearErrors("root");
 
         try {
@@ -154,7 +153,10 @@ export function EditCampusForm({ initialData }: EditCampusFormProps) {
                         <Label htmlFor="slug">Slug</Label>
                         <Input
                             id="slug"
-                            {...register("slug")}
+                            defaultValue={initialData.slug}
+                            readOnly
+                            tabIndex={-1}
+                            autoComplete="off"
                             disabled
                             className="p-5 rounded-lg bg-muted text-muted-foreground"
                         />

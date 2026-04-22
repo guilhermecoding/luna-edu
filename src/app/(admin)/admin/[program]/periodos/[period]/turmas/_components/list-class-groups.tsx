@@ -1,7 +1,7 @@
 import { getClassGroupsByPeriodId } from "@/services/class-groups/class-groups.service";
 import { IconUsersGroup, IconEdit, IconChevronRight, IconBlocks, IconBook, IconClock } from "@tabler/icons-react";
 import Link from "next/link";
-import { Suspense } from "react";
+import { Fragment, Suspense } from "react";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import { shiftLabels } from "../schema";
@@ -92,61 +92,52 @@ async function ListClassGroupsContent({
                 <div key={degreeId} className="space-y-4">
                     <h3 className="text-lg font-bold flex items-center gap-2 px-2">
                         <span className="w-2 h-6 bg-primary rounded-full" />
-                        <span className="flex flex-col min-w-0">
+                        <div className="flex flex-col min-w-0">
                             <span className="truncate">{degree.name}</span>
                             <span className="text-xs font-mono font-normal text-muted-foreground uppercase tracking-wide">
                                 {degree.slug}
                             </span>
-                        </span>
+                        </div>
                     </h3>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
                         {degreeGroups.map((group) => (
                             <div
                                 key={group.id}
-                                className="border border-surface-border rounded-2xl bg-surface p-6 flex flex-col gap-4 hover:border-primary/30 transition-all group/card"
+                                className="border border-surface-border rounded-4xl relative top-0 bg-surface p-6 flex flex-col gap-4 hover:border-primary/30 overflow-hidden transition-all group/card"
                             >
                                 {/* Header */}
-                                <div className="flex items-center gap-3 bg-background/80 rounded-3xl w-full">
-                                    <div className="flex flex-1 flex-col items-center justify-center px-2 py-6 min-w-0">
-                                        <h3 className="font-bold text-3xl truncate">{group.name}</h3>
-                                        <p className="text-[10px] text-muted-foreground font-mono uppercase">
+                                <div className="flex items-center gap-3 w-full z-20">
+                                    <div className="flex flex-1 flex-col items-start justify-center px-3 py-1 min-w-0">
+                                        <h3 className="font-bold text-2xl">{group.name}</h3>
+                                        <p className="text-[10px] text-muted-foreground uppercase">
                                             {group.slug}
                                         </p>
                                     </div>
                                 </div>
 
                                 {/* Informações */}
-                                <div className="space-y-2 text-xs">
-                                    <div className="flex flex-col justify-center">
-                                        <div className="flex items-center gap-1.5 text-muted-foreground">
-                                            <IconBook className="size-4" />
-                                            <span className="text-sm">Série</span>
-                                        </div>
-                                        <span className="font-medium text-lg">{group.basePeriod}ª Série / {group.basePeriod}º Ano</span>
+                                <div className="flex flex-row gap-2 flex-wrap z-20">
+                                    <div className="flex flex-row gap-1 items-center border border-surface-border rounded-full px-2 py-1 whitespace-nowrap">
+                                        <IconBook className="size-4" />
+                                        <span className="font-medium text-xs">{group.basePeriod}ª Série / {group.basePeriod}º Ano</span>
                                     </div>
-                                    <div className="flex flex-col justify-center">
-                                        <div className="flex items-center gap-1.5 text-muted-foreground">
-                                            <IconClock className="size-4" />
-                                            <span className="text-sm">Turno</span>
-                                        </div>
-                                        <span className="text-lg font-medium">
+                                    <div className="flex flex-row gap-1 items-center border border-surface-border rounded-full px-2 py-1 whitespace-nowrap">
+                                        <IconClock className="size-4" />
+                                        <span className="font-medium text-xs">
                                             {shiftLabels[group.shift as keyof typeof shiftLabels]}
                                         </span>
                                     </div>
-                                    <div className="flex flex-col justify-center">
-                                        <div className="flex items-center gap-1.5 text-muted-foreground">
-                                            <IconBook className="size-4" />
-                                            <span className="text-sm">Disciplinas</span>
-                                        </div>
-                                        <span className="text-lg font-medium">
+                                    <div className="flex flex-row gap-1 items-center border border-surface-border rounded-full px-2 py-1 whitespace-nowrap">
+                                        <IconBook className="size-4" />
+                                        <span className="font-medium text-xs">
                                             {group._count.courses} disciplina{group._count.courses !== 1 ? "s" : ""}
                                         </span>
                                     </div>
                                 </div>
 
                                 {/* Actions */}
-                                <div className="flex items-center justify-between mt-auto pt-3 border-t border-surface-border">
+                                <div className="flex items-center justify-between mt-auto pt-3 border-t border-surface-border z-20">
                                     <Link
                                         href={`/admin/${programSlug}/periodos/${periodSlug}/turmas/${group.slug}/editar`}
                                         className="p-2 inline-flex rounded-lg hover:bg-black/5 dark:hover:bg-white/10 text-muted-foreground transition-colors shrink-0"
@@ -165,7 +156,9 @@ async function ListClassGroupsContent({
                                         <IconChevronRight className="size-3.5" />
                                     </Link>
                                 </div>
+                                <div className="absolute -top-10 -right-10 size-36 blur-3xl bg-red-400 dark:bg-green-900 opacity-35 rounded-full" />
                             </div>
+
                         ))}
                     </div>
                 </div>

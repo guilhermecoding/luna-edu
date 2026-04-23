@@ -13,10 +13,11 @@ import Link from "next/link";
 interface CourseActionsProps {
     programSlug: string;
     periodSlug: string;
+    classGroupSlug: string;
     courseCode: string;
 }
 
-export function CourseActions({ programSlug, periodSlug, courseCode }: CourseActionsProps) {
+export function CourseActions({ programSlug, periodSlug, classGroupSlug, courseCode }: CourseActionsProps) {
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -31,7 +32,7 @@ export function CourseActions({ programSlug, periodSlug, courseCode }: CourseAct
             <DropdownMenuContent align="end" className="w-48 rounded-xl border-surface-border p-1.5">
                 <DropdownMenuItem asChild>
                     <Link
-                        href={`/admin/${programSlug}/periodos/${periodSlug}/turmas/${courseCode}/editar`}
+                        href={`/admin/${programSlug}/periodos/${periodSlug}/turmas/${classGroupSlug}/disciplinas/${courseCode}/editar`}
                         className="flex items-center gap-2 cursor-pointer py-2"
                     >
                         <IconEdit className="size-4 text-muted-foreground" />
@@ -40,7 +41,7 @@ export function CourseActions({ programSlug, periodSlug, courseCode }: CourseAct
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
                     <Link
-                        href={`/admin/${programSlug}/periodos/${periodSlug}/turmas/${courseCode}/editar`}
+                        href={`/admin/${programSlug}/periodos/${periodSlug}/turmas/${classGroupSlug}/disciplinas/${courseCode}/editar`}
                         className="flex items-center gap-2 cursor-pointer py-2"
                     >
                         <IconEye className="size-4 text-muted-foreground" />

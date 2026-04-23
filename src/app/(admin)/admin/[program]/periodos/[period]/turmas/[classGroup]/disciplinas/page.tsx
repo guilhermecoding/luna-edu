@@ -55,6 +55,7 @@ export default async function TurmaDisciplinasPage({
                     courses={classGroup.courses}
                     programSlug={program}
                     periodSlug={period}
+                    classGroupSlug={classGroupSlug}
                 />
             </Section>
         </Page>

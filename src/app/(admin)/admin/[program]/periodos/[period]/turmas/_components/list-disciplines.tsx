@@ -130,10 +130,12 @@ function ListDisciplinesContent({
     courses,
     programSlug,
     periodSlug,
+    classGroupSlug,
 }: {
     courses: CourseWithRelations[];
     programSlug: string;
     periodSlug: string;
+    classGroupSlug: string;
 }) {
     if (courses.length === 0) {
         return <EmptyDisciplinesList />;
@@ -254,6 +256,7 @@ function ListDisciplinesContent({
                                     <CourseActions
                                         programSlug={programSlug}
                                         periodSlug={periodSlug}
+                                        classGroupSlug={classGroupSlug}
                                         courseCode={course.code}
                                     />
                                 </td>
@@ -271,10 +274,19 @@ export default function ListDisciplines({
     courses,
     programSlug,
     periodSlug,
+    classGroupSlug,
 }: {
     courses: CourseWithRelations[];
     programSlug: string;
     periodSlug: string;
+    classGroupSlug: string;
 }) {
-    return <ListDisciplinesContent courses={courses} programSlug={programSlug} periodSlug={periodSlug} />;
+    return (
+        <ListDisciplinesContent
+            courses={courses}
+            programSlug={programSlug}
+            periodSlug={periodSlug}
+            classGroupSlug={classGroupSlug}
+        />
+    );
 }

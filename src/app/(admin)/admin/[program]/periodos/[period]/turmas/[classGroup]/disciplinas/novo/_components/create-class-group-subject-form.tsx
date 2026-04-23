@@ -1,6 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import z from "zod";
 import { IconBuilding, IconCalendarEvent, IconLoader2, IconPlus, IconTrash, IconUsers } from "@tabler/icons-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
@@ -27,6 +28,9 @@ import {
     type CreateClassGroupSubjectInput,
 } from "../schema";
 import { DAYS_OF_WEEK, dayOfWeekLabels, SHIFTS, shiftLabels } from "../../../../schema";
+
+type FormInput = z.input<typeof createClassGroupSubjectSchema>;
+type FormOutput = z.output<typeof createClassGroupSubjectSchema>;
 
 type SubjectData = {
     id: string;
@@ -91,7 +95,7 @@ export function CreateClassGroupSubjectForm({
     const pathname = usePathname();
     const searchParams = useSearchParams();
 
-    const form = useForm<CreateClassGroupSubjectInput>({
+    const form = useForm<FormInput, undefined, FormOutput>({
         resolver: zodResolver(createClassGroupSubjectSchema),
         mode: "onChange",
         defaultValues: {

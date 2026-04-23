@@ -8,7 +8,7 @@ import { ZodError, z } from "zod";
 import { courseUpdateSchema, type CourseUpdateInput } from "../../schema";
 import { revalidatePath, updateTag } from "next/cache";
 import { redirect } from "next/navigation";
-import { DayOfWeek, Shift } from "@/generated/prisma/client";
+import { DayOfWeek, Shift } from "@/generated/prisma/enums";
 import { editClassGroupSchema, type EditClassGroupInput } from "./schema";
 
 const deleteCourseSchema = z.object({
@@ -199,10 +199,14 @@ export async function updateClassGroupAction(
             return { success: false, error: "Turma não encontrada." };
         }
 
-        await updateClassGroup(classGroup.id, { name: validatedData.name });
+        await updateClassGroup(classGroup.id, { 
+            name: validatedData.name, 
+            shift: validatedData.shift,
+        });
 
         updateTag(`period:${period.id}:class-groups`);
         updateTag(`period:${period.id}:class-group:${classGroupSlug}`);
+        updateTag(`period:${period.id}:courses`); // Invalida pois o turno das disciplinas pode ter mudado
         revalidatePath(`/admin/${programSlug}/periodos/${periodSlug}/turmas`);
         revalidatePath(`/admin/${programSlug}/periodos/${periodSlug}/turmas/${classGroupSlug}/disciplinas`);
     } catch (error) {
@@ -219,5 +223,5 @@ export async function updateClassGroupAction(
         toast: "success",
         message: "Turma atualizada com sucesso",
     });
-    redirect(`/admin/${programSlug}/periodos/${periodSlug}/turmas/${classGroupSlug}/disciplinas?${params.toString()}`);
+    redirect(`/admin/${programSlug}/periodos/${periodSlug}/turmas/${classGroupSlug}?${params.toString()}`);
 }

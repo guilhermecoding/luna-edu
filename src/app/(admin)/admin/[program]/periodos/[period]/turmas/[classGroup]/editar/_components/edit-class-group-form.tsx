@@ -8,10 +8,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { isRedirectError } from "@/lib/is-redirect-error";
-import { Shift } from "@/generated/prisma/client";
+import { Shift } from "@/generated/prisma/enums";
 import { shiftLabels } from "../../../schema";
 import { updateClassGroupAction } from "../actions";
 import { editClassGroupSchema, type EditClassGroupInput } from "../schema";
+
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Controller } from "react-hook-form";
 
 interface EditClassGroupFormProps {
     programSlug: string;
@@ -41,17 +44,19 @@ export function EditClassGroupForm({
         mode: "onChange",
         defaultValues: {
             name: defaultValues.name,
+            shift: defaultValues.shift,
         },
     });
 
     const {
         register,
-        formState: { errors, isSubmitting, isValid, isDirty },
+        control,
+        formState: { errors, isSubmitting, isValid },
         setError,
         clearErrors,
     } = form;
 
-    const canSubmit = isValid && isDirty && !isSubmitting;
+    const canSubmit = isValid && !isSubmitting;
 
     const onSubmit: SubmitHandler<EditClassGroupInput> = async (data) => {
         clearErrors("root");
@@ -95,9 +100,31 @@ export function EditClassGroupForm({
                     <Label htmlFor="basePeriod">Série</Label>
                     <Input id="basePeriod" defaultValue={`${defaultValues.basePeriod}ª Série / ${defaultValues.basePeriod}º Ano`} readOnly disabled className="p-5 rounded-lg bg-muted text-muted-foreground" />
                 </div>
-                <div className="space-y-2">
-                    <Label htmlFor="shift">Turno</Label>
-                    <Input id="shift" defaultValue={shiftLabels[defaultValues.shift]} readOnly disabled className="p-5 rounded-lg bg-muted text-muted-foreground" />
+                <div className="space-y-2 flex flex-col justify-end">
+                    <Label htmlFor="shift">Turno *</Label>
+                    <Controller
+                        name="shift"
+                        control={control}
+                        render={({ field }) => (
+                            <Select
+                                onValueChange={field.onChange}
+                                value={field.value}
+                                disabled={isSubmitting}
+                            >
+                                <SelectTrigger className="w-full p-5 rounded-lg bg-background h-auto">
+                                    <SelectValue placeholder="Selecione o turno" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {Object.entries(shiftLabels).map(([value, label]) => (
+                                        <SelectItem key={value} value={value}>
+                                            {label}
+                                        </SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+                        )}
+                    />
+                    {errors.shift && <p className="text-sm text-red-600">{errors.shift.message}</p>}
                 </div>
             </div>
             <div className="flex flex-col-reverse sm:flex-row gap-3 justify-end pt-4 border-t items-center mt-6">

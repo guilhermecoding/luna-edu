@@ -175,14 +175,26 @@ export async function updateClassGroup(
     id: string,
     data: {
         name: string;
+        shift: Shift;
     },
 ): Promise<ClassGroup> {
     try {
-        return await prisma.classGroup.update({
-            where: { id },
-            data: {
-                name: data.name,
-            },
+        return await prisma.$transaction(async (tx) => {
+            const updatedGroup = await tx.classGroup.update({
+                where: { id },
+                data: {
+                    name: data.name,
+                    shift: data.shift,
+                },
+            });
+
+            // Sincroniza o turno de todas as disciplinas da turma física
+            await tx.course.updateMany({
+                where: { classGroupId: id },
+                data: { shift: data.shift },
+            });
+
+            return updatedGroup;
         });
     } catch (error) {
         if (

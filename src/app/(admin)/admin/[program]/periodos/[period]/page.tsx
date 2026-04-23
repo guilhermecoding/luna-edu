@@ -1,7 +1,7 @@
 import Page from "@/components/page";
 import Section from "@/components/section";
 import TitlePage from "@/components/title-page";
-import { IconCalendarFilled, IconCalendarEvent, IconSchool, IconCircleCheck, IconUsers, IconProgress, IconPencil } from "@tabler/icons-react";
+import { IconCalendarFilled, IconSchool, IconCircleCheck, IconUsers, IconProgress, IconPencil } from "@tabler/icons-react";
 import { ButtonLink } from "@/components/ui/button-link";
 import { getPeriodByProgramAndSlug } from "@/services/periods/periods.service";
 import { getSubPeriodsByPeriodId } from "@/services/sub-periods/sub-periods.service";
@@ -10,6 +10,7 @@ import { notFound } from "next/navigation";
 import { Metadata } from "next";
 import InfoBoxPeriod from "luna-edu/src/app/(admin)/admin/[program]/periodos/[period]/_components/info-box-period";
 import ClassGroupsPreview from "./_components/class-groups-preview";
+import SubPeriodsPreview from "./_components/sub-periods-preview";
 
 export const metadata: Metadata = {
     title: "Período Letivo",
@@ -31,6 +32,7 @@ export default async function PeriodPage({
         getSubPeriodsByPeriodId(periodData.id),
         getClassGroupsByPeriodId(periodData.id),
     ]);
+    const previewSubPeriods = subPeriods.slice(0, 5);
     const previewClassGroups = classGroups.slice(0, 5);
 
     const isActive = !periodData.completedAt;
@@ -50,7 +52,7 @@ export default async function PeriodPage({
                         />
                     </div>
                     <div className="flex flex-1 justify-end items-end">
-                        <ButtonLink className="w-full sm:w-auto bg-transparent border-2 border-dashed border-primary hover:bg-primary hover:text-background hover:border-solid" href={`/admin/${program}/periodos/${period}/editar`}>
+                        <ButtonLink className="w-full sm:w-auto bg-transparent border-2 border-dashed border-primary hover:bg-primary text-primary hover:text-background hover:border-solid" href={`/admin/${program}/periodos/${period}/editar`}>
                             <IconPencil className="size-5" />
                             Editar Período
                         </ButtonLink>
@@ -95,32 +97,14 @@ export default async function PeriodPage({
                 />
             </Section>
 
-            {/* Cards de navegação rápida */}
+            {/* Visualização de parte das etapas */}
             <Section className="mt-12">
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {/* Sub-períodos (Bimestres) */}
-                    <div className="border border-surface-border rounded-2xl bg-surface p-6 flex flex-col gap-4">
-                        <div className="flex items-center gap-3">
-                            <div className="flex justify-center items-center bg-amber-100 dark:bg-amber-900/30 size-10 rounded-xl text-amber-600 dark:text-amber-400 shrink-0">
-                                <IconCalendarEvent className="size-5" />
-                            </div>
-                            <div>
-                                <h3 className="font-bold text-sm">Etapas Avaliativas</h3>
-                                <p className="text-xs text-muted-foreground">Bimestres / Trimestres</p>
-                            </div>
-                        </div>
-                        <div className="flex items-center justify-between mt-auto">
-                            <span className="text-2xl font-bold">{subPeriods.length}</span>
-                            <ButtonLink
-                                href={`/admin/${program}/periodos/${period}/etapas`}
-                                variant="outline"
-                                className="text-xs"
-                            >
-                                Gerenciar
-                            </ButtonLink>
-                        </div>
-                    </div>
-                </div>
+                <SubPeriodsPreview
+                    subPeriods={previewSubPeriods}
+                    totalSubPeriods={subPeriods.length}
+                    programSlug={program}
+                    periodSlug={period}
+                />
             </Section>
         </Page>
     );

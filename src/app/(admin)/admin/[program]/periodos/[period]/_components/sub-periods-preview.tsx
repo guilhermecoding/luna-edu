@@ -119,7 +119,7 @@ export default function SubPeriodsPreview({
                                     >
                                         <div className="min-w-0">
                                             <p className="text-lg font-bold truncate">{subPeriod.name}</p>
-                                            <p className="text-xs flex flex-row items-center gap-1 font-mono font-medium uppercase text-muted-foreground truncate">
+                                            <p className="text-xs flex flex-row items-center gap-1 font-mono font-bold uppercase text-muted-foreground truncate">
                                                 <IconCodeAsterisk className="size-3.5" /> {subPeriod.slug}
                                             </p>
                                         </div>

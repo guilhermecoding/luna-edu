@@ -42,6 +42,7 @@ import {
     editClassGroupCourseSchema,
     type EditClassGroupCourseInput,
 } from "../schema";
+import { ButtonLink } from "luna-edu/src/components/ui/button-link";
 
 type FormInput = z.input<typeof editClassGroupCourseSchema>;
 type FormOutput = z.output<typeof editClassGroupCourseSchema>;
@@ -312,62 +313,75 @@ export function EditClassGroupSubjectForm({
 
             <div className="space-y-2">
                 <Label htmlFor="roomId">Sala padrão</Label>
-                <Controller
-                    control={control}
-                    name="roomId"
-                    render={({ field }) => (
-                        <Select
-                            value={field.value || ""}
-                            onValueChange={field.onChange}
-                            disabled={isSubmitting}
-                        >
-                            <SelectTrigger
-                                id="roomId"
-                                className="p-5 rounded-lg bg-background w-full"
-                                aria-invalid={errors.roomId ? "true" : "false"}
+                {rooms.length === 0 ? (
+                    <div className="p-4 flex flex-col items-center justify-center gap-2 border-2 border-dashed border-surface-border rounded-xl bg-surface/30 text-center">
+                        <p className="text-sm text-muted-foreground">
+                            Nenhuma sala cadastrada.
+                            <br /> Comece cadastrando a sala na instituição correspondente.
+                        </p>
+                        <ButtonLink variant="outline" href={"/admin/instituicoes"} className="w-full sm:w-auto">
+                            <IconPlus className="size-4 mr-1" />
+                            Adicionar Sala
+                        </ButtonLink>
+                    </div>
+                ) : (
+                    <Controller
+                        control={control}
+                        name="roomId"
+                        render={({ field }) => (
+                            <Select
+                                value={field.value || ""}
+                                onValueChange={field.onChange}
+                                disabled={isSubmitting}
                             >
-                                <SelectValue placeholder="Selecione uma sala (opcional)">
-                                    {field.value ? (
-                                        <span key={field.value}>
-                                            {rooms.find((room) => room.id === field.value)?.name}
-                                        </span>
-                                    ) : null}
-                                </SelectValue>
-                            </SelectTrigger>
-                            <SelectContent>
-                                {Object.entries(roomsByCampus).map(([campusName, campusRooms]) => (
-                                    <SelectGroup key={campusName}>
-                                        <SelectLabel className="text-xs text-muted-foreground uppercase font-semibold">
-                                            {campusName}
-                                        </SelectLabel>
-                                        {campusRooms.map((room, index) => (
-                                            <Fragment key={room.id}>
-                                                <SelectItem value={room.id}>
-                                                    <span className="flex flex-col gap-0.5 py-1">
-                                                        <span className="font-semibold text-sm">{room.name}</span>
-                                                        <span className="flex flex-wrap gap-2 mt-1">
-                                                            <span className="flex items-center gap-1 bg-muted px-2 py-0.5 rounded-md text-[10px] text-muted-foreground border border-surface-border">
-                                                                <IconBuilding className="size-3" />
-                                                                <span>Bloco {room.block || "S/B"}</span>
-                                                            </span>
-                                                            <span className="flex items-center gap-1 bg-muted px-2 py-0.5 rounded-md text-[10px] text-muted-foreground border border-surface-border">
-                                                                <IconUsers className="size-3" />
-                                                                <span>{Number(room.capacity)} vagas</span>
+                                <SelectTrigger
+                                    id="roomId"
+                                    className="p-5 rounded-lg bg-background w-full"
+                                    aria-invalid={errors.roomId ? "true" : "false"}
+                                >
+                                    <SelectValue placeholder="Selecione uma sala (opcional)">
+                                        {field.value ? (
+                                            <span key={field.value}>
+                                                {rooms.find((room) => room.id === field.value)?.name}
+                                            </span>
+                                        ) : null}
+                                    </SelectValue>
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {Object.entries(roomsByCampus).map(([campusName, campusRooms]) => (
+                                        <SelectGroup key={campusName}>
+                                            <SelectLabel className="text-xs text-muted-foreground uppercase font-semibold">
+                                                {campusName}
+                                            </SelectLabel>
+                                            {campusRooms.map((room, index) => (
+                                                <Fragment key={room.id}>
+                                                    <SelectItem value={room.id}>
+                                                        <span className="flex flex-col gap-0.5 py-1">
+                                                            <span className="font-semibold text-sm">{room.name}</span>
+                                                            <span className="flex flex-wrap gap-2 mt-1">
+                                                                <span className="flex items-center gap-1 bg-muted px-2 py-0.5 rounded-md text-[10px] text-muted-foreground border border-surface-border">
+                                                                    <IconBuilding className="size-3" />
+                                                                    <span>Bloco {room.block || "S/B"}</span>
+                                                                </span>
+                                                                <span className="flex items-center gap-1 bg-muted px-2 py-0.5 rounded-md text-[10px] text-muted-foreground border border-surface-border">
+                                                                    <IconUsers className="size-3" />
+                                                                    <span>{Number(room.capacity)} vagas</span>
+                                                                </span>
                                                             </span>
                                                         </span>
-                                                    </span>
-                                                </SelectItem>
-                                                {index < campusRooms.length - 1 && (
-                                                    <Separator className="my-1 opacity-50" />
-                                                )}
-                                            </Fragment>
-                                        ))}
-                                    </SelectGroup>
-                                ))}
-                            </SelectContent>
-                        </Select>
-                    )}
-                />
+                                                    </SelectItem>
+                                                    {index < campusRooms.length - 1 && (
+                                                        <Separator className="my-1 opacity-50" />
+                                                    )}
+                                                </Fragment>
+                                            ))}
+                                        </SelectGroup>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+                        )}
+                    />
+                )}
                 {errors.roomId && <p className="text-sm text-red-600">{errors.roomId.message}</p>}
             </div>
 

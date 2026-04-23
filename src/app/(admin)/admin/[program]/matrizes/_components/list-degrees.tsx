@@ -62,9 +62,9 @@ function DegreeTag({
     value: string;
 }) {
     return (
-        <div className="flex flex-row items-center gap-1 whitespace-nowrap font-medium bg-primary text-white dark:text-black px-2 py-1 rounded-full">
-            {icon}
-            <span>
+        <div className="inline-flex w-40 min-w-0 max-w-40 overflow-hidden flex-row items-center gap-1 whitespace-nowrap font-medium bg-primary text-white dark:text-black px-2 py-1 rounded-full">
+            <span className="shrink-0">{icon}</span>
+            <span className="min-w-0 flex-1 truncate" title={value}>
                 {value}
             </span>
         </div>
@@ -89,7 +89,7 @@ async function ListDegreesContent({
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {degreesData.map((degree, index) => (
-                <div key={degree.id} className="border border-surface-border rounded-4xl p-6 bg-surface flex flex-col items-start hover:border-primary/50 transition-colors">
+                <div key={degree.id} className="border overflow-hidden border-surface-border rounded-4xl p-6 bg-surface flex flex-col items-start hover:border-primary/50 transition-colors">
                     <div className="flex justify-center items-center bg-background border border-surface-border size-12 p-3 rounded-lg mb-4 text-primary">
                         <span className="font-bold font-silkscreen text-2xl">
                             {index + 1}
@@ -97,7 +97,7 @@ async function ListDegreesContent({
                     </div>
                     <div className="flex-1 w-full">
                         <h4 className="text-2xl sm:text-3xl capitalize font-semibold line-clamp-2" title={degree.name}>{degree.name}</h4>
-                        <div className="flex flex-wrap gap-2 text-xs text-muted-foreground my-3">
+                        <div className="flex min-w-0 flex-wrap gap-2 text-xs text-muted-foreground my-3">
                             <DegreeTag icon={<IconUnlink className="size-4" />} value={degree.slug} />
                             {degree.totalHours && <DegreeTag icon={<IconClock className="size-4" />} value={`${degree.totalHours}h`} />}
                             {degree.modality && <DegreeTag icon={<IconEye className="size-4" />} value={degree.modality} />}

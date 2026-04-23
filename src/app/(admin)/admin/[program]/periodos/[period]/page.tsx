@@ -1,7 +1,7 @@
 import Page from "@/components/page";
 import Section from "@/components/section";
 import TitlePage from "@/components/title-page";
-import { IconCalendarFilled, IconUsersGroup, IconCalendarEvent, IconSchool, IconUserCheck, IconCircleCheck, IconUsers, IconProgress } from "@tabler/icons-react";
+import { IconCalendarFilled, IconUsersGroup, IconCalendarEvent, IconSchool, IconCircleCheck, IconUsers, IconProgress } from "@tabler/icons-react";
 import { ButtonLink } from "@/components/ui/button-link";
 import { getPeriodByProgramAndSlug } from "@/services/periods/periods.service";
 import { getSubPeriodsByPeriodId } from "@/services/sub-periods/sub-periods.service";
@@ -9,6 +9,7 @@ import { getClassGroupsByPeriodId } from "@/services/class-groups/class-groups.s
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
 import InfoBoxPeriod from "luna-edu/src/app/(admin)/admin/[program]/periodos/[period]/_components/info-box-period";
+import ClassGroupsPreview from "./_components/class-groups-preview";
 
 export const metadata: Metadata = {
     title: "Período Letivo",
@@ -30,6 +31,7 @@ export default async function PeriodPage({
         getSubPeriodsByPeriodId(periodData.id),
         getClassGroupsByPeriodId(periodData.id),
     ]);
+    const previewClassGroups = classGroups.slice(0, 5);
 
     const isActive = !periodData.completedAt;
 
@@ -85,6 +87,15 @@ export default async function PeriodPage({
                     value={isActive ? "ATIVO" : "FINALIZADO"}
                     color="purple"
                     icon={<IconProgress className="size-full" />}
+                />
+            </Section>
+
+            {/* Visualização de parte das turmas */}
+            <Section className="mt-12">
+                <ClassGroupsPreview
+                    classGroups={previewClassGroups}
+                    programSlug={program}
+                    periodSlug={period}
                 />
             </Section>
 

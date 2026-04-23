@@ -220,31 +220,39 @@ export function CreateClassForm({
                 {/* Matriz Curricular */}
                 <div className="space-y-2">
                     <Label htmlFor="degreeId">Matriz Curricular *</Label>
-                    <Controller
-                        control={control}
-                        name="degreeId"
-                        render={({ field }) => (
-                            <Select
-                                value={field.value || ""}
-                                onValueChange={field.onChange}
-                                disabled={isSubmitting}
-                            >
-                                <SelectTrigger
-                                    id="degreeId"
-                                    className="p-5 rounded-lg bg-background w-full"
+                    {degrees.length === 0 ? (
+                        <div className="p-4 border-2 border-dashed border-surface-border rounded-xl bg-surface/30 text-center">
+                            <p className="text-sm text-muted-foreground">
+                                Nenhuma Matriz cadastrada para este programa. <br /> Comece criando a primeira.
+                            </p>
+                        </div>
+                    ) : (
+                        <Controller
+                            control={control}
+                            name="degreeId"
+                            render={({ field }) => (
+                                <Select
+                                    value={field.value || ""}
+                                    onValueChange={field.onChange}
+                                    disabled={isSubmitting}
                                 >
-                                    <SelectValue placeholder="Selecione a matriz" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    {degrees.map((d) => (
-                                        <SelectItem key={d.id} value={d.id}>
-                                            {d.name}
-                                        </SelectItem>
-                                    ))}
-                                </SelectContent>
-                            </Select>
-                        )}
-                    />
+                                    <SelectTrigger
+                                        id="degreeId"
+                                        className="p-5 rounded-lg bg-background w-full"
+                                    >
+                                        <SelectValue placeholder="Selecione a matriz" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {degrees.map((d) => (
+                                            <SelectItem key={d.id} value={d.id}>
+                                                {d.name}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                            )}
+                        />
+                    )}
                     {errors.degreeId && (
                         <p className="text-sm text-red-600">{errors.degreeId.message}</p>
                     )}
@@ -345,7 +353,7 @@ export function CreateClassForm({
                     <div className="flex items-center gap-2 text-blue-800 dark:text-blue-300">
                         <IconBooks className="size-5" />
                         <p className="font-semibold text-sm">
-                            {matchingSubjects.length} disciplina{matchingSubjects.length !== 1 ? "s" : ""} será{matchingSubjects.length !== 1 ? "ão" : ""} gerada{matchingSubjects.length !== 1 ? "s" : ""} automaticamente:
+                            {matchingSubjects.length} disciplina{matchingSubjects.length !== 1 ? "s" : ""} ser{matchingSubjects.length !== 1 ? "ão" : "á"} gerada{matchingSubjects.length !== 1 ? "s" : ""} automaticamente:
                         </p>
                     </div>
                     <div className="flex flex-wrap gap-2">

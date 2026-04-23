@@ -140,7 +140,7 @@ async function ListClassGroupsContent({
                                     <div className="flex items-center gap-3 w-full z-20">
                                         <div className="flex flex-1 flex-col items-start justify-center px-3 py-1 min-w-0">
                                             <h3 className="font-bold text-2xl">{group.name}</h3>
-                                            <p className="text-xs flex flex-row gap-1 items-center font-mono text-muted-foreground uppercase">
+                                            <p className="text-xs flex flex-row gap-1 items-center font-semibold font-mono text-muted-foreground uppercase">
                                                 <IconCodeAsterisk className="size-4" /> {group.slug}
                                             </p>
                                         </div>

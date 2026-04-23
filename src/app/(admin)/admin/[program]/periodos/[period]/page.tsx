@@ -1,13 +1,14 @@
 import Page from "@/components/page";
 import Section from "@/components/section";
 import TitlePage from "@/components/title-page";
-import { IconCalendarFilled, IconUsersGroup, IconLayoutGrid, IconCalendarEvent } from "@tabler/icons-react";
+import { IconCalendarFilled, IconUsersGroup, IconCalendarEvent, IconSchool, IconUserCheck, IconCircleCheck, IconUsers, IconProgress } from "@tabler/icons-react";
 import { ButtonLink } from "@/components/ui/button-link";
 import { getPeriodByProgramAndSlug } from "@/services/periods/periods.service";
 import { getSubPeriodsByPeriodId } from "@/services/sub-periods/sub-periods.service";
 import { getClassGroupsByPeriodId } from "@/services/class-groups/class-groups.service";
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
+import InfoBoxPeriod from "luna-edu/src/app/(admin)/admin/[program]/periodos/[period]/_components/info-box-period";
 
 export const metadata: Metadata = {
     title: "Período Letivo",
@@ -43,7 +44,7 @@ export default async function PeriodPage({
                     <div className="flex-1">
                         <TitlePage
                             title={periodData.name}
-                            description={`${new Date(periodData.startDate).toLocaleDateString("pt-BR")} à ${new Date(periodData.endDate).toLocaleDateString("pt-BR")}`}
+                            description={`De ${new Date(periodData.startDate).toLocaleDateString("pt-BR")} à ${new Date(periodData.endDate).toLocaleDateString("pt-BR")}`}
                         />
                         <div className="mt-3">
                             <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold ${isActive ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400" : "bg-muted text-muted-foreground"}`}>
@@ -58,6 +59,33 @@ export default async function PeriodPage({
                         </ButtonLink>
                     </div>
                 </div>
+            </Section>
+
+            <Section className="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <InfoBoxPeriod
+                    label="TOTAL DE ALUNOS"
+                    value={592}
+                    color="indigo"
+                    icon={<IconUsers className="size-full" />}
+                />
+                <InfoBoxPeriod
+                    label="ALUNOS MATRICULADOS"
+                    value={534}
+                    color="emerald"
+                    icon={<IconCircleCheck className="size-full" />}
+                />
+                <InfoBoxPeriod
+                    label="TOTAL DE TURMAS"
+                    value={12}
+                    color="amber"
+                    icon={<IconSchool className="size-full" />}
+                />
+                <InfoBoxPeriod
+                    label="STATUS"
+                    value={isActive ? "ATIVO" : "FINALIZADO"}
+                    color="purple"
+                    icon={<IconProgress className="size-full" />}
+                />
             </Section>
 
             {/* Cards de navegação rápida */}

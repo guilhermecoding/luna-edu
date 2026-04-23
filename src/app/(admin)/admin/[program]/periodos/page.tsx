@@ -1,15 +1,15 @@
-import type { Metadata } from "next";
 import Page from "@/components/page";
 import Section from "@/components/section";
 import TitlePage from "@/components/title-page";
 import { ButtonLink } from "@/components/ui/button-link";
+import { getPeriodsByProgramSlug } from "@/services/periods/periods.service";
 import { IconCalendarPlus } from "@tabler/icons-react";
+import type { Metadata } from "next";
 import CurrentPeriod from "./_components/current-period";
 import ListOthersPeriods from "./_components/list-others-periods";
-import { getPeriodsByProgramSlug } from "@/services/periods/periods.service";
 
 export const metadata: Metadata = {
-    title: "Períodos",
+    title: "Períodos Letivos",
 };
 
 export default async function PeriodsPage({
@@ -25,7 +25,7 @@ export default async function PeriodsPage({
                 <div className="flex flex-col lg:flex-row gap-y-6">
                     <div className="flex-1">
                         <TitlePage
-                            title="Períodos"
+                            title="Períodos Letivos"
                             description="Gerencie os períodos letivos do programa."
                         />
                     </div>

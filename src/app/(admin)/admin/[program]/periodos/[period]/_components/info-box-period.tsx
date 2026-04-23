@@ -1,97 +1,44 @@
-import InfoBoxBase from "@/components/info-box-base";
-import { IconBackpack, IconCalendarFilled, IconCirclesRelation, IconCodeAsterisk, IconEdit, IconGrid3x3, IconProgress, IconSchool, IconUsers } from "@tabler/icons-react";
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import { ReactNode } from "react";
 
-function InfoBoxPeriodItem({
-    label,
-    value,
-    icon,
-    labelClassName,
-    valueClassName,
-}: {
-    label: string,
-    value: string,
-    icon?: React.ReactNode,
-    labelClassName?: string,
-    valueClassName?: string,
-}) {
-    return (
-        <div className="flex flex-col gap-1">
-            <div className="flex flex-row items-center gap-1">
-                {icon && (
-                    <span className="text-muted-foreground">
-                        {icon}
-                    </span>
-                )}
-                <span className={cn("text-base text-muted-foreground font-medium", labelClassName)}>
-                    {label}
-                </span>
-            </div>
-            <p className={cn("text-2xl font-semibold", valueClassName)}>{value}</p>
-        </div>
-    );
+type Color = "indigo" | "green" | "rose" | "emerald" | "purple" | "amber";
+interface InfoBoxPeriodProps {
+    label: string;
+    value: number | string;
+    color?: Color;
+    icon?: ReactNode;
 }
 
-export default function InfoBoxPeriod() {
+const colorMap: Record<string, { text: string; bg: string }> = {
+    indigo: { text: "text-indigo-500", bg: "bg-indigo-500" },
+    green: { text: "text-green-500", bg: "bg-green-500" },
+    rose: { text: "text-rose-500", bg: "bg-rose-500" },
+    emerald: { text: "text-emerald-500", bg: "bg-emerald-500" },
+    purple: { text: "text-purple-500", bg: "bg-purple-500" },
+    amber: { text: "text-amber-500", bg: "bg-amber-500" },
+};
+
+export default function InfoBoxPeriod({ label, value, color = "indigo", icon }: InfoBoxPeriodProps) {
+    const colors = colorMap[color] || colorMap.indigo;
+
     return (
-        <InfoBoxBase
-            title="2° Ciclo de 2026"
-            icon={<IconCalendarFilled className="size-9.5 -mt-1" />}
-        >
-            <div className="flex flex-col gap-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {/* Coluna 1 */}
-                    <div className="flex flex-col gap-3">
-                        <InfoBoxPeriodItem
-                            icon={<IconGrid3x3 className="size-4" />}
-                            label="Slug do Período"
-                            value="2c26"
-                        />
-                        <InfoBoxPeriodItem
-                            icon={<IconCodeAsterisk className="size-4" />}
-                            label="Código Canônico"
-                            value="2026.2"
-                        />
-                        <InfoBoxPeriodItem
-                            icon={<IconProgress className="size-4" />}
-                            label="Status"
-                            value="Ativo"
-                        />
-                        <InfoBoxPeriodItem
-                            icon={<IconCirclesRelation className="size-4" />}
-                            label="Condição"
-                            value="Em Andamento"
-                        />
-                    </div>
+        <div className="relative overflow-hidden top-0 left-0 bg-surface w-full border border-surface-border text-center flex flex-col justify-center items-center gap-2 py-7 px-5 rounded-4xl">
+            <span className="text-xl md:text-2xl font-medium text-muted-foreground z-10">
+                {label}
+            </span>
+            <span
+                className={`text-3xl md:text-4xl font-bold z-10 ${colors.text} truncate w-full block`}
+                title={value.toString()}
+            >
+                {value}
+            </span>
 
-                    {/* Coluna 2 */}
-                    <div className="flex flex-col gap-3">
-                        <InfoBoxPeriodItem
-                            icon={<IconSchool className="size-4.5" />}
-                            label="Alunos Matriculados"
-                            value="105"
-                        />
-                        <InfoBoxPeriodItem
-                            icon={<IconUsers className="size-4.5" />}
-                            label="Total de Alunos"
-                            value="120"
-                        />
-                        <InfoBoxPeriodItem
-                            icon={<IconBackpack className="size-4" />}
-                            label="Disciplinas"
-                            value="12"
-                        />
-                    </div>
+            {icon ? (
+                <div className={`absolute top-6 -right-3 opacity-5 ${colors.text}`}>
+                    <div className="size-40 md:size-48">{icon}</div>
                 </div>
-
-                <div className="flex justify-end pt-2 border-t border-border">
-                    <Button variant="outline" className="gap-2">
-                        <IconEdit className="size-4" />
-                        Editar Conteúdo
-                    </Button>
-                </div>
-            </div>
-        </InfoBoxBase>
+            ) : (
+                <div className={`${colors.bg} size-48 rounded-full absolute -top-28 -right-28 opacity-10`}></div>
+            )}
+        </div>
     );
 }

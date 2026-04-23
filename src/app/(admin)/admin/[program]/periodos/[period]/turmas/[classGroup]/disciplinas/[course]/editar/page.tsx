@@ -9,6 +9,8 @@ import { getClassGroupByPeriodIdAndSlug } from "@/services/class-groups/class-gr
 import { getCourseByPeriodIdAndCode } from "@/services/courses/courses.service";
 import { getPeriodByProgramAndSlug } from "@/services/periods/periods.service";
 import { getSubjectsByDegreeAndBasePeriod } from "@/services/subjects/subjects.service";
+import { getAllRooms } from "@/services/rooms/rooms.service";
+import { getTeachers, getTimeSlotsByProgramSlug } from "@/services/schedules/schedules.service";
 import { EditClassGroupSubjectForm } from "./_components/edit-class-group-subject-form";
 
 export const metadata: Metadata = {
@@ -49,6 +51,11 @@ async function EditClassGroupCourseContent({
             .map((groupCourse) => groupCourse.subjectId),
     );
     const availableSubjects = allSubjects.filter((subject) => !usedSubjectIds.has(subject.id));
+    const [rooms, timeSlots, teachers] = await Promise.all([
+        getAllRooms(),
+        getTimeSlotsByProgramSlug(program),
+        getTeachers(),
+    ]);
 
     return (
         <Page>
@@ -68,12 +75,22 @@ async function EditClassGroupCourseContent({
                                 code: course.code,
                                 subjectId: course.subjectId,
                                 shift: course.shift,
+                                roomId: course.roomId || "",
+                                schedules: course.schedules.map((schedule) => ({
+                                    dayOfWeek: schedule.dayOfWeek,
+                                    timeSlotId: schedule.timeSlotId,
+                                    teacherId: schedule.teacherId || "",
+                                    roomId: schedule.roomId || "",
+                                })),
                             }}
                             subjects={availableSubjects.map((subject) => ({
                                 id: subject.id,
                                 name: subject.name,
                                 code: subject.code,
                             }))}
+                            rooms={rooms}
+                            timeSlots={timeSlots}
+                            teachers={teachers}
                         />
                     </div>
                 </BaseForm>

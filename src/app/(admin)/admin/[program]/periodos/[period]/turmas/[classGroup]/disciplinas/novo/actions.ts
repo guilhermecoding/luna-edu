@@ -3,6 +3,7 @@
 import { revalidatePath, updateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import { ZodError } from "zod";
+import { DayOfWeek } from "@/generated/prisma/client";
 import { createCourse, getCourseByPeriodIdAndCode, getCoursesByClassGroupId } from "@/services/courses/courses.service";
 import { getClassGroupByPeriodIdAndSlug } from "@/services/class-groups/class-groups.service";
 import { getPeriodByProgramAndSlug } from "@/services/periods/periods.service";
@@ -56,8 +57,15 @@ export async function createClassGroupSubjectAction(
             code: validatedData.code,
             periodId: period.id,
             subjectId: subject.id,
+            roomId: validatedData.roomId || null,
             shift: validatedData.shift,
             classGroupId: classGroup.id,
+            schedules: validatedData.schedules.map((schedule) => ({
+                dayOfWeek: schedule.dayOfWeek as DayOfWeek,
+                timeSlotId: schedule.timeSlotId,
+                teacherId: schedule.teacherId || null,
+                roomId: schedule.roomId || null,
+            })),
         });
 
         updateTag(`period:${period.id}:courses`);

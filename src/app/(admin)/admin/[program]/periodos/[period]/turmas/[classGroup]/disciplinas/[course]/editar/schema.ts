@@ -1,5 +1,5 @@
 import z from "zod";
-import { SHIFTS } from "../../../../../turmas/schema";
+import { scheduleEntrySchema, SHIFTS } from "../../../../../turmas/schema";
 
 export const editClassGroupCourseSchema = z.object({
     subjectId: z.string().min(1, "Selecione uma disciplina"),
@@ -7,6 +7,8 @@ export const editClassGroupCourseSchema = z.object({
     shift: z.enum(SHIFTS, {
         message: "Selecione um turno",
     }),
+    roomId: z.string().optional().or(z.literal("")),
+    schedules: z.array(scheduleEntrySchema).default([]),
 });
 
 export const deleteClassGroupCourseSchema = z.object({

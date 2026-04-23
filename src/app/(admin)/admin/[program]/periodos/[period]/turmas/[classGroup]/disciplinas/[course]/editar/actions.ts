@@ -69,14 +69,14 @@ export async function editClassGroupCourseAction(
             name: validatedData.name,
             code: course.code,
             subjectId: validatedData.subjectId,
-            roomId: course.roomId,
+            roomId: validatedData.roomId || null,
             shift: validatedData.shift as Shift,
             classGroupId: classGroup.id,
-            schedules: course.schedules.map((schedule) => ({
+            schedules: validatedData.schedules.map((schedule) => ({
                 dayOfWeek: schedule.dayOfWeek as DayOfWeek,
                 timeSlotId: schedule.timeSlotId,
-                teacherId: schedule.teacherId,
-                roomId: schedule.roomId,
+                teacherId: schedule.teacherId || null,
+                roomId: schedule.roomId || null,
             })),
         });
 

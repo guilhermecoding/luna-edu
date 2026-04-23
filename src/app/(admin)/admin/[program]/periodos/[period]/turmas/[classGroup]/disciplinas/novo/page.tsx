@@ -8,6 +8,8 @@ import { notFound } from "next/navigation";
 import { getPeriodByProgramAndSlug } from "@/services/periods/periods.service";
 import { getClassGroupByPeriodIdAndSlug } from "@/services/class-groups/class-groups.service";
 import { getSubjectsByDegreeAndBasePeriod } from "@/services/subjects/subjects.service";
+import { getAllRooms } from "@/services/rooms/rooms.service";
+import { getTeachers, getTimeSlotsByProgramSlug } from "@/services/schedules/schedules.service";
 import { CreateClassGroupSubjectForm } from "./_components/create-class-group-subject-form";
 
 export const metadata: Metadata = {
@@ -34,6 +36,11 @@ async function NewClassGroupSubjectContent({
     const allSubjects = await getSubjectsByDegreeAndBasePeriod(classGroup.degreeId, classGroup.basePeriod);
     const usedSubjectIds = new Set(classGroup.courses.map((course) => course.subjectId));
     const availableSubjects = allSubjects.filter((subject) => !usedSubjectIds.has(subject.id));
+    const [rooms, timeSlots, teachers] = await Promise.all([
+        getAllRooms(),
+        getTimeSlotsByProgramSlug(program),
+        getTeachers(),
+    ]);
 
     return (
         <Page>
@@ -59,6 +66,9 @@ async function NewClassGroupSubjectContent({
                                     name: subject.name,
                                     code: subject.code,
                                 }))}
+                                rooms={rooms}
+                                timeSlots={timeSlots}
+                                teachers={teachers}
                             />
                         </Suspense>
                     </div>

@@ -1,5 +1,5 @@
 import z from "zod";
-import { SHIFTS } from "../../../schema";
+import { scheduleEntrySchema, SHIFTS } from "../../../schema";
 
 export const createClassGroupSubjectSchema = z.object({
     subjectId: z.string().min(1, "Selecione uma disciplina"),
@@ -11,6 +11,8 @@ export const createClassGroupSubjectSchema = z.object({
     shift: z.enum(SHIFTS, {
         message: "Selecione um turno",
     }),
+    roomId: z.string().optional().or(z.literal("")),
+    schedules: z.array(scheduleEntrySchema).default([]),
 });
 
 export type CreateClassGroupSubjectInput = z.infer<typeof createClassGroupSubjectSchema>;

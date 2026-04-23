@@ -91,14 +91,17 @@ export function EditClassGroupForm({
                 <div className="space-y-2">
                     <Label htmlFor="slug">Código</Label>
                     <Input id="slug" defaultValue={defaultValues.slug} readOnly disabled className="p-5 rounded-lg bg-muted text-muted-foreground uppercase" />
+                    <p className="text-[10px] text-muted-foreground px-1">Este campo não pode ser alterado.</p>
                 </div>
                 <div className="space-y-2">
                     <Label htmlFor="degree">Matriz</Label>
                     <Input id="degree" defaultValue={defaultValues.degreeName} readOnly disabled className="p-5 rounded-lg bg-muted text-muted-foreground" />
+                    <p className="text-[10px] text-muted-foreground px-1">Este campo não pode ser alterado.</p>
                 </div>
                 <div className="space-y-2">
                     <Label htmlFor="basePeriod">Série</Label>
                     <Input id="basePeriod" defaultValue={`${defaultValues.basePeriod}ª Série / ${defaultValues.basePeriod}º Ano`} readOnly disabled className="p-5 rounded-lg bg-muted text-muted-foreground" />
+                    <p className="text-[10px] text-muted-foreground px-1">Este campo não pode ser alterado.</p>
                 </div>
                 <div className="space-y-2 flex flex-col justify-end">
                     <Label htmlFor="shift">Turno *</Label>
@@ -128,10 +131,10 @@ export function EditClassGroupForm({
                 </div>
             </div>
             <div className="flex flex-col-reverse sm:flex-row gap-3 justify-end pt-4 border-t items-center mt-6">
-                <Button type="button" variant="outline" onClick={() => router.back()} disabled={isSubmitting}>
+                <Button type="button" className="w-full sm:w-auto" variant="outline" onClick={() => router.back()} disabled={isSubmitting}>
                     Cancelar
                 </Button>
-                <Button type="submit" disabled={!canSubmit} className="flex items-center gap-2">
+                <Button type="submit" disabled={!canSubmit} className="flex items-center gap-2 w-full sm:w-auto">
                     {isSubmitting && <IconLoader2 className="size-5 animate-spin" />}
                     {isSubmitting ? "Salvando..." : "Salvar Alterações"}
                 </Button>

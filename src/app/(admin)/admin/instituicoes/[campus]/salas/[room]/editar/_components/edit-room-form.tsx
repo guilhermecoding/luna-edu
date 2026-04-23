@@ -248,7 +248,7 @@ export function EditRoomForm({ campusSlug, initialData }: EditRoomFormProps) {
                         <h3 className="text-xl font-semibold text-destructive">Zona de Perigo</h3>
                     </div>
                     <p className="text-sm text-muted-foreground mt-1">
-                        Esta ação removerá a sala <b>permanentemente</b>. Apenas salas sem reservas ou turmas vinculadas podem ser excluídas.
+                        Esta ação removerá a sala <b>permanentemente</b>. Se houver salas vinculadas à turmas/disciplinas, elas serão desvinculadas.
                     </p>
                 </div>
 

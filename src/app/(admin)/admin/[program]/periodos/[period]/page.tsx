@@ -78,7 +78,7 @@ export default async function PeriodPage({
                 />
                 <InfoBoxPeriod
                     label="TOTAL DE TURMAS"
-                    value={12}
+                    value={classGroups.length}
                     color="amber"
                     icon={<IconSchool className="size-full" />}
                 />
@@ -94,6 +94,7 @@ export default async function PeriodPage({
             <Section className="mt-12">
                 <ClassGroupsPreview
                     classGroups={previewClassGroups}
+                    totalClassGroups={classGroups.length}
                     programSlug={program}
                     periodSlug={period}
                 />

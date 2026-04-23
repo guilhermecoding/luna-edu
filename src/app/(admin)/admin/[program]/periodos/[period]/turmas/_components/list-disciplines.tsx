@@ -146,12 +146,12 @@ function ListDisciplinesContent({
             <table className="w-full text-left border-collapse">
                 <thead className="bg-primary/5 text-muted-foreground uppercase text-[10px] sm:text-xs">
                     <tr>
-                        <th className="px-4 sm:px-6 py-4 font-medium min-w-[200px]">Disciplina</th>
-                        <th className="px-4 sm:px-6 py-4 font-medium text-center min-w-[150px]">Professor</th>
-                        <th className="px-4 sm:px-6 py-4 font-medium text-center min-w-[90px]">Turno</th>
-                        <th className="px-4 sm:px-6 py-4 font-medium text-center min-w-[120px]">Sala</th>
-                        <th className="px-4 sm:px-6 py-4 font-medium text-center min-w-[140px]">Ocupação</th>
-                        <th className="px-4 sm:px-6 py-4 font-medium text-center whitespace-nowrap min-w-[120px]">Ações</th>
+                        <th className="px-4 sm:px-6 py-4 font-medium min-w-50">Disciplina</th>
+                        <th className="px-4 sm:px-6 py-4 font-medium text-center min-w-37.5">Professor</th>
+                        <th className="px-4 sm:px-6 py-4 font-medium text-center min-w-22.5">Turno</th>
+                        <th className="px-4 sm:px-6 py-4 font-medium text-center min-w-30">Sala</th>
+                        <th className="px-4 sm:px-6 py-4 font-medium text-center min-w-35">Ocupação</th>
+                        <th className="px-4 sm:px-6 py-4 font-medium text-center whitespace-nowrap min-w-30">Ações</th>
                     </tr>
                 </thead>
                 <tbody className="divide-y divide-surface-border">
@@ -208,7 +208,7 @@ function ListDisciplinesContent({
                                 <td className="px-4 sm:px-6 py-4">
                                     <div className="flex justify-center text-center">
                                         {course.room ? (
-                                            <div className="flex flex-col items-center max-w-[150px]">
+                                            <div className="flex flex-col items-center max-w-37.5">
                                                 <span
                                                     className="text-sm sm:text-base font-medium truncate w-full"
                                                     title={course.room.name}
@@ -229,7 +229,7 @@ function ListDisciplinesContent({
                                 <td className="px-4 sm:px-6 py-4">
                                     <div className="flex justify-center">
                                         {course.room ? (
-                                            <div className="w-full max-w-[120px] space-y-1">
+                                            <div className="w-full max-w-30 space-y-1">
                                                 <div className="flex items-center justify-center gap-2 text-[10px]">
                                                     <span className={`font-bold ${roomColor?.text}`}>
                                                         <span className="text-base">{enrolled}</span>

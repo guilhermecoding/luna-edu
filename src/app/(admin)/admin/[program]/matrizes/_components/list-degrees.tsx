@@ -62,7 +62,7 @@ function DegreeTag({
     value: string;
 }) {
     return (
-        <div className="inline-flex w-40 min-w-0 max-w-40 overflow-hidden flex-row items-center gap-1 whitespace-nowrap font-medium bg-primary text-white dark:text-black px-2 py-1 rounded-full">
+        <div className="inline-flex max-w-40 overflow-hidden flex-row items-center gap-1 whitespace-nowrap font-medium bg-primary text-white dark:text-black px-2 py-1 rounded-full">
             <span className="shrink-0">{icon}</span>
             <span className="min-w-0 flex-1 truncate" title={value}>
                 {value}

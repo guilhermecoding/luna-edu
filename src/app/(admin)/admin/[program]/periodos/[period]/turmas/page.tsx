@@ -1,10 +1,10 @@
 import Page from "@/components/page";
 import Section from "@/components/section";
 import TitlePage from "@/components/title-page";
-import { IconCirclePlusFilled, IconUsersGroup } from "@tabler/icons-react";
 import { ButtonLink } from "@/components/ui/button-link";
-import { Metadata } from "next";
 import { getPeriodByProgramAndSlug } from "@/services/periods/periods.service";
+import { IconCirclePlusFilled, IconSchool } from "@tabler/icons-react";
+import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import ListClassGroups from "./_components/list-class-groups";
 
@@ -28,7 +28,7 @@ export default async function ClassGroupsPage({
         <Page>
             <Section>
                 <div className="flex flex-row items-center gap-1 mb-3">
-                    <IconUsersGroup className="size-4 text-muted-foreground" />
+                    <IconSchool className="size-4 text-muted-foreground" />
                     <p className="text-muted-foreground font-bold">Turmas</p>
                 </div>
                 <div className="flex flex-col lg:flex-row gap-y-6">

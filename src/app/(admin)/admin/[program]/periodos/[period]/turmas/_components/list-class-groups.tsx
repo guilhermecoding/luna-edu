@@ -175,7 +175,7 @@ async function ListClassGroupsContent({
                                     {/* Actions */}
                                     <div className="mt-auto pt-3 border-t border-surface-border z-20">
                                         <Link
-                                            href={`/admin/${programSlug}/periodos/${periodSlug}/turmas/${group.slug}/disciplinas`}
+                                            href={`/admin/${programSlug}/periodos/${periodSlug}/turmas/${group.slug}`}
                                             className="text-primary hover:text-primary/80 text-sm font-bold flex flex-row justify-center items-center gap-1 transition-colors px-2 py-1 rounded-lg hover:bg-primary/5"
                                         >
                                             <span>Expandir Turma</span>

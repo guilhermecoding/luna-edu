@@ -227,3 +227,4 @@ export async function deleteClassGroup(id: string): Promise<ClassGroup> {
         throw error;
     }
 }
+

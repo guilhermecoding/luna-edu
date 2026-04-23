@@ -46,9 +46,9 @@ function CampusTag({
     value: string;
 }) {
     return (
-        <div className="flex flex-row items-center gap-1 whitespace-nowrap font-medium bg-primary text-white dark:text-black px-2 py-1 rounded-full">
-            {icon}
-            <span>
+        <div className="flex flex-row items-center gap-1 max-w-full truncate overflow-hidden whitespace-nowrap font-medium bg-primary text-white dark:text-black px-2 py-1 rounded-full">
+            <span className="shrink-0">{icon}</span>
+            <span className="min-w-0 flex-1 truncate" title={value}>
                 {value}
             </span>
         </div>

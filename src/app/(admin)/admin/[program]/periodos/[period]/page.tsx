@@ -1,7 +1,7 @@
 import Page from "@/components/page";
 import Section from "@/components/section";
 import TitlePage from "@/components/title-page";
-import { IconCalendarFilled, IconUsersGroup, IconCalendarEvent, IconSchool, IconCircleCheck, IconUsers, IconProgress, IconPencil } from "@tabler/icons-react";
+import { IconCalendarFilled, IconCalendarEvent, IconSchool, IconCircleCheck, IconUsers, IconProgress, IconPencil } from "@tabler/icons-react";
 import { ButtonLink } from "@/components/ui/button-link";
 import { getPeriodByProgramAndSlug } from "@/services/periods/periods.service";
 import { getSubPeriodsByPeriodId } from "@/services/sub-periods/sub-periods.service";

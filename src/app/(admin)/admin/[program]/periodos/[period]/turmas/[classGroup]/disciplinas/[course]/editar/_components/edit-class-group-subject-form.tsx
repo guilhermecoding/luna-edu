@@ -1,6 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import z from "zod";
 import { IconAlertTriangle, IconBuilding, IconCalendarEvent, IconLoader2, IconPlus, IconTrash, IconUsers } from "@tabler/icons-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
@@ -30,6 +31,8 @@ import {
 } from "@/components/ui/select";
 import { Shift } from "@/generated/prisma/client";
 import { isRedirectError } from "@/lib/is-redirect-error";
+import Image from "next/image";
+import imgGibbyDuvida from "@/assets/images/logo-gibby-duvida.svg";
 import { DAYS_OF_WEEK, dayOfWeekLabels, shiftLabels } from "../../../../../schema";
 import {
     deleteClassGroupCourseAction,
@@ -39,6 +42,9 @@ import {
     editClassGroupCourseSchema,
     type EditClassGroupCourseInput,
 } from "../schema";
+
+type FormInput = z.input<typeof editClassGroupCourseSchema>;
+type FormOutput = z.output<typeof editClassGroupCourseSchema>;
 
 type SubjectOption = {
     id: string;
@@ -108,7 +114,7 @@ export function EditClassGroupSubjectForm({
     const [deleteError, setDeleteError] = useState<string | null>(null);
     const [isDeleting, setIsDeleting] = useState(false);
 
-    const form = useForm<EditClassGroupCourseInput>({
+    const form = useForm<FormInput, undefined, FormOutput>({
         resolver: zodResolver(editClassGroupCourseSchema),
         mode: "onChange",
         defaultValues: {
@@ -614,13 +620,14 @@ export function EditClassGroupSubjectForm({
                         <DialogHeader>
                             <DialogTitle>Apagar Disciplina</DialogTitle>
                             <DialogDescription>
-                                Para confirmar, digite exatamente o nome da disciplina.
+                                Deseja realmente apagar esta disciplina?
                             </DialogDescription>
                         </DialogHeader>
 
-                        <p className="text-sm">
-                            Nome esperado: <strong>{defaultValues.name}</strong>
-                        </p>
+                        <div className="flex flex-col items-center">
+                            <Image className="w-32 h-32" src={imgGibbyDuvida} alt="Gibby Duvida" width={100} height={100} />
+                            <span> Para confirmar, digite exatamente o nome da disciplina: <strong>{defaultValues.name}</strong></span>
+                        </div>
 
                         <div className="space-y-2">
                             <Label htmlFor="confirm-delete-course-name">Nome da disciplina</Label>

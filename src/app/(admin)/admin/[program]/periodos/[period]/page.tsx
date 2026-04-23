@@ -1,7 +1,7 @@
 import Page from "@/components/page";
 import Section from "@/components/section";
 import TitlePage from "@/components/title-page";
-import { IconCalendarFilled, IconUsersGroup, IconCalendarEvent, IconSchool, IconCircleCheck, IconUsers, IconProgress } from "@tabler/icons-react";
+import { IconCalendarFilled, IconUsersGroup, IconCalendarEvent, IconSchool, IconCircleCheck, IconUsers, IconProgress, IconPencil } from "@tabler/icons-react";
 import { ButtonLink } from "@/components/ui/button-link";
 import { getPeriodByProgramAndSlug } from "@/services/periods/periods.service";
 import { getSubPeriodsByPeriodId } from "@/services/sub-periods/sub-periods.service";
@@ -48,16 +48,11 @@ export default async function PeriodPage({
                             title={periodData.name}
                             description={`De ${new Date(periodData.startDate).toLocaleDateString("pt-BR")} à ${new Date(periodData.endDate).toLocaleDateString("pt-BR")}`}
                         />
-                        <div className="mt-3">
-                            <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold ${isActive ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400" : "bg-muted text-muted-foreground"}`}>
-                                {isActive ? "Ativo" : "Finalizado"}
-                            </span>
-                        </div>
                     </div>
                     <div className="flex flex-1 justify-end items-end">
-                        <ButtonLink className="w-full sm:w-auto" href={`/admin/${program}/periodos/${period}/turmas`}>
-                            <IconUsersGroup className="size-5" />
-                            Gerenciar Turmas
+                        <ButtonLink className="w-full sm:w-auto bg-transparent border-2 border-dashed border-primary hover:bg-primary hover:text-background hover:border-solid" href={`/admin/${program}/periodos/${period}/editar`}>
+                            <IconPencil className="size-5" />
+                            Editar Período
                         </ButtonLink>
                     </div>
                 </div>

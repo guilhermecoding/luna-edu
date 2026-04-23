@@ -1,11 +1,11 @@
 import Page from "@/components/page";
 import Section from "@/components/section";
 import TitlePage from "@/components/title-page";
-import { IconPencil, IconSchool, IconUsers, IconBooks, IconSun } from "@tabler/icons-react";
 import { ButtonLink } from "@/components/ui/button-link";
-import { getPeriodByProgramAndSlug } from "@/services/periods/periods.service";
 import { getClassGroupByPeriodIdAndSlug } from "@/services/class-groups/class-groups.service";
+import { getPeriodByProgramAndSlug } from "@/services/periods/periods.service";
 import { getStudentCountByClassGroupId } from "@/services/students/students.service";
+import { IconBooks, IconClockHour2, IconPencil, IconSchool, IconUsers } from "@tabler/icons-react";
 import { notFound } from "next/navigation";
 import InfoBoxPeriod from "../../_components/info-box-period";
 
@@ -15,7 +15,7 @@ export default async function ClassPage({
     params: Promise<{ program: string; period: string; classGroup: string }>;
 }) {
     const { program, period, classGroup: classGroupSlug } = await params;
-    
+
     const periodData = await getPeriodByProgramAndSlug(program, period);
     if (!periodData) {
         notFound();
@@ -62,20 +62,20 @@ export default async function ClassPage({
                 <InfoBoxPeriod
                     label="ALUNOS NA TURMA"
                     value={studentCount}
-                    color="indigo"
+                    color="emerald"
                     icon={<IconUsers className="size-full" />}
                 />
                 <InfoBoxPeriod
                     label="DISCIPLINAS"
                     value={disciplinesCount}
-                    color="amber"
+                    color="indigo"
                     icon={<IconBooks className="size-full" />}
                 />
                 <InfoBoxPeriod
                     label="TURNO"
                     value={shiftMap[classGroupData.shift] || classGroupData.shift}
-                    color="emerald"
-                    icon={<IconSun className="size-full" />}
+                    color="amber"
+                    icon={<IconClockHour2 className="size-full" />}
                 />
             </Section>
         </Page>

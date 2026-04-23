@@ -77,6 +77,47 @@ export async function getRoomSlugById(id: string): Promise<string | null> {
 }
 
 /**
+ * Retorna referências de cache para cursos impactados por uma sala.
+ * Considera tanto Course.roomId (sala padrão) quanto Schedule.roomId (override por horário).
+ */
+export async function getRoomUsageCacheRefs(roomId: string): Promise<Array<{
+    periodId: string;
+    courseCode: string;
+    classGroupId: string | null;
+    classGroupSlug: string | null;
+}>> {
+    const courses = await prisma.course.findMany({
+        where: {
+            OR: [
+                { roomId },
+                {
+                    schedules: {
+                        some: { roomId },
+                    },
+                },
+            ],
+        },
+        select: {
+            periodId: true,
+            code: true,
+            classGroupId: true,
+            classGroup: {
+                select: {
+                    slug: true,
+                },
+            },
+        },
+    });
+
+    return courses.map((course) => ({
+        periodId: course.periodId,
+        courseCode: course.code,
+        classGroupId: course.classGroupId,
+        classGroupSlug: course.classGroup?.slug ?? null,
+    }));
+}
+
+/**
  * Cria uma nova sala.
  */
 export async function createRoom(data: {

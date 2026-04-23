@@ -16,7 +16,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
 import { createRoomAction } from "../actions";
 import { roomSchema, type RoomInput, ROOM_TYPES, roomTypeLabels } from "../../schema";
-import { IconLoader2 } from "@tabler/icons-react";
+import { IconArrowsShuffle, IconLoader2 } from "@tabler/icons-react";
 import { isRedirectError } from "@/lib/is-redirect-error";
 import autoSlug from "@/lib/auto-slug";
 
@@ -109,7 +109,7 @@ export function CreateRoomForm({ campusSlug }: CreateRoomFormProps) {
                     <Label htmlFor="name">Nome da Sala / Laboratório *</Label>
                     <Input
                         id="name"
-                        placeholder="Ex: Sala 101, Laboratório de Informática"
+                        placeholder="Ex: 101, Laboratório de Informática..."
                         {...register("name")}
                         disabled={isSubmitting}
                         aria-invalid={errors.name ? "true" : "false"}
@@ -123,7 +123,7 @@ export function CreateRoomForm({ campusSlug }: CreateRoomFormProps) {
                     <div className="flex gap-2">
                         <Input
                             id="slug"
-                            placeholder="Ex: sala-101"
+                            placeholder="Ex: 101"
                             {...register("slug")}
                             disabled={isSubmitting}
                             aria-invalid={errors.slug ? "true" : "false"}
@@ -145,7 +145,7 @@ export function CreateRoomForm({ campusSlug }: CreateRoomFormProps) {
                             }}
                             disabled={isSubmitting || !nameValue}
                         >
-                            Auto
+                            <IconArrowsShuffle className="size-5" />
                         </Button>
                     </div>
                     {errors.slug && <p className="text-sm text-red-600">{errors.slug.message}</p>}

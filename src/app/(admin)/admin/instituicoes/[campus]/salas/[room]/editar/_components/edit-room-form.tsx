@@ -144,7 +144,7 @@ export function EditRoomForm({ campusSlug, initialData }: EditRoomFormProps) {
                     <Label htmlFor="name">Nome da Sala / Laboratório *</Label>
                     <Input
                         id="name"
-                        placeholder="Ex: Sala 101, Laboratório de Informática"
+                        placeholder="Ex: 101, Laboratório de Informática..."
                         {...register("name")}
                         disabled={isSubmitting || isDeleting}
                         aria-invalid={errors.name ? "true" : "false"}

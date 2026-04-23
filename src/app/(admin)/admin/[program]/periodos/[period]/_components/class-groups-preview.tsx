@@ -141,9 +141,10 @@ function SectionPreviewWrapper({
                     >
                         <div className="flex gap-4 pb-1">
                             {classGroups.map((group) => (
-                                <div
+                                <Link
+                                    href={`/admin/${programSlug}/periodos/${periodSlug}/turmas/${group.slug}`}
                                     key={group.id}
-                                    className="min-w-64 sm:min-w-72 rounded-3xl border border-surface-border bg-surface p-4 flex flex-col gap-3"
+                                    className="min-w-64 sm:min-w-72 rounded-3xl border border-surface-border bg-surface p-4 flex flex-col gap-3 hover:border-primary/60 hover:bg-surface/50 transition-colors"
                                 >
                                     <div className="min-w-0">
                                         <p className="text-lg font-bold truncate">{group.name}</p>
@@ -159,13 +160,13 @@ function SectionPreviewWrapper({
                                             {group._count.courses} disciplina{group._count.courses !== 1 ? "s" : ""}
                                         </span>
                                     </div>
-                                </div>
+                                </Link>
                             ))}
 
                             {showMoreCard && (
                                 <Link
                                     href={`/admin/${programSlug}/periodos/${periodSlug}/turmas`}
-                                    className="min-w-64 sm:min-w-72 rounded-3xl border-2 border-dashed border-surface-border bg-surface p-4 flex items-center justify-center text-center text-sm font-semibold text-primary hover:bg-primary/5 transition-colors"
+                                    className="min-w-64 sm:min-w-72 rounded-3xl border-2 border-dashed border-surface-border bg-surface p-4 flex items-center justify-center text-center text-sm font-semibold text-primary hover:bg-surface/50 transition-colors"
                                 >
                                     <span>Mostrar mais turmas</span>
                                     <IconCaretRight className="size-4" />

@@ -125,29 +125,6 @@ export default async function PeriodPage({
                             </ButtonLink>
                         </div>
                     </div>
-
-                    {/* Turmas (Unificado) */}
-                    <div className="border border-surface-border rounded-2xl bg-surface p-6 flex flex-col gap-4">
-                        <div className="flex items-center gap-3">
-                            <div className="flex justify-center items-center bg-blue-100 dark:bg-blue-900/30 size-10 rounded-xl text-blue-600 dark:text-blue-400 shrink-0">
-                                <IconUsersGroup className="size-5" />
-                            </div>
-                            <div>
-                                <h3 className="font-bold text-sm">Turmas</h3>
-                                <p className="text-xs text-muted-foreground">Agrupamento de alunos e disciplinas</p>
-                            </div>
-                        </div>
-                        <div className="flex items-center justify-between mt-auto">
-                            <span className="text-2xl font-bold">{classGroups.length}</span>
-                            <ButtonLink
-                                href={`/admin/${program}/periodos/${period}/turmas`}
-                                variant="outline"
-                                className="text-xs"
-                            >
-                                Gerenciar
-                            </ButtonLink>
-                        </div>
-                    </div>
                 </div>
             </Section>
         </Page>

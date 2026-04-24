@@ -21,3 +21,14 @@ export async function getStudentCountByClassGroupId(classGroupId: string): Promi
         },
     });
 }
+
+/**
+ * Retorna a quantidade total de alunos no sistema.
+ */
+export async function getTotalStudentsCount(): Promise<number> {
+    "use cache";
+    cacheLife("days");
+    cacheTag("students-count");
+
+    return await prisma.student.count();
+}

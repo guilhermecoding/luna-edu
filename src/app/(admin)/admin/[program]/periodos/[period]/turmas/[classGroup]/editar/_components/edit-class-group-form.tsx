@@ -1,17 +1,29 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { IconLoader2 } from "@tabler/icons-react";
+import { IconAlertTriangle, IconLoader2 } from "@tabler/icons-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useForm, type SubmitHandler } from "react-hook-form";
+import { useState } from "react";
+import Image from "next/image";
+import imgGibbyDuvida from "@/assets/images/logo-gibby-duvida.svg";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { isRedirectError } from "@/lib/is-redirect-error";
 import { Shift } from "@/generated/prisma/enums";
 import { shiftLabels } from "../../../schema";
-import { updateClassGroupAction } from "../actions";
+import { updateClassGroupAction, deleteClassGroupAction } from "../actions";
 import { editClassGroupSchema, type EditClassGroupInput } from "../schema";
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "@/components/ui/dialog";
 
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Controller } from "react-hook-form";
@@ -38,6 +50,10 @@ export function EditClassGroupForm({
     const router = useRouter();
     const pathname = usePathname();
     const searchParams = useSearchParams();
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [deleteConfirmationName, setDeleteConfirmationName] = useState("");
+    const [deleteError, setDeleteError] = useState<string | null>(null);
+    const [isDeleting, setIsDeleting] = useState(false);
 
     const form = useForm<EditClassGroupInput>({
         resolver: zodResolver(editClassGroupSchema),
@@ -57,6 +73,7 @@ export function EditClassGroupForm({
     } = form;
 
     const canSubmit = isValid && !isSubmitting;
+    const canDelete = deleteConfirmationName === defaultValues.name && !isDeleting;
 
     const onSubmit: SubmitHandler<EditClassGroupInput> = async (data) => {
         clearErrors("root");
@@ -72,6 +89,36 @@ export function EditClassGroupForm({
         } catch (error) {
             if (isRedirectError(error)) throw error;
             setError("root", { type: "server", message: "Erro fatal ao atualizar turma" });
+        }
+    };
+
+    const onDeleteClassGroup = async () => {
+        setDeleteError(null);
+        setIsDeleting(true);
+
+        try {
+            const result = await deleteClassGroupAction(programSlug, periodSlug, classGroupSlug, deleteConfirmationName);
+            if (result?.success === false) {
+                const params = new URLSearchParams(searchParams.toString());
+                params.set("toast", "error");
+                params.set("message", result.error || "Erro ao apagar turma");
+                router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+
+                setDeleteError(result.error || "Erro ao apagar turma");
+            }
+        } catch (error) {
+            if (isRedirectError(error)) {
+                throw error;
+            }
+
+            const params = new URLSearchParams(searchParams.toString());
+            params.set("toast", "error");
+            params.set("message", "Erro ao apagar turma");
+            router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+
+            setDeleteError("Erro ao apagar turma");
+        } finally {
+            setIsDeleting(false);
         }
     };
 
@@ -130,7 +177,7 @@ export function EditClassGroupForm({
                     {errors.shift && <p className="text-sm text-red-600">{errors.shift.message}</p>}
                 </div>
             </div>
-            <div className="flex flex-col-reverse sm:flex-row gap-3 justify-end pt-4 border-t items-center mt-6">
+            <div className="flex flex-col-reverse sm:flex-row gap-3 justify-end pt-4">
                 <Button type="button" className="w-full sm:w-auto" variant="outline" onClick={() => router.back()} disabled={isSubmitting}>
                     Cancelar
                 </Button>
@@ -138,6 +185,85 @@ export function EditClassGroupForm({
                     {isSubmitting && <IconLoader2 className="size-5 animate-spin" />}
                     {isSubmitting ? "Salvando..." : "Salvar Alterações"}
                 </Button>
+            </div>
+
+            <div className="border border-destructive/25 bg-destructive/5 rounded-2xl p-4 sm:p-5 space-y-4">
+                <div>
+                    <div className="flex flex-row items-center gap-2">
+                        <IconAlertTriangle className="size-5 text-red-600" />
+                        <h3 className="text-xl font-semibold text-destructive">Zona de Perigo</h3>
+                    </div>
+                    <p className="text-sm text-muted-foreground mt-1">
+                        Esta ação remove a turma <b>permanentemente</b>, bem como todas as disciplinas (oferecimentos) atreladas a ela. <b>Os alunos não serão excluídos</b>, apenas desvinculados destas disciplinas. Esta ação não pode ser desfeita.
+                    </p>
+                </div>
+
+                <Dialog
+                    open={isDeleteModalOpen}
+                    onOpenChange={(open) => {
+                        setIsDeleteModalOpen(open);
+                        if (!open) {
+                            setDeleteConfirmationName("");
+                            setDeleteError(null);
+                        }
+                    }}
+                >
+                    <div className="w-full flex justify-end">
+                        <DialogTrigger asChild>
+                            <Button type="button" variant="destructive" className="w-full sm:w-auto">
+                                Apagar Turma
+                            </Button>
+                        </DialogTrigger>
+                    </div>
+                    <DialogContent>
+                        <DialogHeader>
+                            <DialogTitle>Apagar Turma</DialogTitle>
+
+                            <DialogDescription>
+                                Deseja realmente apagar esta turma e excluir as disciplinas associadas? Os alunos apenas serão desvinculados.
+                            </DialogDescription>
+                        </DialogHeader>
+
+                        <div className="flex flex-col items-center text-center">
+                            <Image className="w-32 h-32" src={imgGibbyDuvida} alt="Gibby Duvida" width={100} height={100} />
+                            <span> Para confirmar, digite exatamente o nome da turma: <br /> <strong>{defaultValues.name}</strong></span>
+                        </div>
+
+                        <div className="space-y-2">
+                            <Label htmlFor="confirm-delete-program-name">Nome da turma</Label>
+                            <Input
+                                id="confirm-delete-program-name"
+                                value={deleteConfirmationName}
+                                onChange={(event) => setDeleteConfirmationName(event.target.value)}
+                                placeholder="Digite o nome exato para confirmar"
+                                className="rounded-lg"
+                                disabled={isDeleting}
+                            />
+                            {deleteError && <p className="text-sm text-red-600">{deleteError}</p>}
+                        </div>
+
+                        <DialogFooter>
+                            <Button
+                                type="button"
+                                variant="outline"
+                                onClick={() => setIsDeleteModalOpen(false)}
+                                disabled={isDeleting}
+                            >
+                                Cancelar
+                            </Button>
+                            <Button
+                                type="button"
+                                variant="destructive"
+                                onClick={onDeleteClassGroup}
+                                disabled={!canDelete}
+                                className="flex items-center gap-2"
+                            >
+                                {isDeleting && <IconLoader2 className="size-5 animate-spin" />}
+                                {isDeleting ? "Apagando..." : "Apagar"}
+                            </Button>
+                        </DialogFooter>
+                    </DialogContent>
+                </Dialog>
             </div>
         </form>
     );

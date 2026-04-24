@@ -209,12 +209,33 @@ export async function updateClassGroup(
 
 /**
  * Remove um grupo.
- * Falha se houver turmas vinculadas.
+ * Exclui as disciplinas correlacionadas e desvincula os alunos.
  */
 export async function deleteClassGroup(id: string): Promise<ClassGroup> {
     try {
-        return await prisma.classGroup.delete({
-            where: { id },
+        return await prisma.$transaction(async (tx) => {
+            const courses = await tx.course.findMany({
+                where: { classGroupId: id },
+                select: { id: true },
+            });
+            const courseIds = courses.map((c) => c.id);
+
+            if (courseIds.length > 0) {
+                await tx.enrollment.deleteMany({ where: { courseId: { in: courseIds } } });
+                await tx.schedule.deleteMany({ where: { courseId: { in: courseIds } } });
+                await tx.courseAssistant.deleteMany({ where: { courseId: { in: courseIds } } });
+                await tx.studentCourseStats.deleteMany({ where: { courseId: { in: courseIds } } });
+                await tx.finalGrade.deleteMany({ where: { courseId: { in: courseIds } } });
+                await tx.activityGrade.deleteMany({ where: { activity: { courseId: { in: courseIds } } } });
+                await tx.activity.deleteMany({ where: { courseId: { in: courseIds } } });
+                await tx.attendance.deleteMany({ where: { lesson: { courseId: { in: courseIds } } } });
+                await tx.lesson.deleteMany({ where: { courseId: { in: courseIds } } });
+                await tx.course.deleteMany({ where: { id: { in: courseIds } } });
+            }
+
+            return await tx.classGroup.delete({
+                where: { id },
+            });
         });
     } catch (error) {
         const msg =
@@ -227,7 +248,7 @@ export async function deleteClassGroup(id: string): Promise<ClassGroup> {
             msg.includes("violates restrict")
         ) {
             throw new Error(
-                "Não é possível excluir o grupo porque existem turmas vinculadas a ele. Remova as turmas primeiro.",
+                "Não é possível excluir o grupo devido a vínculos existentes que não puderam ser removidos.",
             );
         }
         if (

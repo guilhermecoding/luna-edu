@@ -1,36 +1,59 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import type { Metadata, Viewport } from "next";
+import { Poppins, Silkscreen } from "next/font/google";
 import "./globals.css";
+import { cn } from "@/lib/utils";
+import Providers from "@/provider/providers";
+import { Suspense } from "react";
+import { FeedBackToast } from "@/components/feedback-toast";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+const poppins = Poppins({
+    subsets: ["latin"],
+    weight: ["400", "500", "600", "700"],
+    variable: "--font-poppins",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+const silkscreen = Silkscreen({
+    subsets: ["latin"],
+    weight: ["400"],
+    variable: "--font-silkscreen",
 });
 
+export const viewport: Viewport = {
+    width: "device-width",
+    initialScale: 1,
+    maximumScale: 1,
+};
+
+const APP_NAME = "LUNA ACADEMY";
 
 export const metadata: Metadata = {
-  title: "Luna - Sistema de Gestão Educacional e Acompanhamento de Alunos",
-  description: "Gerencie, acompanhe e otimize o desempenho dos seus alunos com o Luna, a plataforma de gestão educacional definitiva.",
+    title: {
+        template: `%s | ${APP_NAME}`,
+        default: `${APP_NAME} - Plataforma de Gestão Educacional`,
+    },
+    description: "Gerencie, acompanhe e otimize o desempenho dos seus alunos com o Luna, a plataforma de gestão educacional definitiva.",
 };
 
 export default function RootLayout({
-  children,
+    children,
 }: Readonly<{
-  children: React.ReactNode;
+    children: React.ReactNode;
 }>) {
-  return (
-    <html
-      lang="pt-BR"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
-    >
-      <body>
-        {children}
-      </body>
-    </html>
-  );
+    const darkModeDev = process.env.NEXT_PUBLIC_DARK_MODE_DEV; // Testa o modo escuro em desenvolvimento
+
+    return (
+        <html
+            lang="pt-BR"
+            className={cn("h-full", "antialiased", poppins.variable, silkscreen.variable, darkModeDev === "true" ? "dark" : "")}
+        >
+            <body>
+                <Providers>
+                    <Suspense fallback={null}>
+                        <FeedBackToast />
+                    </Suspense>
+                    {children}
+                </Providers>
+            </body>
+        </html>
+    );
 }

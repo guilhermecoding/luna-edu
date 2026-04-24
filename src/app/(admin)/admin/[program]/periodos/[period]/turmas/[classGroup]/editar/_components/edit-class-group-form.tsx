@@ -88,17 +88,17 @@ export function EditClassGroupForm({
                     <Input id="name" {...register("name")} disabled={isSubmitting} className="p-5 rounded-lg bg-background" />
                     {errors.name && <p className="text-sm text-red-600">{errors.name.message}</p>}
                 </div>
-                <div className="space-y-2">
+                <div className="space-y-2 cursor-not-allowed">
                     <Label htmlFor="slug">Código</Label>
                     <Input id="slug" defaultValue={defaultValues.slug} readOnly disabled className="p-5 rounded-lg bg-muted text-muted-foreground uppercase" />
                     <p className="text-[10px] text-muted-foreground px-1">Este campo não pode ser alterado.</p>
                 </div>
-                <div className="space-y-2">
+                <div className="space-y-2 cursor-not-allowed">
                     <Label htmlFor="degree">Matriz</Label>
                     <Input id="degree" defaultValue={defaultValues.degreeName} readOnly disabled className="p-5 rounded-lg bg-muted text-muted-foreground" />
                     <p className="text-[10px] text-muted-foreground px-1">Este campo não pode ser alterado.</p>
                 </div>
-                <div className="space-y-2">
+                <div className="space-y-2 cursor-not-allowed">
                     <Label htmlFor="basePeriod">Série</Label>
                     <Input id="basePeriod" defaultValue={`${defaultValues.basePeriod}ª Série / ${defaultValues.basePeriod}º Ano`} readOnly disabled className="p-5 rounded-lg bg-muted text-muted-foreground" />
                     <p className="text-[10px] text-muted-foreground px-1">Este campo não pode ser alterado.</p>

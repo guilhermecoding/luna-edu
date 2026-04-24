@@ -6,6 +6,12 @@ import React from "react";
 import { getUserStats } from "@/services/users/users.service";
 import { getTotalStudentsCount } from "@/services/students/students.service";
 import InfoBoxUsers from "./_components/info-box-users";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+    title: "Usuários",
+};
+
 
 export default async function UsersPage() {
     const [userStats, totalStudents] = await Promise.all([

@@ -1,6 +1,11 @@
 import Page from "@/components/page";
 import Section from "@/components/section";
 import { IconUserShield } from "@tabler/icons-react";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+    title: "Administradores",
+};
 
 export default function AdministratorsPage() {
     return (

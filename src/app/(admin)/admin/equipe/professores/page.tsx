@@ -1,6 +1,11 @@
 import Page from "@/components/page";
 import Section from "@/components/section";
 import { IconBriefcase } from "@tabler/icons-react";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+    title: "Professores",
+};
 
 export default function TeachersPage() {
     return (

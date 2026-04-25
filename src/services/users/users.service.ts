@@ -1,5 +1,7 @@
 import prisma from "@/lib/prisma";
 import { cacheLife, cacheTag } from "next/cache";
+import { Prisma } from "@prisma/client";
+
 
 /**
  * Retorna as estatísticas de usuários: total de usuários, quantidade de administradores e quantidade de professores.
@@ -33,3 +35,42 @@ export async function getUserStats(): Promise<{ totalUsers: number; totalAdmins:
 
     return { totalUsers, totalAdmins, totalTeachers };
 }
+
+/**
+ * Retorna a lista de usuários do sistema (administradores ou professores),
+ * com opção de filtro pelo nome.
+ */
+export async function getUsersList(query?: string) {
+    "use cache";
+    cacheLife("minutes");
+    cacheTag("users-list");
+
+    return await prisma.user.findMany({
+        where: {
+            OR: [
+                { isAdmin: true },
+                { isTeacher: true },
+            ],
+            ...(query ? {
+                name: {
+                    contains: query,
+                    mode: "insensitive" as Prisma.QueryMode,
+                },
+            } : {}),
+        },
+        select: {
+            id: true,
+            name: true,
+            email: true,
+            isActive: true,
+            isAdmin: true,
+            isTeacher: true,
+            systemRole: true,
+        },
+        orderBy: {
+            name: "asc",
+        },
+    });
+}
+
+export type UserListItem = Awaited<ReturnType<typeof getUsersList>>[number];

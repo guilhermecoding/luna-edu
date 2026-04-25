@@ -1,3 +1,4 @@
+import { cn } from "@/lib/utils";
 import { IconChevronRight } from "@tabler/icons-react";
 import Link from "next/link";
 import { ReactNode } from "react";
@@ -10,9 +11,10 @@ interface InfoBoxUsersProps {
     icon?: ReactNode;
     labelLink?: string;
     href?: string;
+    className?: string;
 }
 
-const colorMap: Record<string, { text: string; bg: string }> = {
+const colorMap: Record<Color, { text: string; bg: string }> = {
     indigo: { text: "text-indigo-500", bg: "bg-indigo-500" },
     green: { text: "text-green-500", bg: "bg-green-500" },
     rose: { text: "text-rose-500", bg: "bg-rose-500" },
@@ -21,12 +23,12 @@ const colorMap: Record<string, { text: string; bg: string }> = {
     amber: { text: "text-amber-500", bg: "bg-amber-500" },
 };
 
-export default function InfoBoxUsers({ label, value, color = "indigo", icon, labelLink = "Ver todos", href }: InfoBoxUsersProps) {
+export default function InfoBoxUsers({ label, value, color = "indigo", icon, labelLink = "Ver todos", href, className }: InfoBoxUsersProps) {
     const colors = colorMap[color] || colorMap.indigo;
 
     return (
-        <div className="relative overflow-hidden top-0 left-0 bg-surface w-full border border-surface-border text-center flex flex-col justify-center items-center gap-2 py-7 px-5 rounded-4xl">
-            <span className="text-xl md:text-2xl font-medium text-muted-foreground z-10">
+        <div className={cn("relative overflow-hidden top-0 left-0 bg-surface w-full border border-surface-border text-center flex flex-col justify-center items-center gap-2 py-7 px-5 rounded-4xl", className)}>
+            <span className="text-xl md:text-2xl font-medium text-muted-foreground z-10 block w-full truncate">
                 {label}
             </span>
             <span

@@ -37,7 +37,7 @@ export default async function UsersPage({
                 <div className="flex flex-col lg:flex-row gap-y-6">
                     <div className="flex-1">
                         <TitlePage
-                            title="Usuários do Sistema"
+                            title="Todos os Usuários"
                             description="Gerencie todos os usuários da sua instituição."
                         />
                     </div>
@@ -56,18 +56,24 @@ export default async function UsersPage({
                     value={totalStudents}
                     color="emerald"
                     icon={<IconSchool className="size-full" />}
+                    href="/admin/usuarios/alunos"
+                    labelLink="Todos os alunos"
                 />
                 <InfoBoxUsers
                     label="ADMINISTRADORES"
                     value={userStats.totalAdmins}
                     color="rose"
                     icon={<IconUserShield className="size-full" />}
+                    href="/admin/usuarios/administradores"
+                    labelLink="Todos os administradores"
                 />
                 <InfoBoxUsers
                     label="PROFESSORES"
                     value={userStats.totalTeachers}
                     color="amber"
                     icon={<IconBriefcase className="size-full" />}
+                    href="/admin/usuarios/professores"
+                    labelLink="Todos os professores"
                 />
             </Section>
 

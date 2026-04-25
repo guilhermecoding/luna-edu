@@ -1,3 +1,5 @@
+import { IconChevronRight } from "@tabler/icons-react";
+import Link from "next/link";
 import { ReactNode } from "react";
 
 type Color = "indigo" | "green" | "rose" | "emerald" | "purple" | "amber";
@@ -6,6 +8,8 @@ interface InfoBoxUsersProps {
     value: number | string;
     color?: Color;
     icon?: ReactNode;
+    labelLink?: string;
+    href?: string;
 }
 
 const colorMap: Record<string, { text: string; bg: string }> = {
@@ -17,7 +21,7 @@ const colorMap: Record<string, { text: string; bg: string }> = {
     amber: { text: "text-amber-500", bg: "bg-amber-500" },
 };
 
-export default function InfoBoxUsers({ label, value, color = "indigo", icon }: InfoBoxUsersProps) {
+export default function InfoBoxUsers({ label, value, color = "indigo", icon, labelLink = "Ver todos", href }: InfoBoxUsersProps) {
     const colors = colorMap[color] || colorMap.indigo;
 
     return (
@@ -32,12 +36,18 @@ export default function InfoBoxUsers({ label, value, color = "indigo", icon }: I
                 {value}
             </span>
 
+            {href && (
+                <Link href={href} className="z-10 text-sm flex flex-row items-center gap-0.5 cursor-pointer text-muted-foreground hover:text-foreground transition-colors">
+                    {labelLink}
+                    <IconChevronRight className="size-4" />
+                </Link>
+            )}
             {icon ? (
-                <div className={`absolute top-6 -right-3 opacity-5 ${colors.text}`}>
+                <div className={`pointer-events-none absolute top-6 -right-3 opacity-5 ${colors.text}`}>
                     <div className="size-40 md:size-48">{icon}</div>
                 </div>
             ) : (
-                <div className={`${colors.bg} size-48 rounded-full absolute -top-28 -right-28 opacity-10`}></div>
+                <div className={`${colors.bg} pointer-events-none size-48 rounded-full absolute -top-28 -right-28 opacity-10`}></div>
             )}
         </div>
     );

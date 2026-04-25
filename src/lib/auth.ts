@@ -1,6 +1,7 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import prisma from "@/lib/prisma";
+import { GENRE_VALUES } from "@/lib/genre";
 
 export const auth = betterAuth({
     database: prismaAdapter(prisma, {
@@ -40,6 +41,11 @@ export const auth = betterAuth({
             isActive: {
                 type: "boolean",
                 default: true,
+            },
+            genre: {
+                type: "string",
+                values: [...GENRE_VALUES],
+                default: "PREFER_NOT_TO_SAY",
             },
         },
     },

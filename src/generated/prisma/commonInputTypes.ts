@@ -79,6 +79,13 @@ export type EnumSystemRoleFilter<$PrismaModel = never> = {
   not?: Prisma.NestedEnumSystemRoleFilter<$PrismaModel> | $Enums.SystemRole
 }
 
+export type EnumUserGenreFilter<$PrismaModel = never> = {
+  equals?: $Enums.UserGenre | Prisma.EnumUserGenreFieldRefInput<$PrismaModel>
+  in?: $Enums.UserGenre[] | Prisma.ListEnumUserGenreFieldRefInput<$PrismaModel>
+  notIn?: $Enums.UserGenre[] | Prisma.ListEnumUserGenreFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumUserGenreFilter<$PrismaModel> | $Enums.UserGenre
+}
+
 export type SortOrderInput = {
   sort: Prisma.SortOrder
   nulls?: Prisma.NullsOrder
@@ -165,6 +172,16 @@ export type EnumSystemRoleWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumSystemRoleFilter<$PrismaModel>
   _max?: Prisma.NestedEnumSystemRoleFilter<$PrismaModel>
+}
+
+export type EnumUserGenreWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.UserGenre | Prisma.EnumUserGenreFieldRefInput<$PrismaModel>
+  in?: $Enums.UserGenre[] | Prisma.ListEnumUserGenreFieldRefInput<$PrismaModel>
+  notIn?: $Enums.UserGenre[] | Prisma.ListEnumUserGenreFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumUserGenreWithAggregatesFilter<$PrismaModel> | $Enums.UserGenre
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumUserGenreFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumUserGenreFilter<$PrismaModel>
 }
 
 export type DateTimeNullableFilter<$PrismaModel = never> = {
@@ -429,6 +446,23 @@ export type EnumDayOfWeekWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnumDayOfWeekFilter<$PrismaModel>
 }
 
+export type EnumGenreFilter<$PrismaModel = never> = {
+  equals?: $Enums.Genre | Prisma.EnumGenreFieldRefInput<$PrismaModel>
+  in?: $Enums.Genre[] | Prisma.ListEnumGenreFieldRefInput<$PrismaModel>
+  notIn?: $Enums.Genre[] | Prisma.ListEnumGenreFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumGenreFilter<$PrismaModel> | $Enums.Genre
+}
+
+export type EnumGenreWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.Genre | Prisma.EnumGenreFieldRefInput<$PrismaModel>
+  in?: $Enums.Genre[] | Prisma.ListEnumGenreFieldRefInput<$PrismaModel>
+  notIn?: $Enums.Genre[] | Prisma.ListEnumGenreFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumGenreWithAggregatesFilter<$PrismaModel> | $Enums.Genre
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumGenreFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumGenreFilter<$PrismaModel>
+}
+
 export type EnumGradingTypeFilter<$PrismaModel = never> = {
   equals?: $Enums.GradingType | Prisma.EnumGradingTypeFieldRefInput<$PrismaModel>
   in?: $Enums.GradingType[] | Prisma.ListEnumGradingTypeFieldRefInput<$PrismaModel>
@@ -582,6 +616,13 @@ export type NestedEnumSystemRoleFilter<$PrismaModel = never> = {
   not?: Prisma.NestedEnumSystemRoleFilter<$PrismaModel> | $Enums.SystemRole
 }
 
+export type NestedEnumUserGenreFilter<$PrismaModel = never> = {
+  equals?: $Enums.UserGenre | Prisma.EnumUserGenreFieldRefInput<$PrismaModel>
+  in?: $Enums.UserGenre[] | Prisma.ListEnumUserGenreFieldRefInput<$PrismaModel>
+  notIn?: $Enums.UserGenre[] | Prisma.ListEnumUserGenreFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumUserGenreFilter<$PrismaModel> | $Enums.UserGenre
+}
+
 export type NestedUuidWithAggregatesFilter<$PrismaModel = never> = {
   equals?: string | Prisma.StringFieldRefInput<$PrismaModel>
   in?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
@@ -682,6 +723,16 @@ export type NestedEnumSystemRoleWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumSystemRoleFilter<$PrismaModel>
   _max?: Prisma.NestedEnumSystemRoleFilter<$PrismaModel>
+}
+
+export type NestedEnumUserGenreWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.UserGenre | Prisma.EnumUserGenreFieldRefInput<$PrismaModel>
+  in?: $Enums.UserGenre[] | Prisma.ListEnumUserGenreFieldRefInput<$PrismaModel>
+  notIn?: $Enums.UserGenre[] | Prisma.ListEnumUserGenreFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumUserGenreWithAggregatesFilter<$PrismaModel> | $Enums.UserGenre
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumUserGenreFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumUserGenreFilter<$PrismaModel>
 }
 
 export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
@@ -904,6 +955,23 @@ export type NestedEnumDayOfWeekWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumDayOfWeekFilter<$PrismaModel>
   _max?: Prisma.NestedEnumDayOfWeekFilter<$PrismaModel>
+}
+
+export type NestedEnumGenreFilter<$PrismaModel = never> = {
+  equals?: $Enums.Genre | Prisma.EnumGenreFieldRefInput<$PrismaModel>
+  in?: $Enums.Genre[] | Prisma.ListEnumGenreFieldRefInput<$PrismaModel>
+  notIn?: $Enums.Genre[] | Prisma.ListEnumGenreFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumGenreFilter<$PrismaModel> | $Enums.Genre
+}
+
+export type NestedEnumGenreWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.Genre | Prisma.EnumGenreFieldRefInput<$PrismaModel>
+  in?: $Enums.Genre[] | Prisma.ListEnumGenreFieldRefInput<$PrismaModel>
+  notIn?: $Enums.Genre[] | Prisma.ListEnumGenreFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumGenreWithAggregatesFilter<$PrismaModel> | $Enums.Genre
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumGenreFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumGenreFilter<$PrismaModel>
 }
 
 export type NestedEnumGradingTypeFilter<$PrismaModel = never> = {

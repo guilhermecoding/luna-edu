@@ -17,6 +17,26 @@ export const SystemRole = {
 export type SystemRole = (typeof SystemRole)[keyof typeof SystemRole]
 
 
+export const UserGenre = {
+  MALE: 'MALE',
+  FEMALE: 'FEMALE',
+  NON_BINARY: 'NON_BINARY',
+  PREFER_NOT_TO_SAY: 'PREFER_NOT_TO_SAY'
+} as const
+
+export type UserGenre = (typeof UserGenre)[keyof typeof UserGenre]
+
+
+export const Genre = {
+  MALE: 'MALE',
+  FEMALE: 'FEMALE',
+  NON_BINARY: 'NON_BINARY',
+  PREFER_NOT_TO_SAY: 'PREFER_NOT_TO_SAY'
+} as const
+
+export type Genre = (typeof Genre)[keyof typeof Genre]
+
+
 export const GradingType = {
   NONE: 'NONE',
   POINTS: 'POINTS',

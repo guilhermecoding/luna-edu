@@ -18,6 +18,26 @@ enum SystemRole {
     @@schema("auth")
 }
 
+enum UserGenre {
+    MALE
+    FEMALE
+    NON_BINARY
+    PREFER_NOT_TO_SAY
+
+    @@map("user_genre")
+    @@schema("auth")
+}
+
+enum Genre {
+    MALE
+    FEMALE
+    NON_BINARY
+    PREFER_NOT_TO_SAY
+
+    @@map("genre")
+    @@schema("public")
+}
+
 enum GradingType {
     NONE
     POINTS
@@ -98,6 +118,7 @@ model User {
     isAdmin    Boolean    @default(false) @map("is_admin")
     isTeacher  Boolean    @default(false) @map("is_teacher")
     isActive   Boolean    @default(true) @map("is_active")
+    genre      UserGenre  @default(PREFER_NOT_TO_SAY) @map("genre")
 
     sessions Session[]
     accounts Account[]
@@ -403,7 +424,7 @@ model Student {
     cpf          String
     email        String
     school       String
-    genre        String
+    genre        Genre
 
     enrollments    Enrollment[]
     attendances    Attendance[]

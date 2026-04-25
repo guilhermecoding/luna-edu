@@ -2332,7 +2332,8 @@ export const UserScalarFieldEnum = {
   systemRole: 'systemRole',
   isAdmin: 'isAdmin',
   isTeacher: 'isTeacher',
-  isActive: 'isActive'
+  isActive: 'isActive',
+  genre: 'genre'
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -2762,6 +2763,20 @@ export type ListEnumSystemRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$P
 
 
 /**
+ * Reference to a field of type 'UserGenre'
+ */
+export type EnumUserGenreFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'UserGenre'>
+    
+
+
+/**
+ * Reference to a field of type 'UserGenre[]'
+ */
+export type ListEnumUserGenreFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'UserGenre[]'>
+    
+
+
+/**
  * Reference to a field of type 'Int'
  */
 export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
@@ -2856,6 +2871,20 @@ export type EnumDayOfWeekFieldRefInput<$PrismaModel> = FieldRefInputType<$Prisma
  * Reference to a field of type 'DayOfWeek[]'
  */
 export type ListEnumDayOfWeekFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DayOfWeek[]'>
+    
+
+
+/**
+ * Reference to a field of type 'Genre'
+ */
+export type EnumGenreFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Genre'>
+    
+
+
+/**
+ * Reference to a field of type 'Genre[]'
+ */
+export type ListEnumGenreFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Genre[]'>
     
 
 

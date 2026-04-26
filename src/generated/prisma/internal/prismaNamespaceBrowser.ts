@@ -316,7 +316,7 @@ export const StudentScalarFieldEnum = {
   id: 'id',
   createdAt: 'createdAt',
   name: 'name',
-  age: 'age',
+  birthDate: 'birthDate',
   studentPhone: 'studentPhone',
   parentPhone: 'parentPhone',
   cpf: 'cpf',

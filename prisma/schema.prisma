@@ -418,7 +418,7 @@ model Student {
     id           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
     createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz
     name         String
-    age          Int      @db.SmallInt
+    birthDate    DateTime @map("birth_date") @db.Date
     studentPhone String   @map("student_phone")
     parentPhone  String?  @map("parent_phone")
     cpf          String

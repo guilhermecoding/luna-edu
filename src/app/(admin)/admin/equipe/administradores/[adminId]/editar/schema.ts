@@ -10,4 +10,5 @@ export const editAdminSchema = z.object({
     systemRole: z.enum(["FULL_ACCESS", "READ_ONLY"], { message: "Nível de acesso inválido" }),
 });
 
-export type EditAdminInput = z.infer<typeof editAdminSchema>;
+export type EditAdminInput = z.input<typeof editAdminSchema>;
+export type EditAdminData = z.output<typeof editAdminSchema>;

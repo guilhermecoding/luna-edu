@@ -10,7 +10,8 @@ export const createAdminSchema = z.object({
     systemRole: z.enum(["FULL_ACCESS", "READ_ONLY"], { message: "Nível de acesso inválido" }),
 });
 
-export type CreateAdminInput = z.infer<typeof createAdminSchema>;
+export type CreateAdminInput = z.input<typeof createAdminSchema>;
+export type CreateAdminData = z.output<typeof createAdminSchema>;
 
 export const promoteTeacherSchema = z.object({
     teacherId: z.string().uuid("Professor inválido"),

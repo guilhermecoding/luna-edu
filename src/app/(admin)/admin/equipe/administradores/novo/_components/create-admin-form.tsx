@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -12,6 +12,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { createAdminSchema, promoteTeacherSchema, type CreateAdminData, type CreateAdminInput, type PromoteTeacherInput } from "../schema";
 import { IconLoader2 } from "@tabler/icons-react";
 import type { SystemRole, UserGenre } from "@/generated/prisma/client";
+import { useRouter } from "next/navigation";
 
 type TeacherOption = {
     id: string;
@@ -20,10 +21,12 @@ type TeacherOption = {
 };
 
 export default function CreateAdminForm({ teachers }: { teachers: TeacherOption[] }) {
+    const router = useRouter();
     const [mode, setMode] = useState<"new" | "existing">("new");
 
     const formNew = useForm<CreateAdminInput, unknown, CreateAdminData>({
         resolver: zodResolver(createAdminSchema),
+        mode: "onChange",
         defaultValues: {
             name: "",
             email: "",
@@ -37,11 +40,28 @@ export default function CreateAdminForm({ teachers }: { teachers: TeacherOption[
 
     const formExisting = useForm<PromoteTeacherInput>({
         resolver: zodResolver(promoteTeacherSchema),
+        mode: "onChange",
         defaultValues: {
             teacherId: "",
             systemRole: "FULL_ACCESS",
         },
     });
+
+    useEffect(() => {
+        formNew.reset({
+            name: "",
+            email: "",
+            cpf: "",
+            phone: "",
+            birthDate: undefined,
+            genre: "PREFER_NOT_TO_SAY",
+            systemRole: "FULL_ACCESS",
+        });
+        formExisting.reset({
+            teacherId: "",
+            systemRole: "FULL_ACCESS",
+        });
+    }, [formNew.reset, formExisting.reset, formNew, formExisting]);
 
     const onSubmitNew = async (data: CreateAdminData) => {
         formNew.clearErrors("root");
@@ -62,6 +82,9 @@ export default function CreateAdminForm({ teachers }: { teachers: TeacherOption[
             formExisting.setError("root", { type: "server", message: result.error });
         }
     };
+
+    const canSubmitNew = formNew.formState.isValid && !formNew.formState.isSubmitting;
+    const canSubmitExisting = formExisting.formState.isValid && !formExisting.formState.isSubmitting;
 
     return (
         <div className="bg-surface w-full border border-surface-border p-6 rounded-4xl">
@@ -93,38 +116,79 @@ export default function CreateAdminForm({ teachers }: { teachers: TeacherOption[
                     )}
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div className="flex flex-col gap-2">
-                            <Label htmlFor="name">Nome completo</Label>
-                            <Input id="name" {...formNew.register("name")} placeholder="Ex: João da Silva" className="p-5 h-15.5 rounded-lg bg-background" />
+                            <Label htmlFor="name">Nome completo *</Label>
+                            <Input
+                                id="name"
+                                {...formNew.register("name")}
+                                placeholder="Ex: João da Silva"
+                                className="p-5 h-15.5 rounded-xl bg-background"
+                                aria-invalid={formNew.formState.errors.name ? "true" : "false"}
+                            />
                             {formNew.formState.errors.name && <p className="text-sm text-red-600">{formNew.formState.errors.name.message}</p>}
                         </div>
                         <div className="flex flex-col gap-2">
-                            <Label htmlFor="email">E-mail</Label>
-                            <Input id="email" type="email" {...formNew.register("email")} placeholder="joao@escola.com" className="p-5 h-15.5 rounded-lg bg-background" />
+                            <Label htmlFor="email">E-mail *</Label>
+                            <Input
+                                id="email"
+                                type="email"
+                                {...formNew.register("email")}
+                                placeholder="joao@escola.com"
+                                className="p-5 h-15.5 rounded-xl bg-background"
+                                aria-invalid={formNew.formState.errors.email ? "true" : "false"}
+                            />
                             {formNew.formState.errors.email && <p className="text-sm text-red-600">{formNew.formState.errors.email.message}</p>}
                         </div>
                         <div className="flex flex-col gap-2">
-                            <Label htmlFor="cpf">CPF</Label>
-                            <Input id="cpf" {...formNew.register("cpf")} placeholder="000.000.000-00" className="p-5 h-15.5 rounded-lg bg-background" />
+                            <Label htmlFor="cpf">CPF *</Label>
+                            <Input
+                                id="cpf"
+                                {...formNew.register("cpf")}
+                                placeholder="000.000.000-00"
+                                className="p-5 h-15.5 rounded-xl bg-background"
+                                aria-invalid={formNew.formState.errors.cpf ? "true" : "false"}
+                            />
                             {formNew.formState.errors.cpf && <p className="text-sm text-red-600">{formNew.formState.errors.cpf.message}</p>}
                         </div>
                         <div className="flex flex-col gap-2">
-                            <Label htmlFor="phone">Telefone</Label>
-                            <Input id="phone" {...formNew.register("phone")} placeholder="(11) 99999-9999" className="p-5 h-15.5 rounded-lg bg-background" />
+                            <Label htmlFor="phone">Telefone *</Label>
+                            <Input
+                                id="phone"
+                                {...formNew.register("phone")}
+                                placeholder="(11) 99999-9999"
+                                className="p-5 h-15.5 rounded-xl bg-background"
+                                aria-invalid={formNew.formState.errors.phone ? "true" : "false"}
+                            />
                             {formNew.formState.errors.phone && <p className="text-sm text-red-600">{formNew.formState.errors.phone.message}</p>}
                         </div>
                         <div className="flex flex-col gap-2">
-                            <Label htmlFor="birthDate">Data de Nascimento</Label>
-                            <Input id="birthDate" type="date" {...formNew.register("birthDate")} className="p-5 h-15.5 rounded-lg bg-background" />
+                            <Label htmlFor="birthDate">Data de Nascimento *</Label>
+                            <Controller
+                                control={formNew.control}
+                                name="birthDate"
+                                render={({ field }) => (
+                                    <Input
+                                        id="birthDate"
+                                        type="date"
+                                        value={field.value instanceof Date && !isNaN(field.value.getTime()) ? field.value.toISOString().slice(0, 10) : ""}
+                                        onChange={(e) => {
+                                            const val = e.target.value;
+                                            field.onChange(val ? new Date(`${val}T00:00:00`) : undefined);
+                                        }}
+                                        className="p-5 h-15.5 rounded-xl bg-background"
+                                        aria-invalid={formNew.formState.errors.birthDate ? "true" : "false"}
+                                    />
+                                )}
+                            />
                             {formNew.formState.errors.birthDate && <p className="text-sm text-red-600">{formNew.formState.errors.birthDate.message}</p>}
                         </div>
                         <div className="flex flex-col gap-2">
-                            <Label htmlFor="genre">Gênero</Label>
+                            <Label htmlFor="genre">Gênero *</Label>
                             <Controller
                                 control={formNew.control}
                                 name="genre"
                                 render={({ field }) => (
                                     <Select value={field.value} onValueChange={(val) => field.onChange(val as UserGenre)}>
-                                        <SelectTrigger className="w-full bg-background p-5 h-15.5 rounded-2xl">
+                                        <SelectTrigger className="w-full bg-background p-5 h-15.5 rounded-2xl" aria-invalid={formNew.formState.errors.genre ? "true" : "false"}>
                                             <SelectValue placeholder="Selecione..." />
                                         </SelectTrigger>
                                         <SelectContent>
@@ -139,13 +203,13 @@ export default function CreateAdminForm({ teachers }: { teachers: TeacherOption[
                             {formNew.formState.errors.genre && <p className="text-sm text-red-600">{formNew.formState.errors.genre.message}</p>}
                         </div>
                         <div className="flex flex-col gap-2 sm:col-span-2">
-                            <Label htmlFor="systemRole">Nível de Acesso</Label>
+                            <Label htmlFor="systemRole">Nível de Acesso *</Label>
                             <Controller
                                 control={formNew.control}
                                 name="systemRole"
                                 render={({ field }) => (
                                     <Select value={field.value} onValueChange={(val) => field.onChange(val as SystemRole)}>
-                                        <SelectTrigger className="w-full bg-background p-5 h-15.5 rounded-2xl">
+                                        <SelectTrigger className="w-full bg-background p-5 h-15.5 rounded-2xl" aria-invalid={formNew.formState.errors.systemRole ? "true" : "false"}>
                                             <SelectValue placeholder="Selecione o nível de acesso" />
                                         </SelectTrigger>
                                         <SelectContent>
@@ -158,10 +222,18 @@ export default function CreateAdminForm({ teachers }: { teachers: TeacherOption[
                             {formNew.formState.errors.systemRole && <p className="text-sm text-red-600">{formNew.formState.errors.systemRole.message}</p>}
                         </div>
                     </div>
-                    <div className="flex justify-end mt-4">
-                        <Button type="submit" disabled={formNew.formState.isSubmitting}>
+                    <div className="flex flex-col-reverse justify-end gap-3 pt-4 sm:flex-row mt-4">
+                        <Button
+                            type="button"
+                            variant="outline"
+                            onClick={() => router.back()}
+                            disabled={formNew.formState.isSubmitting}
+                        >
+                            Cancelar
+                        </Button>
+                        <Button type="submit" disabled={!canSubmitNew}>
                             {formNew.formState.isSubmitting && <IconLoader2 className="size-4 mr-2 animate-spin" />}
-                            {formNew.formState.isSubmitting ? "Criando..." : "Criar Administrador"}
+                            {formNew.formState.isSubmitting ? "Criando..." : "Concluir"}
                         </Button>
                     </div>
                 </form>
@@ -174,13 +246,13 @@ export default function CreateAdminForm({ teachers }: { teachers: TeacherOption[
                     )}
                     <div className="flex flex-col gap-4">
                         <div className="flex flex-col gap-2">
-                            <Label htmlFor="teacherId">Selecione o Professor</Label>
+                            <Label htmlFor="teacherId">Selecione o Professor *</Label>
                             <Controller
                                 control={formExisting.control}
                                 name="teacherId"
                                 render={({ field }) => (
                                     <Select value={field.value} onValueChange={field.onChange}>
-                                        <SelectTrigger className="w-full bg-background p-5 h-15.5 rounded-2xl">
+                                        <SelectTrigger className="w-full bg-background p-5 h-15.5 rounded-2xl" aria-invalid={formExisting.formState.errors.teacherId ? "true" : "false"}>
                                             <SelectValue placeholder="Busque um professor..." />
                                         </SelectTrigger>
                                         <SelectContent>
@@ -195,13 +267,13 @@ export default function CreateAdminForm({ teachers }: { teachers: TeacherOption[
                             {formExisting.formState.errors.teacherId && <p className="text-sm text-red-600">{formExisting.formState.errors.teacherId.message}</p>}
                         </div>
                         <div className="flex flex-col gap-2">
-                            <Label htmlFor="systemRole">Nível de Acesso como Administrador</Label>
+                            <Label htmlFor="systemRole">Nível de Acesso como Administrador *</Label>
                             <Controller
                                 control={formExisting.control}
                                 name="systemRole"
                                 render={({ field }) => (
                                     <Select value={field.value} onValueChange={(val) => field.onChange(val as SystemRole)}>
-                                        <SelectTrigger className="w-full bg-background p-5 h-15.5 rounded-2xl">
+                                        <SelectTrigger className="w-full bg-background p-5 h-15.5 rounded-2xl" aria-invalid={formExisting.formState.errors.systemRole ? "true" : "false"}>
                                             <SelectValue placeholder="Selecione o nível de acesso" />
                                         </SelectTrigger>
                                         <SelectContent>
@@ -214,10 +286,18 @@ export default function CreateAdminForm({ teachers }: { teachers: TeacherOption[
                             {formExisting.formState.errors.systemRole && <p className="text-sm text-red-600">{formExisting.formState.errors.systemRole.message}</p>}
                         </div>
                     </div>
-                    <div className="flex justify-end mt-4">
-                        <Button type="submit" disabled={formExisting.formState.isSubmitting}>
+                    <div className="flex flex-col-reverse justify-end gap-3 pt-4 sm:flex-row mt-4">
+                        <Button
+                            type="button"
+                            variant="outline"
+                            onClick={() => router.back()}
+                            disabled={formExisting.formState.isSubmitting}
+                        >
+                            Cancelar
+                        </Button>
+                        <Button type="submit" disabled={!canSubmitExisting}>
                             {formExisting.formState.isSubmitting && <IconLoader2 className="size-4 mr-2 animate-spin" />}
-                            {formExisting.formState.isSubmitting ? "Salvando..." : "Promover a Administrador"}
+                            {formExisting.formState.isSubmitting ? "Salvando..." : "Concluir"}
                         </Button>
                     </div>
                 </form>

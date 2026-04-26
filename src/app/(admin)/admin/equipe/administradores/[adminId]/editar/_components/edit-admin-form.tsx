@@ -12,44 +12,53 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { editAdminSchema, type EditAdminData, type EditAdminInput } from "../schema";
 import { IconLoader2 } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export default function EditAdminForm({ admin }: { admin: User }) {
     const router = useRouter();
-    // Format date for the input (YYYY-MM-DD)
-    const formattedDate = admin.birthDate ? new Date(admin.birthDate).toISOString().split("T")[0] : undefined;
-
     const form = useForm<EditAdminInput, unknown, EditAdminData>({
         resolver: zodResolver(editAdminSchema),
-        mode: "onChange",
+        mode: "all",
         defaultValues: {
             name: admin.name,
             email: admin.email,
             cpf: admin.cpf,
             phone: admin.phone,
-            birthDate: formattedDate as unknown as Date, // zod string to date coercion
+            birthDate: admin.birthDate ? new Date(admin.birthDate) : undefined,
             genre: admin.genre as UserGenre,
             systemRole: admin.systemRole as SystemRole,
         },
     });
 
+    const {
+        register,
+        handleSubmit,
+        control,
+        setError,
+        clearErrors,
+        formState: { errors, isSubmitting },
+    } = form;
+
+    useEffect(() => {
+        form.trigger();
+    }, [form]);
+
     const onSubmit = async (data: EditAdminData) => {
-        form.clearErrors("root");
+        clearErrors("root");
         const result = await editAdminAction(admin.id, data);
 
         if (result && !result.success) {
             toast.error(result.error);
-            form.setError("root", { type: "server", message: result.error });
+            setError("root", { type: "server", message: result.error });
         }
     };
 
-    const canSubmit = form.formState.isValid && !form.formState.isSubmitting;
-
     return (
         <div className="bg-surface border border-surface-border p-6 rounded-3xl max-w-3xl">
-            <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-6">
-                {form.formState.errors.root?.message && (
+            <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
+                {errors.root?.message && (
                     <div className="p-4 bg-red-50 border border-red-200 rounded-lg text-red-900 text-sm">
-                        {form.formState.errors.root.message}
+                        {errors.root.message}
                     </div>
                 )}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -57,47 +66,47 @@ export default function EditAdminForm({ admin }: { admin: User }) {
                         <Label htmlFor="name">Nome completo *</Label>
                         <Input
                             id="name"
-                            {...form.register("name")}
-                            className="p-5 h-15.5 rounded-3xl bg-background"
-                            aria-invalid={form.formState.errors.name ? "true" : "false"}
+                            {...register("name")}
+                            className="p-5 h-15.5 rounded-xl bg-background"
+                            aria-invalid={errors.name ? "true" : "false"}
                         />
-                        {form.formState.errors.name && <p className="text-sm text-red-600">{form.formState.errors.name.message}</p>}
+                        {errors.name && <p className="text-sm text-red-600">{errors.name.message}</p>}
                     </div>
                     <div className="flex flex-col gap-2">
                         <Label htmlFor="email">E-mail *</Label>
                         <Input
                             id="email"
                             type="email"
-                            {...form.register("email")}
-                            className="p-5 h-[62px] rounded-lg bg-background"
-                            aria-invalid={form.formState.errors.email ? "true" : "false"}
+                            {...register("email")}
+                            className="p-5 h-15.5 rounded-xl bg-background"
+                            aria-invalid={errors.email ? "true" : "false"}
                         />
-                        {form.formState.errors.email && <p className="text-sm text-red-600">{form.formState.errors.email.message}</p>}
+                        {errors.email && <p className="text-sm text-red-600">{errors.email.message}</p>}
                     </div>
                     <div className="flex flex-col gap-2">
                         <Label htmlFor="cpf">CPF *</Label>
                         <Input
                             id="cpf"
-                            {...form.register("cpf")}
-                            className="p-5 h-[62px] rounded-lg bg-background"
-                            aria-invalid={form.formState.errors.cpf ? "true" : "false"}
+                            {...register("cpf")}
+                            className="p-5 h-15.5 rounded-xl bg-background"
+                            aria-invalid={errors.cpf ? "true" : "false"}
                         />
-                        {form.formState.errors.cpf && <p className="text-sm text-red-600">{form.formState.errors.cpf.message}</p>}
+                        {errors.cpf && <p className="text-sm text-red-600">{errors.cpf.message}</p>}
                     </div>
                     <div className="flex flex-col gap-2">
                         <Label htmlFor="phone">Telefone *</Label>
                         <Input
                             id="phone"
-                            {...form.register("phone")}
-                            className="p-5 h-[62px] rounded-lg bg-background"
-                            aria-invalid={form.formState.errors.phone ? "true" : "false"}
+                            {...register("phone")}
+                            className="p-5 h-15.5 rounded-xl bg-background"
+                            aria-invalid={errors.phone ? "true" : "false"}
                         />
-                        {form.formState.errors.phone && <p className="text-sm text-red-600">{form.formState.errors.phone.message}</p>}
+                        {errors.phone && <p className="text-sm text-red-600">{errors.phone.message}</p>}
                     </div>
                     <div className="flex flex-col gap-2">
                         <Label htmlFor="birthDate">Data de Nascimento *</Label>
                         <Controller
-                            control={form.control}
+                            control={control}
                             name="birthDate"
                             render={({ field }) => (
                                 <Input
@@ -108,21 +117,21 @@ export default function EditAdminForm({ admin }: { admin: User }) {
                                         const val = e.target.value;
                                         field.onChange(val ? new Date(`${val}T00:00:00`) : undefined);
                                     }}
-                                    className="p-5 h-[62px] rounded-lg bg-background"
-                                    aria-invalid={form.formState.errors.birthDate ? "true" : "false"}
+                                    className="p-5 h-15.5 rounded-xl bg-background"
+                                    aria-invalid={errors.birthDate ? "true" : "false"}
                                 />
                             )}
                         />
-                        {form.formState.errors.birthDate && <p className="text-sm text-red-600">{form.formState.errors.birthDate.message}</p>}
+                        {errors.birthDate && <p className="text-sm text-red-600">{errors.birthDate.message}</p>}
                     </div>
                     <div className="flex flex-col gap-2">
                         <Label htmlFor="genre">Gênero *</Label>
                         <Controller
-                            control={form.control}
+                            control={control}
                             name="genre"
                             render={({ field }) => (
                                 <Select value={field.value} onValueChange={(val) => field.onChange(val as UserGenre)}>
-                                    <SelectTrigger className="w-full bg-background p-5 h-[62px]" aria-invalid={form.formState.errors.genre ? "true" : "false"}>
+                                    <SelectTrigger className="w-full bg-background p-5 h-15.5 rounded-xl" aria-invalid={errors.genre ? "true" : "false"}>
                                         <SelectValue placeholder="Selecione..." />
                                     </SelectTrigger>
                                     <SelectContent>
@@ -134,16 +143,16 @@ export default function EditAdminForm({ admin }: { admin: User }) {
                                 </Select>
                             )}
                         />
-                        {form.formState.errors.genre && <p className="text-sm text-red-600">{form.formState.errors.genre.message}</p>}
+                        {errors.genre && <p className="text-sm text-red-600">{errors.genre.message}</p>}
                     </div>
                     <div className="flex flex-col gap-2 sm:col-span-2">
                         <Label htmlFor="systemRole">Nível de Acesso *</Label>
                         <Controller
-                            control={form.control}
+                            control={control}
                             name="systemRole"
                             render={({ field }) => (
                                 <Select value={field.value} onValueChange={(val) => field.onChange(val as SystemRole)}>
-                                    <SelectTrigger className="w-full bg-background p-5 h-[62px]" aria-invalid={form.formState.errors.systemRole ? "true" : "false"}>
+                                    <SelectTrigger className="w-full bg-background p-5 h-15.5 rounded-xl" aria-invalid={errors.systemRole ? "true" : "false"}>
                                         <SelectValue placeholder="Selecione o nível de acesso" />
                                     </SelectTrigger>
                                     <SelectContent>
@@ -153,7 +162,7 @@ export default function EditAdminForm({ admin }: { admin: User }) {
                                 </Select>
                             )}
                         />
-                        {form.formState.errors.systemRole && <p className="text-sm text-red-600">{form.formState.errors.systemRole.message}</p>}
+                        {errors.systemRole && <p className="text-sm text-red-600">{errors.systemRole.message}</p>}
                     </div>
                 </div>
                 <div className="flex flex-col-reverse justify-end gap-3 pt-4 sm:flex-row mt-4 border-t">
@@ -161,13 +170,13 @@ export default function EditAdminForm({ admin }: { admin: User }) {
                         type="button"
                         variant="outline"
                         onClick={() => router.back()}
-                        disabled={form.formState.isSubmitting}
+                        disabled={isSubmitting}
                     >
                         Cancelar
                     </Button>
-                    <Button type="submit" disabled={!canSubmit}>
-                        {form.formState.isSubmitting && <IconLoader2 className="size-4 mr-2 animate-spin" />}
-                        {form.formState.isSubmitting ? "Salvando..." : "Concluir"}
+                    <Button type="submit" disabled={isSubmitting}>
+                        {isSubmitting && <IconLoader2 className="size-4 mr-2 animate-spin" />}
+                        {isSubmitting ? "Salvando..." : "Concluir"}
                     </Button>
                 </div>
             </form>

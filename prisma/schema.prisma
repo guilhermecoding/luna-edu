@@ -151,7 +151,7 @@ model Session {
 }
 
 model Account {
-    id                    String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+    id                    String    @id
     accountId             String    @map("account_id")
     providerId            String    @map("provider_id")
     providerType          String    @map("provider_type")

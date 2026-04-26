@@ -37,23 +37,24 @@ export async function getAdminById(id: string) {
 export async function createAdmin(data: Prisma.UserCreateInput) {
     const lunaId = await generateLunaId();
     const randomPassword = Math.random().toString(36).slice(-8) + Math.random().toString(36).slice(-8);
+    const signUpBody = {
+        email: data.email as string,
+        password: randomPassword,
+        name: data.name as string,
+        cpf: data.cpf as string,
+        phone: data.phone as string,
+        birthDate: data.birthDate as Date,
+        bio: (data.bio as string) ?? "",
+        genre: data.genre as UserGenre,
+        systemRole: data.systemRole as SystemRole,
+        isAdmin: true,
+        isTeacher: false,
+        isActive: true,
+        lunaId,
+    };
 
     const res = await auth.api.signUpEmail({
-        body: {
-            email: data.email as string,
-            password: randomPassword,
-            name: data.name as string,
-            cpf: data.cpf as string,
-            phone: data.phone as string,
-            birthDate: data.birthDate as Date,
-            bio: (data.bio as string) ?? "",
-            genre: data.genre as UserGenre,
-            systemRole: data.systemRole as SystemRole,
-            isAdmin: true,
-            isTeacher: false,
-            isActive: true,
-            lunaId,
-        },
+        body: signUpBody,
     });
 
     return res.user;

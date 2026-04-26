@@ -240,7 +240,7 @@ export type AccountWhereInput = {
   AND?: Prisma.AccountWhereInput | Prisma.AccountWhereInput[]
   OR?: Prisma.AccountWhereInput[]
   NOT?: Prisma.AccountWhereInput | Prisma.AccountWhereInput[]
-  id?: Prisma.UuidFilter<"Account"> | string
+  id?: Prisma.StringFilter<"Account"> | string
   accountId?: Prisma.StringFilter<"Account"> | string
   providerId?: Prisma.StringFilter<"Account"> | string
   providerType?: Prisma.StringFilter<"Account"> | string
@@ -320,7 +320,7 @@ export type AccountScalarWhereWithAggregatesInput = {
   AND?: Prisma.AccountScalarWhereWithAggregatesInput | Prisma.AccountScalarWhereWithAggregatesInput[]
   OR?: Prisma.AccountScalarWhereWithAggregatesInput[]
   NOT?: Prisma.AccountScalarWhereWithAggregatesInput | Prisma.AccountScalarWhereWithAggregatesInput[]
-  id?: Prisma.UuidWithAggregatesFilter<"Account"> | string
+  id?: Prisma.StringWithAggregatesFilter<"Account"> | string
   accountId?: Prisma.StringWithAggregatesFilter<"Account"> | string
   providerId?: Prisma.StringWithAggregatesFilter<"Account"> | string
   providerType?: Prisma.StringWithAggregatesFilter<"Account"> | string
@@ -337,7 +337,7 @@ export type AccountScalarWhereWithAggregatesInput = {
 }
 
 export type AccountCreateInput = {
-  id?: string
+  id: string
   accountId: string
   providerId: string
   providerType: string
@@ -354,7 +354,7 @@ export type AccountCreateInput = {
 }
 
 export type AccountUncheckedCreateInput = {
-  id?: string
+  id: string
   accountId: string
   providerId: string
   providerType: string
@@ -405,7 +405,7 @@ export type AccountUncheckedUpdateInput = {
 }
 
 export type AccountCreateManyInput = {
-  id?: string
+  id: string
   accountId: string
   providerId: string
   providerType: string
@@ -562,7 +562,7 @@ export type NullableDateTimeFieldUpdateOperationsInput = {
 }
 
 export type AccountCreateWithoutUserInput = {
-  id?: string
+  id: string
   accountId: string
   providerId: string
   providerType: string
@@ -578,7 +578,7 @@ export type AccountCreateWithoutUserInput = {
 }
 
 export type AccountUncheckedCreateWithoutUserInput = {
-  id?: string
+  id: string
   accountId: string
   providerId: string
   providerType: string
@@ -623,7 +623,7 @@ export type AccountScalarWhereInput = {
   AND?: Prisma.AccountScalarWhereInput | Prisma.AccountScalarWhereInput[]
   OR?: Prisma.AccountScalarWhereInput[]
   NOT?: Prisma.AccountScalarWhereInput | Prisma.AccountScalarWhereInput[]
-  id?: Prisma.UuidFilter<"Account"> | string
+  id?: Prisma.StringFilter<"Account"> | string
   accountId?: Prisma.StringFilter<"Account"> | string
   providerId?: Prisma.StringFilter<"Account"> | string
   providerType?: Prisma.StringFilter<"Account"> | string
@@ -640,7 +640,7 @@ export type AccountScalarWhereInput = {
 }
 
 export type AccountCreateManyUserInput = {
-  id?: string
+  id: string
   accountId: string
   providerId: string
   providerType: string

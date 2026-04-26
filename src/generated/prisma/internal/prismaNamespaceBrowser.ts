@@ -110,7 +110,8 @@ export const UserScalarFieldEnum = {
   isAdmin: 'isAdmin',
   isTeacher: 'isTeacher',
   isActive: 'isActive',
-  genre: 'genre'
+  genre: 'genre',
+  lunaId: 'lunaId'
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -322,7 +323,8 @@ export const StudentScalarFieldEnum = {
   cpf: 'cpf',
   email: 'email',
   school: 'school',
-  genre: 'genre'
+  genre: 'genre',
+  lunaId: 'lunaId'
 } as const
 
 export type StudentScalarFieldEnum = (typeof StudentScalarFieldEnum)[keyof typeof StudentScalarFieldEnum]

@@ -1,6 +1,7 @@
 import prisma from "@/lib/prisma";
 import { cacheLife, cacheTag } from "next/cache";
 import { Prisma } from "@/generated/prisma/client";
+import { generateLunaId } from "@/lib/generate-luna-id";
 
 export async function getAdmins(query?: string) {
     "use cache";
@@ -32,9 +33,11 @@ export async function getAdminById(id: string) {
 }
 
 export async function createAdmin(data: Prisma.UserCreateInput) {
+    const lunaId = await generateLunaId();
     const admin = await prisma.user.create({
         data: {
             ...data,
+            lunaId,
             isAdmin: true,
         },
     });
@@ -50,9 +53,17 @@ export async function updateAdmin(id: string, data: Prisma.UserUpdateInput) {
 }
 
 export async function promoteUserToAdmin(userId: string, systemRole: "FULL_ACCESS" | "READ_ONLY") {
+    const user = await prisma.user.findUnique({
+        where: { id: userId },
+        select: { lunaId: true },
+    });
+
+    const lunaId = user?.lunaId || await generateLunaId();
+
     const admin = await prisma.user.update({
         where: { id: userId },
         data: {
+            lunaId,
             isAdmin: true,
             systemRole,
         },

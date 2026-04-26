@@ -41,6 +41,7 @@ export type UserMinAggregateOutputType = {
   isTeacher: boolean | null
   isActive: boolean | null
   genre: $Enums.UserGenre | null
+  lunaId: string | null
 }
 
 export type UserMaxAggregateOutputType = {
@@ -60,6 +61,7 @@ export type UserMaxAggregateOutputType = {
   isTeacher: boolean | null
   isActive: boolean | null
   genre: $Enums.UserGenre | null
+  lunaId: string | null
 }
 
 export type UserCountAggregateOutputType = {
@@ -79,6 +81,7 @@ export type UserCountAggregateOutputType = {
   isTeacher: number
   isActive: number
   genre: number
+  lunaId: number
   _all: number
 }
 
@@ -100,6 +103,7 @@ export type UserMinAggregateInputType = {
   isTeacher?: true
   isActive?: true
   genre?: true
+  lunaId?: true
 }
 
 export type UserMaxAggregateInputType = {
@@ -119,6 +123,7 @@ export type UserMaxAggregateInputType = {
   isTeacher?: true
   isActive?: true
   genre?: true
+  lunaId?: true
 }
 
 export type UserCountAggregateInputType = {
@@ -138,6 +143,7 @@ export type UserCountAggregateInputType = {
   isTeacher?: true
   isActive?: true
   genre?: true
+  lunaId?: true
   _all?: true
 }
 
@@ -230,6 +236,7 @@ export type UserGroupByOutputType = {
   isTeacher: boolean
   isActive: boolean
   genre: $Enums.UserGenre
+  lunaId: string | null
   _count: UserCountAggregateOutputType | null
   _min: UserMinAggregateOutputType | null
   _max: UserMaxAggregateOutputType | null
@@ -270,6 +277,7 @@ export type UserWhereInput = {
   isTeacher?: Prisma.BoolFilter<"User"> | boolean
   isActive?: Prisma.BoolFilter<"User"> | boolean
   genre?: Prisma.EnumUserGenreFilter<"User"> | $Enums.UserGenre
+  lunaId?: Prisma.StringNullableFilter<"User"> | string | null
   sessions?: Prisma.SessionListRelationFilter
   accounts?: Prisma.AccountListRelationFilter
   courseAssistants?: Prisma.CourseAssistantListRelationFilter
@@ -295,6 +303,7 @@ export type UserOrderByWithRelationInput = {
   isTeacher?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   genre?: Prisma.SortOrder
+  lunaId?: Prisma.SortOrderInput | Prisma.SortOrder
   sessions?: Prisma.SessionOrderByRelationAggregateInput
   accounts?: Prisma.AccountOrderByRelationAggregateInput
   courseAssistants?: Prisma.CourseAssistantOrderByRelationAggregateInput
@@ -305,6 +314,7 @@ export type UserOrderByWithRelationInput = {
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  lunaId?: string
   email_cpf?: Prisma.UserEmailCpfCompoundUniqueInput
   AND?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
   OR?: Prisma.UserWhereInput[]
@@ -330,7 +340,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   notifications?: Prisma.NotificationListRelationFilter
   schedules?: Prisma.ScheduleListRelationFilter
   lessons?: Prisma.LessonListRelationFilter
-}, "id" | "email_cpf">
+}, "id" | "lunaId" | "email_cpf">
 
 export type UserOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -349,6 +359,7 @@ export type UserOrderByWithAggregationInput = {
   isTeacher?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   genre?: Prisma.SortOrder
+  lunaId?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.UserCountOrderByAggregateInput
   _max?: Prisma.UserMaxOrderByAggregateInput
   _min?: Prisma.UserMinOrderByAggregateInput
@@ -374,6 +385,7 @@ export type UserScalarWhereWithAggregatesInput = {
   isTeacher?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
   isActive?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
   genre?: Prisma.EnumUserGenreWithAggregatesFilter<"User"> | $Enums.UserGenre
+  lunaId?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
 }
 
 export type UserCreateInput = {
@@ -393,6 +405,7 @@ export type UserCreateInput = {
   isTeacher?: boolean
   isActive?: boolean
   genre?: $Enums.UserGenre
+  lunaId?: string | null
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   courseAssistants?: Prisma.CourseAssistantCreateNestedManyWithoutAssistantInput
@@ -418,6 +431,7 @@ export type UserUncheckedCreateInput = {
   isTeacher?: boolean
   isActive?: boolean
   genre?: $Enums.UserGenre
+  lunaId?: string | null
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   courseAssistants?: Prisma.CourseAssistantUncheckedCreateNestedManyWithoutAssistantInput
@@ -443,6 +457,7 @@ export type UserUpdateInput = {
   isTeacher?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   genre?: Prisma.EnumUserGenreFieldUpdateOperationsInput | $Enums.UserGenre
+  lunaId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   courseAssistants?: Prisma.CourseAssistantUpdateManyWithoutAssistantNestedInput
@@ -468,6 +483,7 @@ export type UserUncheckedUpdateInput = {
   isTeacher?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   genre?: Prisma.EnumUserGenreFieldUpdateOperationsInput | $Enums.UserGenre
+  lunaId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   courseAssistants?: Prisma.CourseAssistantUncheckedUpdateManyWithoutAssistantNestedInput
@@ -493,6 +509,7 @@ export type UserCreateManyInput = {
   isTeacher?: boolean
   isActive?: boolean
   genre?: $Enums.UserGenre
+  lunaId?: string | null
 }
 
 export type UserUpdateManyMutationInput = {
@@ -512,6 +529,7 @@ export type UserUpdateManyMutationInput = {
   isTeacher?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   genre?: Prisma.EnumUserGenreFieldUpdateOperationsInput | $Enums.UserGenre
+  lunaId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type UserUncheckedUpdateManyInput = {
@@ -531,6 +549,7 @@ export type UserUncheckedUpdateManyInput = {
   isTeacher?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   genre?: Prisma.EnumUserGenreFieldUpdateOperationsInput | $Enums.UserGenre
+  lunaId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type UserEmailCpfCompoundUniqueInput = {
@@ -555,6 +574,7 @@ export type UserCountOrderByAggregateInput = {
   isTeacher?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   genre?: Prisma.SortOrder
+  lunaId?: Prisma.SortOrder
 }
 
 export type UserMaxOrderByAggregateInput = {
@@ -574,6 +594,7 @@ export type UserMaxOrderByAggregateInput = {
   isTeacher?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   genre?: Prisma.SortOrder
+  lunaId?: Prisma.SortOrder
 }
 
 export type UserMinOrderByAggregateInput = {
@@ -593,6 +614,7 @@ export type UserMinOrderByAggregateInput = {
   isTeacher?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   genre?: Prisma.SortOrder
+  lunaId?: Prisma.SortOrder
 }
 
 export type UserScalarRelationFilter = {
@@ -736,6 +758,7 @@ export type UserCreateWithoutSessionsInput = {
   isTeacher?: boolean
   isActive?: boolean
   genre?: $Enums.UserGenre
+  lunaId?: string | null
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   courseAssistants?: Prisma.CourseAssistantCreateNestedManyWithoutAssistantInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
@@ -760,6 +783,7 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   isTeacher?: boolean
   isActive?: boolean
   genre?: $Enums.UserGenre
+  lunaId?: string | null
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   courseAssistants?: Prisma.CourseAssistantUncheckedCreateNestedManyWithoutAssistantInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
@@ -800,6 +824,7 @@ export type UserUpdateWithoutSessionsInput = {
   isTeacher?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   genre?: Prisma.EnumUserGenreFieldUpdateOperationsInput | $Enums.UserGenre
+  lunaId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   courseAssistants?: Prisma.CourseAssistantUpdateManyWithoutAssistantNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
@@ -824,6 +849,7 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   isTeacher?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   genre?: Prisma.EnumUserGenreFieldUpdateOperationsInput | $Enums.UserGenre
+  lunaId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   courseAssistants?: Prisma.CourseAssistantUncheckedUpdateManyWithoutAssistantNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
@@ -848,6 +874,7 @@ export type UserCreateWithoutAccountsInput = {
   isTeacher?: boolean
   isActive?: boolean
   genre?: $Enums.UserGenre
+  lunaId?: string | null
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   courseAssistants?: Prisma.CourseAssistantCreateNestedManyWithoutAssistantInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
@@ -872,6 +899,7 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   isTeacher?: boolean
   isActive?: boolean
   genre?: $Enums.UserGenre
+  lunaId?: string | null
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   courseAssistants?: Prisma.CourseAssistantUncheckedCreateNestedManyWithoutAssistantInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
@@ -912,6 +940,7 @@ export type UserUpdateWithoutAccountsInput = {
   isTeacher?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   genre?: Prisma.EnumUserGenreFieldUpdateOperationsInput | $Enums.UserGenre
+  lunaId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   courseAssistants?: Prisma.CourseAssistantUpdateManyWithoutAssistantNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
@@ -936,6 +965,7 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   isTeacher?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   genre?: Prisma.EnumUserGenreFieldUpdateOperationsInput | $Enums.UserGenre
+  lunaId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   courseAssistants?: Prisma.CourseAssistantUncheckedUpdateManyWithoutAssistantNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
@@ -960,6 +990,7 @@ export type UserCreateWithoutSchedulesInput = {
   isTeacher?: boolean
   isActive?: boolean
   genre?: $Enums.UserGenre
+  lunaId?: string | null
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   courseAssistants?: Prisma.CourseAssistantCreateNestedManyWithoutAssistantInput
@@ -984,6 +1015,7 @@ export type UserUncheckedCreateWithoutSchedulesInput = {
   isTeacher?: boolean
   isActive?: boolean
   genre?: $Enums.UserGenre
+  lunaId?: string | null
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   courseAssistants?: Prisma.CourseAssistantUncheckedCreateNestedManyWithoutAssistantInput
@@ -1024,6 +1056,7 @@ export type UserUpdateWithoutSchedulesInput = {
   isTeacher?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   genre?: Prisma.EnumUserGenreFieldUpdateOperationsInput | $Enums.UserGenre
+  lunaId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   courseAssistants?: Prisma.CourseAssistantUpdateManyWithoutAssistantNestedInput
@@ -1048,6 +1081,7 @@ export type UserUncheckedUpdateWithoutSchedulesInput = {
   isTeacher?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   genre?: Prisma.EnumUserGenreFieldUpdateOperationsInput | $Enums.UserGenre
+  lunaId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   courseAssistants?: Prisma.CourseAssistantUncheckedUpdateManyWithoutAssistantNestedInput
@@ -1072,6 +1106,7 @@ export type UserCreateWithoutLessonsInput = {
   isTeacher?: boolean
   isActive?: boolean
   genre?: $Enums.UserGenre
+  lunaId?: string | null
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   courseAssistants?: Prisma.CourseAssistantCreateNestedManyWithoutAssistantInput
@@ -1096,6 +1131,7 @@ export type UserUncheckedCreateWithoutLessonsInput = {
   isTeacher?: boolean
   isActive?: boolean
   genre?: $Enums.UserGenre
+  lunaId?: string | null
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   courseAssistants?: Prisma.CourseAssistantUncheckedCreateNestedManyWithoutAssistantInput
@@ -1136,6 +1172,7 @@ export type UserUpdateWithoutLessonsInput = {
   isTeacher?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   genre?: Prisma.EnumUserGenreFieldUpdateOperationsInput | $Enums.UserGenre
+  lunaId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   courseAssistants?: Prisma.CourseAssistantUpdateManyWithoutAssistantNestedInput
@@ -1160,6 +1197,7 @@ export type UserUncheckedUpdateWithoutLessonsInput = {
   isTeacher?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   genre?: Prisma.EnumUserGenreFieldUpdateOperationsInput | $Enums.UserGenre
+  lunaId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   courseAssistants?: Prisma.CourseAssistantUncheckedUpdateManyWithoutAssistantNestedInput
@@ -1184,6 +1222,7 @@ export type UserCreateWithoutNotificationsInput = {
   isTeacher?: boolean
   isActive?: boolean
   genre?: $Enums.UserGenre
+  lunaId?: string | null
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   courseAssistants?: Prisma.CourseAssistantCreateNestedManyWithoutAssistantInput
@@ -1208,6 +1247,7 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   isTeacher?: boolean
   isActive?: boolean
   genre?: $Enums.UserGenre
+  lunaId?: string | null
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   courseAssistants?: Prisma.CourseAssistantUncheckedCreateNestedManyWithoutAssistantInput
@@ -1248,6 +1288,7 @@ export type UserUpdateWithoutNotificationsInput = {
   isTeacher?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   genre?: Prisma.EnumUserGenreFieldUpdateOperationsInput | $Enums.UserGenre
+  lunaId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   courseAssistants?: Prisma.CourseAssistantUpdateManyWithoutAssistantNestedInput
@@ -1272,6 +1313,7 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   isTeacher?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   genre?: Prisma.EnumUserGenreFieldUpdateOperationsInput | $Enums.UserGenre
+  lunaId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   courseAssistants?: Prisma.CourseAssistantUncheckedUpdateManyWithoutAssistantNestedInput
@@ -1296,6 +1338,7 @@ export type UserCreateWithoutCourseAssistantsInput = {
   isTeacher?: boolean
   isActive?: boolean
   genre?: $Enums.UserGenre
+  lunaId?: string | null
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
@@ -1320,6 +1363,7 @@ export type UserUncheckedCreateWithoutCourseAssistantsInput = {
   isTeacher?: boolean
   isActive?: boolean
   genre?: $Enums.UserGenre
+  lunaId?: string | null
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
@@ -1360,6 +1404,7 @@ export type UserUpdateWithoutCourseAssistantsInput = {
   isTeacher?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   genre?: Prisma.EnumUserGenreFieldUpdateOperationsInput | $Enums.UserGenre
+  lunaId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
@@ -1384,6 +1429,7 @@ export type UserUncheckedUpdateWithoutCourseAssistantsInput = {
   isTeacher?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   genre?: Prisma.EnumUserGenreFieldUpdateOperationsInput | $Enums.UserGenre
+  lunaId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
@@ -1484,6 +1530,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   isTeacher?: boolean
   isActive?: boolean
   genre?: boolean
+  lunaId?: boolean
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
   accounts?: boolean | Prisma.User$accountsArgs<ExtArgs>
   courseAssistants?: boolean | Prisma.User$courseAssistantsArgs<ExtArgs>
@@ -1510,6 +1557,7 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   isTeacher?: boolean
   isActive?: boolean
   genre?: boolean
+  lunaId?: boolean
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1529,6 +1577,7 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   isTeacher?: boolean
   isActive?: boolean
   genre?: boolean
+  lunaId?: boolean
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectScalar = {
@@ -1548,9 +1597,10 @@ export type UserSelectScalar = {
   isTeacher?: boolean
   isActive?: boolean
   genre?: boolean
+  lunaId?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "email" | "emailVerified" | "image" | "createdAt" | "updatedAt" | "cpf" | "phone" | "birthDate" | "bio" | "systemRole" | "isAdmin" | "isTeacher" | "isActive" | "genre", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "email" | "emailVerified" | "image" | "createdAt" | "updatedAt" | "cpf" | "phone" | "birthDate" | "bio" | "systemRole" | "isAdmin" | "isTeacher" | "isActive" | "genre" | "lunaId", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
   accounts?: boolean | Prisma.User$accountsArgs<ExtArgs>
@@ -1590,6 +1640,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     isTeacher: boolean
     isActive: boolean
     genre: $Enums.UserGenre
+    lunaId: string | null
   }, ExtArgs["result"]["user"]>
   composites: {}
 }
@@ -2035,6 +2086,7 @@ export interface UserFieldRefs {
   readonly isTeacher: Prisma.FieldRef<"User", 'Boolean'>
   readonly isActive: Prisma.FieldRef<"User", 'Boolean'>
   readonly genre: Prisma.FieldRef<"User", 'UserGenre'>
+  readonly lunaId: Prisma.FieldRef<"User", 'String'>
 }
     
 

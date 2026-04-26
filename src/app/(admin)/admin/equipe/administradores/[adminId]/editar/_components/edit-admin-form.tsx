@@ -70,6 +70,15 @@ export default function EditAdminForm({ admin }: { admin: User }) {
                 )}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="flex flex-col gap-2">
+                        <Label htmlFor="lunaId">Matrícula/LunaID</Label>
+                        <Input
+                            id="lunaId"
+                            value={admin.lunaId || "Não gerado"}
+                            readOnly
+                            className="p-5 h-15.5 rounded-xl bg-background"
+                        />
+                    </div>
+                    <div className="flex flex-col gap-2">
                         <Label htmlFor="name">Nome completo *</Label>
                         <Input
                             id="name"

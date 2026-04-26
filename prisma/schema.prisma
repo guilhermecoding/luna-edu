@@ -119,6 +119,7 @@ model User {
     isTeacher  Boolean    @default(false) @map("is_teacher")
     isActive   Boolean    @default(true) @map("is_active")
     genre      UserGenre  @default(PREFER_NOT_TO_SAY) @map("genre")
+    lunaId     String?    @unique @map("luna_id")
 
     sessions Session[]
     accounts Account[]
@@ -425,6 +426,7 @@ model Student {
     email        String
     school       String
     genre        Genre
+    lunaId       String?  @unique @map("luna_id")
 
     enrollments    Enrollment[]
     attendances    Attendance[]

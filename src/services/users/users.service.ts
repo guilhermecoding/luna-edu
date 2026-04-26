@@ -60,6 +60,7 @@ export async function getUsersList(query?: string) {
         },
         select: {
             id: true,
+            lunaId: true,
             name: true,
             email: true,
             isActive: true,

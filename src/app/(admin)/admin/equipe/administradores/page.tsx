@@ -34,19 +34,21 @@ export default async function AdministratorsPage({
                             description="Gerencie os administradores com acesso ao sistema da sua instituição."
                         />
                     </div>
+                    <div className="flex flex-1 justify-end items-end">
+                        <ButtonLink className="w-full sm:w-auto" href="/admin/equipe/administradores/novo">
+                            <IconPlus className="size-4" />
+                            Adicionar Administrador
+                        </ButtonLink>
+                    </div>
                 </div>
             </Section>
 
-            <Section className="mt-8">
+            <Section className="mt-18">
                 <div className="bg-surface border border-surface-border p-6 rounded-3xl">
                     <div className="flex flex-col mb-8 sm:flex-row items-start sm:items-center justify-between">
                         <h2 className="text-xl flex flex-row items-start sm:items-center gap-2 font-bold text-foreground mb-6 sm:mb-0 w-full">
                             Todos os administradores
                         </h2>
-                        <ButtonLink className="w-full sm:w-auto" href="/admin/equipe/administradores/novo">
-                            <IconPlus className="size-4" />
-                            Adicionar Administrador
-                        </ButtonLink>
                     </div>
                     <DataTable columns={columns} data={adminsList} />
                 </div>

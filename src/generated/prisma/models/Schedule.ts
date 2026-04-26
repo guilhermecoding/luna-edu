@@ -196,7 +196,7 @@ export type ScheduleWhereInput = {
   courseId?: Prisma.UuidFilter<"Schedule"> | string
   dayOfWeek?: Prisma.EnumDayOfWeekFilter<"Schedule"> | $Enums.DayOfWeek
   timeSlotId?: Prisma.UuidFilter<"Schedule"> | string
-  teacherId?: Prisma.UuidNullableFilter<"Schedule"> | string | null
+  teacherId?: Prisma.StringNullableFilter<"Schedule"> | string | null
   roomId?: Prisma.UuidNullableFilter<"Schedule"> | string | null
   course?: Prisma.XOR<Prisma.CourseScalarRelationFilter, Prisma.CourseWhereInput>
   timeSlot?: Prisma.XOR<Prisma.TimeSlotScalarRelationFilter, Prisma.TimeSlotWhereInput>
@@ -232,7 +232,7 @@ export type ScheduleWhereUniqueInput = Prisma.AtLeast<{
   courseId?: Prisma.UuidFilter<"Schedule"> | string
   dayOfWeek?: Prisma.EnumDayOfWeekFilter<"Schedule"> | $Enums.DayOfWeek
   timeSlotId?: Prisma.UuidFilter<"Schedule"> | string
-  teacherId?: Prisma.UuidNullableFilter<"Schedule"> | string | null
+  teacherId?: Prisma.StringNullableFilter<"Schedule"> | string | null
   roomId?: Prisma.UuidNullableFilter<"Schedule"> | string | null
   course?: Prisma.XOR<Prisma.CourseScalarRelationFilter, Prisma.CourseWhereInput>
   timeSlot?: Prisma.XOR<Prisma.TimeSlotScalarRelationFilter, Prisma.TimeSlotWhereInput>
@@ -263,7 +263,7 @@ export type ScheduleScalarWhereWithAggregatesInput = {
   courseId?: Prisma.UuidWithAggregatesFilter<"Schedule"> | string
   dayOfWeek?: Prisma.EnumDayOfWeekWithAggregatesFilter<"Schedule"> | $Enums.DayOfWeek
   timeSlotId?: Prisma.UuidWithAggregatesFilter<"Schedule"> | string
-  teacherId?: Prisma.UuidNullableWithAggregatesFilter<"Schedule"> | string | null
+  teacherId?: Prisma.StringNullableWithAggregatesFilter<"Schedule"> | string | null
   roomId?: Prisma.UuidNullableWithAggregatesFilter<"Schedule"> | string | null
 }
 
@@ -643,7 +643,7 @@ export type ScheduleScalarWhereInput = {
   courseId?: Prisma.UuidFilter<"Schedule"> | string
   dayOfWeek?: Prisma.EnumDayOfWeekFilter<"Schedule"> | $Enums.DayOfWeek
   timeSlotId?: Prisma.UuidFilter<"Schedule"> | string
-  teacherId?: Prisma.UuidNullableFilter<"Schedule"> | string | null
+  teacherId?: Prisma.StringNullableFilter<"Schedule"> | string | null
   roomId?: Prisma.UuidNullableFilter<"Schedule"> | string | null
 }
 

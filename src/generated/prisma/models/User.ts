@@ -261,7 +261,7 @@ export type UserWhereInput = {
   AND?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
   OR?: Prisma.UserWhereInput[]
   NOT?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
-  id?: Prisma.UuidFilter<"User"> | string
+  id?: Prisma.StringFilter<"User"> | string
   name?: Prisma.StringFilter<"User"> | string
   email?: Prisma.StringFilter<"User"> | string
   emailVerified?: Prisma.BoolFilter<"User"> | boolean
@@ -368,7 +368,7 @@ export type UserScalarWhereWithAggregatesInput = {
   AND?: Prisma.UserScalarWhereWithAggregatesInput | Prisma.UserScalarWhereWithAggregatesInput[]
   OR?: Prisma.UserScalarWhereWithAggregatesInput[]
   NOT?: Prisma.UserScalarWhereWithAggregatesInput | Prisma.UserScalarWhereWithAggregatesInput[]
-  id?: Prisma.UuidWithAggregatesFilter<"User"> | string
+  id?: Prisma.StringWithAggregatesFilter<"User"> | string
   name?: Prisma.StringWithAggregatesFilter<"User"> | string
   email?: Prisma.StringWithAggregatesFilter<"User"> | string
   emailVerified?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
@@ -388,7 +388,7 @@ export type UserScalarWhereWithAggregatesInput = {
 }
 
 export type UserCreateInput = {
-  id?: string
+  id: string
   name: string
   email: string
   emailVerified?: boolean
@@ -414,7 +414,7 @@ export type UserCreateInput = {
 }
 
 export type UserUncheckedCreateInput = {
-  id?: string
+  id: string
   name: string
   email: string
   emailVerified?: boolean
@@ -492,7 +492,7 @@ export type UserUncheckedUpdateInput = {
 }
 
 export type UserCreateManyInput = {
-  id?: string
+  id: string
   name: string
   email: string
   emailVerified?: boolean
@@ -736,7 +736,7 @@ export type UserUpdateOneRequiredWithoutCourseAssistantsNestedInput = {
 }
 
 export type UserCreateWithoutSessionsInput = {
-  id?: string
+  id: string
   name: string
   email: string
   emailVerified?: boolean
@@ -761,7 +761,7 @@ export type UserCreateWithoutSessionsInput = {
 }
 
 export type UserUncheckedCreateWithoutSessionsInput = {
-  id?: string
+  id: string
   name: string
   email: string
   emailVerified?: boolean
@@ -852,7 +852,7 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
 }
 
 export type UserCreateWithoutAccountsInput = {
-  id?: string
+  id: string
   name: string
   email: string
   emailVerified?: boolean
@@ -877,7 +877,7 @@ export type UserCreateWithoutAccountsInput = {
 }
 
 export type UserUncheckedCreateWithoutAccountsInput = {
-  id?: string
+  id: string
   name: string
   email: string
   emailVerified?: boolean
@@ -968,7 +968,7 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
 }
 
 export type UserCreateWithoutSchedulesInput = {
-  id?: string
+  id: string
   name: string
   email: string
   emailVerified?: boolean
@@ -993,7 +993,7 @@ export type UserCreateWithoutSchedulesInput = {
 }
 
 export type UserUncheckedCreateWithoutSchedulesInput = {
-  id?: string
+  id: string
   name: string
   email: string
   emailVerified?: boolean
@@ -1084,7 +1084,7 @@ export type UserUncheckedUpdateWithoutSchedulesInput = {
 }
 
 export type UserCreateWithoutLessonsInput = {
-  id?: string
+  id: string
   name: string
   email: string
   emailVerified?: boolean
@@ -1109,7 +1109,7 @@ export type UserCreateWithoutLessonsInput = {
 }
 
 export type UserUncheckedCreateWithoutLessonsInput = {
-  id?: string
+  id: string
   name: string
   email: string
   emailVerified?: boolean
@@ -1200,7 +1200,7 @@ export type UserUncheckedUpdateWithoutLessonsInput = {
 }
 
 export type UserCreateWithoutNotificationsInput = {
-  id?: string
+  id: string
   name: string
   email: string
   emailVerified?: boolean
@@ -1225,7 +1225,7 @@ export type UserCreateWithoutNotificationsInput = {
 }
 
 export type UserUncheckedCreateWithoutNotificationsInput = {
-  id?: string
+  id: string
   name: string
   email: string
   emailVerified?: boolean
@@ -1316,7 +1316,7 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
 }
 
 export type UserCreateWithoutCourseAssistantsInput = {
-  id?: string
+  id: string
   name: string
   email: string
   emailVerified?: boolean
@@ -1341,7 +1341,7 @@ export type UserCreateWithoutCourseAssistantsInput = {
 }
 
 export type UserUncheckedCreateWithoutCourseAssistantsInput = {
-  id?: string
+  id: string
   name: string
   email: string
   emailVerified?: boolean

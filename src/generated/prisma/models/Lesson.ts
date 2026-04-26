@@ -205,7 +205,7 @@ export type LessonWhereInput = {
   topic?: Prisma.StringFilter<"Lesson"> | string
   scheduleId?: Prisma.UuidNullableFilter<"Lesson"> | string | null
   timeSlotId?: Prisma.UuidNullableFilter<"Lesson"> | string | null
-  teacherId?: Prisma.UuidNullableFilter<"Lesson"> | string | null
+  teacherId?: Prisma.StringNullableFilter<"Lesson"> | string | null
   course?: Prisma.XOR<Prisma.CourseScalarRelationFilter, Prisma.CourseWhereInput>
   schedule?: Prisma.XOR<Prisma.ScheduleNullableScalarRelationFilter, Prisma.ScheduleWhereInput> | null
   timeSlot?: Prisma.XOR<Prisma.TimeSlotNullableScalarRelationFilter, Prisma.TimeSlotWhereInput> | null
@@ -240,7 +240,7 @@ export type LessonWhereUniqueInput = Prisma.AtLeast<{
   topic?: Prisma.StringFilter<"Lesson"> | string
   scheduleId?: Prisma.UuidNullableFilter<"Lesson"> | string | null
   timeSlotId?: Prisma.UuidNullableFilter<"Lesson"> | string | null
-  teacherId?: Prisma.UuidNullableFilter<"Lesson"> | string | null
+  teacherId?: Prisma.StringNullableFilter<"Lesson"> | string | null
   course?: Prisma.XOR<Prisma.CourseScalarRelationFilter, Prisma.CourseWhereInput>
   schedule?: Prisma.XOR<Prisma.ScheduleNullableScalarRelationFilter, Prisma.ScheduleWhereInput> | null
   timeSlot?: Prisma.XOR<Prisma.TimeSlotNullableScalarRelationFilter, Prisma.TimeSlotWhereInput> | null
@@ -273,7 +273,7 @@ export type LessonScalarWhereWithAggregatesInput = {
   topic?: Prisma.StringWithAggregatesFilter<"Lesson"> | string
   scheduleId?: Prisma.UuidNullableWithAggregatesFilter<"Lesson"> | string | null
   timeSlotId?: Prisma.UuidNullableWithAggregatesFilter<"Lesson"> | string | null
-  teacherId?: Prisma.UuidNullableWithAggregatesFilter<"Lesson"> | string | null
+  teacherId?: Prisma.StringNullableWithAggregatesFilter<"Lesson"> | string | null
 }
 
 export type LessonCreateInput = {
@@ -642,7 +642,7 @@ export type LessonScalarWhereInput = {
   topic?: Prisma.StringFilter<"Lesson"> | string
   scheduleId?: Prisma.UuidNullableFilter<"Lesson"> | string | null
   timeSlotId?: Prisma.UuidNullableFilter<"Lesson"> | string | null
-  teacherId?: Prisma.UuidNullableFilter<"Lesson"> | string | null
+  teacherId?: Prisma.StringNullableFilter<"Lesson"> | string | null
 }
 
 export type LessonCreateWithoutTimeSlotInput = {

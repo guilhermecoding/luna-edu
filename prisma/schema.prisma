@@ -102,7 +102,7 @@ enum DayOfWeek {
 // ================= AUTH =================
 
 model User {
-    id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+    id            String   @id
     name          String
     email         String   @unique
     emailVerified Boolean  @default(false) @map("email_verified")
@@ -134,14 +134,14 @@ model User {
 }
 
 model Session {
-    id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+    id        String   @id
     expiresAt DateTime @map("expires_at")
     token     String   @unique
     createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
     updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz
     ipAddress String?  @map("ip_address")
     userAgent String?  @map("user_agent")
-    userId    String   @map("user_id") @db.Uuid
+    userId    String   @map("user_id")
 
     user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -154,8 +154,7 @@ model Account {
     id                    String    @id
     accountId             String    @map("account_id")
     providerId            String    @map("provider_id")
-    providerType          String    @map("provider_type")
-    userId                String    @map("user_id") @db.Uuid
+    userId                String    @map("user_id")
     accessToken           String?   @map("access_token")
     refreshToken          String?   @map("refresh_token")
     idToken               String?   @map("id_token")
@@ -174,7 +173,7 @@ model Account {
 }
 
 model Verification {
-    id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+    id         String   @id
     identifier String
     value      String
     expiresAt  DateTime @map("expires_at")
@@ -369,7 +368,7 @@ model Schedule {
     courseId   String    @map("course_id") @db.Uuid
     dayOfWeek  DayOfWeek @map("day_of_week")
     timeSlotId String    @map("time_slot_id") @db.Uuid
-    teacherId  String?   @map("teacher_id") @db.Uuid
+    teacherId  String?   @map("teacher_id")
     roomId     String?   @map("room_id") @db.Uuid
 
     course   Course   @relation(fields: [courseId], references: [id])
@@ -459,7 +458,7 @@ model Lesson {
     topic      String
     scheduleId String?  @map("schedule_id") @db.Uuid
     timeSlotId String?  @map("time_slot_id") @db.Uuid
-    teacherId  String?  @map("teacher_id") @db.Uuid
+    teacherId  String?  @map("teacher_id")
 
     course      Course       @relation(fields: [courseId], references: [id])
     schedule    Schedule?    @relation(fields: [scheduleId], references: [id])
@@ -568,7 +567,7 @@ model Notification {
     message String
     type    NotificationType @default(INFO)
 
-    userId    String? @map("user_id") @db.Uuid
+    userId    String? @map("user_id")
     studentId String? @map("student_id") @db.Uuid
 
     isRead Boolean @default(false) @map("is_read")
@@ -584,7 +583,7 @@ model CourseAssistant {
     id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
     createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz
     courseId    String   @map("course_id") @db.Uuid
-    assistantId String   @map("assistant_id") @db.Uuid
+    assistantId String   @map("assistant_id")
 
     course    Course @relation(fields: [courseId], references: [id])
     assistant User   @relation(fields: [assistantId], references: [id])

@@ -203,7 +203,7 @@ export type NotificationWhereInput = {
   title?: Prisma.StringFilter<"Notification"> | string
   message?: Prisma.StringFilter<"Notification"> | string
   type?: Prisma.EnumNotificationTypeFilter<"Notification"> | $Enums.NotificationType
-  userId?: Prisma.UuidNullableFilter<"Notification"> | string | null
+  userId?: Prisma.StringNullableFilter<"Notification"> | string | null
   studentId?: Prisma.UuidNullableFilter<"Notification"> | string | null
   isRead?: Prisma.BoolFilter<"Notification"> | boolean
   user?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
@@ -232,7 +232,7 @@ export type NotificationWhereUniqueInput = Prisma.AtLeast<{
   title?: Prisma.StringFilter<"Notification"> | string
   message?: Prisma.StringFilter<"Notification"> | string
   type?: Prisma.EnumNotificationTypeFilter<"Notification"> | $Enums.NotificationType
-  userId?: Prisma.UuidNullableFilter<"Notification"> | string | null
+  userId?: Prisma.StringNullableFilter<"Notification"> | string | null
   studentId?: Prisma.UuidNullableFilter<"Notification"> | string | null
   isRead?: Prisma.BoolFilter<"Notification"> | boolean
   user?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
@@ -262,7 +262,7 @@ export type NotificationScalarWhereWithAggregatesInput = {
   title?: Prisma.StringWithAggregatesFilter<"Notification"> | string
   message?: Prisma.StringWithAggregatesFilter<"Notification"> | string
   type?: Prisma.EnumNotificationTypeWithAggregatesFilter<"Notification"> | $Enums.NotificationType
-  userId?: Prisma.UuidNullableWithAggregatesFilter<"Notification"> | string | null
+  userId?: Prisma.StringNullableWithAggregatesFilter<"Notification"> | string | null
   studentId?: Prisma.UuidNullableWithAggregatesFilter<"Notification"> | string | null
   isRead?: Prisma.BoolWithAggregatesFilter<"Notification"> | boolean
 }
@@ -528,7 +528,7 @@ export type NotificationScalarWhereInput = {
   title?: Prisma.StringFilter<"Notification"> | string
   message?: Prisma.StringFilter<"Notification"> | string
   type?: Prisma.EnumNotificationTypeFilter<"Notification"> | $Enums.NotificationType
-  userId?: Prisma.UuidNullableFilter<"Notification"> | string | null
+  userId?: Prisma.StringNullableFilter<"Notification"> | string | null
   studentId?: Prisma.UuidNullableFilter<"Notification"> | string | null
   isRead?: Prisma.BoolFilter<"Notification"> | boolean
 }

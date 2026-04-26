@@ -35,6 +35,9 @@ export async function getAdminById(id: string) {
 }
 
 export async function createAdmin(data: Prisma.UserCreateInput) {
+    const existingCpf = await prisma.user.findUnique({ where: { cpf: data.cpf as string } });
+    if (existingCpf) throw new Error("CPF_ALREADY_EXISTS");
+
     const lunaId = await generateLunaId();
     const randomPassword = Math.random().toString(36).slice(-8) + Math.random().toString(36).slice(-8);
     const signUpBody = {
@@ -61,6 +64,11 @@ export async function createAdmin(data: Prisma.UserCreateInput) {
 }
 
 export async function updateAdmin(id: string, data: Prisma.UserUpdateInput) {
+    if (data.cpf) {
+        const existingCpf = await prisma.user.findFirst({ where: { cpf: data.cpf as string, id: { not: id } } });
+        if (existingCpf) throw new Error("CPF_ALREADY_EXISTS");
+    }
+
     const admin = await prisma.user.update({
         where: { id },
         data,

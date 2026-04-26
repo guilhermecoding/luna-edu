@@ -45,12 +45,15 @@ export default async function AdministratorsPage({
 
             <Section className="mt-18">
                 <div className="bg-surface border border-surface-border p-6 rounded-3xl">
-                    <div className="flex flex-col mb-8 sm:flex-row items-start sm:items-center justify-between">
-                        <h2 className="text-xl flex flex-row items-start sm:items-center gap-2 font-bold text-foreground mb-6 sm:mb-0 w-full">
-                            Todos os administradores
-                        </h2>
-                    </div>
-                    <DataTable columns={columns} data={adminsList} />
+                    <DataTable 
+                        columns={columns} 
+                        data={adminsList} 
+                        title={
+                            <h2 className="text-xl font-bold text-foreground">
+                                Todos os administradores
+                            </h2>
+                        }
+                    />
                 </div>
             </Section>
         </Page>

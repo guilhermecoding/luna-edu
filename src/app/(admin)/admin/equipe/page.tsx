@@ -80,13 +80,16 @@ export default async function UsersPage({
 
             <Section className="mt-8">
                 <div className="bg-surface border border-surface-border p-6 rounded-3xl">
-                    <div className="flex flex-col mb-8 sm:flex-row items-start sm:items-center justify-between">
-                        <h2 className="text-xl flex flex-row items-start sm:items-center gap-2 font-bold text-foreground mb-6 sm:mb-0 w-full">
-                            <IconShieldChevron className="size-6" />
-                            Todos os membros
-                        </h2>
-                    </div>
-                    <DataTable columns={columns} data={usersList} />
+                    <DataTable 
+                        columns={columns} 
+                        data={usersList} 
+                        title={
+                            <h2 className="text-xl flex flex-row items-center gap-2 font-bold text-foreground">
+                                <IconShieldChevron className="size-6" />
+                                Todos os membros
+                            </h2>
+                        }
+                    />
                 </div>
             </Section>
         </Page>

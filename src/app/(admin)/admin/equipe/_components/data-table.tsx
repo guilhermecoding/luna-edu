@@ -22,11 +22,13 @@ import { IconSearch } from "@tabler/icons-react";
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[];
     data: TData[];
+    title?: React.ReactNode;
 }
 
 export function DataTable<TData, TValue>({
     columns,
     data,
+    title,
 }: DataTableProps<TData, TValue>) {
 
     // eslint-disable-next-line react-hooks/incompatible-library -- TanStack Table + React Compiler
@@ -58,8 +60,13 @@ export function DataTable<TData, TValue>({
 
     return (
         <div className="space-y-4">
-            <div className="w-full justify-center sm:justify-end flex items-center">
-                <div className="w-full sm:max-w-sm flex flex-row items-center gap-2 px-5 py-1 rounded-full border border-input bg-background transition-colors focus-within:border-ring focus-within:ring-[3px] focus-within:ring-ring/50">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                {title && (
+                    <div className="flex-1 w-full">
+                        {title}
+                    </div>
+                )}
+                <div className="w-full sm:max-w-sm flex flex-row items-center gap-2 px-5 py-1 rounded-full border border-input bg-background transition-colors focus-within:border-ring focus-within:ring-[3px] focus-within:ring-ring/50 ml-auto">
                     <IconSearch className="size-4 shrink-0" />
                     <Input
                         placeholder="Pesquisar por nome..."

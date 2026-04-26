@@ -47,6 +47,10 @@ export const auth = betterAuth({
                 values: [...GENRE_VALUES],
                 default: "PREFER_NOT_TO_SAY",
             },
+            lunaId: {
+                type: "string",
+                unique: true,
+            },
         },
     },
 });

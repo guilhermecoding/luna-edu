@@ -1,7 +1,9 @@
 import prisma from "@/lib/prisma";
 import { cacheLife, cacheTag } from "next/cache";
 import { Prisma } from "@/generated/prisma/client";
+import { SystemRole, UserGenre } from "@/generated/prisma/client";
 import { generateLunaId } from "@/lib/generate-luna-id";
+import { auth } from "@/lib/auth";
 
 export async function getAdmins(query?: string) {
     "use cache";
@@ -34,14 +36,27 @@ export async function getAdminById(id: string) {
 
 export async function createAdmin(data: Prisma.UserCreateInput) {
     const lunaId = await generateLunaId();
-    const admin = await prisma.user.create({
-        data: {
-            ...data,
-            lunaId,
+    const randomPassword = Math.random().toString(36).slice(-8) + Math.random().toString(36).slice(-8);
+
+    const res = await auth.api.signUpEmail({
+        body: {
+            email: data.email as string,
+            password: randomPassword,
+            name: data.name as string,
+            cpf: data.cpf as string,
+            phone: data.phone as string,
+            birthDate: data.birthDate as Date,
+            bio: (data.bio as string) ?? "",
+            genre: data.genre as UserGenre,
+            systemRole: data.systemRole as SystemRole,
             isAdmin: true,
+            isTeacher: false,
+            isActive: true,
+            lunaId,
         },
     });
-    return admin;
+
+    return res.user;
 }
 
 export async function updateAdmin(id: string, data: Prisma.UserUpdateInput) {

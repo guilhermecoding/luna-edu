@@ -104,13 +104,13 @@ enum DayOfWeek {
 model User {
     id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
     name          String
-    email         String
+    email         String   @unique
     emailVerified Boolean  @default(false) @map("email_verified")
     image         String?
     createdAt     DateTime @default(now()) @map("created_at") @db.Timestamptz
     updatedAt     DateTime @updatedAt @map("updated_at") @db.Timestamptz
 
-    cpf        String
+    cpf        String     @unique
     phone      String
     birthDate  DateTime   @map("birth_date") @db.Date
     bio        String?
@@ -129,7 +129,6 @@ model User {
     schedules        Schedule[]
     lessons          Lesson[]
 
-    @@unique([email, cpf])
     @@map("user")
     @@schema("auth")
 }
@@ -387,15 +386,15 @@ model Schedule {
 }
 
 model Course {
-    id           String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+    id           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
     createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz
     name         String
     code         String
-    periodId     String  @map("period_id") @db.Uuid
-    roomId       String? @map("room_id") @db.Uuid
-    subjectId    String  @map("subject_id") @db.Uuid
+    periodId     String   @map("period_id") @db.Uuid
+    roomId       String?  @map("room_id") @db.Uuid
+    subjectId    String   @map("subject_id") @db.Uuid
     shift        Shift
-    classGroupId String? @map("class_group_id") @db.Uuid
+    classGroupId String?  @map("class_group_id") @db.Uuid
 
     period     Period      @relation(fields: [periodId], references: [id])
     room       Room?       @relation(fields: [roomId], references: [id])
@@ -422,8 +421,8 @@ model Student {
     birthDate    DateTime @map("birth_date") @db.Date
     studentPhone String   @map("student_phone")
     parentPhone  String?  @map("parent_phone")
-    cpf          String
-    email        String
+    cpf          String   @unique
+    email        String   @unique
     school       String
     genre        Genre
     lunaId       String?  @unique @map("luna_id")
@@ -488,17 +487,17 @@ model Attendance {
 }
 
 model Activity {
-    id           String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-    createdAt    DateTime     @default(now()) @map("created_at") @db.Timestamptz
-    courseId     String       @map("course_id") @db.Uuid
-    subPeriodId  String?      @map("sub_period_id") @db.Uuid
-    title        String
-    gradingType  GradingType  @default(NONE) @map("grading_type")
-    minValue     Float?       @map("min_value")
-    maxValue     Float?       @map("max_value")
-    type         ActivityType @default(HOMEWORK)
-    weight       Float        @default(1.0)
-    dueDate      DateTime?    @map("due_date") @db.Timestamptz
+    id          String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+    createdAt   DateTime     @default(now()) @map("created_at") @db.Timestamptz
+    courseId    String       @map("course_id") @db.Uuid
+    subPeriodId String?      @map("sub_period_id") @db.Uuid
+    title       String
+    gradingType GradingType  @default(NONE) @map("grading_type")
+    minValue    Float?       @map("min_value")
+    maxValue    Float?       @map("max_value")
+    type        ActivityType @default(HOMEWORK)
+    weight      Float        @default(1.0)
+    dueDate     DateTime?    @map("due_date") @db.Timestamptz
 
     course         Course          @relation(fields: [courseId], references: [id])
     subPeriod      SubPeriod?      @relation(fields: [subPeriodId], references: [id])

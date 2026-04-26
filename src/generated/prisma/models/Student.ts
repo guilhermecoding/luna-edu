@@ -260,6 +260,8 @@ export type StudentOrderByWithRelationInput = {
 
 export type StudentWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  cpf?: string
+  email?: string
   lunaId?: string
   AND?: Prisma.StudentWhereInput | Prisma.StudentWhereInput[]
   OR?: Prisma.StudentWhereInput[]
@@ -269,8 +271,6 @@ export type StudentWhereUniqueInput = Prisma.AtLeast<{
   birthDate?: Prisma.DateTimeFilter<"Student"> | Date | string
   studentPhone?: Prisma.StringFilter<"Student"> | string
   parentPhone?: Prisma.StringNullableFilter<"Student"> | string | null
-  cpf?: Prisma.StringFilter<"Student"> | string
-  email?: Prisma.StringFilter<"Student"> | string
   school?: Prisma.StringFilter<"Student"> | string
   genre?: Prisma.EnumGenreFilter<"Student"> | $Enums.Genre
   enrollments?: Prisma.EnrollmentListRelationFilter
@@ -279,7 +279,7 @@ export type StudentWhereUniqueInput = Prisma.AtLeast<{
   finalGrades?: Prisma.FinalGradeListRelationFilter
   stats?: Prisma.StudentCourseStatsListRelationFilter
   notifications?: Prisma.NotificationListRelationFilter
-}, "id" | "lunaId">
+}, "id" | "cpf" | "email" | "lunaId">
 
 export type StudentOrderByWithAggregationInput = {
   id?: Prisma.SortOrder

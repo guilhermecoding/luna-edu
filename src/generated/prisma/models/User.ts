@@ -314,18 +314,17 @@ export type UserOrderByWithRelationInput = {
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  email?: string
+  cpf?: string
   lunaId?: string
-  email_cpf?: Prisma.UserEmailCpfCompoundUniqueInput
   AND?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
   OR?: Prisma.UserWhereInput[]
   NOT?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
   name?: Prisma.StringFilter<"User"> | string
-  email?: Prisma.StringFilter<"User"> | string
   emailVerified?: Prisma.BoolFilter<"User"> | boolean
   image?: Prisma.StringNullableFilter<"User"> | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
-  cpf?: Prisma.StringFilter<"User"> | string
   phone?: Prisma.StringFilter<"User"> | string
   birthDate?: Prisma.DateTimeFilter<"User"> | Date | string
   bio?: Prisma.StringNullableFilter<"User"> | string | null
@@ -340,7 +339,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   notifications?: Prisma.NotificationListRelationFilter
   schedules?: Prisma.ScheduleListRelationFilter
   lessons?: Prisma.LessonListRelationFilter
-}, "id" | "lunaId" | "email_cpf">
+}, "id" | "email" | "cpf" | "lunaId">
 
 export type UserOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -550,11 +549,6 @@ export type UserUncheckedUpdateManyInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   genre?: Prisma.EnumUserGenreFieldUpdateOperationsInput | $Enums.UserGenre
   lunaId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-}
-
-export type UserEmailCpfCompoundUniqueInput = {
-  email: string
-  cpf: string
 }
 
 export type UserCountOrderByAggregateInput = {

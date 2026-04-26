@@ -1,4 +1,4 @@
-import { IconUsers, IconUserShield, IconBriefcase, IconPlus, IconShieldChevron } from "@tabler/icons-react";
+import { IconUsers, IconUserShield, IconBriefcase, IconShieldChevron } from "@tabler/icons-react";
 import Page from "@/components/page";
 import Section from "@/components/section";
 import TitlePage from "@/components/title-page";
@@ -7,7 +7,7 @@ import InfoBoxUsers from "./_components/info-box-users";
 import { DataTable } from "./_components/data-table";
 import { columns } from "./_components/columns";
 import { Metadata } from "next";
-import { Button } from "@/components/ui/button";
+import { ButtonLink } from "@/components/ui/button-link";
 
 export const metadata: Metadata = {
     title: "Equipe",
@@ -38,6 +38,16 @@ export default async function UsersPage({
                             title="Membros da Equipe"
                             description="Gerencie todos os membros da equipe da sua instituição."
                         />
+                    </div>
+                    <div className="flex flex-col sm:flex-row flex-1 gap-2 justify-end items-end">
+                        <ButtonLink className="w-full sm:w-auto bg-transparent border-2 border-dashed border-primary hover:bg-primary text-primary hover:text-background hover:border-solid" href="/admin/equipe/administradores">
+                            <IconUserShield className="size-5" />
+                            Administradores
+                        </ButtonLink>
+                        <ButtonLink className="w-full sm:w-auto bg-transparent border-2 border-dashed border-primary hover:bg-primary text-primary hover:text-background hover:border-solid" href="/admin/equipe/professores">
+                            <IconBriefcase className="size-5" />
+                            Professores
+                        </ButtonLink>
                     </div>
                 </div>
             </Section>
@@ -71,14 +81,10 @@ export default async function UsersPage({
             <Section className="mt-8">
                 <div className="bg-surface border border-surface-border p-6 rounded-3xl">
                     <div className="flex flex-col mb-8 sm:flex-row items-start sm:items-center justify-between">
-                        <h2 className="text-xl flex flex-row items-start sm:items-center gap-2 font-bold text-foreground mb-6 w-full">
+                        <h2 className="text-xl flex flex-row items-start sm:items-center gap-2 font-bold text-foreground mb-6 sm:mb-0 w-full">
                             <IconShieldChevron className="size-6" />
-                            Administradores e Professores
+                            Todos os membros
                         </h2>
-                        <Button className="w-full sm:w-auto" variant="outline">
-                            <IconPlus className="size-4" />
-                            Adicionar Usuário
-                        </Button>
                     </div>
                     <DataTable columns={columns} data={usersList} />
                 </div>

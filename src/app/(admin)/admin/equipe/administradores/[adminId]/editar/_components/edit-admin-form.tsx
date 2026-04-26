@@ -13,6 +13,7 @@ import { editAdminSchema, type EditAdminData, type EditAdminInput } from "../sch
 import { IconLoader2 } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import { maskCPF, maskPhone, unmask } from "@/lib/masks";
 
 export default function EditAdminForm({ admin }: { admin: User }) {
     const router = useRouter();
@@ -45,7 +46,13 @@ export default function EditAdminForm({ admin }: { admin: User }) {
 
     const onSubmit = async (data: EditAdminData) => {
         clearErrors("root");
-        const result = await editAdminAction(admin.id, data);
+        // Garantir que os dados vão limpos para o banco
+        const cleanData = {
+            ...data,
+            cpf: unmask(data.cpf),
+            phone: unmask(data.phone),
+        };
+        const result = await editAdminAction(admin.id, cleanData);
 
         if (result && !result.success) {
             toast.error(result.error);
@@ -85,21 +92,37 @@ export default function EditAdminForm({ admin }: { admin: User }) {
                     </div>
                     <div className="flex flex-col gap-2">
                         <Label htmlFor="cpf">CPF *</Label>
-                        <Input
-                            id="cpf"
-                            {...register("cpf")}
-                            className="p-5 h-15.5 rounded-xl bg-background"
-                            aria-invalid={errors.cpf ? "true" : "false"}
+                        <Controller
+                            control={control}
+                            name="cpf"
+                            render={({ field }) => (
+                                <Input
+                                    id="cpf"
+                                    value={maskCPF(field.value)}
+                                    onChange={(e) => field.onChange(maskCPF(e.target.value))}
+                                    placeholder="000.000.000-00"
+                                    className="p-5 h-15.5 rounded-xl bg-background"
+                                    aria-invalid={errors.cpf ? "true" : "false"}
+                                />
+                            )}
                         />
                         {errors.cpf && <p className="text-sm text-red-600">{errors.cpf.message}</p>}
                     </div>
                     <div className="flex flex-col gap-2">
                         <Label htmlFor="phone">Telefone *</Label>
-                        <Input
-                            id="phone"
-                            {...register("phone")}
-                            className="p-5 h-15.5 rounded-xl bg-background"
-                            aria-invalid={errors.phone ? "true" : "false"}
+                        <Controller
+                            control={control}
+                            name="phone"
+                            render={({ field }) => (
+                                <Input
+                                    id="phone"
+                                    value={maskPhone(field.value)}
+                                    onChange={(e) => field.onChange(maskPhone(e.target.value))}
+                                    placeholder="(11) 99999-9999"
+                                    className="p-5 h-15.5 rounded-xl bg-background"
+                                    aria-invalid={errors.phone ? "true" : "false"}
+                                />
+                            )}
                         />
                         {errors.phone && <p className="text-sm text-red-600">{errors.phone.message}</p>}
                     </div>

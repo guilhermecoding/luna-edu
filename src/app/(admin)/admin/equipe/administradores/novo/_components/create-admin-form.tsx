@@ -175,6 +175,11 @@ export default function CreateAdminForm({ teachers }: { teachers: TeacherOption[
                                         id="birthDate"
                                         type="date"
                                         value={field.value instanceof Date && !isNaN(field.value.getTime()) ? field.value.toISOString().slice(0, 10) : ""}
+                                        onClick={(e) => {
+                                            try {
+                                                e.currentTarget.showPicker?.();
+                                            } catch { }
+                                        }}
                                         onChange={(e) => {
                                             const val = e.target.value;
                                             field.onChange(val ? new Date(`${val}T00:00:00`) : undefined);
@@ -257,7 +262,7 @@ export default function CreateAdminForm({ teachers }: { teachers: TeacherOption[
                                 name="teacherId"
                                 render={({ field }) => (
                                     <Select value={field.value} onValueChange={field.onChange}>
-                                        <SelectTrigger className="w-full bg-background p-5 h-15.5 rounded-2xl" aria-invalid={errorsExisting.teacherId ? "true" : "false"}>
+                                        <SelectTrigger className="w-full bg-background p-5 h-15.5 rounded-xl" aria-invalid={errorsExisting.teacherId ? "true" : "false"}>
                                             <SelectValue placeholder="Busque um professor..." />
                                         </SelectTrigger>
                                         <SelectContent>
@@ -278,7 +283,7 @@ export default function CreateAdminForm({ teachers }: { teachers: TeacherOption[
                                 name="systemRole"
                                 render={({ field }) => (
                                     <Select value={field.value} onValueChange={(val) => field.onChange(val as SystemRole)}>
-                                        <SelectTrigger className="w-full bg-background p-5 h-15.5 rounded-2xl" aria-invalid={errorsExisting.systemRole ? "true" : "false"}>
+                                        <SelectTrigger className="w-full bg-background p-5 h-15.5 rounded-xl" aria-invalid={errorsExisting.systemRole ? "true" : "false"}>
                                             <SelectValue placeholder="Selecione o nível de acesso" />
                                         </SelectTrigger>
                                         <SelectContent>

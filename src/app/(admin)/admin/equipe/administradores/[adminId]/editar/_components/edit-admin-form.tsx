@@ -113,6 +113,11 @@ export default function EditAdminForm({ admin }: { admin: User }) {
                                     id="birthDate"
                                     type="date"
                                     value={field.value instanceof Date && !isNaN(field.value.getTime()) ? field.value.toISOString().slice(0, 10) : ""}
+                                    onClick={(e) => {
+                                        try {
+                                            e.currentTarget.showPicker?.();
+                                        } catch { }
+                                    }}
                                     onChange={(e) => {
                                         const val = e.target.value;
                                         field.onChange(val ? new Date(`${val}T00:00:00`) : undefined);
@@ -145,7 +150,7 @@ export default function EditAdminForm({ admin }: { admin: User }) {
                         />
                         {errors.genre && <p className="text-sm text-red-600">{errors.genre.message}</p>}
                     </div>
-                    <div className="flex flex-col gap-2 sm:col-span-2">
+                    <div className="flex flex-col gap-2">
                         <Label htmlFor="systemRole">Nível de Acesso *</Label>
                         <Controller
                             control={control}

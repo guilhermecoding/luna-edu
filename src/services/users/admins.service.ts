@@ -4,6 +4,7 @@ import { Prisma } from "@/generated/prisma/client";
 import { SystemRole, UserGenre } from "@/generated/prisma/client";
 import { generateLunaId } from "@/lib/generate-luna-id";
 import { auth } from "@/lib/auth";
+import { connection } from "next/server";
 
 type CreateAdminPayload = Pick<
     Prisma.UserCreateInput,
@@ -22,6 +23,8 @@ export async function getAdmins(query?: string) {
     "use cache";
     cacheLife("minutes");
     cacheTag("admins-list");
+
+    await connection();
 
     return await prisma.user.findMany({
         where: {
@@ -47,6 +50,8 @@ export async function getAdminById(id: string) {
     "use cache";
     cacheLife("minutes");
     cacheTag(`admin-${id}`);
+
+    await connection();
 
     return await prisma.user.findUnique({
         where: { id },
@@ -85,6 +90,14 @@ export async function createAdmin(data: CreateAdminPayload) {
     const res = await auth.api.signUpEmail({
         body: signUpBody,
     });
+
+    if (!res) {
+        throw new Error("AUTH_SIGNUP_FAILED_EMPTY_RESPONSE");
+    }
+
+    if (!res.user) {
+        throw new Error("AUTH_SIGNUP_FAILED_NO_USER");
+    }
 
     return res.user;
 }

@@ -20,6 +20,30 @@ export const columns: ColumnDef<User>[] = [
         },
     },
     {
+        accessorKey: "lunaId",
+        header: "Matrícula",
+        cell: ({ row }) => {
+            return <span className="font-mono text-sm">{row.original.lunaId || "---"}</span>;
+        },
+    },
+    {
+        id: "roles",
+        header: "Vínculos",
+        cell: ({ row }) => {
+            const isAdmin = row.original.isAdmin;
+            const isTeacher = row.original.isTeacher;
+
+            return (
+                <div className="flex flex-wrap gap-1">
+                    <Badge variant="outline" className="bg-blue-500/10 text-blue-500 border-blue-500/20">Admin</Badge>
+                    {isTeacher && (
+                        <Badge variant="outline" className="bg-purple-500/10 text-purple-500 border-purple-500/20">Professor</Badge>
+                    )}
+                </div>
+            );
+        },
+    },
+    {
         accessorKey: "isActive",
         header: "Status",
         cell: ({ row }) => {

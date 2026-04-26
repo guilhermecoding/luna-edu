@@ -18,6 +18,13 @@ export const columns: ColumnDef<UserListItem>[] = [
         },
     },
     {
+        accessorKey: "lunaId",
+        header: "Matrícula",
+        cell: ({ row }) => {
+            return <span className="font-mono text-sm">{row.original.lunaId || "---"}</span>;
+        },
+    },
+    {
         accessorKey: "isActive",
         header: "Status",
         cell: ({ row }) => {

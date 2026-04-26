@@ -5,6 +5,13 @@ import { SystemRole, UserGenre } from "@/generated/prisma/client";
 import { generateLunaId } from "@/lib/generate-luna-id";
 import { auth } from "@/lib/auth";
 
+type CreateAdminPayload = Pick<
+    Prisma.UserCreateInput,
+    "name" | "email" | "cpf" | "phone" | "birthDate" | "genre" | "systemRole"
+> & {
+    bio?: string | null;
+};
+
 /**
  * Lista usuários administradores, com filtro opcional por nome.
  *
@@ -53,7 +60,7 @@ export async function getAdminById(id: string) {
  * @returns Usuário criado no processo de cadastro.
  * @throws Error quando o CPF já está em uso (`CPF_ALREADY_EXISTS`).
  */
-export async function createAdmin(data: Prisma.UserCreateInput) {
+export async function createAdmin(data: CreateAdminPayload) {
     const existingCpf = await prisma.user.findUnique({ where: { cpf: data.cpf as string } });
     if (existingCpf) throw new Error("CPF_ALREADY_EXISTS");
 

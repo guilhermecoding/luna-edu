@@ -10,9 +10,10 @@ import { toast } from "sonner";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createAdminSchema, promoteTeacherSchema, type CreateAdminData, type CreateAdminInput, type PromoteTeacherInput } from "../schema";
-import { IconLoader2 } from "@tabler/icons-react";
+import { IconLoader2, IconPlus } from "@tabler/icons-react";
 import type { SystemRole, UserGenre } from "@/generated/prisma/client";
 import { useRouter } from "next/navigation";
+import { ButtonLink } from "@/components/ui/button-link";
 import { maskCPF, maskPhone, unmask } from "@/lib/masks";
 
 type TeacherOption = {
@@ -275,62 +276,77 @@ export default function CreateAdminForm({ teachers }: { teachers: TeacherOption[
                             {errorsExisting.root.message}
                         </div>
                     )}
-                    <div className="flex flex-col gap-4">
-                        <div className="flex flex-col gap-2">
-                            <Label htmlFor="teacherId">Selecione o Professor *</Label>
-                            <Controller
-                                control={controlExisting}
-                                name="teacherId"
-                                render={({ field }) => (
-                                    <Select value={field.value} onValueChange={field.onChange}>
-                                        <SelectTrigger className="w-full bg-background p-5 h-15.5 rounded-xl" aria-invalid={errorsExisting.teacherId ? "true" : "false"}>
-                                            <SelectValue placeholder="Busque um professor..." />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            {teachers.length === 0 && <SelectItem value="none" disabled>Nenhum professor encontrado</SelectItem>}
-                                            {teachers.map(t => (
-                                                <SelectItem key={t.id} value={t.id}>{t.name} ({t.email})</SelectItem>
-                                            ))}
-                                        </SelectContent>
-                                    </Select>
-                                )}
-                            />
-                            {errorsExisting.teacherId && <p className="text-sm text-red-600">{errorsExisting.teacherId.message}</p>}
+                    {teachers.length === 0 ? (
+                        <div className="p-8 flex flex-col items-center justify-center gap-2 border-2 border-dashed border-surface-border rounded-xl bg-surface/30 text-center">
+                            <p className="text-sm text-muted-foreground">
+                                Nenhum professor cadastrado.
+                                <br /> Comece cadastrando o professor na equipe.
+                            </p>
+                            <ButtonLink variant="outline" href="/admin/equipe/professores" className="w-full sm:w-auto">
+                                <IconPlus className="size-4 mr-1" />
+                                Adicionar Professor
+                            </ButtonLink>
                         </div>
-                        <div className="flex flex-col gap-2">
-                            <Label htmlFor="systemRole">Nível de Acesso como Administrador *</Label>
-                            <Controller
-                                control={controlExisting}
-                                name="systemRole"
-                                render={({ field }) => (
-                                    <Select value={field.value} onValueChange={(val) => field.onChange(val as SystemRole)}>
-                                        <SelectTrigger className="w-full bg-background p-5 h-15.5 rounded-xl" aria-invalid={errorsExisting.systemRole ? "true" : "false"}>
-                                            <SelectValue placeholder="Selecione o nível de acesso" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            <SelectItem value="FULL_ACCESS">Acesso Total</SelectItem>
-                                            <SelectItem value="READ_ONLY">Somente Leitura</SelectItem>
-                                        </SelectContent>
-                                    </Select>
-                                )}
-                            />
-                            {errorsExisting.systemRole && <p className="text-sm text-red-600">{errorsExisting.systemRole.message}</p>}
-                        </div>
-                    </div>
-                    <div className="flex flex-col-reverse justify-end gap-3 pt-4 sm:flex-row mt-4">
-                        <Button
-                            type="button"
-                            variant="outline"
-                            onClick={() => router.back()}
-                            disabled={isSubmittingExisting}
-                        >
-                            Cancelar
-                        </Button>
-                        <Button type="submit" disabled={isSubmittingExisting}>
-                            {isSubmittingExisting && <IconLoader2 className="size-4 mr-2 animate-spin" />}
-                            {isSubmittingExisting ? "Salvando..." : "Concluir"}
-                        </Button>
-                    </div>
+                    ) : (
+                        <>
+                            <div className="flex flex-col gap-4">
+                                <div className="flex flex-col gap-2">
+                                    <Label htmlFor="teacherId">Selecione o Professor *</Label>
+                                    <Controller
+                                        control={controlExisting}
+                                        name="teacherId"
+                                        render={({ field }) => (
+                                            <Select value={field.value} onValueChange={field.onChange}>
+                                                <SelectTrigger className="w-full bg-background p-5 h-15.5 rounded-xl" aria-invalid={errorsExisting.teacherId ? "true" : "false"}>
+                                                    <SelectValue placeholder="Busque um professor..." />
+                                                </SelectTrigger>
+                                                <SelectContent>
+                                                    {teachers.length === 0 && <SelectItem value="none" disabled>Nenhum professor encontrado</SelectItem>}
+                                                    {teachers.map(t => (
+                                                        <SelectItem key={t.id} value={t.id}>{t.name} ({t.email})</SelectItem>
+                                                    ))}
+                                                </SelectContent>
+                                            </Select>
+                                        )}
+                                    />
+                                    {errorsExisting.teacherId && <p className="text-sm text-red-600">{errorsExisting.teacherId.message}</p>}
+                                </div>
+                                <div className="flex flex-col gap-2">
+                                    <Label htmlFor="systemRole">Nível de Acesso como Administrador *</Label>
+                                    <Controller
+                                        control={controlExisting}
+                                        name="systemRole"
+                                        render={({ field }) => (
+                                            <Select value={field.value} onValueChange={(val) => field.onChange(val as SystemRole)}>
+                                                <SelectTrigger className="w-full bg-background p-5 h-15.5 rounded-xl" aria-invalid={errorsExisting.systemRole ? "true" : "false"}>
+                                                    <SelectValue placeholder="Selecione o nível de acesso" />
+                                                </SelectTrigger>
+                                                <SelectContent>
+                                                    <SelectItem value="FULL_ACCESS">Acesso Total</SelectItem>
+                                                    <SelectItem value="READ_ONLY">Somente Leitura</SelectItem>
+                                                </SelectContent>
+                                            </Select>
+                                        )}
+                                    />
+                                    {errorsExisting.systemRole && <p className="text-sm text-red-600">{errorsExisting.systemRole.message}</p>}
+                                </div>
+                            </div>
+                            <div className="flex flex-col-reverse justify-end gap-3 pt-4 sm:flex-row mt-4">
+                                <Button
+                                    type="button"
+                                    variant="outline"
+                                    onClick={() => router.back()}
+                                    disabled={isSubmittingExisting}
+                                >
+                                    Cancelar
+                                </Button>
+                                <Button type="submit" disabled={isSubmittingExisting}>
+                                    {isSubmittingExisting && <IconLoader2 className="size-4 mr-2 animate-spin" />}
+                                    {isSubmittingExisting ? "Salvando..." : "Concluir"}
+                                </Button>
+                            </div>
+                        </>
+                    )}
                 </form>
             )}
         </div>

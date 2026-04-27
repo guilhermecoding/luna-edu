@@ -6,6 +6,13 @@ import { Badge } from "@/components/ui/badge";
 
 export const columns: ColumnDef<UserListItem>[] = [
     {
+        accessorKey: "",
+        header: "avatar",
+        cell: ({ row }) => {
+            return <span className="font-mono text-sm text-center">{row.original.id}</span>;
+        },
+    },
+    {
         accessorKey: "name",
         header: "Nome",
         cell: ({ row }) => {

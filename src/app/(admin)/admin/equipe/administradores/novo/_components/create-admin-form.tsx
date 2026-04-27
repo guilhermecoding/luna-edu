@@ -100,14 +100,14 @@ export default function CreateAdminForm({ teachers }: { teachers: TeacherOption[
 
     return (
         <div className="bg-surface w-full border border-surface-border p-6 rounded-4xl">
-            <div className="flex flex-col sm:flex-row gap-2 mb-8 bg-muted p-1 rounded-2xl sm:rounded-3xl w-full sm:w-fit">
+            <div className="flex flex-col sm:flex-row gap-2 mb-8 bg-background p-1 rounded-2xl sm:rounded-3xl w-full sm:w-fit">
                 <Button
                     type="button"
                     variant={mode === "new" ? "default" : "ghost"}
                     onClick={() => setMode("new")}
                     className="rounded-xl sm:rounded-3xl w-full sm:w-auto"
                 >
-                    Criar do Zero
+                    Novo
                 </Button>
                 <Button
                     type="button"
@@ -115,7 +115,7 @@ export default function CreateAdminForm({ teachers }: { teachers: TeacherOption[
                     onClick={() => setMode("existing")}
                     className="rounded-xl sm:rounded-3xl w-full sm:w-auto"
                 >
-                    Selecionar Professor Existente
+                    Professor Existente
                 </Button>
             </div>
 

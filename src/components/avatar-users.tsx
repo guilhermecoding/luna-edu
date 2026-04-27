@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 
-// Genero Masculino avatars
+// Avateres masculinos
 import babyMale from "@/assets/images/avatars/male/01_baby_male_0_3.webp";
 import kidsMale1 from "@/assets/images/avatars/male/02_kids_ male_4_8.webp";
 import kidsMale2 from "@/assets/images/avatars/male/03_kids_male_9_12.webp";
@@ -10,7 +10,7 @@ import youngMale from "@/assets/images/avatars/male/05_young_male_17_24.webp";
 import adultMale from "@/assets/images/avatars/male/06_adult_male_25_60.webp";
 import seniorMale from "@/assets/images/avatars/male/07_adult_male_61_pro.webp";
 
-// Genero Feminino avatars
+// Avateres femininos
 import babyFemale from "@/assets/images/avatars/female/01_baby_female_0_3.webp";
 import kidsFemale1 from "@/assets/images/avatars/female/02_kids_female_4_8.webp";
 import kidsFemale2 from "@/assets/images/avatars/female/03_kids_female_9_12.webp";
@@ -19,8 +19,8 @@ import youngFemale from "@/assets/images/avatars/female/05_young_female_17_24.we
 import adultFemale from "@/assets/images/avatars/female/06_adult_female_25_60.webp";
 import seniorFemale from "@/assets/images/avatars/female/07_adult_female_61_pro.webp";
 
-// Padrão/Gibby
-import gibby from "@/assets/images/logo-gibby-duvida.svg";
+// Avatar padrão/Gibby
+import gibby from "@/assets/images/avatars/default/avatar_gibby_mono.svg";
 
 type AvatarUsersProps = {
     age?: number;

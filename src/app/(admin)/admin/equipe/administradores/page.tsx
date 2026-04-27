@@ -1,12 +1,13 @@
 import Page from "@/components/page";
 import Section from "@/components/section";
-import { IconUserShield, IconPlus } from "@tabler/icons-react";
+import { IconUserShield, IconPlus, IconUserCheck, IconUserX } from "@tabler/icons-react";
 import { Metadata } from "next";
 import TitlePage from "@/components/title-page";
 import { ButtonLink } from "@/components/ui/button-link";
 import { DataTable } from "../_components/data-table";
-import { getAdmins } from "@/services/users/admins.service";
+import { getAdmins, getAdminStats } from "@/services/users/admins.service";
 import { columns } from "./_components/columns";
+import InfoBoxUsers from "../_components/info-box-users";
 
 export const metadata: Metadata = {
     title: "Administradores",
@@ -18,7 +19,10 @@ export default async function AdministratorsPage({
     searchParams: Promise<{ q?: string }>;
 }) {
     const { q } = await searchParams;
-    const adminsList = await getAdmins(q);
+    const [adminsList, adminStats] = await Promise.all([
+        getAdmins(q),
+        getAdminStats(),
+    ]);
 
     return (
         <Page>
@@ -43,7 +47,28 @@ export default async function AdministratorsPage({
                 </div>
             </Section>
 
-            <Section className="mt-18">
+            <Section className="mt-12 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                <InfoBoxUsers
+                    label="TOTAL"
+                    value={adminStats.totalAdmins}
+                    color="indigo"
+                    icon={<IconUserShield className="size-full" />}
+                />
+                <InfoBoxUsers
+                    label="ATIVOS"
+                    value={adminStats.activeAdmins}
+                    color="emerald"
+                    icon={<IconUserCheck className="size-full" />}
+                />
+                <InfoBoxUsers
+                    label="INATIVOS"
+                    value={adminStats.inactiveAdmins}
+                    color="amber"
+                    icon={<IconUserX className="size-full" />}
+                />
+            </Section>
+
+            <Section className="mt-8">
                 <div className="bg-surface border border-surface-border p-6 rounded-3xl">
                     <DataTable
                         columns={columns}

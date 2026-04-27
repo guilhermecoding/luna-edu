@@ -13,6 +13,29 @@ type CreateAdminPayload = Pick<
 };
 
 /**
+ * Retorna as estatísticas dos administradores: total, ativos e inativos.
+ * 
+ * @returns Objeto com totalAdmins, activeAdmins e inactiveAdmins.
+ */
+export async function getAdminStats() {
+    "use cache";
+    cacheLife("minutes");
+    cacheTag("admins-list");
+
+    const [totalAdmins, activeAdmins, inactiveAdmins] = await Promise.all([
+        prisma.user.count({ where: { isAdmin: true } }),
+        prisma.user.count({ where: { isAdmin: true, isActive: true } }),
+        prisma.user.count({ where: { isAdmin: true, isActive: false } }),
+    ]);
+
+    return {
+        totalAdmins,
+        activeAdmins,
+        inactiveAdmins,
+    };
+}
+
+/**
  * Lista usuários administradores, com filtro opcional por nome.
  *
  * @param query Termo opcional para filtrar por nome (case-insensitive).

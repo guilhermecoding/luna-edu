@@ -25,7 +25,7 @@ export default async function AdministratorsPage({
             <Section>
                 <div className="flex flex-row items-center gap-1 mb-3">
                     <IconUserShield className="size-4 text-muted-foreground" />
-                    <p className="text-muted-foreground font-bold">Equipe / Administradores</p>
+                    <p className="text-muted-foreground font-bold">Administradores</p>
                 </div>
                 <div className="flex flex-col lg:flex-row gap-y-6">
                     <div className="flex-1">
@@ -45,9 +45,9 @@ export default async function AdministratorsPage({
 
             <Section className="mt-18">
                 <div className="bg-surface border border-surface-border p-6 rounded-3xl">
-                    <DataTable 
-                        columns={columns} 
-                        data={adminsList} 
+                    <DataTable
+                        columns={columns}
+                        data={adminsList}
                         title={
                             <h2 className="text-xl font-bold text-foreground">
                                 Todos os administradores

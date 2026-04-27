@@ -19,9 +19,9 @@ export const columns: ColumnDef<UserListItem>[] = [
     },
     {
         accessorKey: "lunaId",
-        header: "Matrícula",
+        header: "Matrícula/LunaID",
         cell: ({ row }) => {
-            return <span className="font-mono text-sm">{row.original.lunaId || "---"}</span>;
+            return <span className="font-mono text-sm text-center">{row.original.lunaId || "---"}</span>;
         },
     },
     {
@@ -41,7 +41,7 @@ export const columns: ColumnDef<UserListItem>[] = [
         header: "Função",
         cell: ({ row }) => {
             const { isAdmin, isTeacher } = row.original;
-            
+
             if (isAdmin && isTeacher) {
                 return <Badge variant="outline" className="text-indigo-500 border-indigo-200 bg-indigo-500/10">Admin & Prof</Badge>;
             }
@@ -51,7 +51,7 @@ export const columns: ColumnDef<UserListItem>[] = [
             if (isTeacher) {
                 return <Badge variant="outline" className="text-amber-500 border-amber-200 bg-amber-500/10">Professor</Badge>;
             }
-            
+
             return <Badge variant="outline">Usuário</Badge>;
         },
     },

@@ -21,7 +21,7 @@ export const columns: ColumnDef<User>[] = [
     },
     {
         accessorKey: "lunaId",
-        header: "Matrícula",
+        header: "Matrícula/LunaID",
         cell: ({ row }) => {
             return <span className="font-mono text-sm">{row.original.lunaId || "---"}</span>;
         },

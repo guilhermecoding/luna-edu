@@ -21,10 +21,11 @@ import seniorFemale from "@/assets/images/avatars/female/07_adult_female_61_pro.
 
 // Avatar padrão/Gibby
 import gibby from "@/assets/images/avatars/default/avatar_gibby_mono.svg";
+import { Genre } from "@/generated/prisma/enums";
 
 type AvatarUsersProps = {
     age?: number;
-    genre?: "MALE" | "FEMALE" | "NON_BINARY" | "PREFER_NOT_TO_SAY" | string;
+    genre?: Genre
     className?: string;
     alt?: string;
 };

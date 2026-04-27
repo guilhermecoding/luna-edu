@@ -67,6 +67,8 @@ export async function getUsersList(query?: string) {
             isAdmin: true,
             isTeacher: true,
             systemRole: true,
+            birthDate: true,
+            genre: true,
         },
         orderBy: {
             name: "asc",

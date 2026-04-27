@@ -5,8 +5,24 @@ import { Badge } from "@/components/ui/badge";
 import { User } from "@/generated/prisma/client";
 import { ButtonLink } from "@/components/ui/button-link";
 import { IconPencil } from "@tabler/icons-react";
+import AvatarUsers from "@/components/avatar-users";
+import { calculateAge } from "@/lib/date-utils";
 
 export const columns: ColumnDef<User>[] = [
+    {
+        accessorKey: "avatar",
+        header: "",
+        cell: ({ row }) => {
+            const { birthDate, genre } = row.original;
+            return (
+                <AvatarUsers 
+                    age={calculateAge(birthDate)} 
+                    genre={genre} 
+                    className="size-10" 
+                />
+            );
+        },
+    },
     {
         accessorKey: "name",
         header: "Nome",

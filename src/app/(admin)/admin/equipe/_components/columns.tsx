@@ -3,13 +3,22 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { UserListItem } from "@/services/users/users.service";
 import { Badge } from "@/components/ui/badge";
+import AvatarUsers from "@/components/avatar-users";
+import { calculateAge } from "@/lib/date-utils";
 
 export const columns: ColumnDef<UserListItem>[] = [
     {
-        accessorKey: "",
-        header: "avatar",
+        accessorKey: "avatar",
+        header: "",
         cell: ({ row }) => {
-            return <span className="font-mono text-sm text-center">{row.original.id}</span>;
+            const { birthDate, genre } = row.original;
+            return (
+                <AvatarUsers 
+                    age={calculateAge(birthDate)} 
+                    genre={genre} 
+                    className="size-10" 
+                />
+            );
         },
     },
     {

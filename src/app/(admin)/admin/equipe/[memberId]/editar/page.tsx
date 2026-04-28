@@ -4,23 +4,23 @@ import TitlePage from "@/components/title-page";
 import { IconArrowLeft } from "@tabler/icons-react";
 import { ButtonLink } from "@/components/ui/button-link";
 import { Metadata } from "next";
-import { getAdminById } from "@/services/users/admins.service";
+import { getUserById } from "@/services/users/users.service";
 import { notFound } from "next/navigation";
-import EditAdminForm from "./_components/edit-admin-form";
+import EditMemberForm from "./_components/edit-member-form";
 
 export const metadata: Metadata = {
-    title: "Editar Administrador",
+    title: "Editar Membro",
 };
 
-export default async function EditAdminPage({
+export default async function EditMemberPage({
     params,
 }: {
-    params: Promise<{ adminId: string }>;
+    params: Promise<{ memberId: string }>;
 }) {
-    const { adminId } = await params;
-    const admin = await getAdminById(adminId);
+    const { memberId } = await params;
+    const member = await getUserById(memberId);
 
-    if (!admin) {
+    if (!member || (!member.isAdmin && !member.isTeacher)) {
         notFound();
     }
 
@@ -28,19 +28,19 @@ export default async function EditAdminPage({
         <Page>
             <Section>
                 <div className="flex flex-row items-center gap-1 mb-3">
-                    <ButtonLink href="/admin/equipe/administradores" variant="ghost" size="sm" className="-ml-3 text-muted-foreground hover:text-foreground">
+                    <ButtonLink href="/admin/equipe" variant="ghost" size="sm" className="-ml-3 text-muted-foreground hover:text-foreground">
                         <IconArrowLeft className="size-4" />
                         Voltar
                     </ButtonLink>
                 </div>
                 <TitlePage
-                    title="Editar Administrador"
-                    description={`Atualize os dados e acessos do administrador ${admin.name}.`}
+                    title={`Editar ${member.name}`}
+                    description="Atualize os dados e acessos deste membro da equipe."
                 />
             </Section>
 
             <Section className="mt-8">
-                <EditAdminForm admin={admin} />
+                <EditMemberForm member={member} />
             </Section>
         </Page>
     );

@@ -4,30 +4,32 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { editAdminAction } from "../actions";
+import { editMemberAction } from "../actions";
 import { toast } from "sonner";
 import { SystemRole, User, UserGenre } from "@/generated/prisma/client";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { editAdminSchema, type EditAdminData, type EditAdminInput } from "../schema";
-import { IconLoader2 } from "@tabler/icons-react";
+import { editMemberSchema, type EditMemberData, type EditMemberInput } from "../schema";
+import { IconCheck, IconCopy, IconLoader2 } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
-import { maskCPF, maskPhone, unmask } from "@/lib/masks";
+import { useEffect, useState } from "react";
+import { maskCPF, maskPhone } from "@/lib/masks";
+import { Badge } from "@/components/ui/badge";
 
-export default function EditAdminForm({ admin }: { admin: User }) {
+export default function EditMemberForm({ member }: { member: User }) {
     const router = useRouter();
-    const form = useForm<EditAdminInput, unknown, EditAdminData>({
-        resolver: zodResolver(editAdminSchema),
+    const [copied, setCopied] = useState(false);
+
+    const form = useForm<EditMemberInput, unknown, EditMemberData>({
+        resolver: zodResolver(editMemberSchema),
         mode: "all",
         defaultValues: {
-            name: admin.name,
-            email: admin.email,
-            cpf: admin.cpf,
-            phone: admin.phone,
-            birthDate: admin.birthDate ? new Date(admin.birthDate) : undefined,
-            genre: admin.genre as UserGenre,
-            systemRole: admin.systemRole as SystemRole,
+            name: member.name,
+            email: member.email,
+            phone: member.phone,
+            birthDate: member.birthDate ? new Date(member.birthDate) : undefined,
+            genre: member.genre as UserGenre,
+            systemRole: member.systemRole as SystemRole,
         },
     });
 
@@ -44,19 +46,25 @@ export default function EditAdminForm({ admin }: { admin: User }) {
         form.trigger();
     }, [form]);
 
-    const onSubmit = async (data: EditAdminData) => {
+    const onSubmit = async (data: EditMemberData) => {
         clearErrors("root");
-        // Garantir que os dados vão limpos para o banco
-        const cleanData = {
-            ...data,
-            cpf: unmask(data.cpf),
-            phone: unmask(data.phone),
-        };
-        const result = await editAdminAction(admin.id, cleanData);
+        const result = await editMemberAction(member.id, data);
 
         if (result && !result.success) {
             toast.error(result.error);
             setError("root", { type: "server", message: result.error });
+        }
+    };
+
+    const handleCopyLunaId = async () => {
+        if (!member.lunaId) return;
+        try {
+            await navigator.clipboard.writeText(member.lunaId);
+            setCopied(true);
+            toast.success("Matrícula copiada!");
+            setTimeout(() => setCopied(false), 2000);
+        } catch {
+            toast.error("Falha ao copiar");
         }
     };
 
@@ -68,16 +76,51 @@ export default function EditAdminForm({ admin }: { admin: User }) {
                         {errors.root.message}
                     </div>
                 )}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div className="flex flex-col gap-2">
-                        <Label htmlFor="lunaId">Matrícula/LunaID</Label>
-                        <Input
-                            id="lunaId"
-                            value={admin.lunaId || "Não gerado"}
-                            readOnly
-                            className="p-5 h-15.5 rounded-xl bg-background"
-                        />
+
+                {/* Header com LunaID, CPF e vínculos */}
+                <div className="flex flex-col gap-4 p-4 bg-background rounded-2xl border border-surface-border">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                        <div className="flex flex-col gap-1">
+                            <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Matrícula / LunaID</span>
+                            <div className="flex items-center gap-2">
+                                <span className="font-mono text-lg font-bold text-foreground">
+                                    {member.lunaId || "Não gerado"}
+                                </span>
+                                {member.lunaId && (
+                                    <button
+                                        type="button"
+                                        onClick={handleCopyLunaId}
+                                        className="cursor-pointer p-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+                                        title="Copiar matrícula"
+                                    >
+                                        {copied ? (
+                                            <IconCheck className="size-4 text-emerald-500" />
+                                        ) : (
+                                            <IconCopy className="size-4" />
+                                        )}
+                                    </button>
+                                )}
+                            </div>
+                        </div>
+                        <div className="flex flex-col gap-1">
+                            <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">CPF</span>
+                            <span className="font-mono text-sm text-foreground">{maskCPF(member.cpf)}</span>
+                        </div>
+                        <div className="flex flex-col gap-1">
+                            <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Vínculos</span>
+                            <div className="flex flex-wrap gap-1">
+                                {member.isAdmin && (
+                                    <Badge variant="outline" className="bg-blue-500/10 text-blue-500 border-blue-500/20">Admin</Badge>
+                                )}
+                                {member.isTeacher && (
+                                    <Badge variant="outline" className="bg-purple-500/10 text-purple-500 border-purple-500/20">Professor</Badge>
+                                )}
+                            </div>
+                        </div>
                     </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="flex flex-col gap-2">
                         <Label htmlFor="name">Nome completo *</Label>
                         <Input
@@ -98,24 +141,6 @@ export default function EditAdminForm({ admin }: { admin: User }) {
                             aria-invalid={errors.email ? "true" : "false"}
                         />
                         {errors.email && <p className="text-sm text-red-600">{errors.email.message}</p>}
-                    </div>
-                    <div className="flex flex-col gap-2">
-                        <Label htmlFor="cpf">CPF *</Label>
-                        <Controller
-                            control={control}
-                            name="cpf"
-                            render={({ field }) => (
-                                <Input
-                                    id="cpf"
-                                    value={maskCPF(field.value)}
-                                    onChange={(e) => field.onChange(maskCPF(e.target.value))}
-                                    placeholder="000.000.000-00"
-                                    className="p-5 h-15.5 rounded-xl bg-background"
-                                    aria-invalid={errors.cpf ? "true" : "false"}
-                                />
-                            )}
-                        />
-                        {errors.cpf && <p className="text-sm text-red-600">{errors.cpf.message}</p>}
                     </div>
                     <div className="flex flex-col gap-2">
                         <Label htmlFor="phone">Telefone *</Label>
@@ -213,7 +238,7 @@ export default function EditAdminForm({ admin }: { admin: User }) {
                     </Button>
                     <Button type="submit" disabled={isSubmitting}>
                         {isSubmitting && <IconLoader2 className="size-4 mr-2 animate-spin" />}
-                        {isSubmitting ? "Salvando..." : "Concluir"}
+                        {isSubmitting ? "Salvando..." : "Salvar Alterações"}
                     </Button>
                 </div>
             </form>

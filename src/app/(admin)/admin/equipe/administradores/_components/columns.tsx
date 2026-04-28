@@ -88,7 +88,7 @@ export const columns: ColumnDef<User>[] = [
         cell: ({ row }) => {
             return (
                 <div className="flex justify-end">
-                    <ButtonLink href={`/admin/equipe/administradores/${row.original.id}/editar`} variant="ghost" size="icon">
+                    <ButtonLink href={`/admin/equipe/${row.original.id}/editar`} variant="ghost" size="icon">
                         <IconPencil className="size-4" />
                         <span className="sr-only">Editar</span>
                     </ButtonLink>

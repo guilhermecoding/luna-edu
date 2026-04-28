@@ -1,22 +1,26 @@
 "use server";
 
-import { updateAdmin } from "@/services/users/admins.service";
+import { updateUser } from "@/services/users/users.service";
 import { revalidatePath, updateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import { ZodError } from "zod";
 import { Prisma } from "@/generated/prisma/client";
-import { editAdminSchema, type EditAdminInput } from "./schema";
+import { editMemberSchema, type EditMemberInput } from "./schema";
 
-export async function editAdminAction(adminId: string, data: EditAdminInput) {
+export async function editMemberAction(memberId: string, data: EditMemberInput) {
     try {
-        const validatedData = editAdminSchema.parse(data);
-        await updateAdmin(adminId, validatedData);
+        const validatedData = editMemberSchema.parse(data);
+        await updateUser(memberId, validatedData);
 
         updateTag("admins-list");
         updateTag("users-list");
-        updateTag(`admin-${adminId}`);
+        updateTag("users-stats");
+        updateTag(`user-${memberId}`);
+        updateTag(`admin-${memberId}`);
+        revalidatePath("/admin/equipe");
         revalidatePath("/admin/equipe/administradores");
-        revalidatePath(`/admin/equipe/administradores/${adminId}/editar`);
+        revalidatePath("/admin/equipe/professores");
+        revalidatePath(`/admin/equipe/${memberId}/editar`);
     } catch (error) {
         if (error instanceof ZodError) {
             return {
@@ -51,14 +55,14 @@ export async function editAdminAction(adminId: string, data: EditAdminInput) {
 
         return {
             success: false,
-            error: "Erro ao atualizar administrador",
+            error: "Erro ao atualizar membro",
         };
     }
 
     const params = new URLSearchParams({
         toast: "success",
-        message: "Administrador atualizado com sucesso",
+        message: "Membro atualizado com sucesso",
     });
 
-    redirect(`/admin/equipe/administradores?${params.toString()}`);
+    redirect(`/admin/equipe?${params.toString()}`);
 }

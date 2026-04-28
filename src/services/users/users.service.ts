@@ -76,4 +76,32 @@ export async function getUsersList(query?: string) {
     });
 }
 
+/**
+ * Busca um membro da equipe (admin ou professor) pelo ID.
+ */
+export async function getUserById(id: string) {
+    "use cache";
+    cacheLife("minutes");
+    cacheTag(`user-${id}`);
+
+    return await prisma.user.findUnique({
+        where: { id },
+    });
+}
+
+/**
+ * Atualiza um membro da equipe, validando CPF único.
+ */
+export async function updateUser(id: string, data: Prisma.UserUpdateInput) {
+    if (data.cpf) {
+        const existingCpf = await prisma.user.findFirst({ where: { cpf: data.cpf as string, id: { not: id } } });
+        if (existingCpf) throw new Error("CPF_ALREADY_EXISTS");
+    }
+
+    return await prisma.user.update({
+        where: { id },
+        data,
+    });
+}
+
 export type UserListItem = Awaited<ReturnType<typeof getUsersList>>[number];

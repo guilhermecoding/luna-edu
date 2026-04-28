@@ -5,6 +5,8 @@ import { UserListItem } from "@/services/users/users.service";
 import { Badge } from "@/components/ui/badge";
 import AvatarUsers from "@/components/avatar-users";
 import { calculateAge } from "@/lib/date-utils";
+import { ButtonLink } from "@/components/ui/button-link";
+import { IconPencil } from "@tabler/icons-react";
 
 export const columns: ColumnDef<UserListItem>[] = [
     {
@@ -80,6 +82,19 @@ export const columns: ColumnDef<UserListItem>[] = [
                 <span className="text-sm font-medium">
                     {role === "FULL_ACCESS" ? "Acesso Total" : "Somente Leitura"}
                 </span>
+            );
+        },
+    },
+    {
+        id: "actions",
+        cell: ({ row }) => {
+            return (
+                <div className="flex justify-end">
+                    <ButtonLink href={`/admin/equipe/${row.original.id}/editar`} variant="ghost" size="icon">
+                        <IconPencil className="size-4" />
+                        <span className="sr-only">Editar</span>
+                    </ButtonLink>
+                </div>
             );
         },
     },

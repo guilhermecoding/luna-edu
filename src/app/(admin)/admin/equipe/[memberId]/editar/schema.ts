@@ -7,6 +7,8 @@ export const editMemberSchema = z.object({
     birthDate: z.coerce.date({ message: "Data de nascimento inválida" }).refine((date) => date <= new Date(), { message: "A data de nascimento não pode ser no futuro" }),
     genre: z.enum(["MALE", "FEMALE", "NON_BINARY", "PREFER_NOT_TO_SAY"], { message: "Gênero inválido" }),
     systemRole: z.enum(["FULL_ACCESS", "READ_ONLY"], { message: "Nível de acesso inválido" }),
+    isAdmin: z.boolean(),
+    isTeacher: z.boolean(),
 });
 
 export type EditMemberInput = z.input<typeof editMemberSchema>;

@@ -30,6 +30,8 @@ export default function EditMemberForm({ member }: { member: User }) {
             birthDate: member.birthDate ? new Date(member.birthDate) : undefined,
             genre: member.genre as UserGenre,
             systemRole: member.systemRole as SystemRole,
+            isAdmin: member.isAdmin,
+            isTeacher: member.isTeacher,
         },
     });
 
@@ -48,6 +50,14 @@ export default function EditMemberForm({ member }: { member: User }) {
 
     const onSubmit = async (data: EditMemberData) => {
         clearErrors("root");
+
+        // Validar que pelo menos um vínculo foi selecionado
+        if (!data.isAdmin && !data.isTeacher) {
+            toast.error("O membro precisa ter pelo menos um vínculo (Admin ou Professor)");
+            setError("root", { type: "manual", message: "Selecione pelo menos um vínculo." });
+            return;
+        }
+
         const result = await editMemberAction(member.id, data);
 
         if (result && !result.success) {
@@ -77,9 +87,9 @@ export default function EditMemberForm({ member }: { member: User }) {
                     </div>
                 )}
 
-                {/* Header com LunaID, CPF e vínculos */}
-                <div className="flex flex-col gap-4 p-4 bg-background rounded-2xl border border-surface-border">
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                {/* Header com LunaID, CPF e vínculos - Empilhados verticalmente */}
+                <div className="flex flex-col gap-6 p-6 bg-background rounded-2xl border border-surface-border">
+                    <div className="flex flex-col gap-4">
                         <div className="flex flex-col gap-1">
                             <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Matrícula / LunaID</span>
                             <div className="flex items-center gap-2">
@@ -102,20 +112,46 @@ export default function EditMemberForm({ member }: { member: User }) {
                                 )}
                             </div>
                         </div>
+                        
+                        <div className="h-px bg-surface-border w-full" />
+
                         <div className="flex flex-col gap-1">
                             <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">CPF</span>
                             <span className="font-mono text-sm text-foreground">{maskCPF(member.cpf)}</span>
                         </div>
-                        <div className="flex flex-col gap-1">
-                            <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Vínculos</span>
-                            <div className="flex flex-wrap gap-1">
-                                {member.isAdmin && (
-                                    <Badge variant="outline" className="bg-blue-500/10 text-blue-500 border-blue-500/20">Admin</Badge>
-                                )}
-                                {member.isTeacher && (
-                                    <Badge variant="outline" className="bg-purple-500/10 text-purple-500 border-purple-500/20">Professor</Badge>
-                                )}
+
+                        <div className="h-px bg-surface-border w-full" />
+
+                        <div className="flex flex-col gap-3">
+                            <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Vínculos do Membro</span>
+                            <div className="flex flex-col gap-3">
+                                <label className="flex items-center gap-3 p-3 rounded-xl border border-surface-border bg-surface/50 cursor-pointer hover:bg-surface transition-colors">
+                                    <input 
+                                        type="checkbox" 
+                                        {...register("isAdmin")}
+                                        className="size-5 rounded border-surface-border text-primary focus:ring-primary cursor-pointer"
+                                    />
+                                    <div className="flex flex-col">
+                                        <span className="font-medium text-sm">Administrador</span>
+                                        <span className="text-xs text-muted-foreground">Permite gerenciar a instituição e equipe</span>
+                                    </div>
+                                </label>
+
+                                <label className="flex items-center gap-3 p-3 rounded-xl border border-surface-border bg-surface/50 cursor-pointer hover:bg-surface transition-colors">
+                                    <input 
+                                        type="checkbox" 
+                                        {...register("isTeacher")}
+                                        className="size-5 rounded border-surface-border text-primary focus:ring-primary cursor-pointer"
+                                    />
+                                    <div className="flex flex-col">
+                                        <span className="font-medium text-sm">Professor</span>
+                                        <span className="text-xs text-muted-foreground">Permite gerenciar turmas e disciplinas</span>
+                                    </div>
+                                </label>
                             </div>
+                            {(errors.isAdmin || errors.isTeacher) && (
+                                <p className="text-sm text-red-600">Selecione pelo menos um vínculo para o membro.</p>
+                            )}
                         </div>
                     </div>
                 </div>

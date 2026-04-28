@@ -2,6 +2,7 @@ import z from "zod";
 
 export const editMemberSchema = z.object({
     name: z.string().min(1, "Nome é obrigatório"),
+    cpf: z.string().min(11, "CPF inválido"),
     email: z.string().email("E-mail inválido"),
     phone: z.string().min(10, "Telefone inválido"),
     birthDate: z.coerce.date({ message: "Data de nascimento inválida" }).refine((date) => date <= new Date(), { message: "A data de nascimento não pode ser no futuro" }),

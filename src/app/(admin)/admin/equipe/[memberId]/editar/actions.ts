@@ -6,11 +6,17 @@ import { redirect } from "next/navigation";
 import { ZodError } from "zod";
 import { Prisma } from "@/generated/prisma/client";
 import { editMemberSchema, type EditMemberInput } from "./schema";
+import { unmask } from "@/lib/masks";
 
 export async function editMemberAction(memberId: string, data: EditMemberInput) {
     try {
         const validatedData = editMemberSchema.parse(data);
-        await updateUser(memberId, validatedData);
+        const cleanData = {
+            ...validatedData,
+            cpf: unmask(validatedData.cpf),
+            phone: unmask(validatedData.phone),
+        };
+        await updateUser(memberId, cleanData);
 
         updateTag("admins-list");
         updateTag("users-list");

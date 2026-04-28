@@ -24,6 +24,7 @@ export default function EditMemberForm({ member }: { member: User }) {
         mode: "all",
         defaultValues: {
             name: member.name,
+            cpf: member.cpf,
             email: member.email,
             phone: member.phone,
             birthDate: member.birthDate ? new Date(member.birthDate) : undefined,
@@ -112,23 +113,14 @@ export default function EditMemberForm({ member }: { member: User }) {
                             </div>
                         </div>
 
-                        <div className="h-px bg-surface-border w-full" />
-
-                        <div className="flex flex-col gap-1">
-                            <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">CPF</span>
-                            <span className="font-mono text-sm text-foreground">{maskCPF(member.cpf)}</span>
-                        </div>
-
-                        <div className="h-px bg-surface-border w-full" />
-
                         <div className="flex flex-col gap-3">
                             <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Vínculos do Membro</span>
                             <div className="flex flex-col gap-3">
                                 <label className="flex items-center gap-3 p-3 rounded-xl border border-surface-border bg-surface/50 cursor-pointer hover:bg-surface transition-colors">
-                                    <input
-                                        type="checkbox"
+                                    <input 
+                                        type="checkbox" 
                                         {...register("isAdmin")}
-                                        className="size-5 rounded border-surface-border accent-primary-theme cursor-pointer"
+                                        className="size-5 rounded border-surface-border accent-blue-600 cursor-pointer"
                                     />
                                     <div className="flex flex-col">
                                         <span className="font-medium text-sm">Administrador</span>
@@ -165,6 +157,24 @@ export default function EditMemberForm({ member }: { member: User }) {
                             aria-invalid={errors.name ? "true" : "false"}
                         />
                         {errors.name && <p className="text-sm text-red-600">{errors.name.message}</p>}
+                    </div>
+                    <div className="flex flex-col gap-2">
+                        <Label htmlFor="cpf">CPF *</Label>
+                        <Controller
+                            control={control}
+                            name="cpf"
+                            render={({ field }) => (
+                                <Input
+                                    id="cpf"
+                                    value={maskCPF(field.value)}
+                                    onChange={(e) => field.onChange(maskCPF(e.target.value))}
+                                    placeholder="000.000.000-00"
+                                    className="p-5 h-15.5 rounded-xl bg-background"
+                                    aria-invalid={errors.cpf ? "true" : "false"}
+                                />
+                            )}
+                        />
+                        {errors.cpf && <p className="text-sm text-red-600">{errors.cpf.message}</p>}
                     </div>
                     <div className="flex flex-col gap-2">
                         <Label htmlFor="email">E-mail *</Label>

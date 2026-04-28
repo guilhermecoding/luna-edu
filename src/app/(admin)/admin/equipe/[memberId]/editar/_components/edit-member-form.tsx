@@ -14,7 +14,6 @@ import { IconCheck, IconCopy, IconLoader2 } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { maskCPF, maskPhone } from "@/lib/masks";
-import { Badge } from "@/components/ui/badge";
 
 export default function EditMemberForm({ member }: { member: User }) {
     const router = useRouter();
@@ -112,7 +111,7 @@ export default function EditMemberForm({ member }: { member: User }) {
                                 )}
                             </div>
                         </div>
-                        
+
                         <div className="h-px bg-surface-border w-full" />
 
                         <div className="flex flex-col gap-1">
@@ -126,10 +125,10 @@ export default function EditMemberForm({ member }: { member: User }) {
                             <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Vínculos do Membro</span>
                             <div className="flex flex-col gap-3">
                                 <label className="flex items-center gap-3 p-3 rounded-xl border border-surface-border bg-surface/50 cursor-pointer hover:bg-surface transition-colors">
-                                    <input 
-                                        type="checkbox" 
+                                    <input
+                                        type="checkbox"
                                         {...register("isAdmin")}
-                                        className="size-5 rounded border-surface-border text-primary focus:ring-primary cursor-pointer"
+                                        className="size-5 rounded border-surface-border accent-primary-theme cursor-pointer"
                                     />
                                     <div className="flex flex-col">
                                         <span className="font-medium text-sm">Administrador</span>
@@ -138,10 +137,10 @@ export default function EditMemberForm({ member }: { member: User }) {
                                 </label>
 
                                 <label className="flex items-center gap-3 p-3 rounded-xl border border-surface-border bg-surface/50 cursor-pointer hover:bg-surface transition-colors">
-                                    <input 
-                                        type="checkbox" 
+                                    <input
+                                        type="checkbox"
                                         {...register("isTeacher")}
-                                        className="size-5 rounded border-surface-border text-primary focus:ring-primary cursor-pointer"
+                                        className="size-5 rounded border-surface-border accent-primary-theme cursor-pointer"
                                     />
                                     <div className="flex flex-col">
                                         <span className="font-medium text-sm">Professor</span>

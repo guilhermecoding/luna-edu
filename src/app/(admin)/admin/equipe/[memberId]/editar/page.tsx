@@ -1,8 +1,6 @@
 import Page from "@/components/page";
 import Section from "@/components/section";
 import TitlePage from "@/components/title-page";
-import { IconArrowLeft } from "@tabler/icons-react";
-import { ButtonLink } from "@/components/ui/button-link";
 import { Metadata } from "next";
 import { getUserById } from "@/services/users/users.service";
 import { notFound } from "next/navigation";
@@ -27,12 +25,6 @@ export default async function EditMemberPage({
     return (
         <Page>
             <Section>
-                <div className="flex flex-row items-center gap-1 mb-3">
-                    <ButtonLink href="/admin/equipe" variant="ghost" size="sm" className="-ml-3 text-muted-foreground hover:text-foreground">
-                        <IconArrowLeft className="size-4" />
-                        Voltar
-                    </ButtonLink>
-                </div>
                 <TitlePage
                     title={`Editar ${member.name}`}
                     description="Atualize os dados e acessos deste membro da equipe."

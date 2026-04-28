@@ -69,7 +69,7 @@ export default function EditMemberForm({ member }: { member: User }) {
     };
 
     return (
-        <div className="bg-surface border border-surface-border p-6 rounded-3xl max-w-3xl">
+        <div className="bg-surface border border-surface-border p-6 rounded-3xl">
             <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
                 {errors.root?.message && (
                     <div className="p-4 bg-red-50 border border-red-200 rounded-lg text-red-900 text-sm">

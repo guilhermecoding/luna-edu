@@ -87,66 +87,6 @@ export default function EditMemberForm({ member }: { member: User }) {
                     </div>
                 )}
 
-                {/* Header com LunaID, CPF e vínculos - Empilhados verticalmente */}
-                <div className="flex flex-col gap-6 p-6 bg-background rounded-2xl border border-surface-border">
-                    <div className="flex flex-col gap-4">
-                        <div className="flex flex-col gap-1">
-                            <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Matrícula / LunaID</span>
-                            <div className="flex items-center gap-2">
-                                <span className="font-mono text-lg font-bold text-foreground">
-                                    {member.lunaId || "Não gerado"}
-                                </span>
-                                {member.lunaId && (
-                                    <button
-                                        type="button"
-                                        onClick={handleCopyLunaId}
-                                        className="cursor-pointer p-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
-                                        title="Copiar matrícula"
-                                    >
-                                        {copied ? (
-                                            <IconCheck className="size-4 text-emerald-500" />
-                                        ) : (
-                                            <IconCopy className="size-4" />
-                                        )}
-                                    </button>
-                                )}
-                            </div>
-                        </div>
-
-                        <div className="flex flex-col gap-3">
-                            <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Vínculos do Membro</span>
-                            <div className="flex flex-col gap-3">
-                                <label className="flex items-center gap-3 p-3 rounded-xl border border-surface-border bg-surface/50 cursor-pointer hover:bg-surface transition-colors">
-                                    <input 
-                                        type="checkbox" 
-                                        {...register("isAdmin")}
-                                        className="size-5 rounded border-surface-border accent-blue-600 cursor-pointer"
-                                    />
-                                    <div className="flex flex-col">
-                                        <span className="font-medium text-sm">Administrador</span>
-                                        <span className="text-xs text-muted-foreground">Permite gerenciar a instituição e equipe</span>
-                                    </div>
-                                </label>
-
-                                <label className="flex items-center gap-3 p-3 rounded-xl border border-surface-border bg-surface/50 cursor-pointer hover:bg-surface transition-colors">
-                                    <input
-                                        type="checkbox"
-                                        {...register("isTeacher")}
-                                        className="size-5 rounded border-surface-border accent-primary-theme cursor-pointer"
-                                    />
-                                    <div className="flex flex-col">
-                                        <span className="font-medium text-sm">Professor</span>
-                                        <span className="text-xs text-muted-foreground">Permite gerenciar turmas e disciplinas</span>
-                                    </div>
-                                </label>
-                            </div>
-                            {(errors.isAdmin || errors.isTeacher) && (
-                                <p className="text-sm text-red-600">Selecione pelo menos um vínculo para o membro.</p>
-                            )}
-                        </div>
-                    </div>
-                </div>
-
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="flex flex-col gap-2">
                         <Label htmlFor="name">Nome completo *</Label>
@@ -272,6 +212,68 @@ export default function EditMemberForm({ member }: { member: User }) {
                         {errors.systemRole && <p className="text-sm text-red-600">{errors.systemRole.message}</p>}
                     </div>
                 </div>
+
+                <div className="flex flex-col gap-6 p-6 bg-background rounded-2xl border border-surface-border">
+                    <div className="flex flex-col gap-4">
+                        <div className="flex flex-col gap-1">
+                            <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Matrícula / LunaID</span>
+                            <div className="flex items-center gap-2">
+                                <span className="font-mono text-lg font-bold text-foreground">
+                                    {member.lunaId || "Não gerado"}
+                                </span>
+                                {member.lunaId && (
+                                    <button
+                                        type="button"
+                                        onClick={handleCopyLunaId}
+                                        className="cursor-pointer p-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+                                        title="Copiar matrícula"
+                                    >
+                                        {copied ? (
+                                            <IconCheck className="size-4 text-emerald-500" />
+                                        ) : (
+                                            <IconCopy className="size-4" />
+                                        )}
+                                    </button>
+                                )}
+                            </div>
+                        </div>
+
+                        <div className="h-px bg-surface-border w-full" />
+
+                        <div className="flex flex-col gap-3">
+                            <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Vínculos do Membro</span>
+                            <div className="flex flex-col gap-3">
+                                <label className="flex items-center gap-3 p-3 rounded-xl border border-surface-border bg-surface/50 cursor-pointer hover:bg-surface transition-colors">
+                                    <input 
+                                        type="checkbox" 
+                                        {...register("isAdmin")}
+                                        className="size-5 rounded border-surface-border accent-blue-600 cursor-pointer"
+                                    />
+                                    <div className="flex flex-col">
+                                        <span className="font-medium text-sm">Administrador</span>
+                                        <span className="text-xs text-muted-foreground">Permite gerenciar a instituição e equipe</span>
+                                    </div>
+                                </label>
+
+                                <label className="flex items-center gap-3 p-3 rounded-xl border border-surface-border bg-surface/50 cursor-pointer hover:bg-surface transition-colors">
+                                    <input
+                                        type="checkbox"
+                                        {...register("isTeacher")}
+                                        className="size-5 rounded border-surface-border accent-purple-600 cursor-pointer"
+                                    />
+                                    <div className="flex flex-col">
+                                        <span className="font-medium text-sm">Professor</span>
+                                        <span className="text-xs text-muted-foreground">Permite gerenciar turmas e disciplinas</span>
+                                    </div>
+                                </label>
+                            </div>
+                            {(errors.isAdmin || errors.isTeacher) && (
+                                <p className="text-sm text-red-600">Selecione pelo menos um vínculo para o membro.</p>
+                            )}
+                        </div>
+                    </div>
+                </div>
+
                 <div className="flex flex-col-reverse justify-end gap-3 pt-4 sm:flex-row mt-4 border-t">
                     <Button
                         type="button"

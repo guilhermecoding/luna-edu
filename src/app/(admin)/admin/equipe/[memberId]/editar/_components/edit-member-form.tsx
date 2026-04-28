@@ -41,8 +41,25 @@ export default function EditMemberForm({ member }: { member: User }) {
         control,
         setError,
         clearErrors,
+        reset,
         formState: { errors, isSubmitting },
     } = form;
+
+    // Sincroniza o formulário com os dados originais sempre que o prop 'member' mudar
+    // Isso garante que o formulário não mantenha estados de edições anteriores
+    useEffect(() => {
+        reset({
+            name: member.name,
+            cpf: member.cpf,
+            email: member.email,
+            phone: member.phone,
+            birthDate: member.birthDate ? new Date(member.birthDate) : undefined,
+            genre: member.genre as UserGenre,
+            systemRole: member.systemRole as SystemRole,
+            isAdmin: member.isAdmin,
+            isTeacher: member.isTeacher,
+        });
+    }, [member, reset]);
 
     useEffect(() => {
         form.trigger();
@@ -244,10 +261,10 @@ export default function EditMemberForm({ member }: { member: User }) {
                             <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Vínculos do Membro</span>
                             <div className="flex flex-col gap-3">
                                 <label className="flex items-center gap-3 p-3 rounded-xl border border-surface-border bg-surface/50 cursor-pointer hover:bg-surface transition-colors">
-                                    <input 
-                                        type="checkbox" 
+                                    <input
+                                        type="checkbox"
                                         {...register("isAdmin")}
-                                        className="size-5 rounded border-surface-border accent-blue-600 cursor-pointer"
+                                        className="size-5 rounded border-surface-border accent-primary-theme cursor-pointer"
                                     />
                                     <div className="flex flex-col">
                                         <span className="font-medium text-sm">Administrador</span>
@@ -259,7 +276,7 @@ export default function EditMemberForm({ member }: { member: User }) {
                                     <input
                                         type="checkbox"
                                         {...register("isTeacher")}
-                                        className="size-5 rounded border-surface-border accent-purple-600 cursor-pointer"
+                                        className="size-5 rounded border-surface-border accent-primary-theme cursor-pointer"
                                     />
                                     <div className="flex flex-col">
                                         <span className="font-medium text-sm">Professor</span>

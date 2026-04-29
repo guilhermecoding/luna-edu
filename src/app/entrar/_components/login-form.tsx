@@ -70,9 +70,9 @@ export default function LoginForm() {
     }
 
     return (
-        <div className="w-full space-y-6">
+        <div className="w-full px-3 sm:px-0 sm:w-3/5 space-y-6">
             {/* TABS CUSTOMIZADAS */}
-            <div className="flex p-1 bg-muted/50 rounded-xl border border-border/50">
+            <div className="flex p-1 bg-muted-foreground/10 rounded-xl border border-border/50">
                 <button
                     type="button"
                     onClick={() => setActiveTab("admin")}
@@ -120,8 +120,8 @@ export default function LoginForm() {
                                 type="email"
                                 placeholder={activeTab === "admin" ? "admin@luna.com" : "professor@luna.com"}
                                 className={cn(
-                                    "h-12 rounded-xl border-2 px-4 outline-none transition-all focus:ring-0",
-                                    errors.email ? "border-destructive focus:border-destructive" : "border-border/50 focus:border-primary",
+                                    "h-12 rounded-xl border-2 px-4 outline-none transition-all focus:ring-0 bg-background",
+                                    errors.email ? "border-destructive focus:border-destructive" : "border-foreground/20 focus:border-primary",
                                 )}
                             />
                         )}
@@ -146,8 +146,8 @@ export default function LoginForm() {
                                 type="password"
                                 placeholder="••••••••"
                                 className={cn(
-                                    "h-12 rounded-xl border-2 px-4 outline-none transition-all focus:ring-0",
-                                    errors.password ? "border-destructive focus:border-destructive" : "border-border/50 focus:border-primary",
+                                    "h-12 rounded-xl border-2 px-4 outline-none transition-all focus:ring-0 bg-background",
+                                    errors.password ? "border-destructive focus:border-destructive" : "border-foreground/20 focus:border-primary",
                                 )}
                             />
                         )}
@@ -161,19 +161,19 @@ export default function LoginForm() {
                 <div className="pt-2">
                     <Button
                         type="submit"
-                        className="w-full h-14 rounded-xl text-base font-bold shadow-lg shadow-primary/20 transition-all hover:scale-[1.01] active:scale-[0.99]"
+                        className="w-full h-14 font-bold transition-all hover:scale-[1.01] active:scale-[0.99]"
                         disabled={!isValid || loading}
                         aria-busy={loading}
                     >
                         {loading ? (
                             <>
-                                <IconLoader2 className="animate-spin w-5 h-5" />
-                                Autenticando...
+                                <IconLoader2 className="animate-spin size-6" />
+                                Um momento...
                             </>
                         ) : (
                             <>
-                                <IconLogin2 className="w-5 h-5" />
-                                Entrar como {activeTab === "admin" ? "Administrador" : "Professor"}
+                                <IconLogin2 className="size-6" />
+                                Entrar
                             </>
                         )}
                     </Button>

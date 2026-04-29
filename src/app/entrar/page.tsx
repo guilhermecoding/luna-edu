@@ -1,36 +1,33 @@
+"use client";
+
 import Image from "next/image";
 import LoginForm from "./_components/login-form";
 
 export default function LoginPage() {
     return (
-        <main className="min-h-screen grid grid-cols-1 lg:grid-cols-2 bg-background">
+        <main className="min-h-screen w-full grid grid-cols-1 lg:grid-cols-2 bg-surface">
             {/* Lado Esquerdo - Imagem (Escondido em Mobile) */}
             <div className="hidden lg:block relative overflow-hidden">
                 <Image
-                    src="/thunb-login.webp"
+                    src="/thumb.jpg"
                     alt="Background"
                     fill
                     className="object-cover"
                     priority
                 />
-                <div className="absolute inset-0 bg-primary/20 backdrop-blur-[2px]" />
             </div>
 
             {/* Lado Direito - Formulário */}
-            <div className="flex flex-col items-center justify-center p-8 sm:p-12 lg:p-20">
-                <div className="w-full max-w-100 space-y-8">
+            <div className="flex w-full flex-col items-center justify-center">
+                <div className="w-full space-y-4">
                     {/* Header */}
                     <div className="flex flex-col items-center text-center space-y-4">
-                        <div className="relative w-48 h-16">
-                            <Image
-                                src="/logo.svg"
-                                alt="Luna Academy"
-                                fill
-                                className="object-contain"
-                            />
+                        <div className="flex flex-col items-center gap-2">
+                            <div>Logo</div>
+                            <h2 className="font-silkscreen text-primary-theme text-4xl">LUNA</h2>
                         </div>
                         <div className="space-y-1">
-                            <h1 className="text-2xl font-bold tracking-tight">Bem-vindo de volta</h1>
+                            <h1 className="text-2xl font-bold tracking-tight">Bem-vindo de volta!</h1>
                             <p className="text-muted-foreground text-sm">
                                 Escolha seu perfil e acesse sua conta
                             </p>
@@ -38,7 +35,7 @@ export default function LoginPage() {
                     </div>
 
                     {/* Form */}
-                    <div className="bg-card p-6 rounded-3xl border border-border/50 shadow-sm">
+                    <div className="p-6 flex justify-center items-center">
                         <LoginForm />
                     </div>
 

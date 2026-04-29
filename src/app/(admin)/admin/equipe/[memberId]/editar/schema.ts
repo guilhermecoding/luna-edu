@@ -10,6 +10,7 @@ export const editMemberSchema = z.object({
     systemRole: z.enum(["FULL_ACCESS", "READ_ONLY"], { message: "Nível de acesso inválido" }),
     isAdmin: z.boolean(),
     isTeacher: z.boolean(),
+    isActive: z.boolean(),
 });
 
 export type EditMemberInput = z.input<typeof editMemberSchema>;

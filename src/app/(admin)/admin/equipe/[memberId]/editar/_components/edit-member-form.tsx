@@ -14,10 +14,14 @@ import { IconCheck, IconCopy, IconLoader2 } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { maskCPF, maskPhone } from "@/lib/masks";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import Image from "next/image";
 
 export default function EditMemberForm({ member }: { member: User }) {
     const router = useRouter();
     const [copied, setCopied] = useState(false);
+    const [showStatusModal, setShowStatusModal] = useState(false);
+    const [pendingStatus, setPendingStatus] = useState<boolean | null>(null);
 
     const form = useForm<EditMemberInput, unknown, EditMemberData>({
         resolver: zodResolver(editMemberSchema),
@@ -32,6 +36,7 @@ export default function EditMemberForm({ member }: { member: User }) {
             systemRole: member.systemRole as SystemRole,
             isAdmin: member.isAdmin,
             isTeacher: member.isTeacher,
+            isActive: member.isActive,
         },
     });
 
@@ -58,6 +63,7 @@ export default function EditMemberForm({ member }: { member: User }) {
             systemRole: member.systemRole as SystemRole,
             isAdmin: member.isAdmin,
             isTeacher: member.isTeacher,
+            isActive: member.isActive,
         });
     }, [member, reset]);
 
@@ -228,7 +234,94 @@ export default function EditMemberForm({ member }: { member: User }) {
                         />
                         {errors.systemRole && <p className="text-sm text-red-600">{errors.systemRole.message}</p>}
                     </div>
+                    <div className="flex flex-col gap-2">
+                        <Label htmlFor="isActive">Acesso ao Sistema *</Label>
+                        <Controller
+                            control={control}
+                            name="isActive"
+                            render={({ field }) => (
+                                <Select
+                                    value={field.value ? "active" : "inactive"}
+                                    onValueChange={(val) => {
+                                        const nextStatus = val === "active";
+                                        if (nextStatus !== field.value) {
+                                            setPendingStatus(nextStatus);
+                                            setShowStatusModal(true);
+                                        }
+                                    }}
+                                >
+                                    <SelectTrigger className="w-full bg-background p-5 h-15.5 rounded-xl" aria-invalid={errors.isActive ? "true" : "false"}>
+                                        <SelectValue placeholder="Selecione o status" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="active">Ativado</SelectItem>
+                                        <SelectItem value="inactive">Desativado</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            )}
+                        />
+                        {errors.isActive && <p className="text-sm text-red-600">{errors.isActive.message}</p>}
+                    </div>
                 </div>
+
+                <Dialog open={showStatusModal} onOpenChange={setShowStatusModal}>
+                    <DialogContent className="sm:max-w-md border-none bg-surface p-8 rounded-3xl overflow-hidden">
+                        <div className="absolute top-0 left-0 w-full h-1 bg-primary-theme opacity-20" />
+
+                        <div className="flex flex-col items-center text-center gap-6">
+                            <div className="relative size-32 animate-bounce-slow">
+                                <Image
+                                    src="/gibby-normal-icon.svg"
+                                    alt="Gibby"
+                                    fill
+                                    className="object-contain"
+                                />
+                            </div>
+
+                            <div className="flex flex-col gap-2">
+                                <DialogHeader>
+                                    <DialogTitle className="text-2xl font-bold text-center">
+                                        {pendingStatus ? "Ativar Usuário?" : "Desativar Usuário?"}
+                                    </DialogTitle>
+                                </DialogHeader>
+                                <DialogDescription className="text-muted-foreground text-base">
+                                    {pendingStatus ? (
+                                        "Ao ativar este usuário, ele recuperará o acesso total ao sistema imediatamente utilizando seu login e senha cadastrados."
+                                    ) : (
+                                        "Atenção! Ao desativar este usuário, ele perderá o acesso ao sistema na mesma hora. Mesmo com a senha correta, o acesso será bloqueado."
+                                    )}
+                                </DialogDescription>
+                            </div>
+                        </div>
+
+                        <DialogFooter className="flex flex-row gap-3 mt-4">
+                            <Button
+                                type="button"
+                                variant="outline"
+                                className="flex-1 h-12"
+                                onClick={() => {
+                                    setShowStatusModal(false);
+                                    setPendingStatus(null);
+                                }}
+                            >
+                                Cancelar
+                            </Button>
+                            <Button
+                                type="button"
+                                className="flex-1 h-12 bg-primary-theme hover:bg-primary-theme/90"
+                                onClick={() => {
+                                    if (pendingStatus !== null) {
+                                        form.setValue("isActive", pendingStatus, { shouldDirty: true, shouldValidate: true });
+                                    }
+                                    setShowStatusModal(false);
+                                    setPendingStatus(null);
+                                }}
+                            >
+                                Confirmar
+                            </Button>
+                        </DialogFooter>
+                    </DialogContent>
+                </Dialog>
 
                 <div className="flex flex-col gap-6 p-6 bg-background rounded-2xl border border-surface-border">
                     <div className="flex flex-col gap-4">

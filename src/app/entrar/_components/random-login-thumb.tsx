@@ -8,7 +8,7 @@ type RandomLoginThumbProps = {
 };
 
 export default function RandomLoginThumb({ thumbs }: RandomLoginThumbProps) {
-    const [thumb, setThumb] = useState(thumbs[0]);
+    const [thumb, setThumb] = useState<StaticImageData | null>(null);
 
     useEffect(() => {
         const raf = requestAnimationFrame(() => {
@@ -18,6 +18,10 @@ export default function RandomLoginThumb({ thumbs }: RandomLoginThumbProps) {
 
         return () => cancelAnimationFrame(raf);
     }, [thumbs]);
+
+    if (!thumb) {
+        return <div className="absolute inset-0 bg-surface" />;
+    }
 
     return <Image src={thumb} alt="Background" fill className="object-cover" priority />;
 }

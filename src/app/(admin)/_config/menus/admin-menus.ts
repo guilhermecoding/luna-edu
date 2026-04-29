@@ -2,17 +2,6 @@ import { ItemMenuSidebarAdmin } from "@/@types/item-menu-sidebar.type";
 
 export const adminMenus: ItemMenuSidebarAdmin[] = [
     {
-        group: "GERAL",
-        items: [
-            {
-                title: "Dashboard",
-                url: "/admin",
-                icon: "home",
-                isActive: false,
-            },
-        ],
-    },
-    {
         group: "ACADÊMICO",
         items: [
             {
@@ -69,23 +58,32 @@ export const adminMenus: ItemMenuSidebarAdmin[] = [
         group: "GERENCIAMENTO",
         items: [
             {
+                title: "Alunos",
+                url: "/admin/alunos",
+                icon: "school",
+                isActive: false,
+                items: [
+                    { title: "Listar Alunos", url: "/admin/alunos" },
+                    { title: "Adicionar Aluno", url: "/admin/alunos/novo" },
+                ],
+            },
+            {
+                title: "Equipe",
+                url: "/admin/equipe",
+                icon: "users",
+                isActive: false,
+                items: [
+                    { title: "Administradores", url: "/admin/equipe/administradores" },
+                    { title: "Professores", url: "/admin/equipe/professores" },
+                ],
+            },
+            {
                 title: "Instituições",
                 url: "/admin/instituicoes",
                 icon: "building-estate",
                 isActive: false,
                 items: [
                     { title: "Adicionar Instituição", url: "/admin/instituicoes/novo" },
-                ],
-            },
-            {
-                title: "Usuários",
-                url: "/admin/usuarios",
-                icon: "users",
-                isActive: false,
-                items: [
-                    { title: "Listar Usuários", url: "/admin/usuarios" },
-                    { title: "Adicionar Usuário", url: "/admin/usuarios/novo" },
-                    { title: "Permissões", url: "/admin/usuarios/permissoes" },
                 ],
             },
         ],

@@ -14,8 +14,7 @@ import type * as Prisma from "../internal/prismaNamespace"
 
 /**
  * Model SubPeriod
- * Sub-períodos representam etapas avaliativas dentro de um período letivo,
- * como Bimestres, Trimestres ou Semestres.
+ * 
  */
 export type SubPeriodModel = runtime.Types.Result.DefaultSelection<Prisma.$SubPeriodPayload>
 

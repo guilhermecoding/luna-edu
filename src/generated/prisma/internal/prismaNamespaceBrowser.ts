@@ -109,7 +109,13 @@ export const UserScalarFieldEnum = {
   systemRole: 'systemRole',
   isAdmin: 'isAdmin',
   isTeacher: 'isTeacher',
-  isActive: 'isActive'
+  isActive: 'isActive',
+  genre: 'genre',
+  lunaId: 'lunaId',
+  role: 'role',
+  banned: 'banned',
+  banReason: 'banReason',
+  banExpires: 'banExpires'
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -123,7 +129,8 @@ export const SessionScalarFieldEnum = {
   updatedAt: 'updatedAt',
   ipAddress: 'ipAddress',
   userAgent: 'userAgent',
-  userId: 'userId'
+  userId: 'userId',
+  impersonatedBy: 'impersonatedBy'
 } as const
 
 export type SessionScalarFieldEnum = (typeof SessionScalarFieldEnum)[keyof typeof SessionScalarFieldEnum]
@@ -133,7 +140,6 @@ export const AccountScalarFieldEnum = {
   id: 'id',
   accountId: 'accountId',
   providerId: 'providerId',
-  providerType: 'providerType',
   userId: 'userId',
   accessToken: 'accessToken',
   refreshToken: 'refreshToken',
@@ -315,13 +321,14 @@ export const StudentScalarFieldEnum = {
   id: 'id',
   createdAt: 'createdAt',
   name: 'name',
-  age: 'age',
+  birthDate: 'birthDate',
   studentPhone: 'studentPhone',
   parentPhone: 'parentPhone',
   cpf: 'cpf',
   email: 'email',
   school: 'school',
-  genre: 'genre'
+  genre: 'genre',
+  lunaId: 'lunaId'
 } as const
 
 export type StudentScalarFieldEnum = (typeof StudentScalarFieldEnum)[keyof typeof StudentScalarFieldEnum]

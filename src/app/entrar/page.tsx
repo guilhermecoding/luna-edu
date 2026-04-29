@@ -1,23 +1,28 @@
-"use client";
-
-import { useState } from "react";
-import Image from "next/image";
 import LoginForm from "./_components/login-form";
 import GibbyAnimate from "@/components/gibby-animate";
+import CorporationLogo from "@/app/entrar/_components/corporation-logo";
+import RandomLoginThumb from "./_components/random-login-thumb";
+import CurrentYear from "@/app/entrar/_components/current-year";
+import thumb01 from "@/assets/images/thumbs-login-page/Imagem_01.webp";
+import thumb02 from "@/assets/images/thumbs-login-page/Imagem_02.webp";
+import thumb03 from "@/assets/images/thumbs-login-page/Imagem_03.webp";
+import thumb04 from "@/assets/images/thumbs-login-page/Imagem_04.webp";
+import thumb05 from "@/assets/images/thumbs-login-page/Imagem_05.webp";
+import thumb06 from "@/assets/images/thumbs-login-page/Imagem_06.webp";
+import thumb07 from "@/assets/images/thumbs-login-page/Imagem_07.webp";
+import thumb08 from "@/assets/images/thumbs-login-page/Imagem_08.webp";
+import thumb09 from "@/assets/images/thumbs-login-page/Imagem_09.webp";
+
 
 export default function LoginPage() {
     const logoCorporation = process.env.NEXT_PUBLIC_LOGO_CORPORATION;
-    const [showCorporationLogo, setShowCorporationLogo] = useState(Boolean(logoCorporation));
+
     return (
         <main className="min-h-screen w-full grid grid-cols-1 lg:grid-cols-2 bg-surface">
             {/* Lado Esquerdo - Imagem (Escondido em Mobile) */}
             <div className="hidden lg:block relative overflow-hidden">
-                <Image
-                    src="/thumb.jpg"
-                    alt="Background"
-                    fill
-                    className="object-cover"
-                    priority
+                <RandomLoginThumb
+                    thumbs={[thumb01, thumb02, thumb03, thumb04, thumb05, thumb06, thumb07, thumb08, thumb09]}
                 />
             </div>
 
@@ -29,19 +34,7 @@ export default function LoginPage() {
                         <div className="flex flex-col items-center gap-2">
                             <div className="flex flex-row items-center gap-2">
                                 <GibbyAnimate className="size-24" />
-                                {showCorporationLogo && logoCorporation && (
-                                    <>
-                                        <span className="text-4xl font-bold text-muted-foreground mt-4 mr-2">+</span>
-                                        <Image
-                                            src={logoCorporation}
-                                            alt="Logo"
-                                            width={100}
-                                            height={100}
-                                            className="size-20 object-contain mt-3"
-                                            onError={() => setShowCorporationLogo(false)}
-                                        />
-                                    </>
-                                )}
+                                <CorporationLogo logoCorporation={logoCorporation} />
                             </div>
                             <h2 className="font-silkscreen text-primary-theme text-6xl">LUNA</h2>
                         </div>
@@ -59,7 +52,7 @@ export default function LoginPage() {
 
                     {/* Footer opcional */}
                     <p className="text-center text-xs text-muted-foreground">
-                        &copy; {new Date().getFullYear()} Luna Academy. Todos os direitos reservados.
+                        &copy; <CurrentYear /> Luna Academy. Todos os direitos reservados.
                     </p>
                 </div>
             </div>

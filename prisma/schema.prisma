@@ -1,593 +1,603 @@
+
 generator client {
-    provider = "prisma-client"
-    output   = "../src/generated/prisma"
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
 }
 
 datasource db {
-    provider = "postgresql"
-    schemas  = ["public", "auth"]
+  provider = "postgresql"
+  schemas  = ["public", "auth"]
 }
 
 // ================= ENUMS =================
 
 enum SystemRole {
-    FULL_ACCESS
-    READ_ONLY
+  FULL_ACCESS
+  READ_ONLY
 
-    @@map("system_role")
-    @@schema("auth")
+  @@map("system_role")
+  @@schema("auth")
 }
 
 enum UserGenre {
-    MALE
-    FEMALE
-    NON_BINARY
-    PREFER_NOT_TO_SAY
+  MALE
+  FEMALE
+  NON_BINARY
+  PREFER_NOT_TO_SAY
 
-    @@map("user_genre")
-    @@schema("auth")
+  @@map("user_genre")
+  @@schema("auth")
 }
 
 enum Genre {
-    MALE
-    FEMALE
-    NON_BINARY
-    PREFER_NOT_TO_SAY
+  MALE
+  FEMALE
+  NON_BINARY
+  PREFER_NOT_TO_SAY
 
-    @@map("genre")
-    @@schema("public")
+  @@map("genre")
+  @@schema("public")
 }
 
 enum GradingType {
-    NONE
-    POINTS
-    HITS
+  NONE
+  POINTS
+  HITS
 
-    @@map("grading_type")
-    @@schema("public")
+  @@map("grading_type")
+  @@schema("public")
 }
 
 enum Shift {
-    MORNING
-    AFTERNOON
-    EVENING
+  MORNING
+  AFTERNOON
+  EVENING
 
-    @@map("shift")
-    @@schema("public")
+  @@map("shift")
+  @@schema("public")
 }
 
 enum ActivityType {
-    HOMEWORK
-    EXAM
-    PROJECT
-    QUIZ
-    PARTICIPATION
+  HOMEWORK
+  EXAM
+  PROJECT
+  QUIZ
+  PARTICIPATION
 
-    @@map("activity_type")
-    @@schema("public")
+  @@map("activity_type")
+  @@schema("public")
 }
 
 enum RoomType {
-    CLASSROOM
-    LABORATORY
-    AUDITORIUM
-    OTHERS
+  CLASSROOM
+  LABORATORY
+  AUDITORIUM
+  OTHERS
 
-    @@map("room_type")
-    @@schema("public")
+  @@map("room_type")
+  @@schema("public")
 }
 
 enum NotificationType {
-    INFO
-    WARNING
-    ALERT
+  INFO
+  WARNING
+  ALERT
 
-    @@map("notification_type")
-    @@schema("public")
+  @@map("notification_type")
+  @@schema("public")
 }
 
 enum DayOfWeek {
-    MONDAY
-    TUESDAY
-    WEDNESDAY
-    THURSDAY
-    FRIDAY
-    SATURDAY
-    SUNDAY
+  MONDAY
+  TUESDAY
+  WEDNESDAY
+  THURSDAY
+  FRIDAY
+  SATURDAY
+  SUNDAY
 
-    @@map("day_of_week")
-    @@schema("public")
+  @@map("day_of_week")
+  @@schema("public")
 }
 
 // ================= AUTH =================
 
 model User {
-    id            String   @id
-    name          String
-    email         String   @unique
-    emailVerified Boolean  @default(false) @map("email_verified")
-    image         String?
-    createdAt     DateTime @default(now()) @map("created_at") @db.Timestamptz
-    updatedAt     DateTime @updatedAt @map("updated_at") @db.Timestamptz
+  id            String   @id
+  name          String
+  email         String   @unique
+  emailVerified Boolean  @default(false) @map("email_verified")
+  image         String?
+  createdAt     DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt     DateTime @updatedAt @map("updated_at") @db.Timestamptz
 
-    cpf        String     @unique
-    phone      String
-    birthDate  DateTime   @map("birth_date") @db.Date
-    bio        String?
-    systemRole SystemRole @default(FULL_ACCESS) @map("system_role")
-    isAdmin    Boolean    @default(false) @map("is_admin")
-    isTeacher  Boolean    @default(false) @map("is_teacher")
-    isActive   Boolean    @default(true) @map("is_active")
-    genre      UserGenre  @default(PREFER_NOT_TO_SAY) @map("genre")
-    lunaId     String?    @unique @map("luna_id")
+  cpf        String     @unique
+  phone      String
+  birthDate  DateTime   @map("birth_date") @db.Date
+  bio        String?
+  systemRole SystemRole @default(FULL_ACCESS) @map("system_role")
+  isAdmin    Boolean    @default(false) @map("is_admin")
+  isTeacher  Boolean    @default(false) @map("is_teacher")
+  isActive   Boolean    @default(true) @map("is_active")
+  genre      UserGenre  @default(PREFER_NOT_TO_SAY) @map("genre")
+  lunaId     String?    @unique @map("luna_id")
 
-    sessions Session[]
-    accounts Account[]
+  sessions Session[]
+  accounts Account[]
 
-    courseAssistants CourseAssistant[]
-    notifications    Notification[]
-    schedules        Schedule[]
-    lessons          Lesson[]
+  courseAssistants CourseAssistant[]
+  notifications    Notification[]
+  schedules        Schedule[]
+  lessons          Lesson[]
 
-    @@map("user")
-    @@schema("auth")
+  role       String?
+  banned     Boolean?  @default(false)
+  banReason  String?
+  banExpires DateTime?
+
+  @@map("user")
+  @@schema("auth")
 }
 
 model Session {
-    id        String   @id
-    expiresAt DateTime @map("expires_at")
-    token     String   @unique
-    createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
-    updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz
-    ipAddress String?  @map("ip_address")
-    userAgent String?  @map("user_agent")
-    userId    String   @map("user_id")
+  id        String   @id
+  expiresAt DateTime @map("expires_at")
+  token     String   @unique
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz
+  ipAddress String?  @map("ip_address")
+  userAgent String?  @map("user_agent")
+  userId    String   @map("user_id")
 
-    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-    @@index([userId])
-    @@map("session")
-    @@schema("auth")
+  impersonatedBy String?
+
+  @@index([userId])
+  @@map("session")
+  @@schema("auth")
 }
 
 model Account {
-    id                    String    @id
-    accountId             String    @map("account_id")
-    providerId            String    @map("provider_id")
-    userId                String    @map("user_id")
-    accessToken           String?   @map("access_token")
-    refreshToken          String?   @map("refresh_token")
-    idToken               String?   @map("id_token")
-    accessTokenExpiresAt  DateTime? @map("access_token_expires_at")
-    refreshTokenExpiresAt DateTime? @map("refresh_token_expires_at")
-    scope                 String?
-    password              String?
-    createdAt             DateTime  @default(now()) @map("created_at") @db.Timestamptz
-    updatedAt             DateTime  @updatedAt @map("updated_at") @db.Timestamptz
+  id                    String    @id
+  accountId             String    @map("account_id")
+  providerId            String    @map("provider_id")
+  userId                String    @map("user_id")
+  accessToken           String?   @map("access_token")
+  refreshToken          String?   @map("refresh_token")
+  idToken               String?   @map("id_token")
+  accessTokenExpiresAt  DateTime? @map("access_token_expires_at")
+  refreshTokenExpiresAt DateTime? @map("refresh_token_expires_at")
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt             DateTime  @updatedAt @map("updated_at") @db.Timestamptz
 
-    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-    @@index([userId])
-    @@map("account")
-    @@schema("auth")
+  @@index([userId])
+  @@map("account")
+  @@schema("auth")
 }
 
 model Verification {
-    id         String   @id
-    identifier String
-    value      String
-    expiresAt  DateTime @map("expires_at")
-    createdAt  DateTime @default(now()) @map("created_at") @db.Timestamptz
-    updatedAt  DateTime @updatedAt @map("updated_at") @db.Timestamptz
+  id         String   @id
+  identifier String
+  value      String
+  expiresAt  DateTime @map("expires_at")
+  createdAt  DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt  DateTime @updatedAt @map("updated_at") @db.Timestamptz
 
-    @@index([identifier])
-    @@map("verification")
-    @@schema("auth")
+  @@index([identifier])
+  @@map("verification")
+  @@schema("auth")
 }
 
 // ================= PUBLIC =================
 
 model Program {
-    id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-    createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz
-    name        String
-    description String?
-    slug        String
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz
+  name        String
+  description String?
+  slug        String
 
-    periods   Period[]
-    degrees   Degree[]
-    timeSlots TimeSlot[]
+  periods   Period[]
+  degrees   Degree[]
+  timeSlots TimeSlot[]
 
-    @@unique([slug])
-    @@map("programs")
-    @@schema("public")
+  @@unique([slug])
+  @@map("programs")
+  @@schema("public")
 }
 
 model Degree {
-    id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-    createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz
-    name        String
-    slug        String
-    description String?
-    modality    String?
-    level       String?
-    totalHours  Int?     @map("total_hours")
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz
+  name        String
+  slug        String
+  description String?
+  modality    String?
+  level       String?
+  totalHours  Int?     @map("total_hours")
 
-    /// JSON map of basePeriod number -> display label.
-    /// Ex: {"1": "1º Ano", "2": "2º Ano", "3": "3º Ano"}
-    gradeLevelLabels Json? @map("grade_level_labels")
+  /// JSON map of basePeriod number -> display label.
+  /// Ex: {"1": "1º Ano", "2": "2º Ano", "3": "3º Ano"}
+  gradeLevelLabels Json? @map("grade_level_labels")
 
-    programId String  @map("program_id") @db.Uuid
-    program   Program @relation(fields: [programId], references: [id])
+  programId String  @map("program_id") @db.Uuid
+  program   Program @relation(fields: [programId], references: [id])
 
-    subjects    Subject[]
-    classGroups ClassGroup[]
+  subjects    Subject[]
+  classGroups ClassGroup[]
 
-    @@unique([programId, slug])
-    @@map("degrees")
-    @@schema("public")
+  @@unique([programId, slug])
+  @@map("degrees")
+  @@schema("public")
 }
 
 model Subject {
-    id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-    createdAt  DateTime @default(now()) @map("created_at") @db.Timestamptz
-    name       String
-    code       String   @unique
-    workload   Int?
-    basePeriod Int?     @map("base_period") @db.SmallInt
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt  DateTime @default(now()) @map("created_at") @db.Timestamptz
+  name       String
+  code       String   @unique
+  workload   Int?
+  basePeriod Int?     @map("base_period") @db.SmallInt
 
-    degreeId String @map("degree_id") @db.Uuid
-    degree   Degree @relation(fields: [degreeId], references: [id])
+  degreeId String @map("degree_id") @db.Uuid
+  degree   Degree @relation(fields: [degreeId], references: [id])
 
-    courses Course[]
+  courses Course[]
 
-    @@map("subjects")
-    @@schema("public")
+  @@map("subjects")
+  @@schema("public")
 }
 
 model Campus {
-    id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-    name      String
-    address   String
-    slug      String   @unique
-    createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name      String
+  address   String
+  slug      String   @unique
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
 
-    rooms Room[]
+  rooms Room[]
 
-    @@map("campuses")
-    @@schema("public")
+  @@map("campuses")
+  @@schema("public")
 }
 
 model Room {
-    id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-    createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
-    name      String
-    capacity  BigInt
-    block     String?
-    type      RoomType @default(CLASSROOM)
-    campusId  String   @map("campus_id") @db.Uuid
-    slug      String
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+  name      String
+  capacity  BigInt
+  block     String?
+  type      RoomType @default(CLASSROOM)
+  campusId  String   @map("campus_id") @db.Uuid
+  slug      String
 
-    campus    Campus     @relation(fields: [campusId], references: [id])
-    courses   Course[]
-    schedules Schedule[]
+  campus    Campus     @relation(fields: [campusId], references: [id])
+  courses   Course[]
+  schedules Schedule[]
 
-    @@unique([campusId, slug])
-    @@map("rooms")
-    @@schema("public")
+  @@unique([campusId, slug])
+  @@map("rooms")
+  @@schema("public")
 }
 
 model Period {
-    id            String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-    createdAt     DateTime  @default(now()) @map("created_at") @db.Timestamptz
-    name          String
-    startDate     DateTime  @map("start_date") @db.Date
-    endDate       DateTime  @map("end_date") @db.Date
-    programId     String    @map("id_program") @db.Uuid
-    completedAt   DateTime? @map("completed_at") @db.Timestamptz
-    slug          String
-    canonicalCode String?   @unique @default(dbgenerated("gen_random_uuid()")) @map("canonical_code") @db.Uuid
+  id            String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt     DateTime  @default(now()) @map("created_at") @db.Timestamptz
+  name          String
+  startDate     DateTime  @map("start_date") @db.Date
+  endDate       DateTime  @map("end_date") @db.Date
+  programId     String    @map("id_program") @db.Uuid
+  completedAt   DateTime? @map("completed_at") @db.Timestamptz
+  slug          String
+  canonicalCode String?   @unique @default(dbgenerated("gen_random_uuid()")) @map("canonical_code") @db.Uuid
 
-    program     Program      @relation(fields: [programId], references: [id])
-    courses     Course[]
-    subPeriods  SubPeriod[]
-    classGroups ClassGroup[]
+  program     Program      @relation(fields: [programId], references: [id])
+  courses     Course[]
+  subPeriods  SubPeriod[]
+  classGroups ClassGroup[]
 
-    @@unique([programId, slug])
-    @@index([programId, completedAt, startDate, endDate])
-    @@map("periods")
-    @@schema("public")
+  @@unique([programId, slug])
+  @@index([programId, completedAt, startDate, endDate])
+  @@map("periods")
+  @@schema("public")
 }
 
 /// Sub-períodos representam etapas avaliativas dentro de um período letivo,
 /// como Bimestres, Trimestres ou Semestres.
+
 model SubPeriod {
-    id        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-    createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz
-    name      String
-    slug      String
-    order     Int       @db.SmallInt
-    startDate DateTime  @map("start_date") @db.Date
-    endDate   DateTime  @map("end_date") @db.Date
-    weight    Float     @default(1.0)
-    closedAt  DateTime? @map("closed_at") @db.Timestamptz
-    periodId  String    @map("period_id") @db.Uuid
+  id        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz
+  name      String
+  slug      String
+  order     Int       @db.SmallInt
+  startDate DateTime  @map("start_date") @db.Date
+  endDate   DateTime  @map("end_date") @db.Date
+  weight    Float     @default(1.0)
+  closedAt  DateTime? @map("closed_at") @db.Timestamptz
+  periodId  String    @map("period_id") @db.Uuid
 
-    period     Period     @relation(fields: [periodId], references: [id])
-    activities Activity[]
+  period     Period     @relation(fields: [periodId], references: [id])
+  activities Activity[]
 
-    @@unique([periodId, slug])
-    @@unique([periodId, order])
-    @@map("sub_periods")
-    @@schema("public")
+  @@unique([periodId, slug])
+  @@unique([periodId, order])
+  @@map("sub_periods")
+  @@schema("public")
 }
 
 /// Turma Física — agrupa as turmas disciplinares (Course) que compartilham
 /// os mesmos alunos. Ex: "1º Ano A" contém as turmas de Matemática, Português, etc.
 /// Ao criar um ClassGroup, o sistema auto-gera os Course records baseado nas
 /// disciplinas da Matriz (Degree) + Série (basePeriod).
+
 model ClassGroup {
-    id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-    createdAt  DateTime @default(now()) @map("created_at") @db.Timestamptz
-    name       String
-    slug       String
-    periodId   String   @map("period_id") @db.Uuid
-    degreeId   String   @map("degree_id") @db.Uuid
-    basePeriod Int      @map("base_period") @db.SmallInt
-    shift      Shift
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt  DateTime @default(now()) @map("created_at") @db.Timestamptz
+  name       String
+  slug       String
+  periodId   String   @map("period_id") @db.Uuid
+  degreeId   String   @map("degree_id") @db.Uuid
+  basePeriod Int      @map("base_period") @db.SmallInt
+  shift      Shift
 
-    period  Period   @relation(fields: [periodId], references: [id])
-    degree  Degree   @relation(fields: [degreeId], references: [id])
-    courses Course[]
+  period  Period   @relation(fields: [periodId], references: [id])
+  degree  Degree   @relation(fields: [degreeId], references: [id])
+  courses Course[]
 
-    @@unique([periodId, slug])
-    @@map("class_groups")
-    @@schema("public")
+  @@unique([periodId, slug])
+  @@map("class_groups")
+  @@schema("public")
 }
 
 model TimeSlot {
-    id        String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-    name      String
-    startTime String @map("start_time")
-    endTime   String @map("end_time")
-    shift     Shift
-    programId String @map("program_id") @db.Uuid
+  id        String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name      String
+  startTime String @map("start_time")
+  endTime   String @map("end_time")
+  shift     Shift
+  programId String @map("program_id") @db.Uuid
 
-    program   Program    @relation(fields: [programId], references: [id])
-    schedules Schedule[]
-    lessons   Lesson[]
+  program   Program    @relation(fields: [programId], references: [id])
+  schedules Schedule[]
+  lessons   Lesson[]
 
-    @@unique([programId, startTime])
-    @@map("time_slots")
-    @@schema("public")
+  @@unique([programId, startTime])
+  @@map("time_slots")
+  @@schema("public")
 }
 
 model Schedule {
-    id         String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-    createdAt  DateTime  @default(now()) @map("created_at") @db.Timestamptz
-    courseId   String    @map("course_id") @db.Uuid
-    dayOfWeek  DayOfWeek @map("day_of_week")
-    timeSlotId String    @map("time_slot_id") @db.Uuid
-    teacherId  String?   @map("teacher_id")
-    roomId     String?   @map("room_id") @db.Uuid
+  id         String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt  DateTime  @default(now()) @map("created_at") @db.Timestamptz
+  courseId   String    @map("course_id") @db.Uuid
+  dayOfWeek  DayOfWeek @map("day_of_week")
+  timeSlotId String    @map("time_slot_id") @db.Uuid
+  teacherId  String?   @map("teacher_id")
+  roomId     String?   @map("room_id") @db.Uuid
 
-    course   Course   @relation(fields: [courseId], references: [id])
-    timeSlot TimeSlot @relation(fields: [timeSlotId], references: [id])
-    teacher  User?    @relation(fields: [teacherId], references: [id])
-    room     Room?    @relation(fields: [roomId], references: [id])
-    lessons  Lesson[]
+  course   Course   @relation(fields: [courseId], references: [id])
+  timeSlot TimeSlot @relation(fields: [timeSlotId], references: [id])
+  teacher  User?    @relation(fields: [teacherId], references: [id])
+  room     Room?    @relation(fields: [roomId], references: [id])
+  lessons  Lesson[]
 
-    @@unique([courseId, dayOfWeek, timeSlotId])
-    @@unique([teacherId, dayOfWeek, timeSlotId])
-    @@unique([roomId, dayOfWeek, timeSlotId])
-    @@map("schedules")
-    @@schema("public")
+  @@unique([courseId, dayOfWeek, timeSlotId])
+  @@unique([teacherId, dayOfWeek, timeSlotId])
+  @@unique([roomId, dayOfWeek, timeSlotId])
+  @@map("schedules")
+  @@schema("public")
 }
 
 model Course {
-    id           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-    createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz
-    name         String
-    code         String
-    periodId     String   @map("period_id") @db.Uuid
-    roomId       String?  @map("room_id") @db.Uuid
-    subjectId    String   @map("subject_id") @db.Uuid
-    shift        Shift
-    classGroupId String?  @map("class_group_id") @db.Uuid
+  id           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz
+  name         String
+  code         String
+  periodId     String   @map("period_id") @db.Uuid
+  roomId       String?  @map("room_id") @db.Uuid
+  subjectId    String   @map("subject_id") @db.Uuid
+  shift        Shift
+  classGroupId String?  @map("class_group_id") @db.Uuid
 
-    period     Period      @relation(fields: [periodId], references: [id])
-    room       Room?       @relation(fields: [roomId], references: [id])
-    subject    Subject     @relation(fields: [subjectId], references: [id])
-    classGroup ClassGroup? @relation(fields: [classGroupId], references: [id])
+  period     Period      @relation(fields: [periodId], references: [id])
+  room       Room?       @relation(fields: [roomId], references: [id])
+  subject    Subject     @relation(fields: [subjectId], references: [id])
+  classGroup ClassGroup? @relation(fields: [classGroupId], references: [id])
 
-    enrollments      Enrollment[]
-    lessons          Lesson[]
-    activities       Activity[]
-    courseAssistants CourseAssistant[]
-    finalGrades      FinalGrade[]
-    stats            StudentCourseStats[]
-    schedules        Schedule[]
+  enrollments      Enrollment[]
+  lessons          Lesson[]
+  activities       Activity[]
+  courseAssistants CourseAssistant[]
+  finalGrades      FinalGrade[]
+  stats            StudentCourseStats[]
+  schedules        Schedule[]
 
-    @@unique([periodId, code])
-    @@map("courses")
-    @@schema("public")
+  @@unique([periodId, code])
+  @@map("courses")
+  @@schema("public")
 }
 
 model Student {
-    id           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-    createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz
-    name         String
-    birthDate    DateTime @map("birth_date") @db.Date
-    studentPhone String   @map("student_phone")
-    parentPhone  String?  @map("parent_phone")
-    cpf          String   @unique
-    email        String   @unique
-    school       String
-    genre        Genre
-    lunaId       String?  @unique @map("luna_id")
+  id           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz
+  name         String
+  birthDate    DateTime @map("birth_date") @db.Date
+  studentPhone String   @map("student_phone")
+  parentPhone  String?  @map("parent_phone")
+  cpf          String   @unique
+  email        String   @unique
+  school       String
+  genre        Genre
+  lunaId       String?  @unique @map("luna_id")
 
-    enrollments    Enrollment[]
-    attendances    Attendance[]
-    activityGrades ActivityGrade[]
-    finalGrades    FinalGrade[]
-    stats          StudentCourseStats[]
-    notifications  Notification[]
+  enrollments    Enrollment[]
+  attendances    Attendance[]
+  activityGrades ActivityGrade[]
+  finalGrades    FinalGrade[]
+  stats          StudentCourseStats[]
+  notifications  Notification[]
 
-    @@map("students")
-    @@schema("public")
+  @@map("students")
+  @@schema("public")
 }
 
 model Enrollment {
-    createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
-    courseId  String   @map("course_id") @db.Uuid
-    studentId String   @map("student_id") @db.Uuid
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+  courseId  String   @map("course_id") @db.Uuid
+  studentId String   @map("student_id") @db.Uuid
 
-    course  Course  @relation(fields: [courseId], references: [id])
-    student Student @relation(fields: [studentId], references: [id])
+  course  Course  @relation(fields: [courseId], references: [id])
+  student Student @relation(fields: [studentId], references: [id])
 
-    @@id([courseId, studentId])
-    @@map("enrollments")
-    @@schema("public")
+  @@id([courseId, studentId])
+  @@map("enrollments")
+  @@schema("public")
 }
 
 model Lesson {
-    id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-    createdAt  DateTime @default(now()) @map("created_at") @db.Timestamptz
-    courseId   String   @map("course_id") @db.Uuid
-    date       DateTime @db.Date
-    topic      String
-    scheduleId String?  @map("schedule_id") @db.Uuid
-    timeSlotId String?  @map("time_slot_id") @db.Uuid
-    teacherId  String?  @map("teacher_id")
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt  DateTime @default(now()) @map("created_at") @db.Timestamptz
+  courseId   String   @map("course_id") @db.Uuid
+  date       DateTime @db.Date
+  topic      String
+  scheduleId String?  @map("schedule_id") @db.Uuid
+  timeSlotId String?  @map("time_slot_id") @db.Uuid
+  teacherId  String?  @map("teacher_id")
 
-    course      Course       @relation(fields: [courseId], references: [id])
-    schedule    Schedule?    @relation(fields: [scheduleId], references: [id])
-    timeSlot    TimeSlot?    @relation(fields: [timeSlotId], references: [id])
-    teacher     User?        @relation(fields: [teacherId], references: [id])
-    attendances Attendance[]
+  course      Course       @relation(fields: [courseId], references: [id])
+  schedule    Schedule?    @relation(fields: [scheduleId], references: [id])
+  timeSlot    TimeSlot?    @relation(fields: [timeSlotId], references: [id])
+  teacher     User?        @relation(fields: [teacherId], references: [id])
+  attendances Attendance[]
 
-    @@map("lessons")
-    @@schema("public")
+  @@map("lessons")
+  @@schema("public")
 }
 
 model Attendance {
-    id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-    createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz
-    lessonId    String   @map("lesson_id") @db.Uuid
-    studentId   String   @map("student_id") @db.Uuid
-    isPresent   Boolean  @default(false) @map("is_present")
-    observation String?
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz
+  lessonId    String   @map("lesson_id") @db.Uuid
+  studentId   String   @map("student_id") @db.Uuid
+  isPresent   Boolean  @default(false) @map("is_present")
+  observation String?
 
-    lesson  Lesson  @relation(fields: [lessonId], references: [id])
-    student Student @relation(fields: [studentId], references: [id])
+  lesson  Lesson  @relation(fields: [lessonId], references: [id])
+  student Student @relation(fields: [studentId], references: [id])
 
-    @@map("attendances")
-    @@schema("public")
+  @@map("attendances")
+  @@schema("public")
 }
 
 model Activity {
-    id          String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-    createdAt   DateTime     @default(now()) @map("created_at") @db.Timestamptz
-    courseId    String       @map("course_id") @db.Uuid
-    subPeriodId String?      @map("sub_period_id") @db.Uuid
-    title       String
-    gradingType GradingType  @default(NONE) @map("grading_type")
-    minValue    Float?       @map("min_value")
-    maxValue    Float?       @map("max_value")
-    type        ActivityType @default(HOMEWORK)
-    weight      Float        @default(1.0)
-    dueDate     DateTime?    @map("due_date") @db.Timestamptz
+  id          String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt   DateTime     @default(now()) @map("created_at") @db.Timestamptz
+  courseId    String       @map("course_id") @db.Uuid
+  subPeriodId String?      @map("sub_period_id") @db.Uuid
+  title       String
+  gradingType GradingType  @default(NONE) @map("grading_type")
+  minValue    Float?       @map("min_value")
+  maxValue    Float?       @map("max_value")
+  type        ActivityType @default(HOMEWORK)
+  weight      Float        @default(1.0)
+  dueDate     DateTime?    @map("due_date") @db.Timestamptz
 
-    course         Course          @relation(fields: [courseId], references: [id])
-    subPeriod      SubPeriod?      @relation(fields: [subPeriodId], references: [id])
-    activityGrades ActivityGrade[]
+  course         Course          @relation(fields: [courseId], references: [id])
+  subPeriod      SubPeriod?      @relation(fields: [subPeriodId], references: [id])
+  activityGrades ActivityGrade[]
 
-    @@map("activities")
-    @@schema("public")
+  @@map("activities")
+  @@schema("public")
 }
 
 model ActivityGrade {
-    id           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-    createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz
-    activityId   String   @map("activity_id") @db.Uuid
-    studentId    String   @map("student_id") @db.Uuid
-    earnedPoints Float?   @map("earned_points")
-    earnedHits   Float?   @map("earned_hits")
+  id           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz
+  activityId   String   @map("activity_id") @db.Uuid
+  studentId    String   @map("student_id") @db.Uuid
+  earnedPoints Float?   @map("earned_points")
+  earnedHits   Float?   @map("earned_hits")
 
-    activity Activity @relation(fields: [activityId], references: [id])
-    student  Student  @relation(fields: [studentId], references: [id])
+  activity Activity @relation(fields: [activityId], references: [id])
+  student  Student  @relation(fields: [studentId], references: [id])
 
-    @@map("activity_grades")
-    @@schema("public")
+  @@map("activity_grades")
+  @@schema("public")
 }
 
 model FinalGrade {
-    id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-    createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
-    courseId  String   @map("course_id") @db.Uuid
-    studentId String   @map("student_id") @db.Uuid
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+  courseId  String   @map("course_id") @db.Uuid
+  studentId String   @map("student_id") @db.Uuid
 
-    average    Float?
-    concept    String?
-    isApproved Boolean? @map("is_approved")
+  average    Float?
+  concept    String?
+  isApproved Boolean? @map("is_approved")
 
-    course  Course  @relation(fields: [courseId], references: [id])
-    student Student @relation(fields: [studentId], references: [id])
+  course  Course  @relation(fields: [courseId], references: [id])
+  student Student @relation(fields: [studentId], references: [id])
 
-    @@unique([courseId, studentId])
-    @@map("final_grades")
-    @@schema("public")
+  @@unique([courseId, studentId])
+  @@map("final_grades")
+  @@schema("public")
 }
 
 model StudentCourseStats {
-    id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-    createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
-    courseId  String   @map("course_id") @db.Uuid
-    studentId String   @map("student_id") @db.Uuid
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+  courseId  String   @map("course_id") @db.Uuid
+  studentId String   @map("student_id") @db.Uuid
 
-    attendanceRate Float? @map("attendance_rate")
-    averageGrade   Float? @map("average_grade")
+  attendanceRate Float? @map("attendance_rate")
+  averageGrade   Float? @map("average_grade")
 
-    totalLessons Int? @map("total_lessons")
-    presentCount Int? @map("present_count")
+  totalLessons Int? @map("total_lessons")
+  presentCount Int? @map("present_count")
 
-    course  Course  @relation(fields: [courseId], references: [id])
-    student Student @relation(fields: [studentId], references: [id])
+  course  Course  @relation(fields: [courseId], references: [id])
+  student Student @relation(fields: [studentId], references: [id])
 
-    @@unique([courseId, studentId])
-    @@map("student_course_stats")
-    @@schema("public")
+  @@unique([courseId, studentId])
+  @@map("student_course_stats")
+  @@schema("public")
 }
 
 model Notification {
-    id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-    createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
 
-    title   String
-    message String
-    type    NotificationType @default(INFO)
+  title   String
+  message String
+  type    NotificationType @default(INFO)
 
-    userId    String? @map("user_id")
-    studentId String? @map("student_id") @db.Uuid
+  userId    String? @map("user_id")
+  studentId String? @map("student_id") @db.Uuid
 
-    isRead Boolean @default(false) @map("is_read")
+  isRead Boolean @default(false) @map("is_read")
 
-    user    User?    @relation(fields: [userId], references: [id])
-    student Student? @relation(fields: [studentId], references: [id])
+  user    User?    @relation(fields: [userId], references: [id])
+  student Student? @relation(fields: [studentId], references: [id])
 
-    @@map("notifications")
-    @@schema("public")
+  @@map("notifications")
+  @@schema("public")
 }
 
 model CourseAssistant {
-    id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-    createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz
-    courseId    String   @map("course_id") @db.Uuid
-    assistantId String   @map("assistant_id")
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz
+  courseId    String   @map("course_id") @db.Uuid
+  assistantId String   @map("assistant_id")
 
-    course    Course @relation(fields: [courseId], references: [id])
-    assistant User   @relation(fields: [assistantId], references: [id])
+  course    Course @relation(fields: [courseId], references: [id])
+  assistant User   @relation(fields: [assistantId], references: [id])
 
-    @@map("course_assistants")
-    @@schema("public")
+  @@map("course_assistants")
+  @@schema("public")
 }

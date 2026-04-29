@@ -497,10 +497,6 @@ export type FinalGradeUncheckedUpdateManyWithoutStudentNestedInput = {
   deleteMany?: Prisma.FinalGradeScalarWhereInput | Prisma.FinalGradeScalarWhereInput[]
 }
 
-export type NullableBoolFieldUpdateOperationsInput = {
-  set?: boolean | null
-}
-
 export type FinalGradeCreateWithoutCourseInput = {
   id?: string
   createdAt?: Date | string

@@ -42,6 +42,10 @@ export type UserMinAggregateOutputType = {
   isActive: boolean | null
   genre: $Enums.UserGenre | null
   lunaId: string | null
+  role: string | null
+  banned: boolean | null
+  banReason: string | null
+  banExpires: Date | null
 }
 
 export type UserMaxAggregateOutputType = {
@@ -62,6 +66,10 @@ export type UserMaxAggregateOutputType = {
   isActive: boolean | null
   genre: $Enums.UserGenre | null
   lunaId: string | null
+  role: string | null
+  banned: boolean | null
+  banReason: string | null
+  banExpires: Date | null
 }
 
 export type UserCountAggregateOutputType = {
@@ -82,6 +90,10 @@ export type UserCountAggregateOutputType = {
   isActive: number
   genre: number
   lunaId: number
+  role: number
+  banned: number
+  banReason: number
+  banExpires: number
   _all: number
 }
 
@@ -104,6 +116,10 @@ export type UserMinAggregateInputType = {
   isActive?: true
   genre?: true
   lunaId?: true
+  role?: true
+  banned?: true
+  banReason?: true
+  banExpires?: true
 }
 
 export type UserMaxAggregateInputType = {
@@ -124,6 +140,10 @@ export type UserMaxAggregateInputType = {
   isActive?: true
   genre?: true
   lunaId?: true
+  role?: true
+  banned?: true
+  banReason?: true
+  banExpires?: true
 }
 
 export type UserCountAggregateInputType = {
@@ -144,6 +164,10 @@ export type UserCountAggregateInputType = {
   isActive?: true
   genre?: true
   lunaId?: true
+  role?: true
+  banned?: true
+  banReason?: true
+  banExpires?: true
   _all?: true
 }
 
@@ -237,6 +261,10 @@ export type UserGroupByOutputType = {
   isActive: boolean
   genre: $Enums.UserGenre
   lunaId: string | null
+  role: string | null
+  banned: boolean | null
+  banReason: string | null
+  banExpires: Date | null
   _count: UserCountAggregateOutputType | null
   _min: UserMinAggregateOutputType | null
   _max: UserMaxAggregateOutputType | null
@@ -278,6 +306,10 @@ export type UserWhereInput = {
   isActive?: Prisma.BoolFilter<"User"> | boolean
   genre?: Prisma.EnumUserGenreFilter<"User"> | $Enums.UserGenre
   lunaId?: Prisma.StringNullableFilter<"User"> | string | null
+  role?: Prisma.StringNullableFilter<"User"> | string | null
+  banned?: Prisma.BoolNullableFilter<"User"> | boolean | null
+  banReason?: Prisma.StringNullableFilter<"User"> | string | null
+  banExpires?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   sessions?: Prisma.SessionListRelationFilter
   accounts?: Prisma.AccountListRelationFilter
   courseAssistants?: Prisma.CourseAssistantListRelationFilter
@@ -304,6 +336,10 @@ export type UserOrderByWithRelationInput = {
   isActive?: Prisma.SortOrder
   genre?: Prisma.SortOrder
   lunaId?: Prisma.SortOrderInput | Prisma.SortOrder
+  role?: Prisma.SortOrderInput | Prisma.SortOrder
+  banned?: Prisma.SortOrderInput | Prisma.SortOrder
+  banReason?: Prisma.SortOrderInput | Prisma.SortOrder
+  banExpires?: Prisma.SortOrderInput | Prisma.SortOrder
   sessions?: Prisma.SessionOrderByRelationAggregateInput
   accounts?: Prisma.AccountOrderByRelationAggregateInput
   courseAssistants?: Prisma.CourseAssistantOrderByRelationAggregateInput
@@ -333,6 +369,10 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   isTeacher?: Prisma.BoolFilter<"User"> | boolean
   isActive?: Prisma.BoolFilter<"User"> | boolean
   genre?: Prisma.EnumUserGenreFilter<"User"> | $Enums.UserGenre
+  role?: Prisma.StringNullableFilter<"User"> | string | null
+  banned?: Prisma.BoolNullableFilter<"User"> | boolean | null
+  banReason?: Prisma.StringNullableFilter<"User"> | string | null
+  banExpires?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   sessions?: Prisma.SessionListRelationFilter
   accounts?: Prisma.AccountListRelationFilter
   courseAssistants?: Prisma.CourseAssistantListRelationFilter
@@ -359,6 +399,10 @@ export type UserOrderByWithAggregationInput = {
   isActive?: Prisma.SortOrder
   genre?: Prisma.SortOrder
   lunaId?: Prisma.SortOrderInput | Prisma.SortOrder
+  role?: Prisma.SortOrderInput | Prisma.SortOrder
+  banned?: Prisma.SortOrderInput | Prisma.SortOrder
+  banReason?: Prisma.SortOrderInput | Prisma.SortOrder
+  banExpires?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.UserCountOrderByAggregateInput
   _max?: Prisma.UserMaxOrderByAggregateInput
   _min?: Prisma.UserMinOrderByAggregateInput
@@ -385,6 +429,10 @@ export type UserScalarWhereWithAggregatesInput = {
   isActive?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
   genre?: Prisma.EnumUserGenreWithAggregatesFilter<"User"> | $Enums.UserGenre
   lunaId?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  role?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  banned?: Prisma.BoolNullableWithAggregatesFilter<"User"> | boolean | null
+  banReason?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  banExpires?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
 }
 
 export type UserCreateInput = {
@@ -405,6 +453,10 @@ export type UserCreateInput = {
   isActive?: boolean
   genre?: $Enums.UserGenre
   lunaId?: string | null
+  role?: string | null
+  banned?: boolean | null
+  banReason?: string | null
+  banExpires?: Date | string | null
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   courseAssistants?: Prisma.CourseAssistantCreateNestedManyWithoutAssistantInput
@@ -431,6 +483,10 @@ export type UserUncheckedCreateInput = {
   isActive?: boolean
   genre?: $Enums.UserGenre
   lunaId?: string | null
+  role?: string | null
+  banned?: boolean | null
+  banReason?: string | null
+  banExpires?: Date | string | null
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   courseAssistants?: Prisma.CourseAssistantUncheckedCreateNestedManyWithoutAssistantInput
@@ -457,6 +513,10 @@ export type UserUpdateInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   genre?: Prisma.EnumUserGenreFieldUpdateOperationsInput | $Enums.UserGenre
   lunaId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banned?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   courseAssistants?: Prisma.CourseAssistantUpdateManyWithoutAssistantNestedInput
@@ -483,6 +543,10 @@ export type UserUncheckedUpdateInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   genre?: Prisma.EnumUserGenreFieldUpdateOperationsInput | $Enums.UserGenre
   lunaId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banned?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   courseAssistants?: Prisma.CourseAssistantUncheckedUpdateManyWithoutAssistantNestedInput
@@ -509,6 +573,10 @@ export type UserCreateManyInput = {
   isActive?: boolean
   genre?: $Enums.UserGenre
   lunaId?: string | null
+  role?: string | null
+  banned?: boolean | null
+  banReason?: string | null
+  banExpires?: Date | string | null
 }
 
 export type UserUpdateManyMutationInput = {
@@ -529,6 +597,10 @@ export type UserUpdateManyMutationInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   genre?: Prisma.EnumUserGenreFieldUpdateOperationsInput | $Enums.UserGenre
   lunaId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banned?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type UserUncheckedUpdateManyInput = {
@@ -549,6 +621,10 @@ export type UserUncheckedUpdateManyInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   genre?: Prisma.EnumUserGenreFieldUpdateOperationsInput | $Enums.UserGenre
   lunaId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banned?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type UserCountOrderByAggregateInput = {
@@ -569,6 +645,10 @@ export type UserCountOrderByAggregateInput = {
   isActive?: Prisma.SortOrder
   genre?: Prisma.SortOrder
   lunaId?: Prisma.SortOrder
+  role?: Prisma.SortOrder
+  banned?: Prisma.SortOrder
+  banReason?: Prisma.SortOrder
+  banExpires?: Prisma.SortOrder
 }
 
 export type UserMaxOrderByAggregateInput = {
@@ -589,6 +669,10 @@ export type UserMaxOrderByAggregateInput = {
   isActive?: Prisma.SortOrder
   genre?: Prisma.SortOrder
   lunaId?: Prisma.SortOrder
+  role?: Prisma.SortOrder
+  banned?: Prisma.SortOrder
+  banReason?: Prisma.SortOrder
+  banExpires?: Prisma.SortOrder
 }
 
 export type UserMinOrderByAggregateInput = {
@@ -609,6 +693,10 @@ export type UserMinOrderByAggregateInput = {
   isActive?: Prisma.SortOrder
   genre?: Prisma.SortOrder
   lunaId?: Prisma.SortOrder
+  role?: Prisma.SortOrder
+  banned?: Prisma.SortOrder
+  banReason?: Prisma.SortOrder
+  banExpires?: Prisma.SortOrder
 }
 
 export type UserScalarRelationFilter = {
@@ -643,6 +731,14 @@ export type EnumSystemRoleFieldUpdateOperationsInput = {
 
 export type EnumUserGenreFieldUpdateOperationsInput = {
   set?: $Enums.UserGenre
+}
+
+export type NullableBoolFieldUpdateOperationsInput = {
+  set?: boolean | null
+}
+
+export type NullableDateTimeFieldUpdateOperationsInput = {
+  set?: Date | string | null
 }
 
 export type UserCreateNestedOneWithoutSessionsInput = {
@@ -753,6 +849,10 @@ export type UserCreateWithoutSessionsInput = {
   isActive?: boolean
   genre?: $Enums.UserGenre
   lunaId?: string | null
+  role?: string | null
+  banned?: boolean | null
+  banReason?: string | null
+  banExpires?: Date | string | null
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   courseAssistants?: Prisma.CourseAssistantCreateNestedManyWithoutAssistantInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
@@ -778,6 +878,10 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   isActive?: boolean
   genre?: $Enums.UserGenre
   lunaId?: string | null
+  role?: string | null
+  banned?: boolean | null
+  banReason?: string | null
+  banExpires?: Date | string | null
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   courseAssistants?: Prisma.CourseAssistantUncheckedCreateNestedManyWithoutAssistantInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
@@ -819,6 +923,10 @@ export type UserUpdateWithoutSessionsInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   genre?: Prisma.EnumUserGenreFieldUpdateOperationsInput | $Enums.UserGenre
   lunaId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banned?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   courseAssistants?: Prisma.CourseAssistantUpdateManyWithoutAssistantNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
@@ -844,6 +952,10 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   genre?: Prisma.EnumUserGenreFieldUpdateOperationsInput | $Enums.UserGenre
   lunaId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banned?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   courseAssistants?: Prisma.CourseAssistantUncheckedUpdateManyWithoutAssistantNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
@@ -869,6 +981,10 @@ export type UserCreateWithoutAccountsInput = {
   isActive?: boolean
   genre?: $Enums.UserGenre
   lunaId?: string | null
+  role?: string | null
+  banned?: boolean | null
+  banReason?: string | null
+  banExpires?: Date | string | null
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   courseAssistants?: Prisma.CourseAssistantCreateNestedManyWithoutAssistantInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
@@ -894,6 +1010,10 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   isActive?: boolean
   genre?: $Enums.UserGenre
   lunaId?: string | null
+  role?: string | null
+  banned?: boolean | null
+  banReason?: string | null
+  banExpires?: Date | string | null
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   courseAssistants?: Prisma.CourseAssistantUncheckedCreateNestedManyWithoutAssistantInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
@@ -935,6 +1055,10 @@ export type UserUpdateWithoutAccountsInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   genre?: Prisma.EnumUserGenreFieldUpdateOperationsInput | $Enums.UserGenre
   lunaId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banned?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   courseAssistants?: Prisma.CourseAssistantUpdateManyWithoutAssistantNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
@@ -960,6 +1084,10 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   genre?: Prisma.EnumUserGenreFieldUpdateOperationsInput | $Enums.UserGenre
   lunaId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banned?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   courseAssistants?: Prisma.CourseAssistantUncheckedUpdateManyWithoutAssistantNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
@@ -985,6 +1113,10 @@ export type UserCreateWithoutSchedulesInput = {
   isActive?: boolean
   genre?: $Enums.UserGenre
   lunaId?: string | null
+  role?: string | null
+  banned?: boolean | null
+  banReason?: string | null
+  banExpires?: Date | string | null
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   courseAssistants?: Prisma.CourseAssistantCreateNestedManyWithoutAssistantInput
@@ -1010,6 +1142,10 @@ export type UserUncheckedCreateWithoutSchedulesInput = {
   isActive?: boolean
   genre?: $Enums.UserGenre
   lunaId?: string | null
+  role?: string | null
+  banned?: boolean | null
+  banReason?: string | null
+  banExpires?: Date | string | null
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   courseAssistants?: Prisma.CourseAssistantUncheckedCreateNestedManyWithoutAssistantInput
@@ -1051,6 +1187,10 @@ export type UserUpdateWithoutSchedulesInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   genre?: Prisma.EnumUserGenreFieldUpdateOperationsInput | $Enums.UserGenre
   lunaId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banned?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   courseAssistants?: Prisma.CourseAssistantUpdateManyWithoutAssistantNestedInput
@@ -1076,6 +1216,10 @@ export type UserUncheckedUpdateWithoutSchedulesInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   genre?: Prisma.EnumUserGenreFieldUpdateOperationsInput | $Enums.UserGenre
   lunaId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banned?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   courseAssistants?: Prisma.CourseAssistantUncheckedUpdateManyWithoutAssistantNestedInput
@@ -1101,6 +1245,10 @@ export type UserCreateWithoutLessonsInput = {
   isActive?: boolean
   genre?: $Enums.UserGenre
   lunaId?: string | null
+  role?: string | null
+  banned?: boolean | null
+  banReason?: string | null
+  banExpires?: Date | string | null
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   courseAssistants?: Prisma.CourseAssistantCreateNestedManyWithoutAssistantInput
@@ -1126,6 +1274,10 @@ export type UserUncheckedCreateWithoutLessonsInput = {
   isActive?: boolean
   genre?: $Enums.UserGenre
   lunaId?: string | null
+  role?: string | null
+  banned?: boolean | null
+  banReason?: string | null
+  banExpires?: Date | string | null
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   courseAssistants?: Prisma.CourseAssistantUncheckedCreateNestedManyWithoutAssistantInput
@@ -1167,6 +1319,10 @@ export type UserUpdateWithoutLessonsInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   genre?: Prisma.EnumUserGenreFieldUpdateOperationsInput | $Enums.UserGenre
   lunaId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banned?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   courseAssistants?: Prisma.CourseAssistantUpdateManyWithoutAssistantNestedInput
@@ -1192,6 +1348,10 @@ export type UserUncheckedUpdateWithoutLessonsInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   genre?: Prisma.EnumUserGenreFieldUpdateOperationsInput | $Enums.UserGenre
   lunaId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banned?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   courseAssistants?: Prisma.CourseAssistantUncheckedUpdateManyWithoutAssistantNestedInput
@@ -1217,6 +1377,10 @@ export type UserCreateWithoutNotificationsInput = {
   isActive?: boolean
   genre?: $Enums.UserGenre
   lunaId?: string | null
+  role?: string | null
+  banned?: boolean | null
+  banReason?: string | null
+  banExpires?: Date | string | null
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   courseAssistants?: Prisma.CourseAssistantCreateNestedManyWithoutAssistantInput
@@ -1242,6 +1406,10 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   isActive?: boolean
   genre?: $Enums.UserGenre
   lunaId?: string | null
+  role?: string | null
+  banned?: boolean | null
+  banReason?: string | null
+  banExpires?: Date | string | null
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   courseAssistants?: Prisma.CourseAssistantUncheckedCreateNestedManyWithoutAssistantInput
@@ -1283,6 +1451,10 @@ export type UserUpdateWithoutNotificationsInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   genre?: Prisma.EnumUserGenreFieldUpdateOperationsInput | $Enums.UserGenre
   lunaId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banned?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   courseAssistants?: Prisma.CourseAssistantUpdateManyWithoutAssistantNestedInput
@@ -1308,6 +1480,10 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   genre?: Prisma.EnumUserGenreFieldUpdateOperationsInput | $Enums.UserGenre
   lunaId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banned?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   courseAssistants?: Prisma.CourseAssistantUncheckedUpdateManyWithoutAssistantNestedInput
@@ -1333,6 +1509,10 @@ export type UserCreateWithoutCourseAssistantsInput = {
   isActive?: boolean
   genre?: $Enums.UserGenre
   lunaId?: string | null
+  role?: string | null
+  banned?: boolean | null
+  banReason?: string | null
+  banExpires?: Date | string | null
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
@@ -1358,6 +1538,10 @@ export type UserUncheckedCreateWithoutCourseAssistantsInput = {
   isActive?: boolean
   genre?: $Enums.UserGenre
   lunaId?: string | null
+  role?: string | null
+  banned?: boolean | null
+  banReason?: string | null
+  banExpires?: Date | string | null
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
@@ -1399,6 +1583,10 @@ export type UserUpdateWithoutCourseAssistantsInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   genre?: Prisma.EnumUserGenreFieldUpdateOperationsInput | $Enums.UserGenre
   lunaId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banned?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
@@ -1424,6 +1612,10 @@ export type UserUncheckedUpdateWithoutCourseAssistantsInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   genre?: Prisma.EnumUserGenreFieldUpdateOperationsInput | $Enums.UserGenre
   lunaId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banned?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
@@ -1525,6 +1717,10 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   isActive?: boolean
   genre?: boolean
   lunaId?: boolean
+  role?: boolean
+  banned?: boolean
+  banReason?: boolean
+  banExpires?: boolean
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
   accounts?: boolean | Prisma.User$accountsArgs<ExtArgs>
   courseAssistants?: boolean | Prisma.User$courseAssistantsArgs<ExtArgs>
@@ -1552,6 +1748,10 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   isActive?: boolean
   genre?: boolean
   lunaId?: boolean
+  role?: boolean
+  banned?: boolean
+  banReason?: boolean
+  banExpires?: boolean
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1572,6 +1772,10 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   isActive?: boolean
   genre?: boolean
   lunaId?: boolean
+  role?: boolean
+  banned?: boolean
+  banReason?: boolean
+  banExpires?: boolean
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectScalar = {
@@ -1592,9 +1796,13 @@ export type UserSelectScalar = {
   isActive?: boolean
   genre?: boolean
   lunaId?: boolean
+  role?: boolean
+  banned?: boolean
+  banReason?: boolean
+  banExpires?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "email" | "emailVerified" | "image" | "createdAt" | "updatedAt" | "cpf" | "phone" | "birthDate" | "bio" | "systemRole" | "isAdmin" | "isTeacher" | "isActive" | "genre" | "lunaId", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "email" | "emailVerified" | "image" | "createdAt" | "updatedAt" | "cpf" | "phone" | "birthDate" | "bio" | "systemRole" | "isAdmin" | "isTeacher" | "isActive" | "genre" | "lunaId" | "role" | "banned" | "banReason" | "banExpires", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
   accounts?: boolean | Prisma.User$accountsArgs<ExtArgs>
@@ -1635,6 +1843,10 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     isActive: boolean
     genre: $Enums.UserGenre
     lunaId: string | null
+    role: string | null
+    banned: boolean | null
+    banReason: string | null
+    banExpires: Date | null
   }, ExtArgs["result"]["user"]>
   composites: {}
 }
@@ -2081,6 +2293,10 @@ export interface UserFieldRefs {
   readonly isActive: Prisma.FieldRef<"User", 'Boolean'>
   readonly genre: Prisma.FieldRef<"User", 'UserGenre'>
   readonly lunaId: Prisma.FieldRef<"User", 'String'>
+  readonly role: Prisma.FieldRef<"User", 'String'>
+  readonly banned: Prisma.FieldRef<"User", 'Boolean'>
+  readonly banReason: Prisma.FieldRef<"User", 'String'>
+  readonly banExpires: Prisma.FieldRef<"User", 'DateTime'>
 }
     
 

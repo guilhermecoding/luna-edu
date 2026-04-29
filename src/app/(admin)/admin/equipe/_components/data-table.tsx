@@ -4,8 +4,10 @@ import {
     ColumnDef,
     flexRender,
     getCoreRowModel,
+    getPaginationRowModel,
     useReactTable,
 } from "@tanstack/react-table";
+import { Button } from "@/components/ui/button";
 import {
     Table,
     TableBody,
@@ -36,6 +38,12 @@ export function DataTable<TData, TValue>({
         data,
         columns,
         getCoreRowModel: getCoreRowModel(),
+        getPaginationRowModel: getPaginationRowModel(),
+        initialState: {
+            pagination: {
+                pageSize: 10,
+            },
+        },
     });
 
     const searchParams = useSearchParams();
@@ -126,6 +134,57 @@ export function DataTable<TData, TValue>({
                         )}
                     </TableBody>
                 </Table>
+            </div>
+            
+            {/* Pagination Controls */}
+            <div className="flex items-center justify-between px-2">
+                <div className="flex-1 text-sm text-muted-foreground">
+                    Exibindo {table.getRowModel().rows.length} de {table.getFilteredRowModel ? table.getFilteredRowModel().rows.length : data.length} usuários.
+                </div>
+                <div className="flex items-center space-x-6 lg:space-x-8">
+                    <div className="flex w-[100px] items-center justify-center text-sm font-medium text-muted-foreground">
+                        Página {table.getState().pagination.pageIndex + 1} de{" "}
+                        {table.getPageCount()}
+                    </div>
+                    <div className="flex items-center space-x-2">
+                        <Button
+                            variant="outline"
+                            className="hidden h-8 w-8 p-0 lg:flex"
+                            onClick={() => table.setPageIndex(0)}
+                            disabled={!table.getCanPreviousPage()}
+                        >
+                            <span className="sr-only">Ir para primeira página</span>
+                            <span className="text-lg">«</span>
+                        </Button>
+                        <Button
+                            variant="outline"
+                            className="h-8 w-8 p-0"
+                            onClick={() => table.previousPage()}
+                            disabled={!table.getCanPreviousPage()}
+                        >
+                            <span className="sr-only">Voltar página</span>
+                            <span className="text-lg">‹</span>
+                        </Button>
+                        <Button
+                            variant="outline"
+                            className="h-8 w-8 p-0"
+                            onClick={() => table.nextPage()}
+                            disabled={!table.getCanNextPage()}
+                        >
+                            <span className="sr-only">Avançar página</span>
+                            <span className="text-lg">›</span>
+                        </Button>
+                        <Button
+                            variant="outline"
+                            className="hidden h-8 w-8 p-0 lg:flex"
+                            onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+                            disabled={!table.getCanNextPage()}
+                        >
+                            <span className="sr-only">Ir para última página</span>
+                            <span className="text-lg">»</span>
+                        </Button>
+                    </div>
+                </div>
             </div>
         </div>
     );

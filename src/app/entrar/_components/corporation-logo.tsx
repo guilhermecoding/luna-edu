@@ -22,7 +22,7 @@ export default function CorporationLogo({ logoCorporation }: CorporationLogoProp
                 alt="Logo"
                 width={100}
                 height={100}
-                className="size-20 object-contain mt-3"
+                className="size-20 object-contain mt-3 pointer-events-none"
                 onError={() => setShowCorporationLogo(false)}
             />
         </>

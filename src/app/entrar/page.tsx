@@ -5,6 +5,7 @@ import LoginForm from "./_components/login-form";
 import GibbyAnimate from "@/components/gibby-animate";
 
 export default function LoginPage() {
+    const logoCorporation = process.env.NEXT_PUBLIC_LOGO_CORPORATION;
     return (
         <main className="min-h-screen w-full grid grid-cols-1 lg:grid-cols-2 bg-surface">
             {/* Lado Esquerdo - Imagem (Escondido em Mobile) */}
@@ -24,7 +25,19 @@ export default function LoginPage() {
                     {/* Header */}
                     <div className="flex flex-col items-center text-center space-y-4">
                         <div className="flex flex-col items-center gap-2">
-                            <GibbyAnimate className="w-56" />
+                            <div className="flex flex-row items-center gap-2">
+                                <GibbyAnimate className="size-24" />
+                                <span className="text-4xl font-bold text-muted-foreground mt-4 mr-2">+</span>
+                                {logoCorporation && (
+                                    <Image
+                                        src={logoCorporation}
+                                        alt="Logo"
+                                        width={100}
+                                        height={100}
+                                        className="size-20 object-contain mt-3"
+                                    />
+                                )}
+                            </div>
                             <h2 className="font-silkscreen text-primary-theme text-6xl">LUNA</h2>
                         </div>
                         <div className="space-y-1">

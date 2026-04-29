@@ -9,11 +9,13 @@ interface GibbyAnimateProps {
 
 export default function GibbyAnimate({ className }: GibbyAnimateProps) {
     return (
-        <DotLottieReact
-            src="/gibby-animate.lottie"
-            loop
-            autoplay
-            className={cn("w-full h-full", className)}
-        />
+        <div className={cn("inline-flex shrink-0", className)}>
+            <DotLottieReact
+                src="/gibby-animate.lottie"
+                loop
+                autoplay
+                className="block size-full"
+            />
+        </div>
     );
 }

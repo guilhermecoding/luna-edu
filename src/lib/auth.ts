@@ -1,7 +1,9 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
+import { admin } from "better-auth/plugins";
 import prisma from "@/lib/prisma";
 import { GENRE_VALUES } from "@/lib/genre";
+import { SYSTEM_ROLE } from "@/@types/system-role.type";
 
 export const auth = betterAuth({
     database: prismaAdapter(prisma, {
@@ -27,8 +29,8 @@ export const auth = betterAuth({
             },
             systemRole: {
                 type: "string",
-                values: ["FULL_ACCESS", "READ_ONLY"],
-                default: "FULL_ACCESS",
+                values: [SYSTEM_ROLE.FULL_ACCESS, SYSTEM_ROLE.READ_ONLY],
+                default: SYSTEM_ROLE.FULL_ACCESS,
             },
             isAdmin: {
                 type: "boolean",
@@ -53,4 +55,7 @@ export const auth = betterAuth({
             },
         },
     },
+    plugins: [
+        admin(),
+    ],
 });

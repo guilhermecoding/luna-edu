@@ -3,10 +3,12 @@
 import { updateUser } from "@/services/users/users.service";
 import { revalidatePath, updateTag } from "next/cache";
 import { redirect } from "next/navigation";
+import { headers } from "next/headers";
 import { ZodError } from "zod";
 import { Prisma } from "@/generated/prisma/client";
 import { editMemberSchema, type EditMemberInput } from "./schema";
 import { unmask } from "@/lib/masks";
+import { auth } from "@/lib/auth";
 
 export async function editMemberAction(memberId: string, data: EditMemberInput) {
     try {
@@ -16,7 +18,20 @@ export async function editMemberAction(memberId: string, data: EditMemberInput) 
             cpf: unmask(validatedData.cpf),
             phone: unmask(validatedData.phone),
         };
-        await updateUser(memberId, cleanData);
+
+        const { password, confirmPassword, ...updateFields } = cleanData;
+        void confirmPassword;
+        await updateUser(memberId, updateFields);
+
+        if (password) {
+            await auth.api.setUserPassword({
+                body: {
+                    userId: memberId,
+                    newPassword: password,
+                },
+                headers: await headers(),
+            });
+        }
 
         updateTag("admins-list");
         updateTag("users-list");
@@ -53,9 +68,25 @@ export async function editMemberAction(memberId: string, data: EditMemberInput) 
             if (error.message.includes("Unique constraint failed") && error.message.includes("cpf")) {
                 return { success: false, error: "Já existe um usuário com este CPF." };
             }
+            const normalizedMessage = error.message
+                .split("\n")
+                .map((line) => line.trim())
+                .filter(Boolean)
+                .join(" | ");
+
             return {
                 success: false,
-                error: "Erro do banco de dados: " + (error.message.split("\n").pop() || error.message),
+                error: "Erro do banco de dados: " + (normalizedMessage || error.message || "Falha desconhecida"),
+            };
+        }
+
+        if (typeof error === "object" && error !== null) {
+            const possibleMessage = Reflect.get(error, "message");
+            const possibleCode = Reflect.get(error, "code");
+
+            return {
+                success: false,
+                error: `Erro do banco de dados: ${String(possibleMessage || possibleCode || JSON.stringify(error))}`,
             };
         }
 

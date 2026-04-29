@@ -264,6 +264,46 @@ export default function EditMemberForm({ member }: { member: User }) {
                     </div>
                 </div>
 
+                <div className="flex flex-col gap-6 mt-4">
+                    <div className="flex items-center gap-4">
+                        <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wide whitespace-nowrap">
+                            Acesso do Usuário
+                        </span>
+                        <div className="h-px bg-surface-border flex-1" />
+                    </div>
+
+                    <div className="flex flex-col gap-6">
+                        <h3 className="text-xl font-bold text-foreground">Alterar senha do usuário</h3>
+                        
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div className="flex flex-col gap-2">
+                                <Label htmlFor="password">Nova senha</Label>
+                                <Input
+                                    id="password"
+                                    type="password"
+                                    {...register("password")}
+                                    placeholder="••••••••"
+                                    className="p-5 h-15.5 rounded-xl bg-background"
+                                    aria-invalid={errors.password ? "true" : "false"}
+                                />
+                                {errors.password && <p className="text-sm text-red-600">{errors.password.message}</p>}
+                            </div>
+                            <div className="flex flex-col gap-2">
+                                <Label htmlFor="confirmPassword">Repetir a senha</Label>
+                                <Input
+                                    id="confirmPassword"
+                                    type="password"
+                                    {...register("confirmPassword")}
+                                    placeholder="••••••••"
+                                    className="p-5 h-15.5 rounded-xl bg-background"
+                                    aria-invalid={errors.confirmPassword ? "true" : "false"}
+                                />
+                                {errors.confirmPassword && <p className="text-sm text-red-600">{errors.confirmPassword.message}</p>}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <Dialog open={showStatusModal} onOpenChange={setShowStatusModal}>
                     <DialogContent className="sm:max-w-md border-none bg-surface p-8 rounded-3xl overflow-hidden">
                         <div className="absolute top-0 left-0 w-full h-1 bg-primary-theme opacity-20" />

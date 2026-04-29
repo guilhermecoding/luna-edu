@@ -11,6 +11,16 @@ export const editMemberSchema = z.object({
     isAdmin: z.boolean(),
     isTeacher: z.boolean(),
     isActive: z.boolean(),
+    password: z.string().min(8, "A senha deve ter no mínimo 8 caracteres").optional().or(z.literal("")),
+    confirmPassword: z.string().optional().or(z.literal("")),
+}).superRefine(({ password, confirmPassword }, ctx) => {
+    if (password && password !== confirmPassword) {
+        ctx.addIssue({
+            code: "custom",
+            message: "As senhas não coincidem",
+            path: ["confirmPassword"],
+        });
+    }
 });
 
 export type EditMemberInput = z.input<typeof editMemberSchema>;

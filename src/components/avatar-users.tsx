@@ -52,7 +52,7 @@ export default function AvatarUsers({ age = 0, genre, className, alt = "Avatar d
     }
 
     return (
-        <div className={cn("relative pointer-events-none overflow-hidden border border-surface-border shrink-0 rounded-full", className)}>
+        <div className={cn("relative bg-muted pointer-events-none overflow-hidden border border-surface-border shrink-0 rounded-full", className)}>
             <Image
                 src={src}
                 alt={alt}

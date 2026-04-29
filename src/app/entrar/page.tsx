@@ -41,8 +41,8 @@ export default function LoginPage() {
                             <h2 className="font-silkscreen text-primary-theme text-6xl">LUNA</h2>
                         </div>
                         <div className="space-y-1">
-                            <p className="text-muted-foreground text-sm">
-                                Olá! Escolha seu perfil e acesse sua conta
+                            <p className="text-muted-foreground text-lg font-medium">
+                                Bem-vindo(a) de volta!
                             </p>
                         </div>
                     </div>

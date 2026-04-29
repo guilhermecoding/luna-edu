@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import LoginForm from "./_components/login-form";
+import GibbyAnimate from "@/components/gibby-animate";
 
 export default function LoginPage() {
     return (
@@ -23,13 +24,12 @@ export default function LoginPage() {
                     {/* Header */}
                     <div className="flex flex-col items-center text-center space-y-4">
                         <div className="flex flex-col items-center gap-2">
-                            <div>Logo</div>
-                            <h2 className="font-silkscreen text-primary-theme text-4xl">LUNA</h2>
+                            <GibbyAnimate className="w-56" />
+                            <h2 className="font-silkscreen text-primary-theme text-6xl">LUNA</h2>
                         </div>
                         <div className="space-y-1">
-                            <h1 className="text-2xl font-bold tracking-tight">Bem-vindo de volta!</h1>
                             <p className="text-muted-foreground text-sm">
-                                Escolha seu perfil e acesse sua conta
+                                Olá! Escolha seu perfil e acesse sua conta
                             </p>
                         </div>
                     </div>

@@ -22,7 +22,7 @@ type LoginInput = z.infer<typeof loginSchema>;
 export default function LoginForm() {
     const router = useRouter();
     const [loading, setLoading] = useState(false);
-    const [activeTab, setActiveTab] = useState<"admin" | "teacher">("admin");
+    const [activeTab, setActiveTab] = useState<"admin" | "teacher">("teacher");
 
     const {
         control,
@@ -75,19 +75,6 @@ export default function LoginForm() {
             <div className="flex p-1 bg-muted-foreground/10 rounded-xl border border-border/50">
                 <button
                     type="button"
-                    onClick={() => setActiveTab("admin")}
-                    className={cn(
-                        "flex-1 flex items-center justify-center gap-2 py-2 text-sm font-semibold rounded-lg transition-all",
-                        activeTab === "admin"
-                            ? "bg-background text-primary shadow-sm"
-                            : "text-muted-foreground hover:text-foreground",
-                    )}
-                >
-                    <IconUserShield className="w-4 h-4" />
-                    Administrador
-                </button>
-                <button
-                    type="button"
                     onClick={() => setActiveTab("teacher")}
                     className={cn(
                         "flex-1 flex items-center justify-center gap-2 py-2 text-sm font-semibold rounded-lg transition-all",
@@ -98,6 +85,19 @@ export default function LoginForm() {
                 >
                     <IconSchool className="w-4 h-4" />
                     Professor
+                </button>
+                <button
+                    type="button"
+                    onClick={() => setActiveTab("admin")}
+                    className={cn(
+                        "flex-1 flex items-center justify-center gap-2 py-2 text-sm font-semibold rounded-lg transition-all",
+                        activeTab === "admin"
+                            ? "bg-background text-primary shadow-sm"
+                            : "text-muted-foreground hover:text-foreground",
+                    )}
+                >
+                    <IconUserShield className="w-4 h-4" />
+                    Administrador
                 </button>
             </div>
 

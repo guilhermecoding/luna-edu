@@ -28,7 +28,6 @@ export function CreateSubjectForm({ programSlug, degreeSlug }: Props) {
     const pathname = usePathname();
     const searchParams = useSearchParams();
 
-    const [isBasePeriodAssignable, setIsBasePeriodAssignable] = useState(true);
 
     const form = useForm<FormInput, undefined, FormOutput>({
         resolver: zodResolver(createSubjectSchema),
@@ -148,39 +147,16 @@ export function CreateSubjectForm({ programSlug, degreeSlug }: Props) {
                 </div>
 
                 <div className="space-y-2 md:col-span-1">
-                    <Label>Semestre/Período Recomendado*</Label>
-                    <Select
-                        value={isBasePeriodAssignable ? "assignable" : "not_assignable"}
-                        onValueChange={(value) => {
-                            const assignable = value === "assignable";
-                            setIsBasePeriodAssignable(assignable);
-                            if (!assignable) {
-                                form.setValue("basePeriod", undefined, { shouldValidate: true, shouldDirty: true });
-                            }
-                        }}
-                    >
-                        <SelectTrigger className="w-full bg-background p-5 h-[62px]">
-                            <SelectValue placeholder="Selecione..." />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectItem value="assignable">Atribuível</SelectItem>
-                            <SelectItem value="not_assignable">Não atribuível</SelectItem>
-                        </SelectContent>
-                    </Select>
-
-                    {isBasePeriodAssignable && (
-                        <div className="pt-2 relative">
-                            <Input
-                                id="basePeriod"
-                                type="number"
-                                placeholder="Ex: 1"
-                                {...register("basePeriod")}
-                                disabled={isSubmitting}
-                                className="p-5 h-[62px] rounded-lg bg-background"
-                            />
-                            {errors.basePeriod && <p className="text-sm text-red-600 mt-1">{errors.basePeriod.message}</p>}
-                        </div>
-                    )}
+                    <Label htmlFor="basePeriod">Nível (Semestre/Período) *</Label>
+                    <Input
+                        id="basePeriod"
+                        type="number"
+                        placeholder="Ex: 1"
+                        {...register("basePeriod")}
+                        disabled={isSubmitting}
+                        className="p-5 h-[62px] rounded-lg bg-background"
+                    />
+                    {errors.basePeriod && <p className="text-sm text-red-600 mt-1">{errors.basePeriod.message}</p>}
                 </div>
             </div>
 

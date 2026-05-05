@@ -53,7 +53,7 @@ async function ListSubjectsContent({
                         <th className="px-6 py-4 font-medium">Disciplina/Matéria</th>
                         <th className="px-6 text-center py-4 font-medium">Código</th>
                         <th className="px-6 text-center py-4 font-medium">Carga (h)</th>
-                        <th className="px-6 text-center py-4 font-medium">Semestre/Período Base</th>
+                        <th className="px-6 text-center py-4 font-medium">Nível Base</th>
                         <th className="px-6 py-4 font-medium text-right">Ação</th>
                     </tr>
                 </thead>

@@ -102,7 +102,7 @@ export default function EditMemberForm({
             return;
         }
 
-        if (result?.success && "redirectTo" in result) {
+        if (result?.success && typeof result.redirectTo === "string") {
             await authClient.getSession({
                 query: { disableCookieCache: true },
             });

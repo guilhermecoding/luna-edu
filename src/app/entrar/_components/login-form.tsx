@@ -12,6 +12,7 @@ import { authClient } from "@/lib/auth-client";
 import { toast } from "sonner";
 import { IconLogin2, IconUserShield, IconSchool, IconLoader2 } from "@tabler/icons-react";
 import { cn } from "@/lib/utils";
+import type { SessionUser } from "@/@types/session-type";
 
 const loginSchema = z.object({
     email: z.string().email("Este e-mail não é válido"),
@@ -24,17 +25,12 @@ const emptyLoginValues: LoginInput = {
     password: "",
 };
 
-type SessionUser = {
-    isAdmin?: boolean;
-    isTeacher?: boolean;
-    systemRole?: string;
-};
-
+type SessionUserLogin = Omit<SessionUser, "id">;
 /**
  * Aba Professor: somente quem tem vínculo `isTeacher` no cadastro (inclui admin que também é professor).
  * Aba Admin: somente quem tem vínculo `isAdmin` no cadastro.
  */
-function sessionMatchesTab(activeTab: "admin" | "teacher", user: SessionUser): boolean {
+function sessionMatchesTab(activeTab: "admin" | "teacher", user: SessionUserLogin): boolean {
     if (activeTab === "teacher") {
         return user.isTeacher === true;
     }
@@ -92,7 +88,7 @@ export default function LoginForm() {
                 "user" in sessionBody &&
                 sessionBody.user &&
                 typeof sessionBody.user === "object"
-                    ? (sessionBody.user as SessionUser)
+                    ? (sessionBody.user as SessionUserLogin)
                     : null;
 
             if (!user) {
@@ -111,7 +107,8 @@ export default function LoginForm() {
                 return;
             }
 
-            toast.success(`Bem vindo(a) de volta, ${user.name.split(" ")[0]}!`);
+            const firstName = user.name?.trim().split(" ")[0] || "usuário";
+            toast.success(`Bem vindo(a) de volta, ${firstName}!`);
 
             router.push(activeTab === "admin" ? "/admin" : "/prof");
             router.refresh();

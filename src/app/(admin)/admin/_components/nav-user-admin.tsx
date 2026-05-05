@@ -26,6 +26,7 @@ import { SYSTEM_ROLE } from "@/@types/system-role.type";
 import type { Genre } from "@/generated/prisma/enums";
 import { GENRE_VALUES } from "@/lib/genre";
 import { authClient } from "@/lib/auth-client";
+import type { SessionUser } from "@/@types/session-type";
 
 function ageFromBirthDate(birthDate: string | Date | undefined | null): number {
   if (!birthDate) return 0;
@@ -47,12 +48,7 @@ function parseGenre(value: unknown): Genre | undefined {
     : undefined;
 }
 
-function roleLabelFromSessionUser(user: {
-  id?: string;
-  isAdmin?: boolean;
-  isTeacher?: boolean;
-  systemRole?: string;
-}): string {
+function roleLabelFromSessionUser(user: Omit<SessionUser, "name">): string {
   const adminLike =
     Boolean(user.isAdmin) || user.systemRole === SYSTEM_ROLE.FULL_ACCESS;
   const teacher = Boolean(user.isTeacher);

@@ -5,16 +5,16 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { editStudentAction } from "../../actions";
+import { editStudentAction } from "../../../actions";
 import { toast } from "sonner";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { editStudentSchema, type EditStudentData, type EditStudentInput } from "../../schema";
+import { editStudentSchema, type EditStudentData, type EditStudentInput } from "../../../schema";
 import { IconCheck, IconCopy, IconLoader2 } from "@tabler/icons-react";
 import type { UserGenre } from "@/generated/prisma/client";
 import { useRouter } from "next/navigation";
 import { maskCPF, maskPhone, unmask } from "@/lib/masks";
-import type { Student } from "@prisma/client";
+import type { Student } from "@/generated/prisma/client";
 import { useState } from "react";
 
 export default function EditStudentForm({ student }: { student: Student }) {
@@ -33,7 +33,6 @@ export default function EditStudentForm({ student }: { student: Student }) {
             school: student.school,
             birthDate: new Date(student.birthDate),
             genre: student.genre as UserGenre,
-            lunaId: student.lunaId || "",
         },
     });
 
@@ -57,7 +56,6 @@ export default function EditStudentForm({ student }: { student: Student }) {
             school: student.school,
             birthDate: new Date(student.birthDate),
             genre: student.genre as UserGenre,
-            lunaId: student.lunaId || "",
         });
     }, [student, reset]);
 
@@ -100,24 +98,6 @@ export default function EditStudentForm({ student }: { student: Student }) {
                     </div>
                 )}
                 
-                {student.lunaId && (
-                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-5 bg-background border border-surface-border rounded-2xl gap-4">
-                        <div>
-                            <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">Matrícula LunaID</h3>
-                            <p className="text-2xl font-mono font-bold text-foreground mt-1">{student.lunaId}</p>
-                        </div>
-                        <Button
-                            type="button"
-                            variant="secondary"
-                            onClick={handleCopyLunaId}
-                            className="w-full sm:w-auto"
-                        >
-                            {copied ? <IconCheck className="size-4 mr-2" /> : <IconCopy className="size-4 mr-2" />}
-                            {copied ? "Copiado" : "Copiar Matrícula"}
-                        </Button>
-                    </div>
-                )}
-
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="flex flex-col gap-2">
                         <Label htmlFor="name">Nome completo *</Label>
@@ -254,16 +234,30 @@ export default function EditStudentForm({ student }: { student: Student }) {
                         />
                         {errors.genre && <p className="text-sm text-red-600">{errors.genre.message}</p>}
                     </div>
-                    <div className="flex flex-col gap-2">
-                        <Label htmlFor="lunaId">Matrícula (LunaID) - Opcional</Label>
-                        <Input
-                            id="lunaId"
-                            {...register("lunaId")}
-                            placeholder="Deixe em branco se preferir"
-                            className="p-5 h-15.5 rounded-xl bg-background"
-                            aria-invalid={errors.lunaId ? "true" : "false"}
-                        />
-                        {errors.lunaId && <p className="text-sm text-red-600">{errors.lunaId.message}</p>}
+                </div>
+
+                <div className="flex flex-col gap-6 p-6 bg-background rounded-2xl border border-surface-border">
+                    <div className="flex flex-col gap-1">
+                        <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Matrícula / LunaID</span>
+                        <div className="flex items-center gap-2">
+                            <span className="font-mono text-lg font-bold text-foreground">
+                                {student.lunaId || "Não gerado"}
+                            </span>
+                            {student.lunaId && (
+                                <button
+                                    type="button"
+                                    onClick={handleCopyLunaId}
+                                    className="cursor-pointer p-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+                                    title="Copiar matrícula"
+                                >
+                                    {copied ? (
+                                        <IconCheck className="size-4 text-emerald-500" />
+                                    ) : (
+                                        <IconCopy className="size-4" />
+                                    )}
+                                </button>
+                            )}
+                        </div>
                     </div>
                 </div>
                 <div className="flex flex-col-reverse justify-end gap-3 pt-4 sm:flex-row mt-4">

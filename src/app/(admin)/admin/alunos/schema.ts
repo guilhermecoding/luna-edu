@@ -28,9 +28,7 @@ export const studentSchema = z.object({
 
 export const createStudentSchema = studentSchema;
 
-export const editStudentSchema = studentSchema.extend({
-    lunaId: z.string().optional().or(z.literal("")),
-});
+export const editStudentSchema = studentSchema;
 
 export type CreateStudentInput = z.input<typeof createStudentSchema>;
 export type CreateStudentData = z.infer<typeof createStudentSchema>;

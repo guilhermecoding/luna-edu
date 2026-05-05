@@ -90,11 +90,17 @@ export async function getStudentById(id: string) {
 }
 
 /**
- * Cria um novo aluno
+ * Cria um novo aluno com LUNA ID gerado automaticamente.
  */
 export async function createStudent(data: Omit<Parameters<typeof prisma.student.create>[0]["data"], "id" | "createdAt" | "lunaId">) {
+    const { generateLunaId } = await import("@/lib/generate-luna-id");
+    const lunaId = await generateLunaId();
+    
     return await prisma.student.create({
-        data,
+        data: {
+            ...data,
+            lunaId,
+        },
     });
 }
 

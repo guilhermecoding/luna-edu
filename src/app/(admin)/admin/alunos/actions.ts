@@ -76,7 +76,6 @@ export async function editStudentAction(id: string, data: EditStudentData) {
             birthDate: parsedData.birthDate,
             genre: parsedData.genre,
             school: parsedData.school,
-            lunaId: parsedData.lunaId || null,
         });
 
         revalidateTag("students-list");

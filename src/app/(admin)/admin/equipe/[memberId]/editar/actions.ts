@@ -37,7 +37,19 @@ export async function editMemberAction(memberId: string, data: EditMemberInput) 
             }
         }
 
-        await updateUser(memberId, updateFields);
+        const { affectedGroups } = await updateUser(memberId, updateFields);
+
+        // Invalida cache de todos os períodos e turmas onde o professor tinha aulas
+        const affectedPeriodIds = new Set<string>();
+        for (const group of affectedGroups) {
+            updateTag(`period:${group.periodId}:class-group:${group.slug}`);
+            affectedPeriodIds.add(group.periodId);
+        }
+
+        for (const periodId of affectedPeriodIds) {
+            updateTag(`period:${periodId}:class-groups`);
+            updateTag(`period:${periodId}:courses`);
+        }
 
         if (password) {
             try {

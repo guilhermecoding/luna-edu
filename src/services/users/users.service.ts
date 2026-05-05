@@ -98,9 +98,59 @@ export async function updateUser(id: string, data: Prisma.UserUpdateInput) {
         if (existingCpf) throw new Error("CPF_ALREADY_EXISTS");
     }
 
-    return await prisma.user.update({
-        where: { id },
-        data,
+    return await prisma.$transaction(async (tx) => {
+        // 1. Identificar turmas afetadas antes de remover os vínculos
+        const affectedGroups: { periodId: string; slug: string }[] = [];
+        if (data.isTeacher === false) {
+            const schedules = await tx.schedule.findMany({
+                where: { teacherId: id },
+                select: { 
+                    course: { 
+                        select: { 
+                            periodId: true,
+                            classGroup: { select: { slug: true } },
+                        }, 
+                    }, 
+                },
+            });
+            
+            const seen = new Set<string>();
+            schedules.forEach((s) => {
+                if (s.course.classGroup) {
+                    const key = `${s.course.periodId}:${s.course.classGroup.slug}`;
+                    if (!seen.has(key)) {
+                        seen.add(key);
+                        affectedGroups.push({
+                            periodId: s.course.periodId,
+                            slug: s.course.classGroup.slug,
+                        });
+                    }
+                }
+            });
+        }
+
+        // 2. Atualizar o usuário
+        const user = await tx.user.update({
+            where: { id },
+            data,
+        });
+
+        // 3. Se deixou de ser professor, limpar os vínculos
+        if (data.isTeacher === false) {
+            await tx.schedule.updateMany({
+                where: { teacherId: id },
+                data: { teacherId: null },
+            });
+
+            await tx.courseAssistant.deleteMany({
+                where: { assistantId: id },
+            });
+        }
+
+        return {
+            ...user,
+            affectedGroups,
+        };
     });
 }
 

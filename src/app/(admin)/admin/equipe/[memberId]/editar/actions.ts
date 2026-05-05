@@ -10,6 +10,8 @@ import { editMemberSchema, type EditMemberInput } from "./schema";
 import { unmask } from "@/lib/masks";
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
+import { hashPassword } from "better-auth/crypto";
+import { isRedirectError } from "next/dist/client/components/redirect-error";
 
 export async function editMemberAction(memberId: string, data: EditMemberInput) {
     try {
@@ -38,13 +40,33 @@ export async function editMemberAction(memberId: string, data: EditMemberInput) 
         await updateUser(memberId, updateFields);
 
         if (password) {
-            await auth.api.setUserPassword({
-                body: {
-                    userId: memberId,
-                    newPassword: password,
-                },
-                headers: await headers(),
-            });
+            try {
+                await auth.api.setUserPassword({
+                    body: {
+                        userId: memberId,
+                        newPassword: password,
+                    },
+                    headers: await headers(),
+                });
+            } catch (passwordError) {
+                const normalizedMessage = passwordError instanceof Error ? passwordError.message : String(passwordError);
+                const deniedByAdminPlugin = normalizedMessage.includes("not allowed to set users password");
+
+                if (!deniedByAdminPlugin) {
+                    throw passwordError;
+                }
+
+                const passwordHash = await hashPassword(password);
+                await prisma.account.updateMany({
+                    where: {
+                        userId: memberId,
+                        providerId: "credential",
+                    },
+                    data: {
+                        password: passwordHash,
+                    },
+                });
+            }
         }
 
         updateTag("admins-list");
@@ -70,6 +92,10 @@ export async function editMemberAction(memberId: string, data: EditMemberInput) 
 
         redirect(redirectUrl);
     } catch (error) {
+        if (isRedirectError(error)) {
+            throw error;
+        }
+
         if (error instanceof ZodError) {
             return {
                 success: false,

@@ -10,7 +10,11 @@ import { toast } from "sonner";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { editStudentSchema, type EditStudentData, type EditStudentInput } from "../../../schema";
-import { IconCheck, IconCopy, IconLoader2 } from "@tabler/icons-react";
+import { IconCheck, IconCopy, IconLoader2, IconAlertTriangle } from "@tabler/icons-react";
+import { deleteStudentAction } from "../../../actions";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import Image from "next/image";
+import imgGibbyDuvida from "@/assets/images/logo-gibby-duvida.svg";
 import type { UserGenre } from "@/generated/prisma/client";
 import { useRouter } from "next/navigation";
 import { maskCPF, maskPhone, unmask } from "@/lib/masks";
@@ -20,6 +24,10 @@ import { useState } from "react";
 export default function EditStudentForm({ student }: { student: Student }) {
     const router = useRouter();
     const [copied, setCopied] = useState(false);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [adminPasswordConfirm, setAdminPasswordConfirm] = useState("");
+    const [deleteError, setDeleteError] = useState<string | null>(null);
+    const [isDeleting, setIsDeleting] = useState(false);
 
     const form = useForm<EditStudentInput, unknown, EditStudentData>({
         resolver: zodResolver(editStudentSchema),
@@ -88,6 +96,28 @@ export default function EditStudentForm({ student }: { student: Student }) {
             toast.error("Falha ao copiar");
         }
     };
+
+    const onDeleteStudent = async () => {
+        setDeleteError(null);
+        setIsDeleting(true);
+
+        try {
+            const result = await deleteStudentAction(student.id, adminPasswordConfirm);
+            if (result?.success === false) {
+                setDeleteError(result.error || "Erro ao apagar aluno");
+            } else {
+                toast.success("Aluno apagado com sucesso");
+                router.push("/admin/alunos");
+                router.refresh();
+            }
+        } catch {
+            setDeleteError("Erro ao apagar aluno");
+        } finally {
+            setIsDeleting(false);
+        }
+    };
+
+    const canDelete = adminPasswordConfirm.length > 0 && !isDeleting;
 
     return (
         <div className="bg-surface w-full border border-surface-border p-6 rounded-4xl">
@@ -273,6 +303,85 @@ export default function EditStudentForm({ student }: { student: Student }) {
                         {isSubmitting && <IconLoader2 className="size-4 mr-2 animate-spin" />}
                         {isSubmitting ? "Salvando..." : "Salvar Alterações"}
                     </Button>
+                </div>
+
+                <div className="border border-destructive/25 bg-destructive/5 rounded-2xl p-4 sm:p-5 space-y-4 mt-6">
+                    <div>
+                        <div className="flex flex-row items-center gap-2">
+                            <IconAlertTriangle className="size-5 text-red-600" />
+                            <h3 className="text-xl font-semibold text-destructive">Zona de Perigo</h3>
+                        </div>
+                        <p className="text-sm text-muted-foreground mt-1">
+                            Esta ação remove o aluno <b>permanentemente</b>. Todos os vínculos (matrículas, presenças e notas) serão desfeitos. Esta ação não pode ser desfeita.
+                        </p>
+                    </div>
+
+                    <Dialog
+                        open={isDeleteModalOpen}
+                        onOpenChange={(open) => {
+                            setIsDeleteModalOpen(open);
+                            if (!open) {
+                                setAdminPasswordConfirm("");
+                                setDeleteError(null);
+                            }
+                        }}
+                    >
+                        <div className="w-full flex justify-end">
+                            <DialogTrigger asChild>
+                                <Button type="button" variant="destructive" className="w-full sm:w-auto">
+                                    Apagar Aluno
+                                </Button>
+                            </DialogTrigger>
+                        </div>
+                        <DialogContent>
+                            <DialogHeader>
+                                <DialogTitle>Apagar Aluno</DialogTitle>
+                                <DialogDescription>
+                                    Deseja realmente apagar este aluno?
+                                </DialogDescription>
+                            </DialogHeader>
+
+                            <div className="flex flex-col items-center text-center">
+                                <Image className="w-32 h-32" src={imgGibbyDuvida} alt="Gibby Duvida" width={100} height={100} />
+                                <span> Para confirmar, digite sua senha de administrador:</span>
+                            </div>
+
+                            <div className="space-y-2">
+                                <Label htmlFor="confirm-delete-password">Sua senha</Label>
+                                <Input
+                                    id="confirm-delete-password"
+                                    type="password"
+                                    value={adminPasswordConfirm}
+                                    onChange={(event) => setAdminPasswordConfirm(event.target.value)}
+                                    placeholder="••••••••"
+                                    className="rounded-lg"
+                                    disabled={isDeleting}
+                                />
+                                {deleteError && <p className="text-sm text-red-600">{deleteError}</p>}
+                            </div>
+
+                            <DialogFooter>
+                                <Button
+                                    type="button"
+                                    variant="outline"
+                                    onClick={() => setIsDeleteModalOpen(false)}
+                                    disabled={isDeleting}
+                                >
+                                    Cancelar
+                                </Button>
+                                <Button
+                                    type="button"
+                                    variant="destructive"
+                                    onClick={onDeleteStudent}
+                                    disabled={!canDelete}
+                                    className="flex items-center gap-2"
+                                >
+                                    {isDeleting && <IconLoader2 className="size-5 animate-spin" />}
+                                    {isDeleting ? "Apagando..." : "Apagar"}
+                                </Button>
+                            </DialogFooter>
+                        </DialogContent>
+                    </Dialog>
                 </div>
             </form>
         </div>

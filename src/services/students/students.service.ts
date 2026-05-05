@@ -121,3 +121,23 @@ export async function updateStudent(id: string, data: Partial<Parameters<typeof 
     });
 }
 
+/**
+ * Remove um aluno do sistema permanentemente, limpando todos os seus vínculos.
+ */
+export async function deleteStudent(id: string) {
+    return await prisma.$transaction(async (tx) => {
+        // Limpar vínculos
+        await tx.enrollment.deleteMany({ where: { studentId: id } });
+        await tx.attendance.deleteMany({ where: { studentId: id } });
+        await tx.activityGrade.deleteMany({ where: { studentId: id } });
+        await tx.finalGrade.deleteMany({ where: { studentId: id } });
+        await tx.studentCourseStats.deleteMany({ where: { studentId: id } });
+        await tx.notification.deleteMany({ where: { studentId: id } });
+
+        // Apagar o aluno
+        return await tx.student.delete({
+            where: { id },
+        });
+    });
+}
+

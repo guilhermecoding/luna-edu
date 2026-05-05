@@ -61,7 +61,7 @@ export const columns: ColumnDef<StudentListItem>[] = [
         header: "Idade",
         cell: ({ row }) => {
             const birthDate = row.original.birthDate;
-            return <span className="text-sm">{calculateAge(birthDate)} anos</span>;
+            return <span className="text-sm">{calculateAge(birthDate) === 1 ? "1 ano": `${calculateAge(birthDate)} anos`}</span>;
         },
     },
     {

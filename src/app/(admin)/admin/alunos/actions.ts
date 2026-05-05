@@ -8,6 +8,7 @@ import { headers } from "next/headers";
 import { Prisma } from "@/generated/prisma/client";
 import { isRedirectError } from "next/dist/client/components/redirect-error";
 import { redirect } from "next/navigation";
+import prisma from "@/lib/prisma";
 
 export async function createStudentAction(data: CreateStudentData) {
     try {
@@ -104,4 +105,48 @@ export async function editStudentAction(id: string, data: EditStudentData) {
 
     revalidatePath("/admin/alunos");
     redirect("/admin/alunos");
+}
+
+export async function deleteStudentAction(studentId: string, adminPasswordConfirm: string) {
+    try {
+        const session = await auth.api.getSession({ headers: await headers() });
+        const actorId = session?.user?.id;
+
+        if (!actorId) {
+            return { success: false, error: "Não autorizado" };
+        }
+
+        // Verify password
+        const adminAccount = await prisma.account.findFirst({
+            where: { userId: actorId, providerId: "credential" },
+        });
+
+        if (!adminAccount?.password) {
+            return { success: false, error: "Não foi possível verificar a senha do administrador." };
+        }
+
+        const { verifyPassword } = await import("better-auth/crypto");
+        const isPasswordValid = await verifyPassword({
+            hash: adminAccount.password,
+            password: adminPasswordConfirm,
+        });
+
+        if (!isPasswordValid) {
+            return { success: false, error: "Senha incorreta." };
+        }
+
+        const { deleteStudent } = await import("@/services/students/students.service");
+        await deleteStudent(studentId);
+
+        revalidateTag("students-list");
+        revalidateTag("students-count");
+        revalidateTag(`student-${studentId}`);
+        revalidatePath("/admin/alunos");
+
+        return { success: true };
+    } catch (error) {
+        if (isRedirectError(error)) throw error;
+        console.error("Erro fatal ao excluir aluno:", error);
+        return { success: false, error: "Erro fatal ao excluir aluno." };
+    }
 }

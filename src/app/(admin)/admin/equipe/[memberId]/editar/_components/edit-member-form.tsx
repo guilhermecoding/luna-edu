@@ -14,6 +14,7 @@ import { IconCheck, IconCopy, IconLoader2, IconLock } from "@tabler/icons-react"
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { maskCPF, maskPhone } from "@/lib/masks";
+import { authClient } from "@/lib/auth-client";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import Image from "next/image";
 
@@ -98,6 +99,15 @@ export default function EditMemberForm({
         if (result && !result.success) {
             toast.error(result.error);
             setError("root", { type: "server", message: result.error });
+            return;
+        }
+
+        if (result?.success && "redirectTo" in result) {
+            await authClient.getSession({
+                query: { disableCookieCache: true },
+            });
+            router.push(result.redirectTo);
+            router.refresh();
         }
     };
 

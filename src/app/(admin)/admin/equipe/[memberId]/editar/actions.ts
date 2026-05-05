@@ -52,10 +52,23 @@ export async function editMemberAction(memberId: string, data: EditMemberInput) 
         updateTag("users-stats");
         updateTag(`user-${memberId}`);
         updateTag(`admin-${memberId}`);
+        revalidatePath("/admin", "layout");
         revalidatePath("/admin/equipe");
         revalidatePath("/admin/equipe/administradores");
         revalidatePath("/admin/equipe/professores");
         revalidatePath(`/admin/equipe/${memberId}/editar`);
+
+        const params = new URLSearchParams({
+            toast: "success",
+            message: "Membro atualizado com sucesso",
+        });
+        const redirectUrl = `/admin/equipe?${params.toString()}`;
+
+        if (actorId === memberId) {
+            return { success: true as const, redirectTo: redirectUrl };
+        }
+
+        redirect(redirectUrl);
     } catch (error) {
         if (error instanceof ZodError) {
             return {
@@ -109,11 +122,4 @@ export async function editMemberAction(memberId: string, data: EditMemberInput) 
             error: "Erro ao atualizar membro",
         };
     }
-
-    const params = new URLSearchParams({
-        toast: "success",
-        message: "Membro atualizado com sucesso",
-    });
-
-    redirect(`/admin/equipe?${params.toString()}`);
 }

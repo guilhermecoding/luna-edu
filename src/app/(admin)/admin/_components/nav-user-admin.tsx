@@ -56,9 +56,9 @@ function roleLabelFromSessionUser(user: {
   const adminLike =
     Boolean(user.isAdmin) || user.systemRole === SYSTEM_ROLE.FULL_ACCESS;
   const teacher = Boolean(user.isTeacher);
-  if (adminLike && teacher) return "Admin e Prof.";
-  if (adminLike) return "Admin.";
-  if (teacher) return "Prof";
+  if (adminLike && teacher) return "Administrador & Professor";
+  if (adminLike) return "Administrador";
+  if (teacher) return "Professor";
   return "";
 }
 

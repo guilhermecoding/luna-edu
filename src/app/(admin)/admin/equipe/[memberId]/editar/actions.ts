@@ -9,6 +9,9 @@ import { Prisma } from "@/generated/prisma/client";
 import { editMemberSchema, type EditMemberInput } from "./schema";
 import { unmask } from "@/lib/masks";
 import { auth } from "@/lib/auth";
+import prisma from "@/lib/prisma";
+import { hashPassword } from "better-auth/crypto";
+import { isRedirectError } from "next/dist/client/components/redirect-error";
 
 export async function editMemberAction(memberId: string, data: EditMemberInput) {
     try {
@@ -21,16 +24,61 @@ export async function editMemberAction(memberId: string, data: EditMemberInput) 
 
         const { password, confirmPassword, ...updateFields } = cleanData;
         void confirmPassword;
-        await updateUser(memberId, updateFields);
+
+        const session = await auth.api.getSession({ headers: await headers() });
+        const actorId = session?.user?.id;
+        if (actorId === memberId) {
+            const existingMember = await prisma.user.findUnique({
+                where: { id: memberId },
+                select: { isAdmin: true },
+            });
+            if (existingMember?.isAdmin) {
+                updateFields.isAdmin = true;
+            }
+        }
+
+        const { affectedGroups } = await updateUser(memberId, updateFields);
+
+        // Invalida cache de todos os períodos e turmas onde o professor tinha aulas
+        const affectedPeriodIds = new Set<string>();
+        for (const group of affectedGroups) {
+            updateTag(`period:${group.periodId}:class-group:${group.slug}`);
+            affectedPeriodIds.add(group.periodId);
+        }
+
+        for (const periodId of affectedPeriodIds) {
+            updateTag(`period:${periodId}:class-groups`);
+            updateTag(`period:${periodId}:courses`);
+        }
 
         if (password) {
-            await auth.api.setUserPassword({
-                body: {
-                    userId: memberId,
-                    newPassword: password,
-                },
-                headers: await headers(),
-            });
+            try {
+                await auth.api.setUserPassword({
+                    body: {
+                        userId: memberId,
+                        newPassword: password,
+                    },
+                    headers: await headers(),
+                });
+            } catch (passwordError) {
+                const normalizedMessage = passwordError instanceof Error ? passwordError.message : String(passwordError);
+                const deniedByAdminPlugin = normalizedMessage.includes("not allowed to set users password");
+
+                if (!deniedByAdminPlugin) {
+                    throw passwordError;
+                }
+
+                const passwordHash = await hashPassword(password);
+                await prisma.account.updateMany({
+                    where: {
+                        userId: memberId,
+                        providerId: "credential",
+                    },
+                    data: {
+                        password: passwordHash,
+                    },
+                });
+            }
         }
 
         updateTag("admins-list");
@@ -38,11 +86,28 @@ export async function editMemberAction(memberId: string, data: EditMemberInput) 
         updateTag("users-stats");
         updateTag(`user-${memberId}`);
         updateTag(`admin-${memberId}`);
+        revalidatePath("/admin", "layout");
         revalidatePath("/admin/equipe");
         revalidatePath("/admin/equipe/administradores");
         revalidatePath("/admin/equipe/professores");
         revalidatePath(`/admin/equipe/${memberId}/editar`);
+
+        const params = new URLSearchParams({
+            toast: "success",
+            message: "Membro atualizado com sucesso",
+        });
+        const redirectUrl = `/admin/equipe?${params.toString()}`;
+
+        if (actorId === memberId) {
+            return { success: true as const, redirectTo: redirectUrl };
+        }
+
+        redirect(redirectUrl);
     } catch (error) {
+        if (isRedirectError(error)) {
+            throw error;
+        }
+
         if (error instanceof ZodError) {
             return {
                 success: false,
@@ -95,11 +160,4 @@ export async function editMemberAction(memberId: string, data: EditMemberInput) 
             error: "Erro ao atualizar membro",
         };
     }
-
-    const params = new URLSearchParams({
-        toast: "success",
-        message: "Membro atualizado com sucesso",
-    });
-
-    redirect(`/admin/equipe?${params.toString()}`);
 }

@@ -10,14 +10,22 @@ import { SystemRole, User, UserGenre } from "@/generated/prisma/client";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { editMemberSchema, type EditMemberData, type EditMemberInput } from "../schema";
-import { IconCheck, IconCopy, IconLoader2 } from "@tabler/icons-react";
+import { IconCheck, IconCopy, IconLoader2, IconLock } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { maskCPF, maskPhone } from "@/lib/masks";
+import { authClient } from "@/lib/auth-client";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import Image from "next/image";
 
-export default function EditMemberForm({ member }: { member: User }) {
+export default function EditMemberForm({
+    member,
+    isEditingSelf,
+}: {
+    member: User;
+    isEditingSelf: boolean;
+}) {
+    const lockSelfAdmin = isEditingSelf && member.isAdmin;
     const router = useRouter();
     const [copied, setCopied] = useState(false);
     const [showStatusModal, setShowStatusModal] = useState(false);
@@ -74,18 +82,32 @@ export default function EditMemberForm({ member }: { member: User }) {
     const onSubmit = async (data: EditMemberData) => {
         clearErrors("root");
 
+        const payload: EditMemberData = {
+            ...data,
+            ...(lockSelfAdmin ? { isAdmin: true } : {}),
+        };
+
         // Validar que pelo menos um vínculo foi selecionado
-        if (!data.isAdmin && !data.isTeacher) {
+        if (!payload.isAdmin && !payload.isTeacher) {
             toast.error("O membro precisa ter pelo menos um vínculo (Admin ou Professor)");
             setError("root", { type: "manual", message: "Selecione pelo menos um vínculo." });
             return;
         }
 
-        const result = await editMemberAction(member.id, data);
+        const result = await editMemberAction(member.id, payload);
 
         if (result && !result.success) {
             toast.error(result.error);
             setError("root", { type: "server", message: result.error });
+            return;
+        }
+
+        if (result?.success && typeof result.redirectTo === "string") {
+            await authClient.getSession({
+                query: { disableCookieCache: true },
+            });
+            router.push(result.redirectTo);
+            router.refresh();
         }
     };
 
@@ -393,17 +415,29 @@ export default function EditMemberForm({ member }: { member: User }) {
                         <div className="flex flex-col gap-3">
                             <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Vínculos do Membro</span>
                             <div className="flex flex-col gap-3">
-                                <label className="flex items-center gap-3 p-3 rounded-xl border border-surface-border bg-surface/50 cursor-pointer hover:bg-surface transition-colors">
-                                    <input
-                                        type="checkbox"
-                                        {...register("isAdmin")}
-                                        className="size-5 rounded border-surface-border accent-primary-theme cursor-pointer"
-                                    />
-                                    <div className="flex flex-col">
-                                        <span className="font-medium text-sm">Administrador</span>
-                                        <span className="text-xs text-muted-foreground">Permite gerenciar a instituição e equipe</span>
+                                {lockSelfAdmin ? (
+                                    <div className="flex items-start gap-3 p-3 rounded-xl border border-surface-border bg-muted/30 text-muted-foreground">
+                                        <IconLock className="size-5 shrink-0 mt-0.5 text-foreground/70" aria-hidden />
+                                        <div className="flex flex-col gap-0.5">
+                                            <span className="font-medium text-sm text-foreground">Administrador</span>
+                                            <span className="text-xs leading-relaxed">
+                                                Seu perfil mantém este vínculo por segurança. Ele não pode ser removido ao editar a própria conta.
+                                            </span>
+                                        </div>
                                     </div>
-                                </label>
+                                ) : (
+                                    <label className="flex items-center gap-3 p-3 rounded-xl border border-surface-border bg-surface/50 cursor-pointer hover:bg-surface transition-colors">
+                                        <input
+                                            type="checkbox"
+                                            {...register("isAdmin")}
+                                            className="size-5 rounded border-surface-border accent-primary-theme cursor-pointer"
+                                        />
+                                        <div className="flex flex-col">
+                                            <span className="font-medium text-sm">Administrador</span>
+                                            <span className="text-xs text-muted-foreground">Permite gerenciar a instituição e equipe</span>
+                                        </div>
+                                    </label>
+                                )}
 
                                 <label className="flex items-center gap-3 p-3 rounded-xl border border-surface-border bg-surface/50 cursor-pointer hover:bg-surface transition-colors">
                                     <input

@@ -20,23 +20,32 @@ import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { useRouter, useSearchParams } from "next/navigation";
 import { IconSearch } from "@tabler/icons-react";
+import { cn } from "@/lib/utils";
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[];
     data: TData[];
     title?: React.ReactNode;
+    /** Destaca a linha do usuário logado (opacidade + estilo). Requer `id` em cada linha ou `getRowUserId`. */
+    currentUserId?: string | null;
+    getRowUserId?: (row: TData) => string;
 }
 
 export function DataTable<TData, TValue>({
     columns,
     data,
     title,
+    currentUserId,
+    getRowUserId,
 }: DataTableProps<TData, TValue>) {
 
     // eslint-disable-next-line react-hooks/incompatible-library -- TanStack Table + React Compiler
     const table = useReactTable({
         data,
         columns,
+        meta: {
+            currentUserId: currentUserId ?? undefined,
+        },
         getCoreRowModel: getCoreRowModel(),
         getPaginationRowModel: getPaginationRowModel(),
         initialState: {
@@ -106,11 +115,21 @@ export function DataTable<TData, TValue>({
                     </TableHeader>
                     <TableBody>
                         {table.getRowModel().rows?.length ? (
-                            table.getRowModel().rows.map((row) => (
+                            table.getRowModel().rows.map((row) => {
+                                const rowUserId = getRowUserId
+                                    ? getRowUserId(row.original)
+                                    : (row.original as { id: string }).id;
+                                const isCurrentUser = Boolean(currentUserId && rowUserId === currentUserId);
+                                return (
                                 <TableRow
                                     key={row.id}
                                     data-state={row.getIsSelected() && "selected"}
-                                    className="border-surface-border"
+                                    data-current-user={isCurrentUser ? "true" : undefined}
+                                    aria-label={isCurrentUser ? "Sua conta na lista" : undefined}
+                                    className={cn(
+                                        "border-surface-border",
+                                        isCurrentUser && "opacity-65 bg-muted/25 hover:bg-muted/35",
+                                    )}
                                 >
                                     {row.getVisibleCells().map((cell) => (
                                         <TableCell key={cell.id}>
@@ -121,7 +140,8 @@ export function DataTable<TData, TValue>({
                                         </TableCell>
                                     ))}
                                 </TableRow>
-                            ))
+                                );
+                            })
                         ) : (
                             <TableRow>
                                 <TableCell

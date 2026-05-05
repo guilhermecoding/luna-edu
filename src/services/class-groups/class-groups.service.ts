@@ -6,13 +6,26 @@ import { cacheLife, cacheTag } from "next/cache";
  * Lista todos os grupos (turmas físicas) de um período.
  * Inclui contagem de turmas disciplinares, dados da Matriz e turno.
  */
-export async function getClassGroupsByPeriodId(periodId: string) {
+export async function getClassGroupsByPeriodId(periodId: string, teacherId?: string) {
     "use cache";
     cacheLife("max");
     cacheTag(`period:${periodId}:class-groups`);
 
     return await prisma.classGroup.findMany({
-        where: { periodId },
+        where: {
+            periodId,
+            ...(teacherId ? {
+                courses: {
+                    some: {
+                        schedules: {
+                            some: {
+                                teacherId,
+                            },
+                        },
+                    },
+                },
+            } : {}),
+        },
         orderBy: [{ name: "asc" }, { createdAt: "desc" }],
         include: {
             degree: {

@@ -8,6 +8,8 @@ import { DataTable } from "../_components/data-table";
 import { getAdmins, getAdminStats } from "@/services/users/admins.service";
 import { columns } from "./_components/columns";
 import InfoBoxUsers from "../_components/info-box-users";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
 
 export const metadata: Metadata = {
     title: "Administradores",
@@ -19,10 +21,12 @@ export default async function AdministratorsPage({
     searchParams: Promise<{ q?: string }>;
 }) {
     const { q } = await searchParams;
-    const [adminsList, adminStats] = await Promise.all([
+    const [session, adminsList, adminStats] = await Promise.all([
+        auth.api.getSession({ headers: await headers() }),
         getAdmins(q),
         getAdminStats(),
     ]);
+    const currentUserId = session?.user?.id ?? null;
 
     return (
         <Page>
@@ -73,6 +77,7 @@ export default async function AdministratorsPage({
                     <DataTable
                         columns={columns}
                         data={adminsList}
+                        currentUserId={currentUserId}
                         title={
                             <h2 className="text-xl font-bold text-foreground">
                                 Todos os administradores

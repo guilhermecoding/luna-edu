@@ -1,8 +1,7 @@
 import Page from "@/components/page";
 import Section from "@/components/section";
 import TitlePage from "@/components/title-page";
-import { ButtonLink } from "@/components/ui/button-link";
-import { IconArrowLeft, IconSchool } from "@tabler/icons-react";
+import { IconSchool } from "@tabler/icons-react";
 import { Metadata } from "next";
 import CreateStudentForm from "./_components/create-student-form";
 

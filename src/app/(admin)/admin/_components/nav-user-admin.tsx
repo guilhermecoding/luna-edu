@@ -2,7 +2,16 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { IconLogout, IconSelector, IconUser } from "@tabler/icons-react";
+import { useTheme } from "next-themes";
+import {
+    IconCircleHalf2,
+  IconDeviceDesktop,
+  IconLogout,
+  IconMoon,
+  IconSelector,
+  IconSun,
+  IconUser,
+} from "@tabler/icons-react";
 import { toast } from "sonner";
 
 import AvatarUsers from "@/components/avatar-users";
@@ -15,6 +24,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   SidebarMenu,
@@ -61,6 +77,7 @@ function roleLabelFromSessionUser(user: Omit<SessionUser, "name">): string {
 export function NavUser() {
   const { isMobile } = useSidebar();
   const router = useRouter();
+  const { theme, setTheme } = useTheme();
   const { data: session, isPending } = authClient.useSession();
   const [signingOut, setSigningOut] = useState(false);
 
@@ -158,6 +175,36 @@ export function NavUser() {
                 Perfil
               </DropdownMenuItem>
             </DropdownMenuGroup>
+            <DropdownMenuSeparator />
+            <div className="flex items-center gap-2 px-2 py-1.5">
+              <IconCircleHalf2 className="size-3.5 ml-1" />
+              <span className="text-xs font-medium">Tema</span>
+              <Select value={theme} onValueChange={setTheme}>
+                <SelectTrigger size="sm" className="h-7 w-[110px] rounded-md px-2 py-1 text-xs">
+                  <SelectValue placeholder="Tema" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="light">
+                    <div className="flex items-center gap-2">
+                      <IconSun className="size-3.5" />
+                      <span>Claro</span>
+                    </div>
+                  </SelectItem>
+                  <SelectItem value="dark">
+                    <div className="flex items-center gap-2">
+                      <IconMoon className="size-3.5" />
+                      <span>Escuro</span>
+                    </div>
+                  </SelectItem>
+                  <SelectItem value="system">
+                    <div className="flex items-center gap-2">
+                      <IconDeviceDesktop className="size-3.5" />
+                      <span>Sistema</span>
+                    </div>
+                  </SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
             <DropdownMenuSeparator />
             <DropdownMenuItem
               className="flex cursor-pointer text-red-600 hover:bg-red-50! hover:text-red-600! data-[state=open]:bg-red-50 dark:hover:bg-red-900! dark:hover:text-red-50!"

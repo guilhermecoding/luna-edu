@@ -9,7 +9,10 @@ type Session = {
 };
 
 export async function proxy(request: NextRequest) {
-    const sessionResponse = await fetch(new URL("/api/auth/get-session", request.url), {
+    const sessionUrl = new URL("/api/auth/get-session", request.url);
+    sessionUrl.searchParams.set("disableCookieCache", "true");
+
+    const sessionResponse = await fetch(sessionUrl, {
         headers: {
             cookie: request.headers.get("cookie") || "",
         },
@@ -28,8 +31,8 @@ export async function proxy(request: NextRequest) {
     const isAdminRoute = path.startsWith("/admin");
     const isTeacherRoute = path.startsWith("/prof");
 
-    // Proteção para rotas de admin
-    if (isAdminRoute && !user.isAdmin && user.systemRole !== "FULL_ACCESS") {
+    // Área /admin: exclusiva de quem tem vínculo administrativo.
+    if (isAdminRoute && !user.isAdmin) {
         return NextResponse.redirect(new URL("/entrar", request.url));
     }
 

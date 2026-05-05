@@ -32,13 +32,13 @@ type SessionUser = {
 
 /**
  * Aba Professor: somente quem tem vínculo `isTeacher` no cadastro (inclui admin que também é professor).
- * Aba Admin: perfil administrativo (`isAdmin`) ou papel FULL_ACCESS no sistema (alinhado ao proxy de /admin).
+ * Aba Admin: somente quem tem vínculo `isAdmin` no cadastro.
  */
 function sessionMatchesTab(activeTab: "admin" | "teacher", user: SessionUser): boolean {
     if (activeTab === "teacher") {
         return user.isTeacher === true;
     }
-    return user.isAdmin === true || user.systemRole === "FULL_ACCESS";
+    return user.isAdmin === true;
 }
 
 export default function LoginForm() {

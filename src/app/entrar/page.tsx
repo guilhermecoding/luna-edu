@@ -23,10 +23,13 @@ const loginThumbs = [thumb01, thumb02, thumb03, thumb04, thumb05, thumb06, thumb
 export default async function LoginPage() {
     const session = await auth.api.getSession({
         headers: await headers(),
+        query: {
+            disableCookieCache: true,
+        },
     });
 
     if (session?.user) {
-        if (session.user.isTeacher && !session.user.isAdmin && session.user.systemRole !== "FULL_ACCESS") {
+        if (session.user.isTeacher && !session.user.isAdmin) {
             redirect("/prof");
         }
 

@@ -158,15 +158,41 @@ const BATCH_SIZE = 100;
 
 /**
  * Importa alunos em massa usando Upsert (cria ou atualiza).
- * Processa em lotes de 100 para evitar timeout e sobrecarga no banco.
+ * Processa cada aluno individualmente para isolar erros por linha.
  * Retorna um resumo da operação.
  */
 export async function bulkUpsertStudents(students: BulkStudentInput[]) {
-    const { generateLunaId } = await import("@/lib/generate-luna-id");
-
     let created = 0;
     let updated = 0;
     const errors: { row: number; cpf: string; error: string }[] = [];
+
+    // Gerar um pool de LunaIDs para todos os alunos novos de uma vez
+    // consultando o banco uma única vez para evitar duplicatas
+    const year = new Date().getFullYear().toString();
+    const [lastUser, lastStudent] = await Promise.all([
+        prisma.user.findFirst({
+            where: { lunaId: { startsWith: year } },
+            orderBy: { lunaId: "desc" },
+            select: { lunaId: true },
+        }),
+        prisma.student.findFirst({
+            where: { lunaId: { startsWith: year } },
+            orderBy: { lunaId: "desc" },
+            select: { lunaId: true },
+        }),
+    ]);
+
+    const getSeq = (id: string | null | undefined) => {
+        if (!id) return 0;
+        return parseInt(id.slice(year.length)) || 0;
+    };
+
+    let lunaIdSequence = Math.max(getSeq(lastUser?.lunaId), getSeq(lastStudent?.lunaId));
+
+    const nextLunaId = () => {
+        lunaIdSequence++;
+        return `${year}${lunaIdSequence.toString().padStart(5, "0")}`;
+    };
 
     // Processar em lotes
     for (let i = 0; i < students.length; i += BATCH_SIZE) {
@@ -176,74 +202,60 @@ export async function bulkUpsertStudents(students: BulkStudentInput[]) {
         // Buscar CPFs que já existem neste lote
         const existingStudents = await prisma.student.findMany({
             where: { cpf: { in: batchCpfs } },
-            select: { id: true, cpf: true, lunaId: true },
+            select: { id: true, cpf: true },
         });
         const existingMap = new Map(existingStudents.map((s) => [s.cpf, s]));
 
-        // Gerar LunaIDs para os novos alunos deste lote
-        const newStudents = batch.filter((s) => !existingMap.has(s.cpf));
-        const newLunaIds: string[] = [];
-        for (let j = 0; j < newStudents.length; j++) {
-            newLunaIds.push(await generateLunaId());
-        }
+        // Processar cada aluno individualmente para isolar erros
+        for (const student of batch) {
+            const rowIdx = students.indexOf(student) + 1;
+            const existing = existingMap.get(student.cpf);
 
-        // Executar upserts em transação
-        try {
-            await prisma.$transaction(
-                batch.map((student, idx) => {
-                    const existing = existingMap.get(student.cpf);
-
-                    if (existing) {
-                        // UPDATE: preservar LunaID existente
-                        return prisma.student.update({
-                            where: { id: existing.id },
-                            data: {
-                                name: student.name,
-                                email: student.email,
-                                studentPhone: student.studentPhone,
-                                parentPhone: student.parentPhone || null,
-                                birthDate: student.birthDate,
-                                genre: student.genre,
-                                school: student.school,
-                            },
-                        });
-                    } else {
-                        // CREATE: gerar novo LunaID
-                        const newIdx = newStudents.indexOf(student);
-                        return prisma.student.create({
-                            data: {
-                                name: student.name,
-                                email: student.email,
-                                cpf: student.cpf,
-                                studentPhone: student.studentPhone,
-                                parentPhone: student.parentPhone || null,
-                                birthDate: student.birthDate,
-                                genre: student.genre,
-                                school: student.school,
-                                lunaId: newLunaIds[newIdx],
-                            },
-                        });
-                    }
-                }),
-            );
-
-            // Contar resultados
-            for (const student of batch) {
-                if (existingMap.has(student.cpf)) {
+            try {
+                if (existing) {
+                    // UPDATE: preservar LunaID existente, apenas atualizar dados
+                    await prisma.student.update({
+                        where: { id: existing.id },
+                        data: {
+                            name: student.name,
+                            email: student.email,
+                            studentPhone: student.studentPhone,
+                            parentPhone: student.parentPhone || null,
+                            birthDate: student.birthDate,
+                            genre: student.genre,
+                            school: student.school,
+                        },
+                    });
                     updated++;
                 } else {
+                    // CREATE: atribuir próximo LunaID disponível
+                    await prisma.student.create({
+                        data: {
+                            name: student.name,
+                            email: student.email,
+                            cpf: student.cpf,
+                            studentPhone: student.studentPhone,
+                            parentPhone: student.parentPhone || null,
+                            birthDate: student.birthDate,
+                            genre: student.genre,
+                            school: student.school,
+                            lunaId: nextLunaId(),
+                        },
+                    });
                     created++;
                 }
-            }
-        } catch (error) {
-            // Se o lote inteiro falhar, registrar os erros individuais
-            for (const student of batch) {
-                const rowIdx = students.indexOf(student) + 1;
-                errors.push({
-                    row: rowIdx,
-                    cpf: student.cpf,
-                    error: error instanceof Error ? error.message : "Erro desconhecido",
-                });
+            } catch (error) {
+                // Traduzir erros P2002 para mensagens legíveis
+                let message = error instanceof Error ? error.message : "Erro desconhecido";
+                if (
+                    error !== null &&
+                    typeof error === "object" &&
+                    "code" in error &&
+                    (error as { code: string }).code === "P2002"
+                ) {
+                    message = "CPF ou e-mail já cadastrado por outro aluno.";
+                }
+                errors.push({ row: rowIdx, cpf: student.cpf, error: message });
             }
         }
     }

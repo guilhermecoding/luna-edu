@@ -224,89 +224,82 @@ export default function ImportStudentsTab() {
 
             {/* Result State */}
             {state === "done" && result && (
-                <div className="flex flex-col gap-4">
+                <div className="flex flex-col gap-6 animate-in fade-in slide-in-from-bottom-2 duration-300">
                     {result.success ? (
-                        <>
-                            {/* Resumo de sucesso */}
-                            <div className="p-6 rounded-2xl border border-emerald-200 bg-emerald-50/50">
-                                <div className="flex items-center gap-3 mb-4">
+                        <div className="space-y-4">
+                            {/* Dashboard de Estatísticas */}
+                            <div className="bg-background border border-surface-border rounded-3xl overflow-hidden">
+                                <div className="p-6 border-b border-surface-border bg-emerald-50/30 flex items-center gap-3">
                                     <div className="p-2 bg-emerald-100 text-emerald-600 rounded-full">
                                         <IconCheck className="size-5" />
                                     </div>
-                                    <h4 className="text-lg font-bold text-emerald-900">Importação Concluída</h4>
+                                    <h4 className="text-lg font-bold text-foreground">Importação Finalizada</h4>
                                 </div>
-                                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                                    <div className="p-4 bg-white/80 rounded-xl border border-emerald-100">
-                                        <p className="text-2xl font-bold text-emerald-700">{result.created}</p>
-                                        <p className="text-sm text-emerald-600">Novos alunos</p>
+                                <div className="grid grid-cols-3 divide-x divide-surface-border">
+                                    <div className="p-6 text-center">
+                                        <p className="text-3xl font-bold text-emerald-600">{result.created}</p>
+                                        <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider mt-1">Criados</p>
                                     </div>
-                                    <div className="p-4 bg-white/80 rounded-xl border border-emerald-100">
-                                        <p className="text-2xl font-bold text-blue-700">{result.updated}</p>
-                                        <p className="text-sm text-blue-600">Atualizados</p>
+                                    <div className="p-6 text-center">
+                                        <p className="text-3xl font-bold text-blue-600">{result.updated}</p>
+                                        <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider mt-1">Atualizados</p>
                                     </div>
-                                    <div className="p-4 bg-white/80 rounded-xl border border-emerald-100">
-                                        <p className="text-2xl font-bold text-foreground">{result.total}</p>
-                                        <p className="text-sm text-muted-foreground">Total processados</p>
+                                    <div className="p-6 text-center">
+                                        <p className="text-3xl font-bold text-foreground">{result.total}</p>
+                                        <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider mt-1">Total</p>
                                     </div>
                                 </div>
                             </div>
 
-                            {/* Linhas puladas */}
-                            {result.skipped.length > 0 && (
-                                <div className="p-5 rounded-2xl border border-amber-200 bg-amber-50/50">
-                                    <div className="flex items-center gap-2 mb-3">
-                                        <IconAlertTriangle className="size-5 text-amber-600" />
-                                        <h4 className="font-semibold text-amber-900">
-                                            {result.skipped.length} linha(s) ignorada(s)
-                                        </h4>
+                            {/* Logs de Problemas (se houver) */}
+                            {(result.skipped.length > 0 || result.dbErrors.length > 0) && (
+                                <div className="border border-surface-border rounded-2xl overflow-hidden">
+                                    <div className="px-4 py-3 bg-muted/50 border-b border-surface-border flex items-center justify-between">
+                                        <div className="flex items-center gap-2">
+                                            <IconAlertTriangle className="size-4 text-amber-500" />
+                                            <span className="text-sm font-semibold">Log de Ocorrências</span>
+                                        </div>
+                                        <span className="text-xs text-muted-foreground">
+                                            {result.skipped.length + result.dbErrors.length} itens requerem atenção
+                                        </span>
                                     </div>
-                                    <div className="max-h-40 overflow-y-auto space-y-2">
-                                        {result.skipped.map((item) => (
-                                            <div key={item.row} className="text-sm text-amber-800 bg-white/60 p-2 rounded-lg">
-                                                <span className="font-mono font-semibold">Linha {item.row}:</span>{" "}
-                                                {item.errors.join(", ")}
+                                    <div className="max-h-60 overflow-y-auto divide-y divide-surface-border bg-background">
+                                        {result.skipped.map((item, idx) => (
+                                            <div key={`skip-${idx}`} className="p-3 flex gap-3 items-start hover:bg-muted/30 transition-colors">
+                                                <span className="px-2 py-0.5 bg-amber-100 text-amber-700 text-[10px] font-bold rounded uppercase mt-0.5">Aviso</span>
+                                                <div className="text-sm">
+                                                    <span className="font-semibold text-foreground">Linha {item.row}:</span>{" "}
+                                                    <span className="text-muted-foreground">{item.errors.join(", ")}</span>
+                                                </div>
+                                            </div>
+                                        ))}
+                                        {result.dbErrors.map((item, idx) => (
+                                            <div key={`err-${idx}`} className="p-3 flex gap-3 items-start hover:bg-muted/30 transition-colors">
+                                                <span className="px-2 py-0.5 bg-red-100 text-red-700 text-[10px] font-bold rounded uppercase mt-0.5">Erro</span>
+                                                <div className="text-sm">
+                                                    <span className="font-semibold text-foreground">Linha {item.row} (CPF: {item.cpf}):</span>{" "}
+                                                    <span className="text-muted-foreground">{item.error}</span>
+                                                </div>
                                             </div>
                                         ))}
                                     </div>
                                 </div>
                             )}
-
-                            {/* Erros de banco */}
-                            {result.dbErrors.length > 0 && (
-                                <div className="p-5 rounded-2xl border border-red-200 bg-red-50/50">
-                                    <div className="flex items-center gap-2 mb-3">
-                                        <IconAlertTriangle className="size-5 text-red-600" />
-                                        <h4 className="font-semibold text-red-900">
-                                            {result.dbErrors.length} erro(s) no banco de dados
-                                        </h4>
-                                    </div>
-                                    <div className="max-h-40 overflow-y-auto space-y-2">
-                                        {result.dbErrors.map((item) => (
-                                            <div key={item.row} className="text-sm text-red-800 bg-white/60 p-2 rounded-lg">
-                                                <span className="font-mono font-semibold">Linha {item.row} (CPF: {item.cpf}):</span>{" "}
-                                                {item.error}
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
-                            )}
-                        </>
+                        </div>
                     ) : (
-                        <div className="p-6 rounded-2xl border border-red-200 bg-red-50/50">
-                            <div className="flex items-center gap-3">
-                                <div className="p-2 bg-red-100 text-red-600 rounded-full">
-                                    <IconAlertTriangle className="size-5" />
-                                </div>
-                                <div>
-                                    <h4 className="font-bold text-red-900">Falha na Importação</h4>
-                                    <p className="text-sm text-red-700 mt-1">{result.error}</p>
-                                </div>
+                        <div className="p-6 rounded-3xl border border-red-200 bg-red-50/50 flex items-center gap-4">
+                            <div className="p-3 bg-red-100 text-red-600 rounded-2xl">
+                                <IconAlertTriangle className="size-6" />
+                            </div>
+                            <div>
+                                <h4 className="font-bold text-red-900">Falha na Importação</h4>
+                                <p className="text-sm text-red-700 mt-1">{result.error}</p>
                             </div>
                         </div>
                     )}
 
-                    <div className="flex justify-end">
-                        <Button type="button" variant="outline" onClick={handleReset}>
+                    <div className="flex justify-end gap-3">
+                        <Button type="button" variant="outline" className="rounded-xl h-11" onClick={handleReset}>
                             <IconRefresh className="size-4 mr-2" />
                             Nova Importação
                         </Button>

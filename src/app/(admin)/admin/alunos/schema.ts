@@ -35,3 +35,20 @@ export type CreateStudentData = z.infer<typeof createStudentSchema>;
 
 export type EditStudentInput = z.input<typeof editStudentSchema>;
 export type EditStudentData = z.infer<typeof editStudentSchema>;
+
+/**
+ * Schema para validação de cada linha do CSV de importação em massa.
+ * Aceita strings brutas que serão normalizadas no servidor.
+ */
+export const importStudentRowSchema = z.object({
+    nome: z.string().min(3, "Nome deve ter no mínimo 3 caracteres"),
+    email: z.string().email("E-mail inválido"),
+    cpf: z.string().min(11, "CPF inválido"),
+    data_nascimento: z.string().min(1, "Data de nascimento é obrigatória"),
+    genero: z.string().optional().default(""),
+    celular_aluno: z.string().min(10, "Celular do aluno inválido"),
+    celular_responsavel: z.string().optional().default(""),
+    escola_origem: z.string().min(2, "Escola de origem é obrigatória"),
+});
+
+export type ImportStudentRow = z.infer<typeof importStudentRowSchema>;

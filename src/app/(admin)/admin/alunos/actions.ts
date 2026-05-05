@@ -1,11 +1,11 @@
 "use server";
 
-import { revalidatePath, revalidateTag } from "next/cache";
-import { createStudentSchema, editStudentSchema, type CreateStudentData, type EditStudentData } from "./schema";
+import { updateTag } from "next/cache";
+import { createStudentSchema, editStudentSchema, importStudentRowSchema, type CreateStudentData, type EditStudentData } from "./schema";
 import { createStudent, updateStudent } from "@/services/students/students.service";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
-import { Prisma } from "@/generated/prisma/client";
+import { Genre, Prisma } from "@/generated/prisma/client";
 import { isRedirectError } from "next/dist/client/components/redirect-error";
 import { redirect } from "next/navigation";
 import prisma from "@/lib/prisma";
@@ -32,9 +32,9 @@ export async function createStudentAction(data: CreateStudentData) {
             school: parsedData.school,
         });
 
-        revalidateTag("students-list");
-        revalidateTag("students-count");
-        
+        updateTag("students-list");
+        updateTag("students-count");
+
     } catch (error) {
         if (error instanceof Prisma.PrismaClientKnownRequestError) {
             if (error.code === "P2002") {
@@ -53,7 +53,6 @@ export async function createStudentAction(data: CreateStudentData) {
         return { success: false, error: "Ocorreu um erro inesperado ao criar o aluno." };
     }
 
-    revalidatePath("/admin/alunos");
     redirect("/admin/alunos");
 }
 
@@ -79,8 +78,8 @@ export async function editStudentAction(id: string, data: EditStudentData) {
             school: parsedData.school,
         });
 
-        revalidateTag("students-list");
-        revalidateTag(`student-${id}`);
+        updateTag("students-list");
+        updateTag(`student-${id}`);
 
     } catch (error) {
         if (error instanceof Prisma.PrismaClientKnownRequestError) {
@@ -103,7 +102,6 @@ export async function editStudentAction(id: string, data: EditStudentData) {
         return { success: false, error: "Ocorreu um erro inesperado ao atualizar o aluno." };
     }
 
-    revalidatePath("/admin/alunos");
     redirect("/admin/alunos");
 }
 
@@ -138,15 +136,143 @@ export async function deleteStudentAction(studentId: string, adminPasswordConfir
         const { deleteStudent } = await import("@/services/students/students.service");
         await deleteStudent(studentId);
 
-        revalidateTag("students-list");
-        revalidateTag("students-count");
-        revalidateTag(`student-${studentId}`);
-        revalidatePath("/admin/alunos");
+        updateTag("students-list");
+        updateTag("students-count");
+        updateTag(`student-${studentId}`);
 
         return { success: true };
     } catch (error) {
         if (isRedirectError(error)) throw error;
         console.error("Erro fatal ao excluir aluno:", error);
         return { success: false, error: "Erro fatal ao excluir aluno." };
+    }
+}
+
+export type ImportResult = {
+    success: true;
+    created: number;
+    updated: number;
+    total: number;
+    skipped: { row: number; errors: string[] }[];
+    dbErrors: { row: number; cpf: string; error: string }[];
+} | {
+    success: false;
+    error: string;
+};
+
+export async function importStudentsAction(formData: FormData): Promise<ImportResult> {
+    try {
+        const session = await auth.api.getSession({ headers: await headers() });
+        if (!session?.user?.id) {
+            return { success: false, error: "Não autorizado" };
+        }
+
+        const file = formData.get("file") as File | null;
+        if (!file) {
+            return { success: false, error: "Nenhum arquivo enviado." };
+        }
+
+        if (!file.name.endsWith(".csv")) {
+            return { success: false, error: "Formato inválido. Envie um arquivo .csv." };
+        }
+
+        const content = await file.text();
+        const { parseCsv, parseDateString, parseGenre } = await import("@/lib/csv-helper");
+        const rows = parseCsv(content);
+
+        if (rows.length === 0) {
+            return { success: false, error: "O arquivo CSV está vazio ou não possui dados válidos." };
+        }
+
+        if (rows.length > 1000) {
+            return { success: false, error: "O arquivo excede o limite de 1000 alunos por importação." };
+        }
+
+        // Validar e transformar cada linha
+        type BulkStudentInput = {
+            name: string;
+            email: string;
+            cpf: string;
+            birthDate: Date;
+            genre: Genre;
+            studentPhone: string;
+            parentPhone?: string | null;
+            school: string;
+        };
+        const validStudents: BulkStudentInput[] = [];
+        const skipped: { row: number; errors: string[] }[] = [];
+
+        for (let i = 0; i < rows.length; i++) {
+            const row = rows[i];
+            const rowNumber = i + 2; // +2 pois linha 1 é o cabeçalho e o array é 0-indexed
+
+            // Limpar CPF e telefones (remover formatação)
+            const cleanCpf = (row.cpf || "").replace(/\D/g, "");
+            const cleanPhone = (row.celular_aluno || "").replace(/\D/g, "");
+            const cleanParentPhone = (row.celular_responsavel || "").replace(/\D/g, "");
+
+            const parsed = importStudentRowSchema.safeParse({
+                nome: row.nome || row.name || "",
+                email: row.email || row.e_mail || "",
+                cpf: cleanCpf,
+                data_nascimento: row.data_nascimento || row.data_de_nascimento || row.nascimento || "",
+                genero: row.genero || row.sexo || "",
+                celular_aluno: cleanPhone,
+                celular_responsavel: cleanParentPhone,
+                escola_origem: row.escola_origem || row.escola || "",
+            });
+
+            if (!parsed.success) {
+                skipped.push({
+                    row: rowNumber,
+                    errors: parsed.error.issues.map((issue) => `${issue.path.join(".")}: ${issue.message}`),
+                });
+                continue;
+            }
+
+            const birthDate = parseDateString(parsed.data.data_nascimento);
+            if (!birthDate) {
+                skipped.push({
+                    row: rowNumber,
+                    errors: [`Data de nascimento inválida: "${parsed.data.data_nascimento}". Use DD/MM/YYYY ou YYYY-MM-DD.`],
+                });
+                continue;
+            }
+
+            validStudents.push({
+                name: parsed.data.nome,
+                email: parsed.data.email,
+                cpf: parsed.data.cpf,
+                birthDate,
+                genre: parseGenre(parsed.data.genero),
+                studentPhone: parsed.data.celular_aluno,
+                parentPhone: parsed.data.celular_responsavel || null,
+                school: parsed.data.escola_origem,
+            });
+        }
+
+        if (validStudents.length === 0) {
+            return { success: false, error: "Nenhuma linha válida encontrada no CSV." };
+        }
+
+        // Executar o bulk upsert
+        const { bulkUpsertStudents } = await import("@/services/students/students.service");
+        const result = await bulkUpsertStudents(validStudents);
+
+        updateTag("students-list");
+        updateTag("students-count");
+
+        return {
+            success: true,
+            created: result.created,
+            updated: result.updated,
+            total: result.total,
+            skipped,
+            dbErrors: result.errors,
+        };
+    } catch (error) {
+        if (isRedirectError(error)) throw error;
+        console.error("Erro na importação em massa:", error);
+        return { success: false, error: "Erro inesperado durante a importação." };
     }
 }

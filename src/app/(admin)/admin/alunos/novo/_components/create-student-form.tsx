@@ -10,10 +10,11 @@ import { toast } from "sonner";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createStudentSchema, type CreateStudentData, type CreateStudentInput } from "../../schema";
-import { IconLoader2, IconUpload } from "@tabler/icons-react";
+import { IconLoader2 } from "@tabler/icons-react";
 import type { UserGenre } from "@/generated/prisma/client";
 import { useRouter } from "next/navigation";
 import { maskCPF, maskPhone, unmask } from "@/lib/masks";
+import ImportStudentsTab from "./import-students-tab";
 
 export default function CreateStudentForm() {
     const router = useRouter();
@@ -245,17 +246,7 @@ export default function CreateStudentForm() {
                     </div>
                 </form>
             ) : (
-                <div className="p-12 flex flex-col items-center justify-center gap-4 border-2 border-dashed border-surface-border rounded-2xl bg-background/50 text-center">
-                    <div className="p-4 bg-primary/10 text-primary rounded-full">
-                        <IconUpload className="size-8" />
-                    </div>
-                    <div>
-                        <h3 className="text-xl font-bold text-foreground">Importação via Planilha</h3>
-                        <p className="text-sm text-muted-foreground mt-2 max-w-md mx-auto">
-                            Em breve você poderá adicionar vários alunos de uma só vez realizando o upload de um arquivo CSV ou Excel.
-                        </p>
-                    </div>
-                </div>
+                <ImportStudentsTab />
             )}
         </div>
     );

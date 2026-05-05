@@ -14,10 +14,25 @@ import thumb07 from "@/assets/images/thumbs-login-page/Imagem_07.webp";
 import thumb08 from "@/assets/images/thumbs-login-page/Imagem_08.webp";
 import thumb09 from "@/assets/images/thumbs-login-page/Imagem_09.webp";
 import { connection } from "next/server";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 
 const loginThumbs = [thumb01, thumb02, thumb03, thumb04, thumb05, thumb06, thumb07, thumb08, thumb09];
 
 export default async function LoginPage() {
+    const session = await auth.api.getSession({
+        headers: await headers(),
+    });
+
+    if (session?.user) {
+        if (session.user.isTeacher && !session.user.isAdmin && session.user.systemRole !== "FULL_ACCESS") {
+            redirect("/prof");
+        }
+
+        redirect("/admin");
+    }
+
     const logoCorporation = process.env.NEXT_PUBLIC_LOGO_CORPORATION;
     await connection();
     const randomThumb = loginThumbs[randomInt(loginThumbs.length)];

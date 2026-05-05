@@ -1,13 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import z from "zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
 import { toast } from "sonner";
 import { IconLogin2, IconUserShield, IconSchool, IconLoader2 } from "@tabler/icons-react";
@@ -18,6 +18,11 @@ const loginSchema = z.object({
     password: z.string().min(6, "Senha deve ter ao menos 6 caracteres"),
 });
 type LoginInput = z.infer<typeof loginSchema>;
+
+const emptyLoginValues: LoginInput = {
+    email: "",
+    password: "",
+};
 
 type SessionUser = {
     isAdmin?: boolean;
@@ -38,21 +43,25 @@ function sessionMatchesTab(activeTab: "admin" | "teacher", user: SessionUser): b
 
 export default function LoginForm() {
     const router = useRouter();
+    const pathname = usePathname();
     const [loading, setLoading] = useState(false);
     const [activeTab, setActiveTab] = useState<"admin" | "teacher">("teacher");
 
     const {
         control,
         handleSubmit,
+        reset,
         formState: { isValid, errors },
     } = useForm<LoginInput>({
         resolver: zodResolver(loginSchema),
         mode: "onChange",
-        defaultValues: {
-            email: "",
-            password: "",
-        },
+        defaultValues: emptyLoginValues,
     });
+
+    useEffect(() => {
+        reset(emptyLoginValues);
+        setActiveTab("teacher");
+    }, [pathname, reset]);
 
     // ---------------------
     // SUBMIT DO LOGIN
@@ -66,8 +75,8 @@ export default function LoginForm() {
             });
 
             if (error) {
-                toast.error("Erro ao fazer login", {
-                    description: error.message || "Verifique suas credenciais e tente novamente.",
+                toast.error("Usuário não encontrado", {
+                    description: "Ops! Não sabemos quem é você... Talvez suas credenciais estejam inválidas. Tente novamente.",
                 });
                 return;
             }
@@ -108,7 +117,7 @@ export default function LoginForm() {
             router.refresh();
         } catch {
             toast.error("Erro inesperado", {
-                description: "Ocorreu um problema ao conectar com o servidor.",
+                description: "Ocorreu um problema do nosso lado. Tente novamente em instantes.",
             });
         } finally {
             setLoading(false);

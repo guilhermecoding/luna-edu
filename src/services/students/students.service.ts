@@ -163,7 +163,7 @@ const BATCH_SIZE = 100;
  */
 export async function bulkUpsertStudents(students: BulkStudentInput[]) {
     let created = 0;
-    let updated = 0;
+    const updated = 0;
     const errors: { row: number; cpf: string; error: string }[] = [];
 
     // Gerar um pool de LunaIDs para todos os alunos novos de uma vez
@@ -213,37 +213,24 @@ export async function bulkUpsertStudents(students: BulkStudentInput[]) {
 
             try {
                 if (existing) {
-                    // UPDATE: preservar LunaID existente, apenas atualizar dados
-                    await prisma.student.update({
-                        where: { id: existing.id },
-                        data: {
-                            name: student.name,
-                            email: student.email,
-                            studentPhone: student.studentPhone,
-                            parentPhone: student.parentPhone || null,
-                            birthDate: student.birthDate,
-                            genre: student.genre,
-                            school: student.school,
-                        },
-                    });
-                    updated++;
-                } else {
-                    // CREATE: atribuir próximo LunaID disponível
-                    await prisma.student.create({
-                        data: {
-                            name: student.name,
-                            email: student.email,
-                            cpf: student.cpf,
-                            studentPhone: student.studentPhone,
-                            parentPhone: student.parentPhone || null,
-                            birthDate: student.birthDate,
-                            genre: student.genre,
-                            school: student.school,
-                            lunaId: nextLunaId(),
-                        },
-                    });
-                    created++;
+                    throw new Error(`Aluno ${student.name} (CPF: ${student.cpf}) já está cadastrado no sistema.`);
                 }
+                
+                // CREATE: atribuir próximo LunaID disponível
+                await prisma.student.create({
+                    data: {
+                        name: student.name,
+                        email: student.email,
+                        cpf: student.cpf,
+                        studentPhone: student.studentPhone,
+                        parentPhone: student.parentPhone || null,
+                        birthDate: student.birthDate,
+                        genre: student.genre,
+                        school: student.school,
+                        lunaId: nextLunaId(),
+                    },
+                });
+                created++;
             } catch (error) {
                 // Traduzir erros P2002 para mensagens legíveis
                 let message = error instanceof Error ? error.message : "Erro desconhecido";
@@ -253,7 +240,7 @@ export async function bulkUpsertStudents(students: BulkStudentInput[]) {
                     "code" in error &&
                     (error as { code: string }).code === "P2002"
                 ) {
-                    message = "CPF ou e-mail já cadastrado por outro aluno.";
+                    message = `Aluno ${student.name} (CPF: ${student.cpf}) possui dados (como CPF ou e-mail) já vinculados a outro registro.`;
                 }
                 errors.push({ row: rowIdx, cpf: student.cpf, error: message });
             }

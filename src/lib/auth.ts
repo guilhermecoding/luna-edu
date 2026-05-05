@@ -5,10 +5,18 @@ import prisma from "@/lib/prisma";
 import { GENRE_VALUES } from "@/lib/genre";
 import { SYSTEM_ROLE } from "@/@types/system-role.type";
 
+const trustedOrigins = [
+    "http://localhost:3000",
+    ...(process.env.BETTER_AUTH_TRUSTED_ORIGINS
+        ? process.env.BETTER_AUTH_TRUSTED_ORIGINS.split(",").map((origin) => origin.trim()).filter(Boolean)
+        : []),
+];
+
 export const auth = betterAuth({
     database: prismaAdapter(prisma, {
         provider: "postgresql",
     }),
+    trustedOrigins,
     emailAndPassword: {
         enabled: true,
     },

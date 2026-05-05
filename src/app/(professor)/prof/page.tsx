@@ -9,7 +9,7 @@ export default function TeacherPage() {
 
     async function handleLogout() {
         await authClient.signOut();
-        router.push("/entrar");
+        router.replace("/entrar");
         router.refresh();
     }
 

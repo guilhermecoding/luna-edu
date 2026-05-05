@@ -14,8 +14,8 @@ import { IconLogin2, IconUserShield, IconSchool, IconLoader2 } from "@tabler/ico
 import { cn } from "@/lib/utils";
 
 const loginSchema = z.object({
-    email: z.string().email("Email inválido"),
-    password: z.string().min(6, "Senha deve ter ao menos 6 caracteres"),
+    email: z.string().email("Este e-mail não é válido"),
+    password: z.string().min(8, "A senha deve ter ao menos 8 caracteres"),
 });
 type LoginInput = z.infer<typeof loginSchema>;
 

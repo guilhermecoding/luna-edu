@@ -80,7 +80,7 @@ export function NavUser() {
         });
         return;
       }
-      router.push("/entrar");
+      router.replace("/entrar");
       router.refresh();
     } catch {
       toast.error("Erro ao sair", {

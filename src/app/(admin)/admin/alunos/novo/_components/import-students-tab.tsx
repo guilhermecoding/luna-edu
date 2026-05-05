@@ -15,10 +15,12 @@ import {
     IconRefresh,
     IconDownload,
 } from "@tabler/icons-react";
+import { useRouter } from "next/navigation";
 
 type ImportState = "idle" | "uploading" | "done";
 
 export default function ImportStudentsTab() {
+    const router = useRouter();
     const [file, setFile] = useState<File | null>(null);
     const [isDragging, setIsDragging] = useState(false);
     const [state, setState] = useState<ImportState>("idle");
@@ -235,7 +237,7 @@ export default function ImportStudentsTab() {
                                     </div>
                                     <h4 className="text-lg font-bold text-foreground">Importação Finalizada</h4>
                                 </div>
-                                <div className="grid grid-cols-3 divide-x divide-surface-border">
+                                <div className="grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-x divide-surface-border">
                                     <div className="p-6 text-center">
                                         <p className="text-3xl font-bold text-emerald-600">{result.created}</p>
                                         <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider mt-1">Criados</p>
@@ -257,16 +259,16 @@ export default function ImportStudentsTab() {
                                     <div className="px-4 py-3 bg-muted/50 border-b border-surface-border flex items-center justify-between">
                                         <div className="flex items-center gap-2">
                                             <IconAlertTriangle className="size-4 text-amber-500" />
-                                            <span className="text-sm font-semibold">Log de Ocorrências</span>
+                                            <span className="text-sm font-semibold">Informativo de Processamento</span>
                                         </div>
                                         <span className="text-xs text-muted-foreground">
-                                            {result.skipped.length + result.dbErrors.length} itens requerem atenção
+                                            {result.skipped.length + result.dbErrors.length} itens requerem sua atenção
                                         </span>
                                     </div>
                                     <div className="max-h-60 overflow-y-auto divide-y divide-surface-border bg-background">
                                         {result.skipped.map((item, idx) => (
                                             <div key={`skip-${idx}`} className="p-3 flex gap-3 items-start hover:bg-muted/30 transition-colors">
-                                                <span className="px-2 py-0.5 bg-amber-100 text-amber-700 text-[10px] font-bold rounded uppercase mt-0.5">Aviso</span>
+                                                <span className="px-2 py-0.5 bg-amber-100 text-amber-700 text-[10px] font-bold rounded uppercase mt-0.5">Atenção</span>
                                                 <div className="text-sm">
                                                     <span className="font-semibold text-foreground">Linha {item.row}:</span>{" "}
                                                     <span className="text-muted-foreground">{item.errors.join(", ")}</span>
@@ -275,9 +277,9 @@ export default function ImportStudentsTab() {
                                         ))}
                                         {result.dbErrors.map((item, idx) => (
                                             <div key={`err-${idx}`} className="p-3 flex gap-3 items-start hover:bg-muted/30 transition-colors">
-                                                <span className="px-2 py-0.5 bg-red-100 text-red-700 text-[10px] font-bold rounded uppercase mt-0.5">Erro</span>
+                                                <span className="px-2 py-0.5 bg-red-100 text-red-700 text-[10px] font-bold rounded uppercase mt-0.5">Falha</span>
                                                 <div className="text-sm">
-                                                    <span className="font-semibold text-foreground">Linha {item.row} (CPF: {item.cpf}):</span>{" "}
+                                                    <span className="font-semibold text-foreground">Linha {item.row}:</span>{" "}
                                                     <span className="text-muted-foreground">{item.error}</span>
                                                 </div>
                                             </div>
@@ -292,16 +294,28 @@ export default function ImportStudentsTab() {
                                 <IconAlertTriangle className="size-6" />
                             </div>
                             <div>
-                                <h4 className="font-bold text-red-900">Falha na Importação</h4>
+                                <h4 className="font-bold text-red-900">Não foi possível importar</h4>
                                 <p className="text-sm text-red-700 mt-1">{result.error}</p>
                             </div>
                         </div>
                     )}
 
-                    <div className="flex justify-end gap-3">
-                        <Button type="button" variant="outline" className="rounded-xl h-11" onClick={handleReset}>
+                    <div className="flex flex-col-reverse sm:flex-row justify-end gap-3 pt-4 border-t border-surface-border mt-2">
+                        <Button
+                            type="button"
+                            variant="outline"
+                            className="h-11"
+                            onClick={handleReset}
+                        >
                             <IconRefresh className="size-4 mr-2" />
                             Nova Importação
+                        </Button>
+                        <Button
+                            type="button"
+                            className="h-11 px-8"
+                            onClick={() => router.push("/admin/alunos")}
+                        >
+                            Concluído
                         </Button>
                     </div>
                 </div>

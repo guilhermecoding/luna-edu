@@ -161,3 +161,93 @@ export async function editMemberAction(memberId: string, data: EditMemberInput) 
         };
     }
 }
+
+export async function deleteMemberAction(memberId: string, adminPasswordConfirm: string) {
+    try {
+        const session = await auth.api.getSession({ headers: await headers() });
+        const actorId = session?.user?.id;
+
+        if (!actorId) {
+            return { success: false, error: "Não autorizado" };
+        }
+
+        if (actorId === memberId) {
+            return { success: false, error: "Você não pode excluir sua própria conta." };
+        }
+
+        // Verify password
+        const adminAccount = await prisma.account.findFirst({
+            where: { userId: actorId, providerId: "credential" },
+        });
+
+        if (!adminAccount?.password) {
+            return { success: false, error: "Não foi possível verificar a senha do administrador." };
+        }
+
+        const { verifyPassword } = await import("better-auth/crypto");
+        const isPasswordValid = await verifyPassword({
+            hash: adminAccount.password,
+            password: adminPasswordConfirm,
+        });
+
+        if (!isPasswordValid) {
+            return { success: false, error: "Senha incorreta." };
+        }
+
+        // Identificar grupos afetados antes da deleção para limpar o cache
+        const affectedGroups: { periodId: string; slug: string }[] = [];
+        const schedules = await prisma.schedule.findMany({
+            where: { teacherId: memberId },
+            select: { 
+                course: { 
+                    select: { 
+                        periodId: true,
+                        classGroup: { select: { slug: true } },
+                    }, 
+                }, 
+            },
+        });
+        
+        const seen = new Set<string>();
+        schedules.forEach((s) => {
+            if (s.course.classGroup) {
+                const key = `${s.course.periodId}:${s.course.classGroup.slug}`;
+                if (!seen.has(key)) {
+                    seen.add(key);
+                    affectedGroups.push({
+                        periodId: s.course.periodId,
+                        slug: s.course.classGroup.slug,
+                    });
+                }
+            }
+        });
+
+        const { deleteUser } = await import("@/services/users/users.service");
+        await deleteUser(memberId);
+
+        // Invalida cache
+        const affectedPeriodIds = new Set<string>();
+        for (const group of affectedGroups) {
+            updateTag(`period:${group.periodId}:class-group:${group.slug}`);
+            affectedPeriodIds.add(group.periodId);
+        }
+
+        for (const periodId of affectedPeriodIds) {
+            updateTag(`period:${periodId}:class-groups`);
+            updateTag(`period:${periodId}:courses`);
+        }
+
+        updateTag("admins-list");
+        updateTag("users-list");
+        updateTag("users-stats");
+        updateTag(`user-${memberId}`);
+        updateTag(`admin-${memberId}`);
+        revalidatePath("/admin", "layout");
+        revalidatePath("/admin/equipe");
+
+        return { success: true };
+    } catch (error) {
+        if (isRedirectError(error)) throw error;
+        return { success: false, error: "Erro fatal ao excluir membro." };
+    }
+}

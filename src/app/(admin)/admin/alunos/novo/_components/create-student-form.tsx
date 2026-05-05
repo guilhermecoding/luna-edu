@@ -246,7 +246,7 @@ export default function CreateStudentForm() {
                     </div>
                 </form>
             ) : (
-                <ImportStudentsTab />
+                <ImportStudentsTab key={mode} />
             )}
         </div>
     );

@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { importStudentsAction, type ImportResult } from "../../actions";
 import { toast } from "sonner";
@@ -26,6 +26,16 @@ export default function ImportStudentsTab() {
     const [state, setState] = useState<ImportState>("idle");
     const [result, setResult] = useState<ImportResult | null>(null);
     const inputRef = useRef<HTMLInputElement>(null);
+
+    // Resetar estado ao desmontar ou trocar de aba
+    useEffect(() => {
+        return () => {
+            setFile(null);
+            setResult(null);
+            setState("idle");
+            toast.dismiss();
+        };
+    }, []);
 
     const handleFile = (f: File) => {
         if (!f.name.endsWith(".csv")) {
@@ -121,7 +131,7 @@ export default function ImportStudentsTab() {
                     variant="outline"
                     size="sm"
                     onClick={downloadTemplate}
-                    className="shrink-0"
+                    className="shrink-0 w-full sm:w-auto"
                 >
                     <IconDownload className="size-4 mr-1.5" />
                     Baixar Modelo CSV
@@ -200,7 +210,7 @@ export default function ImportStudentsTab() {
 
                     {file && (
                         <div className="flex justify-end">
-                            <Button type="button" onClick={handleImport}>
+                            <Button type="button" onClick={handleImport} className="h-11">
                                 <IconUserPlus className="size-4 mr-2" />
                                 Importar Alunos
                             </Button>

@@ -145,7 +145,7 @@ export default function EditMemberForm({
                 router.push("/admin/equipe");
                 router.refresh();
             }
-        } catch (error) {
+        } catch {
             setDeleteError("Erro ao apagar usuário");
         } finally {
             setIsDeleting(false);
@@ -266,7 +266,7 @@ export default function EditMemberForm({
                         />
                         {errors.genre && <p className="text-sm text-red-600">{errors.genre.message}</p>}
                     </div>
-                    <div className="flex flex-col gap-2">
+                    {!isEditingSelf && <div className="flex flex-col gap-2">
                         <Label htmlFor="systemRole">Nível de Acesso *</Label>
                         <Controller
                             control={control}
@@ -284,8 +284,8 @@ export default function EditMemberForm({
                             )}
                         />
                         {errors.systemRole && <p className="text-sm text-red-600">{errors.systemRole.message}</p>}
-                    </div>
-                    <div className="flex flex-col gap-2">
+                    </div>}
+                    {!isEditingSelf && <div className="flex flex-col gap-2">
                         <Label htmlFor="isActive">Acesso ao Sistema *</Label>
                         <Controller
                             control={control}
@@ -312,7 +312,7 @@ export default function EditMemberForm({
                             )}
                         />
                         {errors.isActive && <p className="text-sm text-red-600">{errors.isActive.message}</p>}
-                    </div>
+                    </div>}
                 </div>
 
                 <div className="flex flex-col gap-6 mt-4">

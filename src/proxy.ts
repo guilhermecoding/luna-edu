@@ -26,15 +26,15 @@ export async function proxy(request: NextRequest) {
     const path = request.nextUrl.pathname;
 
     const isAdminRoute = path.startsWith("/admin");
-    const isProfRoute = path.startsWith("/prof");
+    const isTeacherRoute = path.startsWith("/prof");
 
     // Proteção para rotas de admin
     if (isAdminRoute && !user.isAdmin && user.systemRole !== "FULL_ACCESS") {
         return NextResponse.redirect(new URL("/entrar", request.url));
     }
 
-    // Proteção para rotas de professor (permitindo que admins também acessem)
-    if (isProfRoute && !user.isTeacher && !user.isAdmin && user.systemRole !== "FULL_ACCESS") {
+    // Área /prof: exclusiva de quem tem vínculo de professor (isTeacher). Admin ou FULL_ACCESS sem docência não entra.
+    if (isTeacherRoute && !user.isTeacher) {
         return NextResponse.redirect(new URL("/entrar", request.url));
     }
 

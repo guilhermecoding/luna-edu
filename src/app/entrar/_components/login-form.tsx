@@ -19,6 +19,23 @@ const loginSchema = z.object({
 });
 type LoginInput = z.infer<typeof loginSchema>;
 
+type SessionUser = {
+    isAdmin?: boolean;
+    isTeacher?: boolean;
+    systemRole?: string;
+};
+
+/**
+ * Aba Professor: somente quem tem vínculo `isTeacher` no cadastro (inclui admin que também é professor).
+ * Aba Admin: perfil administrativo (`isAdmin`) ou papel FULL_ACCESS no sistema (alinhado ao proxy de /admin).
+ */
+function sessionMatchesTab(activeTab: "admin" | "teacher", user: SessionUser): boolean {
+    if (activeTab === "teacher") {
+        return user.isTeacher === true;
+    }
+    return user.isAdmin === true || user.systemRole === "FULL_ACCESS";
+}
+
 export default function LoginForm() {
     const router = useRouter();
     const [loading, setLoading] = useState(false);
@@ -55,10 +72,39 @@ export default function LoginForm() {
                 return;
             }
 
-            toast.success("Login realizado com sucesso!");
+            const sessionRes = await fetch("/api/auth/get-session", {
+                credentials: "include",
+                cache: "no-store",
+            });
+            const sessionBody = sessionRes.ok ? await sessionRes.json() : null;
+            const user =
+                sessionBody &&
+                typeof sessionBody === "object" &&
+                "user" in sessionBody &&
+                sessionBody.user &&
+                typeof sessionBody.user === "object"
+                    ? (sessionBody.user as SessionUser)
+                    : null;
 
-            // Redirecionamento após login bem sucedido
-            router.push("/admin");
+            if (!user) {
+                await authClient.signOut();
+                toast.error("Não foi possível validar o perfil", {
+                    description: "Tente novamente em instantes.",
+                });
+                return;
+            }
+
+            if (!sessionMatchesTab(activeTab, user)) {
+                await authClient.signOut();
+                toast.error("Usuário não encontrado", {
+                    description: "Ops! Não sabemos quem é você... Talvez suas credenciais estejam inválidas. Tente novamente.",
+                });
+                return;
+            }
+
+            toast.success(`Bem vindo(a) de volta, ${user.name.split(" ")[0]}!`);
+
+            router.push(activeTab === "admin" ? "/admin" : "/prof");
             router.refresh();
         } catch {
             toast.error("Erro inesperado", {

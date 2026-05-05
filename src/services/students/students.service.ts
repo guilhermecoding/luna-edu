@@ -32,3 +32,46 @@ export async function getTotalStudentsCount(): Promise<number> {
 
     return await prisma.student.count();
 }
+
+/**
+ * Retorna a lista de alunos do sistema, com opção de filtro pelo nome ou CPF.
+ */
+export async function getStudentsList(query?: string) {
+    "use cache";
+    cacheLife("minutes");
+    cacheTag("students-list");
+
+    return await prisma.student.findMany({
+        where: query ? {
+            OR: [
+                {
+                    name: {
+                        contains: query,
+                        mode: "insensitive" as const,
+                    },
+                },
+                {
+                    cpf: {
+                        contains: query.replace(/\D/g, ""),
+                    },
+                },
+            ],
+        } : {},
+        select: {
+            id: true,
+            lunaId: true,
+            name: true,
+            email: true,
+            cpf: true,
+            studentPhone: true,
+            birthDate: true,
+            genre: true,
+            school: true,
+        },
+        orderBy: {
+            name: "asc",
+        },
+    });
+}
+
+export type StudentListItem = Awaited<ReturnType<typeof getStudentsList>>[number];

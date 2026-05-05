@@ -8,6 +8,8 @@ import { DataTable } from "./_components/data-table";
 import { columns } from "./_components/columns";
 import { Metadata } from "next";
 import { ButtonLink } from "@/components/ui/button-link";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
 
 export const metadata: Metadata = {
     title: "Equipe",
@@ -20,10 +22,12 @@ export default async function UsersPage({
 }) {
     const { q } = await searchParams;
 
-    const [userStats, usersList] = await Promise.all([
+    const [session, userStats, usersList] = await Promise.all([
+        auth.api.getSession({ headers: await headers() }),
         getUserStats(),
         getUsersList(q),
     ]);
+    const currentUserId = session?.user?.id ?? null;
 
     return (
         <Page>
@@ -82,7 +86,8 @@ export default async function UsersPage({
                 <div className="bg-surface border border-surface-border p-6 rounded-3xl">
                     <DataTable 
                         columns={columns} 
-                        data={usersList} 
+                        data={usersList}
+                        currentUserId={currentUserId}
                         title={
                             <h2 className="text-xl flex flex-row items-center gap-2 font-bold text-foreground">
                                 <IconShieldChevron className="size-6" />

@@ -9,6 +9,7 @@ import { Prisma } from "@/generated/prisma/client";
 import { editMemberSchema, type EditMemberInput } from "./schema";
 import { unmask } from "@/lib/masks";
 import { auth } from "@/lib/auth";
+import prisma from "@/lib/prisma";
 
 export async function editMemberAction(memberId: string, data: EditMemberInput) {
     try {
@@ -21,6 +22,19 @@ export async function editMemberAction(memberId: string, data: EditMemberInput) 
 
         const { password, confirmPassword, ...updateFields } = cleanData;
         void confirmPassword;
+
+        const session = await auth.api.getSession({ headers: await headers() });
+        const actorId = session?.user?.id;
+        if (actorId === memberId) {
+            const existingMember = await prisma.user.findUnique({
+                where: { id: memberId },
+                select: { isAdmin: true },
+            });
+            if (existingMember?.isAdmin) {
+                updateFields.isAdmin = true;
+            }
+        }
+
         await updateUser(memberId, updateFields);
 
         if (password) {

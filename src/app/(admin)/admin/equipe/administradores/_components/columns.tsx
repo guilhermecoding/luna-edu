@@ -26,10 +26,22 @@ export const columns: ColumnDef<User>[] = [
     {
         accessorKey: "name",
         header: "Nome",
-        cell: ({ row }) => {
+        cell: ({ row, table }) => {
+            const currentUserId = (table.options.meta as { currentUserId?: string } | undefined)?.currentUserId;
+            const isYou = Boolean(currentUserId && row.original.id === currentUserId);
             return (
-                <div className="flex flex-col">
-                    <span className="font-medium">{row.original.name}</span>
+                <div className="flex flex-col gap-1">
+                    <div className="flex flex-wrap items-center gap-2">
+                        <span className="font-medium">{row.original.name}</span>
+                        {isYou && (
+                            <Badge
+                                variant="outline"
+                                className="text-[0.65rem] font-semibold uppercase tracking-wide border-primary/40 bg-primary/10 text-primary"
+                            >
+                                Você
+                            </Badge>
+                        )}
+                    </div>
                     <span className="text-sm text-muted-foreground">{row.original.email}</span>
                 </div>
             );

@@ -1,3 +1,7 @@
+export function isValidDate(date: Date) {
+    return !Number.isNaN(date.getTime());
+}
+
 export function calculateAge(birthDate: Date | string) {
     const date = new Date(birthDate);
     const today = new Date();

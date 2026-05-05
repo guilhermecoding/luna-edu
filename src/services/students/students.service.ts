@@ -75,3 +75,36 @@ export async function getStudentsList(query?: string) {
 }
 
 export type StudentListItem = Awaited<ReturnType<typeof getStudentsList>>[number];
+
+/**
+ * Retorna um aluno pelo ID
+ */
+export async function getStudentById(id: string) {
+    "use cache";
+    cacheLife("minutes");
+    cacheTag(`student-${id}`);
+
+    return await prisma.student.findUnique({
+        where: { id },
+    });
+}
+
+/**
+ * Cria um novo aluno
+ */
+export async function createStudent(data: Omit<Parameters<typeof prisma.student.create>[0]["data"], "id" | "createdAt" | "lunaId">) {
+    return await prisma.student.create({
+        data,
+    });
+}
+
+/**
+ * Atualiza um aluno existente
+ */
+export async function updateStudent(id: string, data: Partial<Parameters<typeof prisma.student.update>[0]["data"]>) {
+    return await prisma.student.update({
+        where: { id },
+        data,
+    });
+}
+

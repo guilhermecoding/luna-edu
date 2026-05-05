@@ -495,28 +495,34 @@ export function EditClassGroupSubjectForm({
 
                                 <div className="space-y-1.5">
                                     <Label className="text-xs text-muted-foreground">Professor</Label>
-                                    <Controller
-                                        control={control}
-                                        name={`schedules.${index}.teacherId`}
-                                        render={({ field: teacherField }) => (
-                                            <Select
-                                                value={teacherField.value || ""}
-                                                onValueChange={teacherField.onChange}
-                                                disabled={isSubmitting}
-                                            >
-                                                <SelectTrigger className="rounded-lg bg-background w-full h-10">
-                                                    <SelectValue placeholder="Opcional" />
-                                                </SelectTrigger>
-                                                <SelectContent>
-                                                    {teachers.map((teacher) => (
-                                                        <SelectItem key={teacher.id} value={teacher.id}>
-                                                            {teacher.name}
-                                                        </SelectItem>
-                                                    ))}
-                                                </SelectContent>
-                                            </Select>
-                                        )}
-                                    />
+                                    {teachers.length === 0 ? (
+                                        <div className="h-10 flex items-center px-3 rounded-lg border-2 border-dashed border-surface-border bg-surface/30 text-[10px] text-muted-foreground leading-tight">
+                                            Nenhum professor cadastrado.
+                                        </div>
+                                    ) : (
+                                        <Controller
+                                            control={control}
+                                            name={`schedules.${index}.teacherId`}
+                                            render={({ field: teacherField }) => (
+                                                <Select
+                                                    value={teacherField.value || ""}
+                                                    onValueChange={teacherField.onChange}
+                                                    disabled={isSubmitting}
+                                                >
+                                                    <SelectTrigger className="rounded-lg bg-background w-full h-10">
+                                                        <SelectValue placeholder="Opcional" />
+                                                    </SelectTrigger>
+                                                    <SelectContent>
+                                                        {teachers.map((teacher) => (
+                                                            <SelectItem key={teacher.id} value={teacher.id}>
+                                                                {teacher.name}
+                                                            </SelectItem>
+                                                        ))}
+                                                    </SelectContent>
+                                                </Select>
+                                            )}
+                                        />
+                                    )}
                                 </div>
 
                                 <div className="space-y-1.5">

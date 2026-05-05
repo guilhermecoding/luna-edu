@@ -35,20 +35,6 @@ function ShiftIcon({ shift }: { shift: Shift }) {
     }
 }
 
-// ── Professores estáticos (placeholder) ────────────────────────────
-const STATIC_TEACHERS = [
-    "Prof. Ana Silva",
-    "Prof. Carlos Souza",
-    "Prof. Maria Oliveira",
-    "Prof. João Santos",
-    "Prof. Fernanda Lima",
-    "Prof. Ricardo Alves",
-];
-
-function getStaticTeacher(name: string): string {
-    return STATIC_TEACHERS[hashString(name) % STATIC_TEACHERS.length];
-}
-
 // ── Ocupação estática (placeholder) ────────────────────────────────
 function getStaticEnrollment(name: string): number {
     return 15 + (hashString(name) % 25); // entre 15 e 39
@@ -157,7 +143,7 @@ function ListDisciplinesContent({
                 <tbody className="divide-y divide-surface-border">
                     {courses.map((course) => {
                         const avatarColor = getAvatarColor(course.subject.name);
-                        const teacher = getStaticTeacher(course.name);
+                        const teacher = course.schedules.find(s => s.teacher)?.teacher?.name || "Não atribuído";
                         const enrolled = getStaticEnrollment(course.name);
                         const roomCapacity = course.room ? Number(course.room.capacity) : 0;
                         const occupancyPct = roomCapacity > 0 ? Math.min((enrolled / roomCapacity) * 100, 100) : 0;

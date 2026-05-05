@@ -8,6 +8,7 @@ import { getStudentCountByClassGroupId } from "@/services/students/students.serv
 import { IconBooks, IconClockHour2, IconPencil, IconSchool, IconUsers } from "@tabler/icons-react";
 import { notFound } from "next/navigation";
 import InfoBoxPeriod from "../../_components/info-box-period";
+import ListDisciplines from "../_components/list-disciplines";
 
 export default async function ClassPage({
     params,
@@ -76,6 +77,22 @@ export default async function ClassPage({
                     value={shiftMap[classGroupData.shift] || classGroupData.shift}
                     color="amber"
                     icon={<IconClockHour2 className="size-full" />}
+                />
+            </Section>
+
+            <Section className="mt-12">
+                <div className="flex flex-row items-center gap-2 mb-6">
+                    <div className="bg-primary/10 p-2 rounded-lg">
+                        <IconBooks className="size-5 text-primary" />
+                    </div>
+                    <h2 className="text-xl font-bold text-foreground">Disciplinas Ofertadas</h2>
+                </div>
+
+                <ListDisciplines
+                    courses={classGroupData.courses}
+                    programSlug={program}
+                    periodSlug={period}
+                    classGroupSlug={classGroupSlug}
                 />
             </Section>
         </Page>

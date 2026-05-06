@@ -135,14 +135,14 @@ export function DataTable<TData, TValue>({
                     </TableBody>
                 </Table>
             </div>
-            
+
             {/* Pagination Controls */}
             <div className="flex items-center justify-between px-2">
                 <div className="flex-1 text-sm text-muted-foreground">
                     Exibindo {table.getRowModel().rows.length} de {table.getFilteredRowModel ? table.getFilteredRowModel().rows.length : data.length} alunos.
                 </div>
                 <div className="flex items-center space-x-6 lg:space-x-8">
-                    <div className="flex w-[100px] items-center justify-center text-sm font-medium text-muted-foreground">
+                    <div className="flex w-25 items-center justify-center text-sm font-medium text-muted-foreground">
                         Página {table.getState().pagination.pageIndex + 1} de{" "}
                         {table.getPageCount()}
                     </div>

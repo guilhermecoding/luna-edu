@@ -109,24 +109,7 @@ export function DataTablePeriodStudents<TData, TValue>({
                     </div>
                 )}
 
-                <div className="flex flex-row items-center gap-2 w-full sm:w-auto">
-                    {hasSelection && (
-                        <Button
-                            variant="destructive"
-                            size="sm"
-                            onClick={handleUnlink}
-                            disabled={isPending}
-                            className="h-10 px-4 rounded-full animate-in fade-in zoom-in duration-200"
-                        >
-                            {isPending ? (
-                                <IconLoader2 className="size-4 mr-2 animate-spin" />
-                            ) : (
-                                <IconUserMinus className="size-4 mr-2" />
-                            )}
-                            Desvincular ({selectedRows.length})
-                        </Button>
-                    )}
-
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 w-full sm:w-auto">
                     <div className="w-full sm:max-w-sm flex flex-row items-center gap-2 px-5 py-1 rounded-full border border-input bg-background transition-colors focus-within:border-ring focus-within:ring-[3px] focus-within:ring-ring/50">
                         <IconSearch className="size-4 shrink-0" />
                         <Input
@@ -136,6 +119,22 @@ export function DataTablePeriodStudents<TData, TValue>({
                             className="border-none bg-transparent shadow-none outline-none focus-visible:border-transparent focus-visible:ring-0 focus-visible:ring-offset-0"
                         />
                     </div>
+                    {hasSelection && (
+                        <Button
+                            variant="destructive"
+                            size="sm"
+                            onClick={handleUnlink}
+                            disabled={isPending}
+                            className="w-full sm:w-auto h-10 px-4 text-sm rounded-full animate-in fade-in zoom-in duration-200"
+                        >
+                            {isPending ? (
+                                <IconLoader2 className="size-4 mr-2 animate-spin" />
+                            ) : (
+                                <IconUserMinus className="size-4 mr-2" />
+                            )}
+                            Desvincular ({selectedRows.length})
+                        </Button>
+                    )}
                 </div>
             </div>
 
@@ -196,7 +195,7 @@ export function DataTablePeriodStudents<TData, TValue>({
                     Exibindo {table.getRowModel().rows.length} de {data.length} alunos.
                 </div>
                 <div className="flex items-center space-x-6 lg:space-x-8">
-                    <div className="flex w-[100px] items-center justify-center text-sm font-medium text-muted-foreground">
+                    <div className="flex w-25 items-center justify-center text-sm font-medium text-muted-foreground">
                         Página {table.getState().pagination.pageIndex + 1} de{" "}
                         {table.getPageCount()}
                     </div>

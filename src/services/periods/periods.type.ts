@@ -6,5 +6,7 @@ export type PeriodListItem = Pick<
 > & {
     _count: {
         courses: number;
+        studentPeriods: number;
     };
+    enrolledCount: number;
 };

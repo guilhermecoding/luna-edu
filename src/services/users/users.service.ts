@@ -154,4 +154,32 @@ export async function updateUser(id: string, data: Prisma.UserUpdateInput) {
     });
 }
 
+/**
+ * Exclui um membro da equipe permanentemente e limpa seus vínculos.
+ */
+export async function deleteUser(id: string) {
+    return await prisma.$transaction(async (tx) => {
+        // Remover professor dos horários e aulas
+        await tx.schedule.updateMany({
+            where: { teacherId: id },
+            data: { teacherId: null },
+        });
+
+        await tx.lesson.updateMany({
+            where: { teacherId: id },
+            data: { teacherId: null },
+        });
+
+        // Remover assistências, contas, sessões e notificações
+        await tx.courseAssistant.deleteMany({ where: { assistantId: id } });
+        await tx.account.deleteMany({ where: { userId: id } });
+        await tx.session.deleteMany({ where: { userId: id } });
+        await tx.notification.deleteMany({ where: { userId: id } });
+
+        return await tx.user.delete({
+            where: { id },
+        });
+    });
+}
+
 export type UserListItem = Awaited<ReturnType<typeof getUsersList>>[number];

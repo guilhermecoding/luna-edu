@@ -296,10 +296,11 @@ model Period {
   slug          String
   canonicalCode String?   @unique @default(dbgenerated("gen_random_uuid()")) @map("canonical_code") @db.Uuid
 
-  program     Program      @relation(fields: [programId], references: [id])
-  courses     Course[]
-  subPeriods  SubPeriod[]
-  classGroups ClassGroup[]
+  program        Program         @relation(fields: [programId], references: [id])
+  courses        Course[]
+  subPeriods     SubPeriod[]
+  classGroups    ClassGroup[]
+  studentPeriods StudentPeriod[]
 
   @@unique([programId, slug])
   @@index([programId, completedAt, startDate, endDate])
@@ -442,6 +443,7 @@ model Student {
   finalGrades    FinalGrade[]
   stats          StudentCourseStats[]
   notifications  Notification[]
+  studentPeriods StudentPeriod[]
 
   @@map("students")
   @@schema("public")
@@ -457,6 +459,21 @@ model Enrollment {
 
   @@id([courseId, studentId])
   @@map("enrollments")
+  @@schema("public")
+}
+
+model StudentPeriod {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  studentId String   @map("student_id") @db.Uuid
+  periodId  String   @map("period_id") @db.Uuid
+  status    String   @default("WAITING")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+
+  student Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  period  Period  @relation(fields: [periodId], references: [id], onDelete: Cascade)
+
+  @@unique([studentId, periodId])
+  @@map("student_periods")
   @@schema("public")
 }
 

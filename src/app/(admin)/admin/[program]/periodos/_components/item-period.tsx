@@ -39,6 +39,7 @@ export default function ItemPeriod({
     statusLabel,
     statusVariant,
     coursesCount,
+    studentsCount,
 }: {
     programSlug: string;
     periodSlug: string;
@@ -47,6 +48,7 @@ export default function ItemPeriod({
     statusLabel: string;
     statusVariant: StaticStatusIndicatorProps["variant"];
     coursesCount: number;
+    studentsCount: number;
 }) {
     return (
         <div className="w-full min-w-0 flex flex-row items-center bg-surface border border-surface-border p-4 rounded-4xl gap-3">
@@ -75,11 +77,11 @@ export default function ItemPeriod({
 
                     {/* Infos */}
                     <div className="hidden @3xl/main:flex flex-row items-center">
-                        <Info label="DISCIPLINAS" value={coursesCount} />
+                        <Info label="TURMAS" value={coursesCount} />
 
                         <Separator orientation="vertical" className="mx-4" />
 
-                        <Info label="ALUNOS" value={120} />
+                        <Info label="ALUNOS" value={studentsCount} />
                     </div>
 
                     {/* Status (Tablet e Desktop) */}

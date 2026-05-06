@@ -10,13 +10,15 @@ import { SystemRole, User, UserGenre } from "@/generated/prisma/client";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { editMemberSchema, type EditMemberData, type EditMemberInput } from "../schema";
-import { IconCheck, IconCopy, IconLoader2, IconLock } from "@tabler/icons-react";
+import { IconAlertTriangle, IconCheck, IconCopy, IconLoader2, IconLock } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { maskCPF, maskPhone } from "@/lib/masks";
 import { authClient } from "@/lib/auth-client";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import Image from "next/image";
+import imgGibbyDuvida from "@/assets/images/logo-gibby-duvida.svg";
+import { deleteMemberAction } from "../actions";
 
 export default function EditMemberForm({
     member,
@@ -30,6 +32,11 @@ export default function EditMemberForm({
     const [copied, setCopied] = useState(false);
     const [showStatusModal, setShowStatusModal] = useState(false);
     const [pendingStatus, setPendingStatus] = useState<boolean | null>(null);
+
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [adminPasswordConfirm, setAdminPasswordConfirm] = useState("");
+    const [deleteError, setDeleteError] = useState<string | null>(null);
+    const [isDeleting, setIsDeleting] = useState(false);
 
     const form = useForm<EditMemberInput, unknown, EditMemberData>({
         resolver: zodResolver(editMemberSchema),
@@ -120,6 +127,28 @@ export default function EditMemberForm({
             setTimeout(() => setCopied(false), 2000);
         } catch {
             toast.error("Falha ao copiar");
+        }
+    };
+
+    const canDelete = adminPasswordConfirm.length > 0 && !isDeleting;
+
+    const onDeleteMember = async () => {
+        setDeleteError(null);
+        setIsDeleting(true);
+
+        try {
+            const result = await deleteMemberAction(member.id, adminPasswordConfirm);
+            if (result?.success === false) {
+                setDeleteError(result.error || "Erro ao apagar usuário");
+            } else {
+                toast.success("Usuário apagado com sucesso");
+                router.push("/admin/equipe");
+                router.refresh();
+            }
+        } catch {
+            setDeleteError("Erro ao apagar usuário");
+        } finally {
+            setIsDeleting(false);
         }
     };
 
@@ -237,7 +266,7 @@ export default function EditMemberForm({
                         />
                         {errors.genre && <p className="text-sm text-red-600">{errors.genre.message}</p>}
                     </div>
-                    <div className="flex flex-col gap-2">
+                    {!isEditingSelf && <div className="flex flex-col gap-2">
                         <Label htmlFor="systemRole">Nível de Acesso *</Label>
                         <Controller
                             control={control}
@@ -255,8 +284,8 @@ export default function EditMemberForm({
                             )}
                         />
                         {errors.systemRole && <p className="text-sm text-red-600">{errors.systemRole.message}</p>}
-                    </div>
-                    <div className="flex flex-col gap-2">
+                    </div>}
+                    {!isEditingSelf && <div className="flex flex-col gap-2">
                         <Label htmlFor="isActive">Acesso ao Sistema *</Label>
                         <Controller
                             control={control}
@@ -283,7 +312,7 @@ export default function EditMemberForm({
                             )}
                         />
                         {errors.isActive && <p className="text-sm text-red-600">{errors.isActive.message}</p>}
-                    </div>
+                    </div>}
                 </div>
 
                 <div className="flex flex-col gap-6 mt-4">
@@ -472,6 +501,87 @@ export default function EditMemberForm({
                         {isSubmitting ? "Salvando..." : "Salvar Alterações"}
                     </Button>
                 </div>
+
+                {!isEditingSelf && (
+                    <div className="border border-destructive/25 bg-destructive/5 rounded-2xl p-4 sm:p-5 space-y-4 mt-6">
+                        <div>
+                            <div className="flex flex-row items-center gap-2">
+                                <IconAlertTriangle className="size-5 text-red-600" />
+                                <h3 className="text-xl font-semibold text-destructive">Zona de Perigo</h3>
+                            </div>
+                            <p className="text-sm text-muted-foreground mt-1">
+                                Esta ação remove o usuário <b>permanentemente</b>. Todos os vínculos (horários e aulas) serão desfeitos. Esta ação não pode ser desfeita.
+                            </p>
+                        </div>
+
+                        <Dialog
+                            open={isDeleteModalOpen}
+                            onOpenChange={(open) => {
+                                setIsDeleteModalOpen(open);
+                                if (!open) {
+                                    setAdminPasswordConfirm("");
+                                    setDeleteError(null);
+                                }
+                            }}
+                        >
+                            <div className="w-full flex justify-end">
+                                <DialogTrigger asChild>
+                                    <Button type="button" variant="destructive" className="w-full sm:w-auto">
+                                        Apagar Usuário
+                                    </Button>
+                                </DialogTrigger>
+                            </div>
+                            <DialogContent>
+                                <DialogHeader>
+                                    <DialogTitle>Apagar Usuário</DialogTitle>
+                                    <DialogDescription>
+                                        Deseja realmente apagar este usuário?
+                                    </DialogDescription>
+                                </DialogHeader>
+
+                                <div className="flex flex-col items-center text-center">
+                                    <Image className="w-32 h-32" src={imgGibbyDuvida} alt="Gibby Duvida" width={100} height={100} />
+                                    <span> Para confirmar, digite sua senha de administrador:</span>
+                                </div>
+
+                                <div className="space-y-2">
+                                    <Label htmlFor="confirm-delete-password">Sua senha</Label>
+                                    <Input
+                                        id="confirm-delete-password"
+                                        type="password"
+                                        value={adminPasswordConfirm}
+                                        onChange={(event) => setAdminPasswordConfirm(event.target.value)}
+                                        placeholder="••••••••"
+                                        className="rounded-lg"
+                                        disabled={isDeleting}
+                                    />
+                                    {deleteError && <p className="text-sm text-red-600">{deleteError}</p>}
+                                </div>
+
+                                <DialogFooter>
+                                    <Button
+                                        type="button"
+                                        variant="outline"
+                                        onClick={() => setIsDeleteModalOpen(false)}
+                                        disabled={isDeleting}
+                                    >
+                                        Cancelar
+                                    </Button>
+                                    <Button
+                                        type="button"
+                                        variant="destructive"
+                                        onClick={onDeleteMember}
+                                        disabled={!canDelete}
+                                        className="flex items-center gap-2"
+                                    >
+                                        {isDeleting && <IconLoader2 className="size-5 animate-spin" />}
+                                        {isDeleting ? "Apagando..." : "Apagar"}
+                                    </Button>
+                                </DialogFooter>
+                            </DialogContent>
+                        </Dialog>
+                    </div>
+                )}
             </form>
         </div>
     );

@@ -63,8 +63,9 @@ export const adminMenus: ItemMenuSidebarAdmin[] = [
                 icon: "school",
                 isActive: false,
                 items: [
-                    { title: "Listar Alunos", url: "/admin/alunos" },
                     { title: "Adicionar Aluno", url: "/admin/alunos/novo" },
+                    { title: "Listar Alunos deste Período", url: "/admin/[program]/periodos/[period]/alunos" },
+                    { title: "Todos os alunos", url: "/admin/alunos" },
                 ],
             },
             {

@@ -32,11 +32,11 @@ export function CourseActions({ programSlug, periodSlug, classGroupSlug, courseC
             <DropdownMenuContent align="end" className="w-48 rounded-xl border-surface-border p-1.5">
                 <DropdownMenuItem asChild>
                     <Link
-                        href={`/admin/${programSlug}/periodos/${periodSlug}/turmas/${classGroupSlug}/disciplinas/${courseCode}/editar`}
+                        href={`/admin/${programSlug}/periodos/${periodSlug}/turmas/${classGroupSlug}/disciplinas/${courseCode}`}
                         className="flex items-center gap-2 cursor-pointer py-2"
                     >
-                        <IconEdit className="size-4 text-muted-foreground" />
-                        <span className="font-medium">Editar Disciplina</span>
+                        <IconEye className="size-4 text-muted-foreground" />
+                        <span className="font-medium">Detalhar</span>
                     </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
@@ -44,8 +44,8 @@ export function CourseActions({ programSlug, periodSlug, classGroupSlug, courseC
                         href={`/admin/${programSlug}/periodos/${periodSlug}/turmas/${classGroupSlug}/disciplinas/${courseCode}/editar`}
                         className="flex items-center gap-2 cursor-pointer py-2"
                     >
-                        <IconEye className="size-4 text-muted-foreground" />
-                        <span className="font-medium">Ver Detalhes</span>
+                        <IconEdit className="size-4 text-muted-foreground" />
+                        <span className="font-medium">Editar</span>
                     </Link>
                 </DropdownMenuItem>
             </DropdownMenuContent>

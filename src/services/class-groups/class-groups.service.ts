@@ -11,7 +11,7 @@ export async function getClassGroupsByPeriodId(periodId: string, teacherId?: str
     cacheLife("max");
     cacheTag(`period:${periodId}:class-groups`);
 
-    return await prisma.classGroup.findMany({
+    const groups = await prisma.classGroup.findMany({
         where: {
             periodId,
             ...(teacherId ? {
@@ -42,6 +42,44 @@ export async function getClassGroupsByPeriodId(periodId: string, teacherId?: str
             },
         },
     });
+
+    // Buscar contagem de alunos únicos por turma física
+    const classGroupIds = groups.map((g) => g.id);
+    const enrollments = await prisma.enrollment.findMany({
+        where: {
+            course: {
+                classGroupId: { in: classGroupIds },
+            },
+        },
+        select: {
+            studentId: true,
+            course: {
+                select: {
+                    classGroupId: true,
+                },
+            },
+        },
+    });
+
+    // Mapear alunos únicos por turma
+    const studentMap = new Map<string, Set<string>>();
+    for (const enrollment of enrollments) {
+        const groupId = enrollment.course.classGroupId;
+        if (!groupId) continue;
+
+        if (!studentMap.has(groupId)) {
+            studentMap.set(groupId, new Set());
+        }
+        studentMap.get(groupId)!.add(enrollment.studentId);
+    }
+
+    return groups.map((group) => ({
+        ...group,
+        _count: {
+            ...group._count,
+            students: studentMap.get(group.id)?.size || 0,
+        },
+    }));
 }
 
 /**
@@ -274,3 +312,128 @@ export async function deleteClassGroup(id: string): Promise<ClassGroup> {
     }
 }
 
+/**
+ * Matricula uma lista de alunos em uma turma (ClassGroup).
+ * Isso os inscreve em todas as disciplinas (Courses) da turma e atualiza o status no período para 'ENROLLED'.
+ */
+export async function enrollStudentsInClassGroup(classGroupId: string, studentIds: string[]) {
+    return await prisma.$transaction(async (tx) => {
+        // 1. Obter a turma para descobrir o periodId e os cursos associados
+        const classGroup = await tx.classGroup.findUnique({
+            where: { id: classGroupId },
+            include: { courses: { select: { id: true } } },
+        });
+
+        if (!classGroup) {
+            throw new Error("Turma não encontrada.");
+        }
+
+        const courseIds = classGroup.courses.map((c) => c.id);
+
+        if (courseIds.length === 0) {
+            throw new Error("A turma não possui disciplinas cadastradas para matricular os alunos.");
+        }
+
+        // 2. Criar as matrículas
+        const enrollmentsToCreate = [];
+        for (const studentId of studentIds) {
+            for (const courseId of courseIds) {
+                enrollmentsToCreate.push({ studentId, courseId });
+            }
+        }
+
+        await tx.enrollment.createMany({
+            data: enrollmentsToCreate,
+            skipDuplicates: true,
+        });
+
+        // 3. Atualizar o status dos alunos no período para ENROLLED
+        await tx.studentPeriod.updateMany({
+            where: {
+                periodId: classGroup.periodId,
+                studentId: { in: studentIds },
+            },
+            data: {
+                status: "ENROLLED",
+            },
+        });
+
+        return { success: true, count: studentIds.length, classGroup };
+    });
+}
+
+export async function unlinkStudentsFromClassGroup(classGroupId: string, studentIds: string[]) {
+    return await prisma.$transaction(async (tx) => {
+        const classGroup = await tx.classGroup.findUnique({
+            where: { id: classGroupId },
+            include: { courses: { select: { id: true } } },
+        });
+
+        if (!classGroup) {
+            throw new Error("Turma não encontrada.");
+        }
+
+        const courseIds = classGroup.courses.map((c) => c.id);
+
+        if (courseIds.length === 0) {
+            return { success: true, count: 0 };
+        }
+
+        // 1. Remover Presenças
+        await tx.attendance.deleteMany({
+            where: {
+                studentId: { in: studentIds },
+                lesson: { courseId: { in: courseIds } },
+            },
+        });
+
+        // 2. Remover Notas
+        await tx.activityGrade.deleteMany({
+            where: {
+                studentId: { in: studentIds },
+                activity: { courseId: { in: courseIds } },
+            },
+        });
+
+        await tx.finalGrade.deleteMany({
+            where: {
+                studentId: { in: studentIds },
+                courseId: { in: courseIds },
+            },
+        });
+
+        await tx.studentCourseStats.deleteMany({
+            where: {
+                studentId: { in: studentIds },
+                courseId: { in: courseIds },
+            },
+        });
+
+        // 3. Remover Matrículas
+        await tx.enrollment.deleteMany({
+            where: {
+                studentId: { in: studentIds },
+                courseId: { in: courseIds },
+            },
+        });
+
+        // 4. Update status se não tiver mais nenhuma disciplina no periodo
+        for (const studentId of studentIds) {
+            const enrollmentsCount = await tx.enrollment.count({
+                where: {
+                    studentId,
+                    course: { periodId: classGroup.periodId },
+                },
+            });
+            
+            if (enrollmentsCount === 0) {
+                await tx.studentPeriod.updateMany({
+                    where: { studentId, periodId: classGroup.periodId },
+                    data: { status: "WAITING" },
+                });
+            }
+        }
+
+        return { success: true };
+    });
+}

@@ -3,7 +3,7 @@ import Section from "@/components/section";
 import TitlePage from "@/components/title-page";
 import { IconCalendarFilled, IconSchool, IconCircleCheck, IconUsers, IconProgress, IconPencil } from "@tabler/icons-react";
 import { ButtonLink } from "@/components/ui/button-link";
-import { getPeriodByProgramAndSlug } from "@/services/periods/periods.service";
+import { getPeriodByProgramAndSlug, getPeriodStats } from "@/services/periods/periods.service";
 import { getSubPeriodsByPeriodId } from "@/services/sub-periods/sub-periods.service";
 import { getClassGroupsByPeriodId } from "@/services/class-groups/class-groups.service";
 import { notFound } from "next/navigation";
@@ -28,9 +28,10 @@ export default async function PeriodPage({
         notFound();
     }
 
-    const [subPeriods, classGroups] = await Promise.all([
+    const [subPeriods, classGroups, stats] = await Promise.all([
         getSubPeriodsByPeriodId(periodData.id),
         getClassGroupsByPeriodId(periodData.id),
+        getPeriodStats(periodData.id),
     ]);
     const previewSubPeriods = subPeriods.slice(0, 5);
     const previewClassGroups = classGroups.slice(0, 5);
@@ -44,16 +45,20 @@ export default async function PeriodPage({
                     <IconCalendarFilled className="size-4 text-muted-foreground" />
                     <p className="text-muted-foreground font-bold">Período Letivo</p>
                 </div>
-                <div className="flex flex-col lg:flex-row gap-y-6">
+                <div className="flex flex-col lg:flex-row gap-y-6 justify-between">
                     <div className="flex-1">
                         <TitlePage
                             title={periodData.name}
                             description={`De ${new Date(periodData.startDate).toLocaleDateString("pt-BR")} à ${new Date(periodData.endDate).toLocaleDateString("pt-BR")}`}
                         />
                     </div>
-                    <div className="flex flex-1 justify-end items-end">
-                        <ButtonLink className="w-full sm:w-auto bg-transparent border-2 border-dashed border-primary hover:bg-primary text-primary hover:text-background hover:border-solid" href={`/admin/${program}/periodos/${period}/editar`}>
-                            <IconPencil className="size-5" />
+                    <div className="flex flex-col sm:flex-row gap-3 items-start lg:items-end lg:justify-end">
+                        <ButtonLink className="w-full sm:w-auto bg-transparent border-2 border-dashed border-primary hover:bg-primary text-primary hover:text-background hover:border-solid h-11" href={`/admin/${program}/periodos/${period}/alunos`}>
+                            <IconSchool className="size-5 mr-2" />
+                            Alunos
+                        </ButtonLink>
+                        <ButtonLink className="w-full sm:w-auto bg-transparent border-2 border-dashed border-primary hover:bg-primary text-primary hover:text-background hover:border-solid h-11" href={`/admin/${program}/periodos/${period}/editar`}>
+                            <IconPencil className="size-5 mr-2" />
                             Editar Período
                         </ButtonLink>
                     </div>
@@ -63,13 +68,13 @@ export default async function PeriodPage({
             <Section className="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 <InfoBoxPeriod
                     label="TOTAL DE ALUNOS"
-                    value={592}
+                    value={stats.totalStudents}
                     color="indigo"
                     icon={<IconUsers className="size-full" />}
                 />
                 <InfoBoxPeriod
                     label="ALUNOS MATRICULADOS"
-                    value={534}
+                    value={stats.enrolledStudents}
                     color="emerald"
                     icon={<IconCircleCheck className="size-full" />}
                 />

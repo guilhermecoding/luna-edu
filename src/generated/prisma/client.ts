@@ -127,6 +127,11 @@ export type Student = Prisma.StudentModel
  */
 export type Enrollment = Prisma.EnrollmentModel
 /**
+ * Model StudentPeriod
+ * 
+ */
+export type StudentPeriod = Prisma.StudentPeriodModel
+/**
  * Model Lesson
  * 
  */

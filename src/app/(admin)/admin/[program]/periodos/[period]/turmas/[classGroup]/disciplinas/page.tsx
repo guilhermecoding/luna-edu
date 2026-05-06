@@ -6,6 +6,7 @@ import { ButtonLink } from "@/components/ui/button-link";
 import { Metadata } from "next";
 import { getPeriodByProgramAndSlug } from "@/services/periods/periods.service";
 import { getClassGroupByPeriodIdAndSlug } from "@/services/class-groups/class-groups.service";
+import { getStudentCountByClassGroupId } from "@/services/students/students.service";
 import { notFound } from "next/navigation";
 import ListDisciplines from "../../_components/list-disciplines";
 
@@ -25,6 +26,8 @@ export default async function TurmaDisciplinasPage({
 
     const classGroup = await getClassGroupByPeriodIdAndSlug(periodData.id, classGroupSlug);
     if (!classGroup) notFound();
+
+    const studentCount = await getStudentCountByClassGroupId(classGroup.id);
 
     return (
         <Page>
@@ -56,6 +59,7 @@ export default async function TurmaDisciplinasPage({
                     programSlug={program}
                     periodSlug={period}
                     classGroupSlug={classGroupSlug}
+                    studentCount={studentCount}
                 />
             </Section>
         </Page>

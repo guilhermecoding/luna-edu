@@ -444,3 +444,48 @@ export async function getAvailableStudentsAction(periodId: string, classGroupId:
         return { success: false, error: "Erro inesperado ao buscar alunos." };
     }
 }
+
+export async function findStudentsByListAction(identifiers: string[], periodId: string) {
+    try {
+        const session = await auth.api.getSession({ headers: await headers() });
+        if (!session?.user?.id) return { success: false, error: "Não autorizado" };
+
+        const cleanedIdentifiers = identifiers
+            .map(id => id.trim())
+            .filter(id => id.length > 0);
+
+        if (cleanedIdentifiers.length === 0) return { success: true, students: [] };
+
+        const students = await prisma.student.findMany({
+            where: {
+                OR: [
+                    { lunaId: { in: cleanedIdentifiers } },
+                    { cpf: { in: cleanedIdentifiers.map(id => id.replace(/\D/g, "")) } },
+                ],
+                studentPeriods: {
+                    some: { periodId },
+                },
+            },
+            select: {
+                id: true,
+                name: true,
+                lunaId: true,
+                cpf: true,
+            },
+        });
+
+        const foundLunaIds = new Set(students.map(s => s.lunaId));
+        const foundCpfs = new Set(students.map(s => s.cpf));
+        
+        const notFound = cleanedIdentifiers.filter(id => {
+            const clean = id.replace(/\D/g, "");
+            return !foundLunaIds.has(id) && !foundCpfs.has(clean);
+        });
+
+        return { success: true, students, notFound };
+    } catch (error) {
+        console.error("Erro ao buscar lista de alunos:", error);
+        return { success: false, error: "Erro ao processar lista." };
+    }
+}
+

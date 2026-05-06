@@ -136,7 +136,7 @@ export function AddStudentsToClassSheet({
                     Adicionar Alunos
                 </Button>
             </SheetTrigger>
-            <SheetContent className="sm:max-w-[70vw] flex flex-col h-full gap-0 p-0 border-l-surface-border bg-surface">
+            <SheetContent className="data-[side=right]:w-full data-[side=right]:sm:max-w-[70vw] flex flex-col h-full gap-0 p-0 border-l-surface-border bg-surface">
                 <SheetHeader className="p-6 border-b border-surface-border bg-background/50 backdrop-blur-sm shrink-0">
                     <div className="flex items-center justify-between">
                         <div className="space-y-1">
@@ -178,7 +178,7 @@ export function AddStudentsToClassSheet({
                         </div>
                     </div>
 
-                    <div className="mt-4 flex items-center justify-between">
+                    <div className="mt-4 flex flex-col sm:flex-row items-end sm:items-center justify-between gap-4">
                         <div className="flex items-center gap-4">
                             <Button
                                 variant="ghost"
@@ -198,9 +198,9 @@ export function AddStudentsToClassSheet({
                         {totalPages > 1 && (
                             <div className="flex items-center gap-1">
                                 <Button
-                                    variant="outline"
+                                    variant="ghost"
                                     size="icon"
-                                    className="size-8 rounded-lg"
+                                    className="size-8 rounded-lg bg-transparent"
                                     onClick={() => handlePageChange(page - 1)}
                                     disabled={page === 1 || loading}
                                 >
@@ -210,9 +210,9 @@ export function AddStudentsToClassSheet({
                                     {page} / {totalPages}
                                 </span>
                                 <Button
-                                    variant="outline"
+                                    variant="ghost"
                                     size="icon"
-                                    className="size-8 rounded-lg"
+                                    className="size-8 rounded-lg bg-transparent"
                                     onClick={() => handlePageChange(page + 1)}
                                     disabled={page === totalPages || loading}
                                 >
@@ -295,18 +295,18 @@ export function AddStudentsToClassSheet({
                 </ScrollArea>
 
                 <SheetFooter className="p-6 border-t border-surface-border bg-background/50 backdrop-blur-sm shrink-0">
-                    <div className="flex items-center justify-between w-full gap-4">
+                    <div className="flex flex-col-reverse sm:flex-row items-center justify-end w-full gap-4">
                         <Button
                             variant="outline"
                             onClick={() => handleOpenChange(false)}
-                            className="flex-1 h-12 rounded-2xl border-surface-border hover:bg-surface-border/50 transition-colors"
+                            className="h-12 w-full sm:w-auto hover:bg-surface-border/50 transition-colors"
                         >
                             Cancelar
                         </Button>
                         <Button
                             disabled={selectedIds.size === 0 || isPending}
                             onClick={handleEnroll}
-                            className="flex-[2] h-12 rounded-2xl shadow-lg shadow-primary/20 transition-all hover:scale-[1.01] active:scale-[0.99]"
+                            className="h-12 w-full sm:w-auto transition-all hover:scale-[1.01] active:scale-[0.99]"
                         >
                             {isPending ? (
                                 <>

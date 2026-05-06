@@ -13,6 +13,7 @@ import { Metadata } from "next";
 import { Shift } from "@/generated/prisma/enums";
 import { DataTableClassStudents } from "./_components/data-table-class-students";
 import { columns } from "../../alunos/_components/columns-period";
+import { AddStudentsToClassSheet } from "./_components/add-students-to-class-sheet";
 
 export const metadata: Metadata = {
     title: "Detalhes da Turma",
@@ -64,11 +65,16 @@ export default async function ClassPage({
                             description={`Informações da turma ${classGroupData.name}.`}
                         />
                     </div>
-                    <div className="flex flex-1 justify-end items-end">
+                    <div className="flex flex-col sm:flex-row flex-1 gap-3 justify-end items-end">
                         <ButtonLink className="w-full sm:w-auto bg-transparent border-2 border-dashed border-primary hover:bg-primary text-primary hover:text-background hover:border-solid" href={`/admin/${program}/periodos/${period}/turmas/${classGroupSlug}/editar`}>
                             <IconPencil className="size-5" />
                             Editar Turma
                         </ButtonLink>
+                        <AddStudentsToClassSheet
+                            periodId={periodData.id}
+                            classGroupId={classGroupData.id}
+                            classGroupName={classGroupData.name}
+                        />
                     </div>
                 </div>
             </Section>

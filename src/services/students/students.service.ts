@@ -142,6 +142,58 @@ export async function getStudentsList(query?: string) {
 export type StudentListItem = Awaited<ReturnType<typeof getStudentsList>>[number];
 
 /**
+ * Retorna a lista de alunos de um período que ainda não foram enturmados (status WAITING).
+ */
+export async function getStudentsWaitingByPeriod(periodId: string, query?: string, page: number = 1, limit: number = 20) {
+    "use cache";
+    cacheLife("minutes");
+    cacheTag(`period:${periodId}:students-waiting`);
+
+    const skip = (page - 1) * limit;
+
+    const where = {
+        studentPeriods: {
+            some: {
+                periodId,
+                status: "WAITING" as const,
+            },
+        },
+        ...(query ? {
+            OR: [
+                { name: { contains: query, mode: "insensitive" as const } },
+                { cpf: { contains: query.replace(/\D/g, "") } },
+                { lunaId: { contains: query.replace(/\D/g, "") } },
+            ],
+        } : {}),
+    };
+
+    const [students, total] = await Promise.all([
+        prisma.student.findMany({
+            where,
+            select: {
+                id: true,
+                lunaId: true,
+                name: true,
+                email: true,
+                cpf: true,
+                studentPhone: true,
+                birthDate: true,
+                genre: true,
+                school: true,
+            },
+            orderBy: {
+                name: "asc" as const,
+            },
+            skip,
+            take: limit,
+        }),
+        prisma.student.count({ where }),
+    ]);
+
+    return { students, total };
+}
+
+/**
  * Retorna a quantidade total de alunos em um período.
  */
 export async function getTotalStudentsCountByPeriodId(periodId: string): Promise<number> {

@@ -418,3 +418,26 @@ export async function unlinkStudentsFromClassGroupAction(studentIds: string[], c
         return { success: false, error: "Erro inesperado ao desvincular alunos da turma." };
     }
 }
+
+export async function getWaitingStudentsAction(periodId: string, query?: string, page: number = 1, limit: number = 20) {
+    try {
+        const session = await auth.api.getSession({ headers: await headers() });
+        if (!session?.user?.id) {
+            return { success: false, error: "Não autorizado" };
+        }
+
+        const { getStudentsWaitingByPeriod } = await import("@/services/students/students.service");
+        const { students, total } = await getStudentsWaitingByPeriod(periodId, query, page, limit);
+
+        return { 
+            success: true, 
+            students, 
+            total,
+            totalPages: Math.ceil(total / limit),
+        };
+    } catch (error) {
+        console.error("Erro ao buscar alunos em espera:", error);
+        return { success: false, error: "Erro inesperado ao buscar alunos." };
+    }
+}
+

@@ -16,7 +16,17 @@ import { useRouter } from "next/navigation";
 import { maskCPF, maskPhone, unmask } from "@/lib/masks";
 import ImportStudentsTab from "./import-students-tab";
 
-export default function CreateStudentForm() {
+export default function CreateStudentForm({
+    periodId,
+    redirectPath = "/admin/alunos",
+    onCancel,
+    onSuccess,
+}: {
+    periodId?: string;
+    redirectPath?: string;
+    onCancel?: () => void;
+    onSuccess?: () => void;
+} = {}) {
     const router = useRouter();
     const [mode, setMode] = useState<"single" | "bulk">("single");
 
@@ -57,11 +67,17 @@ export default function CreateStudentForm() {
             studentPhone: unmask(data.studentPhone),
             parentPhone: data.parentPhone ? unmask(data.parentPhone) : "",
         };
-        const result = await createStudentAction(cleanData);
+        const result = await createStudentAction(cleanData, periodId, redirectPath);
 
         if (result && !result.success) {
             toast.error(result.error);
             setError("root", { type: "server", message: result.error });
+        } else if (result?.success) {
+            toast.success("Aluno criado com sucesso!");
+            if (redirectPath === "none") {
+                router.refresh();
+            }
+            if (onSuccess) onSuccess();
         }
     };
 
@@ -234,7 +250,10 @@ export default function CreateStudentForm() {
                         <Button
                             type="button"
                             variant="outline"
-                            onClick={() => router.back()}
+                            onClick={() => {
+                                if (onCancel) onCancel();
+                                else router.back();
+                            }}
                             disabled={isSubmitting}
                         >
                             Cancelar
@@ -246,7 +265,7 @@ export default function CreateStudentForm() {
                     </div>
                 </form>
             ) : (
-                <ImportStudentsTab key={mode} />
+                <ImportStudentsTab key={mode} periodId={periodId} redirectPath={redirectPath} />
             )}
         </div>
     );

@@ -45,16 +45,20 @@ export default async function PeriodPage({
                     <IconCalendarFilled className="size-4 text-muted-foreground" />
                     <p className="text-muted-foreground font-bold">Período Letivo</p>
                 </div>
-                <div className="flex flex-col lg:flex-row gap-y-6">
+                <div className="flex flex-col lg:flex-row gap-y-6 justify-between">
                     <div className="flex-1">
                         <TitlePage
                             title={periodData.name}
                             description={`De ${new Date(periodData.startDate).toLocaleDateString("pt-BR")} à ${new Date(periodData.endDate).toLocaleDateString("pt-BR")}`}
                         />
                     </div>
-                    <div className="flex flex-1 justify-end items-end">
-                        <ButtonLink className="w-full sm:w-auto bg-transparent border-2 border-dashed border-primary hover:bg-primary text-primary hover:text-background hover:border-solid" href={`/admin/${program}/periodos/${period}/editar`}>
-                            <IconPencil className="size-5" />
+                    <div className="flex flex-col sm:flex-row gap-3 items-start lg:items-end lg:justify-end">
+                        <ButtonLink className="w-full sm:w-auto bg-transparent border-2 border-dashed border-primary hover:bg-primary text-primary hover:text-background hover:border-solid h-11" href={`/admin/${program}/periodos/${period}/alunos`}>
+                            <IconSchool className="size-5 mr-2" />
+                            Alunos
+                        </ButtonLink>
+                        <ButtonLink className="w-full sm:w-auto bg-transparent border-2 border-dashed border-primary hover:bg-primary text-primary hover:text-background hover:border-solid h-11" href={`/admin/${program}/periodos/${period}/editar`}>
+                            <IconPencil className="size-5 mr-2" />
                             Editar Período
                         </ButtonLink>
                     </div>

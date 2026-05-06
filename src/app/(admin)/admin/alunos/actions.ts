@@ -10,7 +10,7 @@ import { isRedirectError } from "next/dist/client/components/redirect-error";
 import { redirect } from "next/navigation";
 import prisma from "@/lib/prisma";
 
-export async function createStudentAction(data: CreateStudentData) {
+export async function createStudentAction(data: CreateStudentData, periodId?: string, redirectPath: string = "/admin/alunos") {
     try {
         const session = await auth.api.getSession({ headers: await headers() });
         const actorId = session?.user?.id;
@@ -30,10 +30,14 @@ export async function createStudentAction(data: CreateStudentData) {
             birthDate: parsedData.birthDate,
             genre: parsedData.genre,
             school: parsedData.school,
-        });
+        }, periodId);
 
         updateTag("students-list");
         updateTag("students-count");
+        if (periodId) {
+            updateTag(`period:${periodId}:students-list`);
+            updateTag(`period:${periodId}:students-count`);
+        }
 
     } catch (error) {
         if (error instanceof Prisma.PrismaClientKnownRequestError) {
@@ -56,8 +60,11 @@ export async function createStudentAction(data: CreateStudentData) {
         console.error("Erro ao criar aluno:", error);
         return { success: false, error: "Ocorreu um erro inesperado ao criar o aluno." };
     }
+    if (redirectPath !== "none") {
+        redirect(redirectPath);
+    }
 
-    redirect("/admin/alunos");
+    return { success: true };
 }
 
 export async function editStudentAction(id: string, data: EditStudentData) {
@@ -271,7 +278,10 @@ export async function importStudentsAction(formData: FormData): Promise<ImportRe
 
         updateTag("students-list");
         updateTag("students-count");
-
+        if (periodId) {
+            updateTag(`period:${periodId}:students-list`);
+            updateTag(`period:${periodId}:students-count`);
+        }
 
         return {
             success: true,

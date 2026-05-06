@@ -81,8 +81,82 @@ export async function getStudentsList(query?: string) {
     });
 }
 
+
 export type StudentListItem = Awaited<ReturnType<typeof getStudentsList>>[number];
 
+/**
+ * Retorna a quantidade total de alunos em um período.
+ */
+export async function getTotalStudentsCountByPeriodId(periodId: string): Promise<number> {
+    "use cache";
+    cacheLife("days");
+    cacheTag(`period:${periodId}:students-count`);
+
+    return await prisma.studentPeriod.count({
+        where: {
+            periodId: periodId,
+        },
+    });
+}
+
+/**
+ * Retorna a lista de alunos de um período específico no mesmo formato da lista principal.
+ */
+export async function getStudentsByPeriodList(periodId: string, query?: string) {
+    "use cache";
+    cacheLife("minutes");
+    cacheTag(`period:${periodId}:students-list`);
+
+    const studentsPeriods = await prisma.studentPeriod.findMany({
+        where: {
+            periodId: periodId,
+            student: query ? {
+                OR: [
+                    {
+                        name: {
+                            contains: query,
+                            mode: "insensitive" as const,
+                        },
+                    },
+                    ...(query.replace(/\D/g, "") ? [
+                        {
+                            cpf: {
+                                contains: query.replace(/\D/g, ""),
+                            },
+                        },
+                        {
+                            lunaId: {
+                                contains: query.replace(/\D/g, ""),
+                            },
+                        },
+                    ] : []),
+                ],
+            } : undefined,
+        },
+        include: {
+            student: {
+                select: {
+                    id: true,
+                    lunaId: true,
+                    name: true,
+                    email: true,
+                    cpf: true,
+                    studentPhone: true,
+                    birthDate: true,
+                    genre: true,
+                    school: true,
+                },
+            },
+        },
+        orderBy: {
+            student: {
+                name: "asc",
+            },
+        },
+    });
+
+    return studentsPeriods.map(sp => sp.student);
+}
 /**
  * Retorna um aluno pelo ID
  */
@@ -99,7 +173,10 @@ export async function getStudentById(id: string) {
 /**
  * Cria um novo aluno com LUNA ID gerado automaticamente.
  */
-export async function createStudent(data: Omit<Parameters<typeof prisma.student.create>[0]["data"], "id" | "createdAt" | "lunaId">) {
+export async function createStudent(
+    data: Omit<Parameters<typeof prisma.student.create>[0]["data"], "id" | "createdAt" | "lunaId" | "studentPeriods">,
+    periodId?: string,
+) {
     const { generateLunaId } = await import("@/lib/generate-luna-id");
     const lunaId = await generateLunaId();
     
@@ -107,6 +184,12 @@ export async function createStudent(data: Omit<Parameters<typeof prisma.student.
         data: {
             ...data,
             lunaId,
+            studentPeriods: periodId ? {
+                create: {
+                    periodId,
+                    status: "WAITING",
+                },
+            } : undefined,
         },
     });
 }

@@ -19,7 +19,7 @@ import { useRouter } from "next/navigation";
 
 type ImportState = "idle" | "uploading" | "done";
 
-export default function ImportStudentsTab({ periodId }: { periodId?: string } = {}) {
+export default function ImportStudentsTab({ periodId, redirectPath }: { periodId?: string; redirectPath?: string } = {}) {
     const router = useRouter();
     const [file, setFile] = useState<File | null>(null);
     const [isDragging, setIsDragging] = useState(false);
@@ -327,7 +327,14 @@ export default function ImportStudentsTab({ periodId }: { periodId?: string } = 
                         <Button
                             type="button"
                             className="h-11 px-8"
-                            onClick={() => router.push("/admin/alunos")}
+                            onClick={() => {
+                                if (redirectPath === "none") {
+                                    // Se estiver dentro de um modal que não deve redirecionar
+                                    handleReset();
+                                } else {
+                                    router.push(redirectPath || "/admin/alunos");
+                                }
+                            }}
                         >
                             Concluído
                         </Button>

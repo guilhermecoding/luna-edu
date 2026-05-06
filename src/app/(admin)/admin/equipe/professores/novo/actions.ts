@@ -15,6 +15,7 @@ export async function createTeacherAction(data: CreateTeacherInput) {
         updateTag("teachers-list");
         updateTag("users-list");
         updateTag("users-stats");
+        updateTag("all-teachers");
         revalidatePath("/admin/equipe/professores");
         revalidatePath("/admin/equipe");
     } catch (error) {
@@ -71,6 +72,7 @@ export async function promoteAdminAction(data: PromoteAdminInput) {
         updateTag("teachers-list");
         updateTag("users-list");
         updateTag("users-stats");
+        updateTag("all-teachers");
         updateTag(`user-${validatedData.adminId}`);
         revalidatePath("/admin/equipe/professores");
         revalidatePath("/admin/equipe");

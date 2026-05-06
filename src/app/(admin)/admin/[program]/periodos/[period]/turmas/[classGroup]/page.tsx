@@ -9,6 +9,11 @@ import { IconBooks, IconClockHour2, IconPencil, IconSchool, IconUsers } from "@t
 import { notFound } from "next/navigation";
 import InfoBoxPeriod from "../../_components/info-box-period";
 import ListDisciplines from "../_components/list-disciplines";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+    title: "Detalhes da Turma",
+};
 
 export default async function ClassPage({
     params,
@@ -93,6 +98,7 @@ export default async function ClassPage({
                     programSlug={program}
                     periodSlug={period}
                     classGroupSlug={classGroupSlug}
+                    studentCount={studentCount}
                 />
             </Section>
         </Page>

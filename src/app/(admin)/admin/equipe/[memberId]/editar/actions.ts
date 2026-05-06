@@ -84,6 +84,7 @@ export async function editMemberAction(memberId: string, data: EditMemberInput) 
         updateTag("admins-list");
         updateTag("users-list");
         updateTag("users-stats");
+        updateTag("all-teachers");
         updateTag(`user-${memberId}`);
         updateTag(`admin-${memberId}`);
         revalidatePath("/admin", "layout");
@@ -240,6 +241,7 @@ export async function deleteMemberAction(memberId: string, adminPasswordConfirm:
         updateTag("admins-list");
         updateTag("users-list");
         updateTag("users-stats");
+        updateTag("all-teachers");
         updateTag(`user-${memberId}`);
         updateTag(`admin-${memberId}`);
         revalidatePath("/admin", "layout");

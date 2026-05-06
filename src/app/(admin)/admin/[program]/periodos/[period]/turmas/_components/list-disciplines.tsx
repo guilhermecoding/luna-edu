@@ -117,11 +117,13 @@ function ListDisciplinesContent({
     programSlug,
     periodSlug,
     classGroupSlug,
+    studentCount,
 }: {
     courses: CourseWithRelations[];
     programSlug: string;
     periodSlug: string;
     classGroupSlug: string;
+    studentCount: number;
 }) {
     if (courses.length === 0) {
         return <EmptyDisciplinesList />;
@@ -144,7 +146,7 @@ function ListDisciplinesContent({
                     {courses.map((course) => {
                         const avatarColor = getAvatarColor(course.subject.name);
                         const teacher = course.schedules.find(s => s.teacher)?.teacher?.name || "Não atribuído";
-                        const enrolled = getStaticEnrollment(course.name);
+                        const enrolled = studentCount;
                         const roomCapacity = course.room ? Number(course.room.capacity) : 0;
                         const occupancyPct = roomCapacity > 0 ? Math.min((enrolled / roomCapacity) * 100, 100) : 0;
                         const roomColor = course.room ? getOccupancyColor(course.room.name) : null;
@@ -261,11 +263,13 @@ export default function ListDisciplines({
     programSlug,
     periodSlug,
     classGroupSlug,
+    studentCount,
 }: {
     courses: CourseWithRelations[];
     programSlug: string;
     periodSlug: string;
     classGroupSlug: string;
+    studentCount: number;
 }) {
     return (
         <ListDisciplinesContent
@@ -273,6 +277,7 @@ export default function ListDisciplines({
             programSlug={programSlug}
             periodSlug={periodSlug}
             classGroupSlug={classGroupSlug}
+            studentCount={studentCount}
         />
     );
 }

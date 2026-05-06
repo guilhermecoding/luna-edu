@@ -19,17 +19,20 @@ import {
 import { useEffect, useState, useTransition } from "react";
 import { Input } from "@/components/ui/input";
 import { useRouter, useSearchParams } from "next/navigation";
-import { IconSearch, IconUserMinus, IconLoader2, IconAlertTriangle } from "@tabler/icons-react";
+import { IconSearch, IconUserMinus, IconLoader2, IconAlertTriangle, IconUserPlus } from "@tabler/icons-react";
 import { toast } from "sonner";
-import { unlinkStudentsFromPeriodAction } from "@/app/(admin)/admin/alunos/actions";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { enrollStudentsInClassGroupAction, unlinkStudentsFromPeriodAction } from "@/app/(admin)/admin/alunos/actions";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
+import { ClassGroup } from "@/generated/prisma/client";
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[];
     data: TData[];
     title?: React.ReactNode;
     periodId: string;
+    classGroups?: ClassGroup[];
 }
 
 export function DataTablePeriodStudents<TData, TValue>({
@@ -37,12 +40,17 @@ export function DataTablePeriodStudents<TData, TValue>({
     data,
     title,
     periodId,
+    classGroups = [],
 }: DataTableProps<TData, TValue>) {
     const [rowSelection, setRowSelection] = useState({});
     const [isPending, startTransition] = useTransition();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [adminPassword, setAdminPassword] = useState("");
     const [error, setError] = useState<string | null>(null);
+
+    const [isEnrollModalOpen, setIsEnrollModalOpen] = useState(false);
+    const [selectedClassGroupId, setSelectedClassGroupId] = useState("");
+    const [enrollError, setEnrollError] = useState<string | null>(null);
 
     const router = useRouter();
     const searchParams = useSearchParams();
@@ -102,6 +110,28 @@ export function DataTablePeriodStudents<TData, TValue>({
         });
     };
 
+    const handleEnroll = () => {
+        if (!selectedClassGroupId) {
+            setEnrollError("Selecione uma turma para continuar.");
+            return;
+        }
+        setEnrollError(null);
+        startTransition(async () => {
+            const studentIds = selectedRows.map((row) => (row.original as { id: string }).id);
+            const res = await enrollStudentsInClassGroupAction(studentIds, selectedClassGroupId, periodId);
+
+            if (res.success) {
+                toast.success("Alunos enturmados com sucesso!");
+                setRowSelection({});
+                setIsEnrollModalOpen(false);
+                setSelectedClassGroupId("");
+                router.refresh();
+            } else {
+                setEnrollError(res.error || "Erro ao enturmar alunos");
+            }
+        });
+    };
+
     return (
         <div className="space-y-4">
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
@@ -122,19 +152,100 @@ export function DataTablePeriodStudents<TData, TValue>({
                         />
                     </div>
                     {hasSelection && (
-                        <Button
-                            variant="destructive"
-                            size="sm"
-                            onClick={() => setIsModalOpen(true)}
-                            disabled={isPending}
-                            className="w-full sm:w-auto h-10 px-4 text-sm rounded-full animate-in fade-in zoom-in duration-200"
-                        >
-                            <IconUserMinus className="size-4 mr-2" />
-                            Desvincular ({selectedRows.length})
-                        </Button>
+                        <div className="flex flex-col sm:flex-row items-center gap-2 w-full sm:w-auto animate-in fade-in zoom-in duration-200">
+                            <Button
+                                size="sm"
+                                onClick={() => setIsEnrollModalOpen(true)}
+                                disabled={isPending}
+                                className="w-full sm:w-auto h-10 px-4 text-foreground hover:bg-green-400/50 transition-colors bg-green-200 border-green-300 dark:bg-green-900/20 dark:border-green-600/20 dark:hover:bg-green-600/20 text-sm rounded-full"
+                            >
+                                <IconUserPlus className="size-4 mr-2 text-primary" />
+                                Enturmar ({selectedRows.length})
+                            </Button>
+                            <Button
+                                variant="destructive"
+                                size="sm"
+                                onClick={() => setIsModalOpen(true)}
+                                disabled={isPending}
+                                className="w-full sm:w-auto h-10 px-4 text-sm rounded-full"
+                            >
+                                <IconUserMinus className="size-4 mr-2" />
+                                Desvincular ({selectedRows.length})
+                            </Button>
+                        </div>
                     )}
                 </div>
             </div>
+
+            <Dialog
+                open={isEnrollModalOpen}
+                onOpenChange={(open) => {
+                    setIsEnrollModalOpen(open);
+                    if (!open) {
+                        setSelectedClassGroupId("");
+                        setEnrollError(null);
+                    }
+                }}
+            >
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogTitle className="flex items-center gap-2">
+                            <IconUserPlus className="size-5 text-primary" />
+                            Matricular em Turma
+                        </DialogTitle>
+                        <DialogDescription>
+                            Você está prestes a matricular <b>{selectedRows.length} aluno{selectedRows.length > 1 ? "s" : ""}</b> em uma turma.
+                        </DialogDescription>
+                    </DialogHeader>
+
+                    <div className="space-y-4 py-4">
+                        <div className="space-y-2">
+                            <Label htmlFor="class-group-select">Selecione a turma de destino:</Label>
+                            <Select
+                                value={selectedClassGroupId}
+                                onValueChange={setSelectedClassGroupId}
+                                disabled={isPending || classGroups.length === 0}
+                            >
+                                <SelectTrigger id="class-group-select" className="w-full bg-background rounded-xl h-12">
+                                    <SelectValue placeholder={classGroups.length === 0 ? "Nenhuma turma disponível" : "Escolha uma turma..."} />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {classGroups.map((cg) => (
+                                        <SelectItem key={cg.id} value={cg.id}>
+                                            {cg.name}
+                                        </SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+                            {enrollError && <p className="text-sm text-red-600 font-medium animate-in fade-in slide-in-from-top-1">{enrollError}</p>}
+                        </div>
+                        <p className="text-sm text-muted-foreground">
+                            Os alunos serão matriculados em <b>todas as disciplinas</b> cadastradas para a turma selecionada.
+                        </p>
+                    </div>
+
+                    <DialogFooter className="gap-3 flex flex-col-reverse sm:flex-row">
+                        <Button
+                            type="button"
+                            variant="outline"
+                            onClick={() => setIsEnrollModalOpen(false)}
+                            disabled={isPending}
+                            className="h-11"
+                        >
+                            Cancelar
+                        </Button>
+                        <Button
+                            type="button"
+                            onClick={handleEnroll}
+                            disabled={!selectedClassGroupId || isPending}
+                            className="h-11 px-8"
+                        >
+                            {isPending && <IconLoader2 className="size-4 mr-2 animate-spin" />}
+                            {isPending ? "Processando..." : "Matricular"}
+                        </Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
 
             <Dialog
                 open={isModalOpen}

@@ -274,3 +274,52 @@ export async function deleteClassGroup(id: string): Promise<ClassGroup> {
     }
 }
 
+/**
+ * Matricula uma lista de alunos em uma turma (ClassGroup).
+ * Isso os inscreve em todas as disciplinas (Courses) da turma e atualiza o status no período para 'ENROLLED'.
+ */
+export async function enrollStudentsInClassGroup(classGroupId: string, studentIds: string[]) {
+    return await prisma.$transaction(async (tx) => {
+        // 1. Obter a turma para descobrir o periodId e os cursos associados
+        const classGroup = await tx.classGroup.findUnique({
+            where: { id: classGroupId },
+            include: { courses: { select: { id: true } } },
+        });
+
+        if (!classGroup) {
+            throw new Error("Turma não encontrada.");
+        }
+
+        const courseIds = classGroup.courses.map((c) => c.id);
+
+        if (courseIds.length === 0) {
+            throw new Error("A turma não possui disciplinas cadastradas para matricular os alunos.");
+        }
+
+        // 2. Criar as matrículas
+        const enrollmentsToCreate = [];
+        for (const studentId of studentIds) {
+            for (const courseId of courseIds) {
+                enrollmentsToCreate.push({ studentId, courseId });
+            }
+        }
+
+        await tx.enrollment.createMany({
+            data: enrollmentsToCreate,
+            skipDuplicates: true,
+        });
+
+        // 3. Atualizar o status dos alunos no período para ENROLLED
+        await tx.studentPeriod.updateMany({
+            where: {
+                periodId: classGroup.periodId,
+                studentId: { in: studentIds },
+            },
+            data: {
+                status: "ENROLLED",
+            },
+        });
+
+        return { success: true, count: studentIds.length, classGroup };
+    });
+}

@@ -342,3 +342,28 @@ export async function unlinkStudentsFromPeriodAction(studentIds: string[], perio
         return { success: false, error: "Erro inesperado ao desvincular alunos." };
     }
 }
+
+export async function enrollStudentsInClassGroupAction(studentIds: string[], classGroupId: string, periodId: string) {
+    try {
+        const session = await auth.api.getSession({ headers: await headers() });
+        if (!session?.user?.id) {
+            return { success: false, error: "Não autorizado" };
+        }
+
+        if (studentIds.length === 0) {
+            return { success: false, error: "Nenhum aluno selecionado" };
+        }
+
+        const { enrollStudentsInClassGroup } = await import("@/services/class-groups/class-groups.service");
+        await enrollStudentsInClassGroup(classGroupId, studentIds);
+
+        updateTag(`period:${periodId}:students-list`);
+        updateTag(`period:${periodId}:students-count`);
+        updateTag(`class-group:${classGroupId}:students-count`);
+
+        return { success: true };
+    } catch (error) {
+        console.error("Erro ao enturmar alunos:", error);
+        return { success: false, error: "Erro inesperado ao enturmar alunos." };
+    }
+}

@@ -4,6 +4,7 @@ import Section from "@/components/section";
 import TitlePage from "@/components/title-page";
 import { getStudentsByPeriodList, getTotalStudentsCountByPeriodId } from "@/services/students/students.service";
 import { getPeriodByProgramAndSlug } from "@/services/periods/periods.service";
+import { getClassGroupsByPeriodId } from "@/services/class-groups/class-groups.service";
 import InfoBoxStudents from "@/app/(admin)/admin/alunos/_components/info-box-students";
 import { DataTablePeriodStudents } from "./_components/data-table-period-students";
 import { columns } from "./_components/columns-period";
@@ -31,9 +32,10 @@ export default async function PeriodStudentsPage({
         notFound();
     }
 
-    const [totalStudents, studentsList] = await Promise.all([
+    const [totalStudents, studentsList, classGroups] = await Promise.all([
         getTotalStudentsCountByPeriodId(periodData.id),
         getStudentsByPeriodList(periodData.id, q),
+        getClassGroupsByPeriodId(periodData.id),
     ]);
 
     return (
@@ -85,6 +87,7 @@ export default async function PeriodStudentsPage({
                         columns={columns}
                         data={studentsList}
                         periodId={periodData.id}
+                        classGroups={classGroups}
                         title={
                             <h2 className="text-xl flex flex-row items-center gap-2 font-bold text-foreground">
                                 <IconSchool className="size-6" />

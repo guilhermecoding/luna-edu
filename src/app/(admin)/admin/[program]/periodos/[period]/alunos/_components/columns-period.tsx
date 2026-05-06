@@ -17,7 +17,7 @@ export const columns: ColumnDef<StudentListItem>[] = [
                 checked={table.getIsAllPageRowsSelected()}
                 onChange={(e) => table.toggleAllPageRowsSelected(!!(e.target as HTMLInputElement).checked)}
                 aria-label="Selecionar todos"
-                className="translate-y-[2px]"
+                className="translate-y-0.5"
             />
         ),
         cell: ({ row }) => (
@@ -25,7 +25,7 @@ export const columns: ColumnDef<StudentListItem>[] = [
                 checked={row.getIsSelected()}
                 onChange={(e) => row.toggleSelected(!!(e.target as HTMLInputElement).checked)}
                 aria-label="Selecionar linha"
-                className="translate-y-[2px]"
+                className="translate-y-0.5"
             />
         ),
         enableSorting: false,
@@ -37,10 +37,10 @@ export const columns: ColumnDef<StudentListItem>[] = [
         cell: ({ row }) => {
             const { birthDate, genre } = row.original;
             return (
-                <AvatarUsers 
-                    age={calculateAge(birthDate)} 
-                    genre={genre} 
-                    className="size-10" 
+                <AvatarUsers
+                    age={calculateAge(birthDate)}
+                    genre={genre}
+                    className="size-10"
                 />
             );
         },
@@ -83,7 +83,7 @@ export const columns: ColumnDef<StudentListItem>[] = [
         header: "Idade",
         cell: ({ row }) => {
             const birthDate = row.original.birthDate;
-            return <span className="text-sm">{calculateAge(birthDate) === 1 ? "1 ano": `${calculateAge(birthDate)} anos`}</span>;
+            return <span className="text-sm">{calculateAge(birthDate) === 1 ? "1 ano" : `${calculateAge(birthDate)} anos`}</span>;
         },
     },
     {

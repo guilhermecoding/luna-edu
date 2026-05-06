@@ -213,24 +213,38 @@ export async function bulkUpsertStudents(students: BulkStudentInput[]) {
 
             try {
                 if (existing) {
-                    throw new Error(`Aluno ${student.name} (CPF: ${student.cpf}) já está cadastrado no sistema.`);
+                    // UPDATE: Atualizar dados que podem mudar (como e-mail para acesso ao resultado)
+                    await prisma.student.update({
+                        where: { id: existing.id },
+                        data: {
+                            name: student.name,
+                            email: student.email,
+                            studentPhone: student.studentPhone,
+                            parentPhone: student.parentPhone || null,
+                            birthDate: student.birthDate,
+                            genre: student.genre,
+                            school: student.school,
+                            // CPF e LunaID NUNCA mudam na importação
+                        },
+                    });
+                    updated++;
+                } else {
+                    // CREATE: atribuir próximo LunaID disponível
+                    await prisma.student.create({
+                        data: {
+                            name: student.name,
+                            email: student.email,
+                            cpf: student.cpf,
+                            studentPhone: student.studentPhone,
+                            parentPhone: student.parentPhone || null,
+                            birthDate: student.birthDate,
+                            genre: student.genre,
+                            school: student.school,
+                            lunaId: nextLunaId(),
+                        },
+                    });
+                    created++;
                 }
-                
-                // CREATE: atribuir próximo LunaID disponível
-                await prisma.student.create({
-                    data: {
-                        name: student.name,
-                        email: student.email,
-                        cpf: student.cpf,
-                        studentPhone: student.studentPhone,
-                        parentPhone: student.parentPhone || null,
-                        birthDate: student.birthDate,
-                        genre: student.genre,
-                        school: student.school,
-                        lunaId: nextLunaId(),
-                    },
-                });
-                created++;
             } catch (error) {
                 // Traduzir erros P2002 para mensagens legíveis
                 let message = error instanceof Error ? error.message : "Erro desconhecido";
@@ -240,7 +254,7 @@ export async function bulkUpsertStudents(students: BulkStudentInput[]) {
                     "code" in error &&
                     (error as { code: string }).code === "P2002"
                 ) {
-                    message = `Aluno ${student.name} (CPF: ${student.cpf}) possui dados (como CPF ou e-mail) já vinculados a outro registro.`;
+                    message = "Conflito de dados: O e-mail informado já pertence a outro CPF.";
                 }
                 errors.push({ row: rowIdx, cpf: student.cpf, error: message });
             }

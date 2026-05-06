@@ -313,3 +313,34 @@ export async function deletePeriod(programSlug: string, periodSlug: string): Pro
         throw error;
     }
 }
+
+/**
+ * Retorna estatísticas de alunos para um período específico.
+ * 
+ * Usa 'some' nos relacionamentos para contar de forma eficiente apenas 
+ * alunos que possuem ao menos uma matrícula em turmas deste período.
+ * 
+ * @param periodId ID do período.
+ * @returns Objeto com total global de alunos e total de alunos matriculados no período.
+ */
+export async function getPeriodStats(periodId: string) {
+    const [totalStudents, enrolledStudents] = await Promise.all([
+        prisma.student.count(),
+        prisma.student.count({
+            where: {
+                enrollments: {
+                    some: {
+                        course: {
+                            periodId: periodId,
+                        },
+                    },
+                },
+            },
+        }),
+    ]);
+
+    return {
+        totalStudents,
+        enrolledStudents,
+    };
+}

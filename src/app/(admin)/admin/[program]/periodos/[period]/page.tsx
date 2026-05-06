@@ -3,7 +3,7 @@ import Section from "@/components/section";
 import TitlePage from "@/components/title-page";
 import { IconCalendarFilled, IconSchool, IconCircleCheck, IconUsers, IconProgress, IconPencil } from "@tabler/icons-react";
 import { ButtonLink } from "@/components/ui/button-link";
-import { getPeriodByProgramAndSlug } from "@/services/periods/periods.service";
+import { getPeriodByProgramAndSlug, getPeriodStats } from "@/services/periods/periods.service";
 import { getSubPeriodsByPeriodId } from "@/services/sub-periods/sub-periods.service";
 import { getClassGroupsByPeriodId } from "@/services/class-groups/class-groups.service";
 import { notFound } from "next/navigation";
@@ -28,9 +28,10 @@ export default async function PeriodPage({
         notFound();
     }
 
-    const [subPeriods, classGroups] = await Promise.all([
+    const [subPeriods, classGroups, stats] = await Promise.all([
         getSubPeriodsByPeriodId(periodData.id),
         getClassGroupsByPeriodId(periodData.id),
+        getPeriodStats(periodData.id),
     ]);
     const previewSubPeriods = subPeriods.slice(0, 5);
     const previewClassGroups = classGroups.slice(0, 5);
@@ -63,13 +64,13 @@ export default async function PeriodPage({
             <Section className="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 <InfoBoxPeriod
                     label="TOTAL DE ALUNOS"
-                    value={592}
+                    value={stats.totalStudents}
                     color="indigo"
                     icon={<IconUsers className="size-full" />}
                 />
                 <InfoBoxPeriod
                     label="ALUNOS MATRICULADOS"
-                    value={534}
+                    value={stats.enrolledStudents}
                     color="emerald"
                     icon={<IconCircleCheck className="size-full" />}
                 />

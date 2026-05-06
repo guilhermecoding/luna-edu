@@ -21,7 +21,7 @@ export default function NewStudentPage() {
                     <div className="flex-1">
                         <TitlePage
                             title="Novo Aluno"
-                            description="Adicione um novo aluno ao sistema. Você pode preencher manualmente ou importar uma planilha."
+                            description="Adicione um novo aluno ao sistema. Você pode preencher manualmente ou importar uma planilha CSV. Alunos adicionados aqui não terão vinculo com nenhum período. Você pode vincular um aluno a um período posteriormente através das opções de Período."
                         />
                     </div>
                 </div>

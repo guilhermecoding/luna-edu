@@ -38,13 +38,17 @@ export async function createStudentAction(data: CreateStudentData) {
     } catch (error) {
         if (error instanceof Prisma.PrismaClientKnownRequestError) {
             if (error.code === "P2002") {
-                const target = error.meta?.target as string[];
-                if (target?.includes("email")) {
+                const target = JSON.stringify(error.meta?.target || "").toLowerCase();
+                const message = error.message.toLowerCase();
+
+                if (target.includes("email") || message.includes("email")) {
                     return { success: false, error: "Este e-mail já está em uso por outro aluno." };
                 }
-                if (target?.includes("cpf")) {
+                if (target.includes("cpf") || message.includes("cpf")) {
                     return { success: false, error: "Este CPF já está em uso por outro aluno." };
                 }
+                
+                return { success: false, error: "Conflito de dados: Um aluno com estes dados já existe." };
             }
         }
         if (isRedirectError(error)) throw error;
@@ -84,16 +88,20 @@ export async function editStudentAction(id: string, data: EditStudentData) {
     } catch (error) {
         if (error instanceof Prisma.PrismaClientKnownRequestError) {
             if (error.code === "P2002") {
-                const target = error.meta?.target as string[];
-                if (target?.includes("email")) {
+                const target = JSON.stringify(error.meta?.target || "").toLowerCase();
+                const message = error.message.toLowerCase();
+
+                if (target.includes("email") || message.includes("email")) {
                     return { success: false, error: "Este e-mail já está em uso por outro aluno." };
                 }
-                if (target?.includes("cpf")) {
+                if (target.includes("cpf") || message.includes("cpf")) {
                     return { success: false, error: "Este CPF já está em uso por outro aluno." };
                 }
-                if (target?.includes("luna_id") || target?.includes("lunaId")) {
+                if (target.includes("luna_id") || target.includes("lunaid") || message.includes("luna_id")) {
                     return { success: false, error: "Esta Matrícula já está em uso por outro aluno." };
                 }
+
+                return { success: false, error: "Conflito de dados: Outro aluno já possui estas informações." };
             }
         }
         if (isRedirectError(error)) throw error;

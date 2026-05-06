@@ -84,7 +84,7 @@ export default function ImportStudentsTab({ periodId }: { periodId?: string } = 
             if (periodId) {
                 formData.append("periodId", periodId);
             }
-            
+
             const res = await importStudentsAction(formData);
             setResult(res);
 
@@ -157,7 +157,7 @@ export default function ImportStudentsTab({ periodId }: { periodId?: string } = 
                             ${isDragging
                                 ? "border-primary bg-primary/5 scale-[1.01]"
                                 : file
-                                    ? "border-emerald-400 bg-emerald-50/50"
+                                    ? "border-emerald-400 bg-emerald-50/50 dark:bg-emerald-900/50"
                                     : "border-surface-border hover:border-primary/50 hover:bg-primary/5"
                             }
                         `}

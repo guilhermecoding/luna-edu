@@ -19,7 +19,7 @@ import { useRouter } from "next/navigation";
 
 type ImportState = "idle" | "uploading" | "done";
 
-export default function ImportStudentsTab() {
+export default function ImportStudentsTab({ periodId }: { periodId?: string } = {}) {
     const router = useRouter();
     const [file, setFile] = useState<File | null>(null);
     const [isDragging, setIsDragging] = useState(false);
@@ -81,6 +81,10 @@ export default function ImportStudentsTab() {
         try {
             const formData = new FormData();
             formData.append("file", file);
+            if (periodId) {
+                formData.append("periodId", periodId);
+            }
+            
             const res = await importStudentsAction(formData);
             setResult(res);
 

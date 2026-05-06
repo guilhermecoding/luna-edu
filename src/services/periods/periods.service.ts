@@ -325,7 +325,11 @@ export async function deletePeriod(programSlug: string, periodSlug: string): Pro
  */
 export async function getPeriodStats(periodId: string) {
     const [totalStudents, enrolledStudents] = await Promise.all([
-        prisma.student.count(),
+        prisma.studentPeriod.count({
+            where: {
+                periodId: periodId,
+            },
+        }),
         prisma.student.count({
             where: {
                 enrollments: {

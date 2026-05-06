@@ -255,12 +255,15 @@ export async function importStudentsAction(formData: FormData): Promise<ImportRe
             return { success: false, error: "Nenhuma linha válida encontrada no CSV." };
         }
 
+        const periodId = formData.get("periodId") as string | null;
+
         // Executar o bulk upsert
         const { bulkUpsertStudents } = await import("@/services/students/students.service");
-        const result = await bulkUpsertStudents(validStudents);
+        const result = await bulkUpsertStudents(validStudents, periodId || undefined);
 
         updateTag("students-list");
         updateTag("students-count");
+
 
         return {
             success: true,

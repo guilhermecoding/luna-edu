@@ -161,9 +161,9 @@ const BATCH_SIZE = 100;
  * Processa cada aluno individualmente para isolar erros por linha.
  * Retorna um resumo da operação.
  */
-export async function bulkUpsertStudents(students: BulkStudentInput[]) {
+export async function bulkUpsertStudents(students: BulkStudentInput[], periodId?: string) {
     let created = 0;
-    const updated = 0;
+    let updated = 0;
     const errors: { row: number; cpf: string; error: string }[] = [];
 
     // Gerar um pool de LunaIDs para todos os alunos novos de uma vez
@@ -212,9 +212,11 @@ export async function bulkUpsertStudents(students: BulkStudentInput[]) {
             const existing = existingMap.get(student.cpf);
 
             try {
+                let studentRecordId: string;
+                
                 if (existing) {
                     // UPDATE: Atualizar dados que podem mudar (como e-mail para acesso ao resultado)
-                    await prisma.student.update({
+                    const updatedStudent = await prisma.student.update({
                         where: { id: existing.id },
                         data: {
                             name: student.name,
@@ -228,9 +230,10 @@ export async function bulkUpsertStudents(students: BulkStudentInput[]) {
                         },
                     });
                     updated++;
+                    studentRecordId = updatedStudent.id;
                 } else {
                     // CREATE: atribuir próximo LunaID disponível
-                    await prisma.student.create({
+                    const newStudent = await prisma.student.create({
                         data: {
                             name: student.name,
                             email: student.email,
@@ -244,7 +247,27 @@ export async function bulkUpsertStudents(students: BulkStudentInput[]) {
                         },
                     });
                     created++;
+                    studentRecordId = newStudent.id;
                 }
+
+                // VÍNCULO DE PERÍODO (Em Espera)
+                if (periodId) {
+                    await prisma.studentPeriod.upsert({
+                        where: {
+                            studentId_periodId: {
+                                studentId: studentRecordId,
+                                periodId: periodId,
+                            },
+                        },
+                        create: {
+                            studentId: studentRecordId,
+                            periodId: periodId,
+                            status: "WAITING",
+                        },
+                        update: {}, // Não altera status se já existir
+                    });
+                }
+
             } catch (error) {
                 // Traduzir erros P2002 para mensagens legíveis
                 let message = error instanceof Error ? error.message : "Erro desconhecido";

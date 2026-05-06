@@ -361,3 +361,79 @@ export async function enrollStudentsInClassGroup(classGroupId: string, studentId
         return { success: true, count: studentIds.length, classGroup };
     });
 }
+
+export async function unlinkStudentsFromClassGroup(classGroupId: string, studentIds: string[]) {
+    return await prisma.$transaction(async (tx) => {
+        const classGroup = await tx.classGroup.findUnique({
+            where: { id: classGroupId },
+            include: { courses: { select: { id: true } } },
+        });
+
+        if (!classGroup) {
+            throw new Error("Turma não encontrada.");
+        }
+
+        const courseIds = classGroup.courses.map((c) => c.id);
+
+        if (courseIds.length === 0) {
+            return { success: true, count: 0 };
+        }
+
+        // 1. Remover Presenças
+        await tx.attendance.deleteMany({
+            where: {
+                studentId: { in: studentIds },
+                lesson: { courseId: { in: courseIds } },
+            },
+        });
+
+        // 2. Remover Notas
+        await tx.activityGrade.deleteMany({
+            where: {
+                studentId: { in: studentIds },
+                activity: { courseId: { in: courseIds } },
+            },
+        });
+
+        await tx.finalGrade.deleteMany({
+            where: {
+                studentId: { in: studentIds },
+                courseId: { in: courseIds },
+            },
+        });
+
+        await tx.studentCourseStats.deleteMany({
+            where: {
+                studentId: { in: studentIds },
+                courseId: { in: courseIds },
+            },
+        });
+
+        // 3. Remover Matrículas
+        await tx.enrollment.deleteMany({
+            where: {
+                studentId: { in: studentIds },
+                courseId: { in: courseIds },
+            },
+        });
+
+        // 4. Update status se não tiver mais nenhuma disciplina no periodo
+        for (const studentId of studentIds) {
+            const enrollmentsCount = await tx.enrollment.count({
+                where: {
+                    studentId,
+                    course: { periodId: classGroup.periodId },
+                },
+            });
+            
+            if (enrollmentsCount === 0) {
+                await tx.studentPeriod.updateMany({
+                    where: { studentId, periodId: classGroup.periodId },
+                    data: { status: "WAITING" },
+                });
+            }
+        }
+
+        return { success: true };
+    });
+}

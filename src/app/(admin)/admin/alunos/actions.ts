@@ -335,6 +335,9 @@ export async function unlinkStudentsFromPeriodAction(studentIds: string[], perio
 
         updateTag(`period:${periodId}:students-list`);
         updateTag(`period:${periodId}:students-count`);
+        updateTag(`period:${periodId}:class-groups`);
+        updateTag(`period:${periodId}`);
+        updateTag(`program:${periodId}:periods`);
 
         return { success: true };
     } catch (error) {
@@ -365,5 +368,53 @@ export async function enrollStudentsInClassGroupAction(studentIds: string[], cla
     } catch (error) {
         console.error("Erro ao enturmar alunos:", error);
         return { success: false, error: "Erro inesperado ao enturmar alunos." };
+    }
+}
+
+export async function unlinkStudentsFromClassGroupAction(studentIds: string[], classGroupId: string, periodId: string, adminPasswordConfirm: string) {
+    try {
+        const session = await auth.api.getSession({ headers: await headers() });
+        const actorId = session?.user?.id;
+
+        if (!actorId) {
+            return { success: false, error: "Não autorizado" };
+        }
+
+        if (studentIds.length === 0) {
+            return { success: false, error: "Nenhum aluno selecionado" };
+        }
+
+        // Verificar senha
+        const adminAccount = await prisma.account.findFirst({
+            where: { userId: actorId, providerId: "credential" },
+        });
+
+        if (!adminAccount?.password) {
+            return { success: false, error: "Não foi possível verificar a senha do administrador." };
+        }
+
+        const { verifyPassword } = await import("better-auth/crypto");
+        const isPasswordValid = await verifyPassword({
+            hash: adminAccount.password,
+            password: adminPasswordConfirm,
+        });
+
+        if (!isPasswordValid) {
+            return { success: false, error: "Senha incorreta." };
+        }
+
+        const { unlinkStudentsFromClassGroup } = await import("@/services/class-groups/class-groups.service");
+        await unlinkStudentsFromClassGroup(classGroupId, studentIds);
+
+        updateTag(`period:${periodId}:students-list`);
+        updateTag(`period:${periodId}:students-count`);
+        updateTag(`period:${periodId}:class-groups`);
+        updateTag(`class-group:${classGroupId}:students-list`);
+        updateTag(`class-group:${classGroupId}:students-count`);
+
+        return { success: true };
+    } catch (error) {
+        console.error("Erro ao desvincular alunos da turma:", error);
+        return { success: false, error: "Erro inesperado ao desvincular alunos da turma." };
     }
 }

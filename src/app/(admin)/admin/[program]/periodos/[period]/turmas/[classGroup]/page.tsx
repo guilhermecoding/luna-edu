@@ -4,13 +4,15 @@ import TitlePage from "@/components/title-page";
 import { ButtonLink } from "@/components/ui/button-link";
 import { getClassGroupByPeriodIdAndSlug } from "@/services/class-groups/class-groups.service";
 import { getPeriodByProgramAndSlug } from "@/services/periods/periods.service";
-import { getStudentCountByClassGroupId } from "@/services/students/students.service";
+import { getStudentCountByClassGroupId, getStudentsByClassGroupList } from "@/services/students/students.service";
 import { IconBooks, IconClockHour2, IconPencil, IconSchool, IconUsers } from "@tabler/icons-react";
 import { notFound } from "next/navigation";
 import InfoBoxPeriod from "../../_components/info-box-period";
 import ListDisciplines from "../_components/list-disciplines";
 import { Metadata } from "next";
 import { Shift } from "@/generated/prisma/enums";
+import { DataTableClassStudents } from "./_components/data-table-class-students";
+import { columns } from "../../alunos/_components/columns-period";
 
 export const metadata: Metadata = {
     title: "Detalhes da Turma",
@@ -18,10 +20,13 @@ export const metadata: Metadata = {
 
 export default async function ClassPage({
     params,
+    searchParams,
 }: {
     params: Promise<{ program: string; period: string; classGroup: string }>;
+    searchParams: Promise<{ q?: string }>;
 }) {
     const { program, period, classGroup: classGroupSlug } = await params;
+    const { q } = await searchParams;
 
     const periodData = await getPeriodByProgramAndSlug(program, period);
     if (!periodData) {
@@ -33,8 +38,11 @@ export default async function ClassPage({
         notFound();
     }
 
-    const studentCount = await getStudentCountByClassGroupId(classGroupData.id);
-    const disciplinesCount = classGroupData.courses.length;
+    const [studentCount, disciplinesCount, studentsList] = await Promise.all([
+        getStudentCountByClassGroupId(classGroupData.id),
+        Promise.resolve(classGroupData.courses.length),
+        getStudentsByClassGroupList(classGroupData.id, q),
+    ]);
 
     const shiftMap: Record<Shift, string> = {
         MORNING: "MATUTINO",
@@ -100,6 +108,22 @@ export default async function ClassPage({
                     periodSlug={period}
                     classGroupSlug={classGroupSlug}
                     studentCount={studentCount}
+                />
+            </Section>
+
+            <Section className="mt-12">
+                <div className="flex flex-row items-center gap-2 mb-6">
+                    <div className="bg-primary/10 p-2 rounded-lg">
+                        <IconUsers className="size-5 text-primary" />
+                    </div>
+                    <h2 className="text-xl font-bold text-foreground">Alunos Matriculados</h2>
+                </div>
+
+                <DataTableClassStudents
+                    columns={columns}
+                    data={studentsList}
+                    periodId={periodData.id}
+                    classGroupId={classGroupData.id}
                 />
             </Section>
         </Page>

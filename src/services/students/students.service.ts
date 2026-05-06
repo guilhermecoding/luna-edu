@@ -23,6 +23,63 @@ export async function getStudentCountByClassGroupId(classGroupId: string): Promi
 }
 
 /**
+ * Retorna a lista de alunos de uma turma física específica no mesmo formato da lista principal.
+ */
+export async function getStudentsByClassGroupList(classGroupId: string, query?: string) {
+    "use cache";
+    cacheLife("minutes");
+    cacheTag(`class-group:${classGroupId}:students-list`);
+
+    return await prisma.student.findMany({
+        where: {
+            enrollments: {
+                some: {
+                    course: {
+                        classGroupId: classGroupId,
+                    },
+                },
+            },
+            ...(query ? {
+                OR: [
+                    {
+                        name: {
+                            contains: query,
+                            mode: "insensitive" as const,
+                        },
+                    },
+                    ...(query.replace(/\D/g, "") ? [
+                        {
+                            cpf: {
+                                contains: query.replace(/\D/g, ""),
+                            },
+                        },
+                        {
+                            lunaId: {
+                                contains: query.replace(/\D/g, ""),
+                            },
+                        },
+                    ] : []),
+                ],
+            } : {}),
+        },
+        select: {
+            id: true,
+            lunaId: true,
+            name: true,
+            email: true,
+            cpf: true,
+            studentPhone: true,
+            birthDate: true,
+            genre: true,
+            school: true,
+        },
+        orderBy: {
+            name: "asc",
+        },
+    });
+}
+
+/**
  * Retorna a quantidade total de alunos no sistema.
  */
 export async function getTotalStudentsCount(): Promise<number> {

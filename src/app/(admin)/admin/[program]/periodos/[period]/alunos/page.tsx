@@ -1,4 +1,4 @@
-import { IconSchool, IconChartBar, IconPlus, IconUserCircle, IconArrowLeft } from "@tabler/icons-react";
+import { IconSchool, IconChartBar, IconPlus, IconUserCircle } from "@tabler/icons-react";
 import Page from "@/components/page";
 import Section from "@/components/section";
 import TitlePage from "@/components/title-page";

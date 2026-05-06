@@ -78,6 +78,7 @@ async function ListOthersPeriodsContent({
                             statusLabel={statusLabel}
                             statusVariant={statusVariant}
                             coursesCount={period._count.courses}
+                            studentsCount={period._count.studentPeriods}
                         />
                     );
                 })()

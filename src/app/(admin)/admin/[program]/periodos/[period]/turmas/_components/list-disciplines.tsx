@@ -35,10 +35,6 @@ function ShiftIcon({ shift }: { shift: Shift }) {
     }
 }
 
-// ── Ocupação estática (placeholder) ────────────────────────────────
-function getStaticEnrollment(name: string): number {
-    return 15 + (hashString(name) % 25); // entre 15 e 39
-}
 
 // ── Skeleton ───────────────────────────────────────────────────────
 export function ListDisciplinesSkeleton() {
@@ -173,7 +169,7 @@ function ListDisciplinesContent({
                                     </div>
                                 </td>
 
-                                {/* ── Professor (estático) ── */}
+                                {/* ── Professor ── */}
                                 <td className="px-4 sm:px-6 py-4">
                                     <div className="flex justify-center">
                                         <span className="inline-flex items-center gap-1.5 text-sm sm:text-base text-foreground whitespace-nowrap">
@@ -226,7 +222,7 @@ function ListDisciplinesContent({
                                                     </span>
                                                     <span className="text-muted-foreground">({Math.round(occupancyPct)}%)</span>
                                                 </div>
-                                                <div className="h-1.5 w-full bg-muted rounded-full overflow-hidden">
+                                                <div className="h-1.5 w-full bg-primary/10 dark:bg-muted rounded-full overflow-hidden">
                                                     <div
                                                         className={`h-full rounded-full transition-all ${roomColor?.bar}`}
                                                         style={{ width: `${occupancyPct}%` }}

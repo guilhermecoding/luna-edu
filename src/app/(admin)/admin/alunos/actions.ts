@@ -298,15 +298,36 @@ export async function importStudentsAction(formData: FormData): Promise<ImportRe
     }
 }
 
-export async function unlinkStudentsFromPeriodAction(studentIds: string[], periodId: string) {
+export async function unlinkStudentsFromPeriodAction(studentIds: string[], periodId: string, adminPasswordConfirm: string) {
     try {
         const session = await auth.api.getSession({ headers: await headers() });
-        if (!session?.user?.id) {
+        const actorId = session?.user?.id;
+
+        if (!actorId) {
             return { success: false, error: "Não autorizado" };
         }
 
         if (studentIds.length === 0) {
             return { success: false, error: "Nenhum aluno selecionado" };
+        }
+
+        // Verificar senha
+        const adminAccount = await prisma.account.findFirst({
+            where: { userId: actorId, providerId: "credential" },
+        });
+
+        if (!adminAccount?.password) {
+            return { success: false, error: "Não foi possível verificar a senha do administrador." };
+        }
+
+        const { verifyPassword } = await import("better-auth/crypto");
+        const isPasswordValid = await verifyPassword({
+            hash: adminAccount.password,
+            password: adminPasswordConfirm,
+        });
+
+        if (!isPasswordValid) {
+            return { success: false, error: "Senha incorreta." };
         }
 
         const { unlinkStudentsFromPeriod } = await import("@/services/students/students.service");

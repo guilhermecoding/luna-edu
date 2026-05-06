@@ -19,9 +19,11 @@ import {
 import { useEffect, useState, useTransition } from "react";
 import { Input } from "@/components/ui/input";
 import { useRouter, useSearchParams } from "next/navigation";
-import { IconSearch, IconUserMinus, IconLoader2 } from "@tabler/icons-react";
+import { IconSearch, IconUserMinus, IconLoader2, IconAlertTriangle } from "@tabler/icons-react";
 import { toast } from "sonner";
 import { unlinkStudentsFromPeriodAction } from "@/app/(admin)/admin/alunos/actions";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[];
@@ -38,6 +40,10 @@ export function DataTablePeriodStudents<TData, TValue>({
 }: DataTableProps<TData, TValue>) {
     const [rowSelection, setRowSelection] = useState({});
     const [isPending, startTransition] = useTransition();
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [adminPassword, setAdminPassword] = useState("");
+    const [error, setError] = useState<string | null>(null);
+
     const router = useRouter();
     const searchParams = useSearchParams();
     const [query, setQuery] = useState(searchParams.get("q") || "");
@@ -79,23 +85,19 @@ export function DataTablePeriodStudents<TData, TValue>({
     const hasSelection = selectedRows.length > 0;
 
     const handleUnlink = () => {
-        if (!hasSelection) return;
-
-        const studentIds = selectedRows.map((row) => (row.original as { id: string }).id);
-        const names = selectedRows.map((row) => (row.original as { name: string }).name).join(", ");
-
-        if (!confirm(`Tem certeza que deseja desvincular ${selectedRows.length} aluno(s) deste período?\n\nAlunos: ${names}\n\nIsso removerá também todas as matrículas, notas e presenças vinculadas a este período.`)) {
-            return;
-        }
-
+        setError(null);
         startTransition(async () => {
-            const res = await unlinkStudentsFromPeriodAction(studentIds, periodId);
+            const studentIds = selectedRows.map((row) => (row.original as { id: string }).id);
+            const res = await unlinkStudentsFromPeriodAction(studentIds, periodId, adminPassword);
+
             if (res.success) {
                 toast.success("Alunos desvinculados com sucesso!");
                 setRowSelection({});
+                setIsModalOpen(false);
+                setAdminPassword("");
                 router.refresh();
             } else {
-                toast.error(res.error || "Erro ao desvincular alunos");
+                setError(res.error || "Erro ao desvincular alunos");
             }
         });
     };
@@ -123,20 +125,89 @@ export function DataTablePeriodStudents<TData, TValue>({
                         <Button
                             variant="destructive"
                             size="sm"
-                            onClick={handleUnlink}
+                            onClick={() => setIsModalOpen(true)}
                             disabled={isPending}
                             className="w-full sm:w-auto h-10 px-4 text-sm rounded-full animate-in fade-in zoom-in duration-200"
                         >
-                            {isPending ? (
-                                <IconLoader2 className="size-4 mr-2 animate-spin" />
-                            ) : (
-                                <IconUserMinus className="size-4 mr-2" />
-                            )}
+                            <IconUserMinus className="size-4 mr-2" />
                             Desvincular ({selectedRows.length})
                         </Button>
                     )}
                 </div>
             </div>
+
+            <Dialog
+                open={isModalOpen}
+                onOpenChange={(open) => {
+                    setIsModalOpen(open);
+                    if (!open) {
+                        setAdminPassword("");
+                        setError(null);
+                    }
+                }}
+            >
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogTitle className="flex items-center gap-2 text-destructive">
+                            <IconAlertTriangle className="size-5" />
+                            Confirmar Desvinculação
+                        </DialogTitle>
+                        <DialogDescription>
+                            Você está prestes a desvincular <b>{selectedRows.length} aluno{selectedRows.length > 1 ? "s" : ""}</b> deste período.
+                        </DialogDescription>
+                    </DialogHeader>
+
+                    <div className="bg-destructive/10 p-4 rounded-xl space-y-2">
+                        <p className="text-sm font-bold text-destructive flex items-center gap-2 uppercase tracking-wide">
+                            <IconAlertTriangle className="size-4" />
+                            Atenção: Consequências
+                        </p>
+                        <p className="text-sm text-destructive/80 leading-relaxed">
+                            Esta ação removerá <b>permanentemente</b> todas as matrículas, notas e presenças vinculadas a este período.
+                            Os dados cadastrais do aluno no sistema não serão afetados.
+                        </p>
+                    </div>
+
+                    <div className="flex flex-col items-center text-center gap-4 py-4">
+                        <div className="space-y-2 w-full text-left">
+                            <Label htmlFor="confirm-password">Para confirmar, digite sua senha de administrador:</Label>
+                            <Input
+                                id="confirm-password"
+                                type="password"
+                                value={adminPassword}
+                                onChange={(e) => setAdminPassword(e.target.value)}
+                                placeholder="••••••••"
+                                className="rounded-xl h-12"
+                                disabled={isPending}
+                                autoFocus
+                            />
+                            {error && <p className="text-sm text-red-600 font-medium animate-in fade-in slide-in-from-top-1">{error}</p>}
+                        </div>
+                    </div>
+
+                    <DialogFooter className="gap-3 flex flex-col-reverse sm:flex-row">
+                        <Button
+                            type="button"
+                            variant="outline"
+                            onClick={() => setIsModalOpen(false)}
+                            disabled={isPending}
+                            className="h-11"
+                        >
+                            Cancelar
+                        </Button>
+                        <Button
+                            type="button"
+                            variant="destructive"
+                            onClick={handleUnlink}
+                            disabled={!adminPassword || isPending}
+                            className="h-11 px-8"
+                        >
+                            {isPending && <IconLoader2 className="size-4 mr-2 animate-spin" />}
+                            {isPending ? "Processando..." : "Desvincular"}
+                        </Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
 
             <div className="rounded-md border border-surface-border overflow-hidden bg-background">
                 <Table>

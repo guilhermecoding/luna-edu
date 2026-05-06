@@ -142,12 +142,19 @@ export async function getStudentsList(query?: string) {
 export type StudentListItem = Awaited<ReturnType<typeof getStudentsList>>[number];
 
 /**
- * Retorna a lista de alunos de um período que ainda não foram enturmados (status WAITING).
+ * Retorna a lista de alunos de um período que estão disponíveis para serem enturmados em uma turma específica.
+ * Um aluno está disponível se ele pertence ao período e ainda não está matriculado nesta turma específica.
  */
-export async function getStudentsWaitingByPeriod(periodId: string, query?: string, page: number = 1, limit: number = 20) {
+export async function getAvailableStudentsForClassGroup(
+    periodId: string,
+    classGroupId: string,
+    query?: string,
+    page: number = 1,
+    limit: number = 20,
+) {
     "use cache";
     cacheLife("minutes");
-    cacheTag(`period:${periodId}:students-waiting`);
+    cacheTag(`period:${periodId}:available-students`);
 
     const skip = (page - 1) * limit;
 
@@ -155,7 +162,16 @@ export async function getStudentsWaitingByPeriod(periodId: string, query?: strin
         studentPeriods: {
             some: {
                 periodId,
-                status: "WAITING" as const,
+            },
+        },
+        // Não mostrar alunos que já estão nesta turma específica
+        NOT: {
+            enrollments: {
+                some: {
+                    course: {
+                        classGroupId: classGroupId,
+                    },
+                },
             },
         },
         ...(query ? {

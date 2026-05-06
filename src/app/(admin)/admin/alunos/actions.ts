@@ -362,6 +362,9 @@ export async function enrollStudentsInClassGroupAction(studentIds: string[], cla
 
         updateTag(`period:${periodId}:students-list`);
         updateTag(`period:${periodId}:students-count`);
+        updateTag(`period:${periodId}:available-students`);
+        updateTag(`period:${periodId}:class-groups`);
+        updateTag(`class-group:${classGroupId}:students-list`);
         updateTag(`class-group:${classGroupId}:students-count`);
 
         return { success: true };
@@ -408,6 +411,7 @@ export async function unlinkStudentsFromClassGroupAction(studentIds: string[], c
 
         updateTag(`period:${periodId}:students-list`);
         updateTag(`period:${periodId}:students-count`);
+        updateTag(`period:${periodId}:available-students`);
         updateTag(`period:${periodId}:class-groups`);
         updateTag(`class-group:${classGroupId}:students-list`);
         updateTag(`class-group:${classGroupId}:students-count`);
@@ -419,15 +423,15 @@ export async function unlinkStudentsFromClassGroupAction(studentIds: string[], c
     }
 }
 
-export async function getWaitingStudentsAction(periodId: string, query?: string, page: number = 1, limit: number = 20) {
+export async function getAvailableStudentsAction(periodId: string, classGroupId: string, query?: string, page: number = 1, limit: number = 20) {
     try {
         const session = await auth.api.getSession({ headers: await headers() });
         if (!session?.user?.id) {
             return { success: false, error: "Não autorizado" };
         }
 
-        const { getStudentsWaitingByPeriod } = await import("@/services/students/students.service");
-        const { students, total } = await getStudentsWaitingByPeriod(periodId, query, page, limit);
+        const { getAvailableStudentsForClassGroup } = await import("@/services/students/students.service");
+        const { students, total } = await getAvailableStudentsForClassGroup(periodId, classGroupId, query, page, limit);
 
         return { 
             success: true, 
@@ -436,8 +440,7 @@ export async function getWaitingStudentsAction(periodId: string, query?: string,
             totalPages: Math.ceil(total / limit),
         };
     } catch (error) {
-        console.error("Erro ao buscar alunos em espera:", error);
+        console.error("Erro ao buscar alunos disponíveis:", error);
         return { success: false, error: "Erro inesperado ao buscar alunos." };
     }
 }
-

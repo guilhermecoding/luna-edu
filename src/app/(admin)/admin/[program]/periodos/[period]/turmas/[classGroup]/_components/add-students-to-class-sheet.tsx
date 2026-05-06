@@ -13,7 +13,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { IconSearch, IconUserPlus, IconLoader2, IconUserCheck, IconX, IconChevronLeft, IconChevronRight } from "@tabler/icons-react";
-import { getWaitingStudentsAction, enrollStudentsInClassGroupAction } from "@/app/(admin)/admin/alunos/actions";
+import { getAvailableStudentsAction, enrollStudentsInClassGroupAction } from "@/app/(admin)/admin/alunos/actions";
 import { StudentListItem } from "@/services/students/students.service";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
@@ -47,7 +47,7 @@ export function AddStudentsToClassSheet({
 
     const fetchStudents = useCallback(async (searchQuery: string, currentPage: number) => {
         setLoading(true);
-        const res = await getWaitingStudentsAction(periodId, searchQuery, currentPage, 10);
+        const res = await getAvailableStudentsAction(periodId, classGroupId, searchQuery, currentPage, 10);
         if (res.success && res.students) {
             setStudents(res.students);
             setTotalPages(res.totalPages || 1);
@@ -55,7 +55,7 @@ export function AddStudentsToClassSheet({
             toast.error(res.error || "Erro ao buscar alunos.");
         }
         setLoading(false);
-    }, [periodId]);
+    }, [periodId, classGroupId]);
 
     useEffect(() => {
         const timer = setTimeout(() => {

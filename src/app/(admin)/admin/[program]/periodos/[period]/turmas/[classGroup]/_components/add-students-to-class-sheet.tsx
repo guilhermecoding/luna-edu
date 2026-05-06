@@ -155,8 +155,8 @@ export function AddStudentsToClassSheet({
                 <SheetHeader className="p-6 border-b border-surface-border bg-background/50 backdrop-blur-sm shrink-0">
                     <div className="space-y-1">
                         <SheetTitle className="text-2xl font-bold flex items-center gap-2">
-                            <div className="p-2 bg-primary/10">
-                                <IconUserPlus className="size-6 text-primary" />
+                            <div className="p-2 bg-primary/10 rounded-lg">
+                                <IconUserPlus className="size-4 text-primary" />
                             </div>
                             Adicionar Alunos
                         </SheetTitle>
@@ -241,7 +241,7 @@ export function AddStudentsToClassSheet({
                                             <AvatarUsers genre={student.genre} age={calculateAge(student.birthDate)} className="size-10" />
                                             <div className="flex-1 min-w-0">
                                                 <p className="font-bold truncate">{student.name}</p>
-                                                <p className="text-xs text-muted-foreground">{student.lunaId} • {maskCPF(student.cpf)}</p>
+                                                <p className="text-xs text-muted-foreground">{student.lunaId} • {maskCPF(student.cpf)} • {calculateAge(student.birthDate) ? `${calculateAge(student.birthDate)} anos` : "---"}</p>
                                             </div>
                                         </div>
                                     ))

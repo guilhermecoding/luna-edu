@@ -169,7 +169,7 @@ async function ListClassGroupsContent({
                                         <div className="flex flex-row gap-1 items-center border border-surface-border rounded-full px-2 py-1 whitespace-nowrap">
                                             <IconUser className="size-4" />
                                             <span className="font-medium text-xs">
-                                                23 alunos
+                                                {group._count.students} aluno{group._count.students !== 1 ? "s" : ""}
                                             </span>
                                         </div>
                                     </div>

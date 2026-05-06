@@ -10,6 +10,7 @@ import { notFound } from "next/navigation";
 import InfoBoxPeriod from "../../_components/info-box-period";
 import ListDisciplines from "../_components/list-disciplines";
 import { Metadata } from "next";
+import { Shift } from "@/generated/prisma/enums";
 
 export const metadata: Metadata = {
     title: "Detalhes da Turma",
@@ -35,7 +36,7 @@ export default async function ClassPage({
     const studentCount = await getStudentCountByClassGroupId(classGroupData.id);
     const disciplinesCount = classGroupData.courses.length;
 
-    const shiftMap: Record<string, string> = {
+    const shiftMap: Record<Shift, string> = {
         MORNING: "MATUTINO",
         AFTERNOON: "VESPERTINO",
         EVENING: "NOTURNO",

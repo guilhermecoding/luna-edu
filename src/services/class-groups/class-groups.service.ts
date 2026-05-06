@@ -11,7 +11,7 @@ export async function getClassGroupsByPeriodId(periodId: string, teacherId?: str
     cacheLife("max");
     cacheTag(`period:${periodId}:class-groups`);
 
-    return await prisma.classGroup.findMany({
+    const groups = await prisma.classGroup.findMany({
         where: {
             periodId,
             ...(teacherId ? {
@@ -42,6 +42,44 @@ export async function getClassGroupsByPeriodId(periodId: string, teacherId?: str
             },
         },
     });
+
+    // Buscar contagem de alunos únicos por turma física
+    const classGroupIds = groups.map((g) => g.id);
+    const enrollments = await prisma.enrollment.findMany({
+        where: {
+            course: {
+                classGroupId: { in: classGroupIds },
+            },
+        },
+        select: {
+            studentId: true,
+            course: {
+                select: {
+                    classGroupId: true,
+                },
+            },
+        },
+    });
+
+    // Mapear alunos únicos por turma
+    const studentMap = new Map<string, Set<string>>();
+    for (const enrollment of enrollments) {
+        const groupId = enrollment.course.classGroupId;
+        if (!groupId) continue;
+
+        if (!studentMap.has(groupId)) {
+            studentMap.set(groupId, new Set());
+        }
+        studentMap.get(groupId)!.add(enrollment.studentId);
+    }
+
+    return groups.map((group) => ({
+        ...group,
+        _count: {
+            ...group._count,
+            students: studentMap.get(group.id)?.size || 0,
+        },
+    }));
 }
 
 /**

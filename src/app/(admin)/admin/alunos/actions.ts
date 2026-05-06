@@ -297,3 +297,27 @@ export async function importStudentsAction(formData: FormData): Promise<ImportRe
         return { success: false, error: "Erro inesperado durante a importação." };
     }
 }
+
+export async function unlinkStudentsFromPeriodAction(studentIds: string[], periodId: string) {
+    try {
+        const session = await auth.api.getSession({ headers: await headers() });
+        if (!session?.user?.id) {
+            return { success: false, error: "Não autorizado" };
+        }
+
+        if (studentIds.length === 0) {
+            return { success: false, error: "Nenhum aluno selecionado" };
+        }
+
+        const { unlinkStudentsFromPeriod } = await import("@/services/students/students.service");
+        await unlinkStudentsFromPeriod(studentIds, periodId);
+
+        updateTag(`period:${periodId}:students-list`);
+        updateTag(`period:${periodId}:students-count`);
+
+        return { success: true };
+    } catch (error) {
+        console.error("Erro ao desvincular alunos:", error);
+        return { success: false, error: "Erro inesperado ao desvincular alunos." };
+    }
+}

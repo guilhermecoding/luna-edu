@@ -5,8 +5,8 @@ import TitlePage from "@/components/title-page";
 import { getStudentsByPeriodList, getTotalStudentsCountByPeriodId } from "@/services/students/students.service";
 import { getPeriodByProgramAndSlug } from "@/services/periods/periods.service";
 import InfoBoxStudents from "@/app/(admin)/admin/alunos/_components/info-box-students";
-import { DataTable } from "@/app/(admin)/admin/alunos/_components/data-table";
-import { columns } from "@/app/(admin)/admin/alunos/_components/columns";
+import { DataTablePeriodStudents } from "./_components/data-table-period-students";
+import { columns } from "./_components/columns-period";
 import { Metadata } from "next";
 import { ButtonLink } from "@/components/ui/button-link";
 import { notFound } from "next/navigation";
@@ -47,7 +47,7 @@ export default async function PeriodStudentsPage({
                     <div className="flex-1">
                         <TitlePage
                             title={`Alunos - ${periodData.name}`}
-                            description="Gerencie todos os alunos matriculados ou em espera neste período."
+                            description="Gerencie todos os alunos matriculados ou em espera neste período. Você pode selecionar alunos para desvinculá-los."
                         />
                     </div>
                     <div className="flex flex-col sm:flex-row flex-1 gap-2 justify-end items-end">
@@ -81,13 +81,14 @@ export default async function PeriodStudentsPage({
 
             <Section className="mt-8">
                 <div className="bg-surface border border-surface-border p-6 rounded-3xl">
-                    <DataTable
+                    <DataTablePeriodStudents
                         columns={columns}
                         data={studentsList}
+                        periodId={periodData.id}
                         title={
                             <h2 className="text-xl flex flex-row items-center gap-2 font-bold text-foreground">
                                 <IconSchool className="size-6" />
-                                Todos os alunos deste período
+                                Alunos vinculados
                             </h2>
                         }
                     />

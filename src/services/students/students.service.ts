@@ -369,3 +369,69 @@ export async function bulkUpsertStudents(students: BulkStudentInput[], periodId?
 
     return { created, updated, errors, total: students.length };
 }
+/**
+ * Desvincula uma lista de alunos de um período, removendo todos os seus dados relacionados a esse período.
+ */
+export async function unlinkStudentsFromPeriod(studentIds: string[], periodId: string) {
+    return await prisma.$transaction(async (tx) => {
+        // 1. Remover Presenças em aulas de cursos deste período
+        await tx.attendance.deleteMany({
+            where: {
+                studentId: { in: studentIds },
+                lesson: {
+                    course: {
+                        periodId: periodId,
+                    },
+                },
+            },
+        });
+
+        // 2. Remover Notas de Atividades de cursos deste período
+        await tx.activityGrade.deleteMany({
+            where: {
+                studentId: { in: studentIds },
+                activity: {
+                    course: {
+                        periodId: periodId,
+                    },
+                },
+            },
+        });
+
+        // 3. Remover Notas Finais e Estatísticas de cursos deste período
+        await tx.finalGrade.deleteMany({
+            where: {
+                studentId: { in: studentIds },
+                course: {
+                    periodId: periodId,
+                },
+            },
+        });
+        await tx.studentCourseStats.deleteMany({
+            where: {
+                studentId: { in: studentIds },
+                course: {
+                    periodId: periodId,
+                },
+            },
+        });
+
+        // 4. Remover Matrículas em cursos deste período
+        await tx.enrollment.deleteMany({
+            where: {
+                studentId: { in: studentIds },
+                course: {
+                    periodId: periodId,
+                },
+            },
+        });
+
+        // 5. Finalmente, remover o vínculo de Período (Em Espera / Matriculado)
+        return await tx.studentPeriod.deleteMany({
+            where: {
+                studentId: { in: studentIds },
+                periodId: periodId,
+            },
+        });
+    });
+}

@@ -177,8 +177,10 @@ export async function getAvailableStudentsForClassGroup(
         ...(query ? {
             OR: [
                 { name: { contains: query, mode: "insensitive" as const } },
-                { cpf: { contains: query.replace(/\D/g, "") } },
-                { lunaId: { contains: query.replace(/\D/g, "") } },
+                ...(query.replace(/\D/g, "") ? [
+                    { cpf: { contains: query.replace(/\D/g, "") } },
+                    { lunaId: { contains: query.replace(/\D/g, "") } },
+                ] : []),
             ],
         } : {}),
     };

@@ -58,13 +58,16 @@ export function AddStudentsToClassSheet({
     }, [periodId, classGroupId]);
 
     useEffect(() => {
+        if (!open) {
+            return;
+        }
+
         const timer = setTimeout(() => {
-            if (open) {
-                fetchStudents(query, 1);
-            }
+            fetchStudents(query, page);
         }, 500);
+
         return () => clearTimeout(timer);
-    }, [open, query, fetchStudents]);
+    }, [open, query, page, fetchStudents]);
 
     const handlePageChange = (newPage: number) => {
         if (newPage >= 1 && newPage <= totalPages) {

@@ -432,7 +432,7 @@ model Student {
   studentPhone String   @map("student_phone")
   parentPhone  String?  @map("parent_phone")
   cpf          String   @unique
-  email        String   @unique
+  email        String
   school       String
   genre        Genre
   lunaId       String?  @unique @map("luna_id")

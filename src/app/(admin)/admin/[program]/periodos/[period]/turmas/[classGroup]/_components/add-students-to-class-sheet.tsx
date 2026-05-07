@@ -87,7 +87,7 @@ export function AddStudentsToClassSheet({
         if (!bulkInput.trim()) return;
 
         setIsValidatingBulk(true);
-        const identifiers = bulkInput.split(/[\n,;]+/).map(i => i.trim()).filter(i => i.length > 0);
+        const identifiers = bulkInput.split(/[\n,;]+/).map(i => i.trim().replace(/[.-]/g, "")).filter(i => i.length > 0);
 
         const res = await findStudentsByListAction(identifiers, periodId);
 

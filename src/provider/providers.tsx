@@ -3,6 +3,7 @@
 import { Toaster } from "@/components/ui/sonner";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { ThemeProvider } from "@/components/theme-provider";
 
 /**
  * Componente de Providers para fornecer contextos globais.
@@ -14,11 +15,13 @@ export default function Providers({
     children: React.ReactNode;
 }>) {
     return (
-        <SidebarProvider>
-            <TooltipProvider>
-                {children}
-            </TooltipProvider>
-            <Toaster richColors position="top-right" />
-        </SidebarProvider>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+            <SidebarProvider>
+                <TooltipProvider>
+                    {children}
+                </TooltipProvider>
+                <Toaster richColors position="top-right" />
+            </SidebarProvider>
+        </ThemeProvider>
     );
 }

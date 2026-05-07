@@ -105,7 +105,7 @@ export async function getPeriodsByProgramSlug(
         return [];
     }
 
-    return prisma.period.findMany({
+    const periods = await prisma.period.findMany({
         where: { programId: program.id },
         orderBy: [{ startDate: "desc" }, { createdAt: "desc" }],
         select: {
@@ -118,10 +118,30 @@ export async function getPeriodsByProgramSlug(
             _count: {
                 select: {
                     courses: true,
+                    studentPeriods: true,
                 },
             },
         },
     });
+
+    // Buscar contagem de matriculados separadamente para evitar N+1 e limitações do _count
+    const enrolledGrouped = await prisma.studentPeriod.groupBy({
+        by: ["periodId"],
+        where: {
+            periodId: { in: periods.map((p) => p.id) },
+            status: "ENROLLED",
+        },
+        _count: {
+            _all: true,
+        },
+    });
+
+    const enrolledMap = new Map(enrolledGrouped.map((g) => [g.periodId, g._count._all]));
+
+    return periods.map((p) => ({
+        ...p,
+        enrolledCount: enrolledMap.get(p.id) || 0,
+    }));
 }
 
 /**
@@ -312,4 +332,39 @@ export async function deletePeriod(programSlug: string, periodSlug: string): Pro
         }
         throw error;
     }
+}
+
+/**
+ * Retorna estatísticas de alunos para um período específico.
+ * 
+ * Usa 'some' nos relacionamentos para contar de forma eficiente apenas 
+ * alunos que possuem ao menos uma matrícula em turmas deste período.
+ * 
+ * @param periodId ID do período.
+ * @returns Objeto com total global de alunos e total de alunos matriculados no período.
+ */
+export async function getPeriodStats(periodId: string) {
+    const [totalStudents, enrolledStudents] = await Promise.all([
+        prisma.studentPeriod.count({
+            where: {
+                periodId: periodId,
+            },
+        }),
+        prisma.student.count({
+            where: {
+                enrollments: {
+                    some: {
+                        course: {
+                            periodId: periodId,
+                        },
+                    },
+                },
+            },
+        }),
+    ]);
+
+    return {
+        totalStudents,
+        enrolledStudents,
+    };
 }

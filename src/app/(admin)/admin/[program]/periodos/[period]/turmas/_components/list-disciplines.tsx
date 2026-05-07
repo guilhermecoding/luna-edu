@@ -35,24 +35,6 @@ function ShiftIcon({ shift }: { shift: Shift }) {
     }
 }
 
-// ── Professores estáticos (placeholder) ────────────────────────────
-const STATIC_TEACHERS = [
-    "Prof. Ana Silva",
-    "Prof. Carlos Souza",
-    "Prof. Maria Oliveira",
-    "Prof. João Santos",
-    "Prof. Fernanda Lima",
-    "Prof. Ricardo Alves",
-];
-
-function getStaticTeacher(name: string): string {
-    return STATIC_TEACHERS[hashString(name) % STATIC_TEACHERS.length];
-}
-
-// ── Ocupação estática (placeholder) ────────────────────────────────
-function getStaticEnrollment(name: string): number {
-    return 15 + (hashString(name) % 25); // entre 15 e 39
-}
 
 // ── Skeleton ───────────────────────────────────────────────────────
 export function ListDisciplinesSkeleton() {
@@ -131,11 +113,13 @@ function ListDisciplinesContent({
     programSlug,
     periodSlug,
     classGroupSlug,
+    studentCount,
 }: {
     courses: CourseWithRelations[];
     programSlug: string;
     periodSlug: string;
     classGroupSlug: string;
+    studentCount: number;
 }) {
     if (courses.length === 0) {
         return <EmptyDisciplinesList />;
@@ -157,8 +141,8 @@ function ListDisciplinesContent({
                 <tbody className="divide-y divide-surface-border">
                     {courses.map((course) => {
                         const avatarColor = getAvatarColor(course.subject.name);
-                        const teacher = getStaticTeacher(course.name);
-                        const enrolled = getStaticEnrollment(course.name);
+                        const teacher = course.schedules.find(s => s.teacher)?.teacher?.name || "Não atribuído";
+                        const enrolled = studentCount;
                         const roomCapacity = course.room ? Number(course.room.capacity) : 0;
                         const occupancyPct = roomCapacity > 0 ? Math.min((enrolled / roomCapacity) * 100, 100) : 0;
                         const roomColor = course.room ? getOccupancyColor(course.room.name) : null;
@@ -185,7 +169,7 @@ function ListDisciplinesContent({
                                     </div>
                                 </td>
 
-                                {/* ── Professor (estático) ── */}
+                                {/* ── Professor ── */}
                                 <td className="px-4 sm:px-6 py-4">
                                     <div className="flex justify-center">
                                         <span className="inline-flex items-center gap-1.5 text-sm sm:text-base text-foreground whitespace-nowrap">
@@ -238,7 +222,7 @@ function ListDisciplinesContent({
                                                     </span>
                                                     <span className="text-muted-foreground">({Math.round(occupancyPct)}%)</span>
                                                 </div>
-                                                <div className="h-1.5 w-full bg-muted rounded-full overflow-hidden">
+                                                <div className="h-1.5 w-full bg-primary/10 dark:bg-muted rounded-full overflow-hidden">
                                                     <div
                                                         className={`h-full rounded-full transition-all ${roomColor?.bar}`}
                                                         style={{ width: `${occupancyPct}%` }}
@@ -275,11 +259,13 @@ export default function ListDisciplines({
     programSlug,
     periodSlug,
     classGroupSlug,
+    studentCount,
 }: {
     courses: CourseWithRelations[];
     programSlug: string;
     periodSlug: string;
     classGroupSlug: string;
+    studentCount: number;
 }) {
     return (
         <ListDisciplinesContent
@@ -287,6 +273,7 @@ export default function ListDisciplines({
             programSlug={programSlug}
             periodSlug={periodSlug}
             classGroupSlug={classGroupSlug}
+            studentCount={studentCount}
         />
     );
 }

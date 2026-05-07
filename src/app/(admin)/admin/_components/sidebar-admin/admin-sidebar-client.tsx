@@ -6,12 +6,6 @@ import { ItemMenuSidebarAdmin } from "@/@types/item-menu-sidebar.type";
 
 import { usePathname, useParams } from "next/navigation";
 
-const user = {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/gibby-normal-icon.svg",
-};
-
 function injectParams(url: string, params: Record<string, string | string[] | undefined>): string | null {
     let finalUrl = url;
     for (const [key, value] of Object.entries(params)) {
@@ -69,5 +63,5 @@ export function AdminSidebarContent({ menus }: { menus: ItemMenuSidebarAdmin[] }
 }
 
 export function AdminSidebarFooter() {
-    return <NavUser user={user} />;
+    return <NavUser />;
 }

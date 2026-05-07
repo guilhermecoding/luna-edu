@@ -81,12 +81,14 @@ async function ListClassGroupsContent({
     periodId,
     programSlug,
     periodSlug,
+    teacherId,
 }: {
     periodId: string;
     programSlug: string;
     periodSlug: string;
+    teacherId?: string;
 }) {
-    const groups = await getClassGroupsByPeriodId(periodId);
+    const groups = await getClassGroupsByPeriodId(periodId, teacherId);
 
     if (groups.length === 0) {
         return (
@@ -167,7 +169,7 @@ async function ListClassGroupsContent({
                                         <div className="flex flex-row gap-1 items-center border border-surface-border rounded-full px-2 py-1 whitespace-nowrap">
                                             <IconUser className="size-4" />
                                             <span className="font-medium text-xs">
-                                                23 alunos
+                                                {group._count.students} aluno{group._count.students !== 1 ? "s" : ""}
                                             </span>
                                         </div>
                                     </div>
@@ -198,10 +200,12 @@ export default function ListClassGroups({
     periodId,
     programSlug,
     periodSlug,
+    teacherId,
 }: {
     periodId: string;
     programSlug: string;
     periodSlug: string;
+    teacherId?: string;
 }) {
     return (
         <Suspense fallback={<ListClassGroupsSkeleton />}>
@@ -209,6 +213,7 @@ export default function ListClassGroups({
                 periodId={periodId}
                 programSlug={programSlug}
                 periodSlug={periodSlug}
+                teacherId={teacherId}
             />
         </Suspense>
     );

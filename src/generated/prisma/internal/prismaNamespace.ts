@@ -80,12 +80,12 @@ export type PrismaVersion = {
 }
 
 /**
- * Prisma Client JS version: 7.7.0
- * Query Engine version: 75cbdc1eb7150937890ad5465d861175c6624711
+ * Prisma Client JS version: 7.8.0
+ * Query Engine version: 3c6e192761c0362d496ed980de936e2f3cebcd3a
  */
 export const prismaVersion: PrismaVersion = {
-  client: "7.7.0",
-  engine: "75cbdc1eb7150937890ad5465d861175c6624711"
+  client: "7.8.0",
+  engine: "3c6e192761c0362d496ed980de936e2f3cebcd3a"
 }
 
 /**
@@ -401,6 +401,7 @@ export const ModelName = {
   Course: 'Course',
   Student: 'Student',
   Enrollment: 'Enrollment',
+  StudentPeriod: 'StudentPeriod',
   Lesson: 'Lesson',
   Attendance: 'Attendance',
   Activity: 'Activity',
@@ -424,7 +425,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "session" | "account" | "verification" | "program" | "degree" | "subject" | "campus" | "room" | "period" | "subPeriod" | "classGroup" | "timeSlot" | "schedule" | "course" | "student" | "enrollment" | "lesson" | "attendance" | "activity" | "activityGrade" | "finalGrade" | "studentCourseStats" | "notification" | "courseAssistant"
+    modelProps: "user" | "session" | "account" | "verification" | "program" | "degree" | "subject" | "campus" | "room" | "period" | "subPeriod" | "classGroup" | "timeSlot" | "schedule" | "course" | "student" | "enrollment" | "studentPeriod" | "lesson" | "attendance" | "activity" | "activityGrade" | "finalGrade" | "studentCourseStats" | "notification" | "courseAssistant"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1686,6 +1687,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    StudentPeriod: {
+      payload: Prisma.$StudentPeriodPayload<ExtArgs>
+      fields: Prisma.StudentPeriodFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.StudentPeriodFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StudentPeriodPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.StudentPeriodFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StudentPeriodPayload>
+        }
+        findFirst: {
+          args: Prisma.StudentPeriodFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StudentPeriodPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.StudentPeriodFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StudentPeriodPayload>
+        }
+        findMany: {
+          args: Prisma.StudentPeriodFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StudentPeriodPayload>[]
+        }
+        create: {
+          args: Prisma.StudentPeriodCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StudentPeriodPayload>
+        }
+        createMany: {
+          args: Prisma.StudentPeriodCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.StudentPeriodCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StudentPeriodPayload>[]
+        }
+        delete: {
+          args: Prisma.StudentPeriodDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StudentPeriodPayload>
+        }
+        update: {
+          args: Prisma.StudentPeriodUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StudentPeriodPayload>
+        }
+        deleteMany: {
+          args: Prisma.StudentPeriodDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.StudentPeriodUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.StudentPeriodUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StudentPeriodPayload>[]
+        }
+        upsert: {
+          args: Prisma.StudentPeriodUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StudentPeriodPayload>
+        }
+        aggregate: {
+          args: Prisma.StudentPeriodAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateStudentPeriod>
+        }
+        groupBy: {
+          args: Prisma.StudentPeriodGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.StudentPeriodGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.StudentPeriodCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.StudentPeriodCountAggregateOutputType> | number
+        }
+      }
+    }
     Lesson: {
       payload: Prisma.$LessonPayload<ExtArgs>
       fields: Prisma.LessonFieldRefs
@@ -2332,7 +2407,13 @@ export const UserScalarFieldEnum = {
   systemRole: 'systemRole',
   isAdmin: 'isAdmin',
   isTeacher: 'isTeacher',
-  isActive: 'isActive'
+  isActive: 'isActive',
+  genre: 'genre',
+  lunaId: 'lunaId',
+  role: 'role',
+  banned: 'banned',
+  banReason: 'banReason',
+  banExpires: 'banExpires'
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -2346,7 +2427,8 @@ export const SessionScalarFieldEnum = {
   updatedAt: 'updatedAt',
   ipAddress: 'ipAddress',
   userAgent: 'userAgent',
-  userId: 'userId'
+  userId: 'userId',
+  impersonatedBy: 'impersonatedBy'
 } as const
 
 export type SessionScalarFieldEnum = (typeof SessionScalarFieldEnum)[keyof typeof SessionScalarFieldEnum]
@@ -2356,7 +2438,6 @@ export const AccountScalarFieldEnum = {
   id: 'id',
   accountId: 'accountId',
   providerId: 'providerId',
-  providerType: 'providerType',
   userId: 'userId',
   accessToken: 'accessToken',
   refreshToken: 'refreshToken',
@@ -2538,13 +2619,14 @@ export const StudentScalarFieldEnum = {
   id: 'id',
   createdAt: 'createdAt',
   name: 'name',
-  age: 'age',
+  birthDate: 'birthDate',
   studentPhone: 'studentPhone',
   parentPhone: 'parentPhone',
   cpf: 'cpf',
   email: 'email',
   school: 'school',
-  genre: 'genre'
+  genre: 'genre',
+  lunaId: 'lunaId'
 } as const
 
 export type StudentScalarFieldEnum = (typeof StudentScalarFieldEnum)[keyof typeof StudentScalarFieldEnum]
@@ -2557,6 +2639,17 @@ export const EnrollmentScalarFieldEnum = {
 } as const
 
 export type EnrollmentScalarFieldEnum = (typeof EnrollmentScalarFieldEnum)[keyof typeof EnrollmentScalarFieldEnum]
+
+
+export const StudentPeriodScalarFieldEnum = {
+  id: 'id',
+  studentId: 'studentId',
+  periodId: 'periodId',
+  status: 'status',
+  createdAt: 'createdAt'
+} as const
+
+export type StudentPeriodScalarFieldEnum = (typeof StudentPeriodScalarFieldEnum)[keyof typeof StudentPeriodScalarFieldEnum]
 
 
 export const LessonScalarFieldEnum = {
@@ -2762,6 +2855,20 @@ export type ListEnumSystemRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$P
 
 
 /**
+ * Reference to a field of type 'UserGenre'
+ */
+export type EnumUserGenreFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'UserGenre'>
+    
+
+
+/**
+ * Reference to a field of type 'UserGenre[]'
+ */
+export type ListEnumUserGenreFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'UserGenre[]'>
+    
+
+
+/**
  * Reference to a field of type 'Int'
  */
 export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
@@ -2856,6 +2963,20 @@ export type EnumDayOfWeekFieldRefInput<$PrismaModel> = FieldRefInputType<$Prisma
  * Reference to a field of type 'DayOfWeek[]'
  */
 export type ListEnumDayOfWeekFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DayOfWeek[]'>
+    
+
+
+/**
+ * Reference to a field of type 'Genre'
+ */
+export type EnumGenreFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Genre'>
+    
+
+
+/**
+ * Reference to a field of type 'Genre[]'
+ */
+export type ListEnumGenreFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Genre[]'>
     
 
 
@@ -2993,6 +3114,21 @@ export type PrismaClientOptions = ({
    * ```
    */
   comments?: runtime.SqlCommenterPlugin[]
+  /**
+   * Optional maximum size for the query plan cache. If not provided, a default size will be used.
+   * A value of `0` can be used to disable the cache entirely. A higher cache size can improve
+   * performance for applications that execute a large number of unique queries, while a smaller
+   * cache size can reduce memory usage.
+   * 
+   * @example
+   * ```
+   * const prisma = new PrismaClient({
+   *   adapter,
+   *   queryPlanCacheMaxSize: 100,
+   * })
+   * ```
+   */
+  queryPlanCacheMaxSize?: number
 }
 export type GlobalOmitConfig = {
   user?: Prisma.UserOmit
@@ -3012,6 +3148,7 @@ export type GlobalOmitConfig = {
   course?: Prisma.CourseOmit
   student?: Prisma.StudentOmit
   enrollment?: Prisma.EnrollmentOmit
+  studentPeriod?: Prisma.StudentPeriodOmit
   lesson?: Prisma.LessonOmit
   attendance?: Prisma.AttendanceOmit
   activity?: Prisma.ActivityOmit

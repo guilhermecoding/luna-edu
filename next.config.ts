@@ -15,6 +15,7 @@ if (process.env.NEXT_PUBLIC_LOGO_CORPORATION) {
 }
 
 const nextConfig: NextConfig = {
+    output: "standalone",
     reactCompiler: true,
     cacheComponents: true,
     allowedDevOrigins: process.env.NEXT_PUBLIC_ALLOWED_DEV_ORIGINS

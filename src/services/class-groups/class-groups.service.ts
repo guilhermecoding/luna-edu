@@ -1,0 +1,439 @@
+import { ClassGroup, Prisma, Shift } from "@/generated/prisma/client";
+import prisma from "@/lib/prisma";
+import { cacheLife, cacheTag } from "next/cache";
+
+/**
+ * Lista todos os grupos (turmas físicas) de um período.
+ * Inclui contagem de turmas disciplinares, dados da Matriz e turno.
+ */
+export async function getClassGroupsByPeriodId(periodId: string, teacherId?: string) {
+    "use cache";
+    cacheLife("max");
+    cacheTag(`period:${periodId}:class-groups`);
+
+    const groups = await prisma.classGroup.findMany({
+        where: {
+            periodId,
+            ...(teacherId ? {
+                courses: {
+                    some: {
+                        schedules: {
+                            some: {
+                                teacherId,
+                            },
+                        },
+                    },
+                },
+            } : {}),
+        },
+        orderBy: [{ name: "asc" }, { createdAt: "desc" }],
+        include: {
+            degree: {
+                select: {
+                    id: true,
+                    name: true,
+                    slug: true,
+                },
+            },
+            _count: {
+                select: {
+                    courses: true,
+                },
+            },
+        },
+    });
+
+    // Buscar contagem de alunos únicos por turma física
+    const classGroupIds = groups.map((g) => g.id);
+    const enrollments = await prisma.enrollment.findMany({
+        where: {
+            course: {
+                classGroupId: { in: classGroupIds },
+            },
+        },
+        select: {
+            studentId: true,
+            course: {
+                select: {
+                    classGroupId: true,
+                },
+            },
+        },
+    });
+
+    // Mapear alunos únicos por turma
+    const studentMap = new Map<string, Set<string>>();
+    for (const enrollment of enrollments) {
+        const groupId = enrollment.course.classGroupId;
+        if (!groupId) continue;
+
+        if (!studentMap.has(groupId)) {
+            studentMap.set(groupId, new Set());
+        }
+        studentMap.get(groupId)!.add(enrollment.studentId);
+    }
+
+    return groups.map((group) => ({
+        ...group,
+        _count: {
+            ...group._count,
+            students: studentMap.get(group.id)?.size || 0,
+        },
+    }));
+}
+
+/**
+ * Busca um grupo pelo período e slug.
+ */
+export async function getClassGroupByPeriodIdAndSlug(
+    periodId: string,
+    slug: string,
+) {
+    "use cache";
+    cacheLife("max");
+    cacheTag(`period:${periodId}:class-group:${slug}`);
+
+    return await prisma.classGroup.findUnique({
+        where: {
+            periodId_slug: {
+                periodId,
+                slug,
+            },
+        },
+        include: {
+            degree: true,
+            courses: {
+                include: {
+                    subject: true,
+                    period: true,
+                    schedules: {
+                        include: {
+                            timeSlot: true,
+                            teacher: {
+                                select: {
+                                    id: true,
+                                    name: true,
+                                },
+                            },
+                            room: {
+                                include: {
+                                    campus: true,
+                                },
+                            },
+                        },
+                    },
+                    room: {
+                        include: {
+                            campus: true,
+                        },
+                    },
+                },
+                orderBy: { name: "asc" },
+            },
+        },
+    });
+}
+
+/**
+ * Retorna os slugs dos grupos informados, na mesma ordem dos ids únicos.
+ * Usado após mutações de curso para invalidar tags `period:…:class-group:…` sem usar Prisma nas server actions.
+ */
+export async function getClassGroupSlugsByIds(classGroupIds: string[]): Promise<string[]> {
+    const uniqueIds = [...new Set(classGroupIds.filter(Boolean))];
+    if (uniqueIds.length === 0) {
+        return [];
+    }
+    const rows = await prisma.classGroup.findMany({
+        where: { id: { in: uniqueIds } },
+        select: { id: true, slug: true },
+    });
+    const byId = new Map(rows.map((r) => [r.id, r.slug] as const));
+    return uniqueIds.map((id) => byId.get(id)).filter((s): s is string => s != null);
+}
+
+/**
+ * Cria um novo grupo (turma física) e auto-gera as turmas disciplinares
+ * baseado nas disciplinas da Matriz (Degree) + Série (basePeriod).
+ *
+ * Ex: Criar "1º Ano A" com Matriz "Ensino Médio" + basePeriod 1
+ * → busca todas as disciplinas do 1º ano do Ensino Médio
+ * → cria um Course para cada uma, vinculado ao grupo.
+ */
+export async function createClassGroup(data: {
+    name: string;
+    slug: string;
+    periodId: string;
+    degreeId: string;
+    basePeriod: number;
+    shift: Shift;
+}): Promise<ClassGroup> {
+    try {
+        return await prisma.$transaction(async (tx) => {
+            // 1. Criar o grupo
+            const group = await tx.classGroup.create({
+                data: {
+                    name: data.name,
+                    slug: data.slug,
+                    periodId: data.periodId,
+                    degreeId: data.degreeId,
+                    basePeriod: data.basePeriod,
+                    shift: data.shift,
+                },
+            });
+
+            // 2. Buscar disciplinas da Matriz + Série
+            const subjects = await tx.subject.findMany({
+                where: {
+                    degreeId: data.degreeId,
+                    basePeriod: data.basePeriod,
+                },
+                orderBy: { name: "asc" },
+            });
+
+            // 3. Auto-gerar turmas disciplinares
+            if (subjects.length > 0) {
+                await tx.course.createMany({
+                    data: subjects.map((subject) => ({
+                        name: subject.name,
+                        code: `${data.slug}-${subject.code}`.toUpperCase(),
+                        periodId: data.periodId,
+                        subjectId: subject.id,
+                        shift: data.shift,
+                        classGroupId: group.id,
+                    })),
+                });
+            }
+
+            return group;
+        });
+    } catch (error) {
+        if (
+            error instanceof Prisma.PrismaClientKnownRequestError &&
+            error.code === "P2002"
+        ) {
+            throw new Error(
+                "Já existe um grupo com este código neste período.",
+            );
+        }
+        throw error;
+    }
+}
+
+/**
+ * Atualiza os dados de um grupo.
+ */
+export async function updateClassGroup(
+    id: string,
+    data: {
+        name: string;
+        shift: Shift;
+    },
+): Promise<ClassGroup> {
+    try {
+        return await prisma.$transaction(async (tx) => {
+            const updatedGroup = await tx.classGroup.update({
+                where: { id },
+                data: {
+                    name: data.name,
+                    shift: data.shift,
+                },
+            });
+
+            // Sincroniza o turno de todas as disciplinas da turma física
+            await tx.course.updateMany({
+                where: { classGroupId: id },
+                data: { shift: data.shift },
+            });
+
+            return updatedGroup;
+        });
+    } catch (error) {
+        if (
+            error instanceof Prisma.PrismaClientKnownRequestError &&
+            error.code === "P2025"
+        ) {
+            throw new Error("Grupo não encontrado.");
+        }
+        throw error;
+    }
+}
+
+/**
+ * Remove um grupo.
+ * Exclui as disciplinas correlacionadas e desvincula os alunos.
+ */
+export async function deleteClassGroup(id: string): Promise<ClassGroup> {
+    try {
+        return await prisma.$transaction(async (tx) => {
+            const courses = await tx.course.findMany({
+                where: { classGroupId: id },
+                select: { id: true },
+            });
+            const courseIds = courses.map((c) => c.id);
+
+            if (courseIds.length > 0) {
+                await tx.enrollment.deleteMany({ where: { courseId: { in: courseIds } } });
+                await tx.schedule.deleteMany({ where: { courseId: { in: courseIds } } });
+                await tx.courseAssistant.deleteMany({ where: { courseId: { in: courseIds } } });
+                await tx.studentCourseStats.deleteMany({ where: { courseId: { in: courseIds } } });
+                await tx.finalGrade.deleteMany({ where: { courseId: { in: courseIds } } });
+                await tx.activityGrade.deleteMany({ where: { activity: { courseId: { in: courseIds } } } });
+                await tx.activity.deleteMany({ where: { courseId: { in: courseIds } } });
+                await tx.attendance.deleteMany({ where: { lesson: { courseId: { in: courseIds } } } });
+                await tx.lesson.deleteMany({ where: { courseId: { in: courseIds } } });
+                await tx.course.deleteMany({ where: { id: { in: courseIds } } });
+            }
+
+            return await tx.classGroup.delete({
+                where: { id },
+            });
+        });
+    } catch (error) {
+        const msg =
+            error instanceof Error
+                ? error.message.toLowerCase()
+                : String(error).toLowerCase();
+        if (
+            (error as { code?: string })?.code === "P2003" ||
+            msg.includes("foreign key constraint") ||
+            msg.includes("violates restrict")
+        ) {
+            throw new Error(
+                "Não é possível excluir o grupo devido a vínculos existentes que não puderam ser removidos.",
+            );
+        }
+        if (
+            error instanceof Error &&
+            error.message.includes("Record to delete does not exist")
+        ) {
+            throw new Error("Grupo não encontrado.");
+        }
+        throw error;
+    }
+}
+
+/**
+ * Matricula uma lista de alunos em uma turma (ClassGroup).
+ * Isso os inscreve em todas as disciplinas (Courses) da turma e atualiza o status no período para 'ENROLLED'.
+ */
+export async function enrollStudentsInClassGroup(classGroupId: string, studentIds: string[]) {
+    return await prisma.$transaction(async (tx) => {
+        // 1. Obter a turma para descobrir o periodId e os cursos associados
+        const classGroup = await tx.classGroup.findUnique({
+            where: { id: classGroupId },
+            include: { courses: { select: { id: true } } },
+        });
+
+        if (!classGroup) {
+            throw new Error("Turma não encontrada.");
+        }
+
+        const courseIds = classGroup.courses.map((c) => c.id);
+
+        if (courseIds.length === 0) {
+            throw new Error("A turma não possui disciplinas cadastradas para matricular os alunos.");
+        }
+
+        // 2. Criar as matrículas
+        const enrollmentsToCreate = [];
+        for (const studentId of studentIds) {
+            for (const courseId of courseIds) {
+                enrollmentsToCreate.push({ studentId, courseId });
+            }
+        }
+
+        await tx.enrollment.createMany({
+            data: enrollmentsToCreate,
+            skipDuplicates: true,
+        });
+
+        // 3. Atualizar o status dos alunos no período para ENROLLED
+        await tx.studentPeriod.updateMany({
+            where: {
+                periodId: classGroup.periodId,
+                studentId: { in: studentIds },
+            },
+            data: {
+                status: "ENROLLED",
+            },
+        });
+
+        return { success: true, count: studentIds.length, classGroup };
+    });
+}
+
+export async function unlinkStudentsFromClassGroup(classGroupId: string, studentIds: string[]) {
+    return await prisma.$transaction(async (tx) => {
+        const classGroup = await tx.classGroup.findUnique({
+            where: { id: classGroupId },
+            include: { courses: { select: { id: true } } },
+        });
+
+        if (!classGroup) {
+            throw new Error("Turma não encontrada.");
+        }
+
+        const courseIds = classGroup.courses.map((c) => c.id);
+
+        if (courseIds.length === 0) {
+            return { success: true, count: 0 };
+        }
+
+        // 1. Remover Presenças
+        await tx.attendance.deleteMany({
+            where: {
+                studentId: { in: studentIds },
+                lesson: { courseId: { in: courseIds } },
+            },
+        });
+
+        // 2. Remover Notas
+        await tx.activityGrade.deleteMany({
+            where: {
+                studentId: { in: studentIds },
+                activity: { courseId: { in: courseIds } },
+            },
+        });
+
+        await tx.finalGrade.deleteMany({
+            where: {
+                studentId: { in: studentIds },
+                courseId: { in: courseIds },
+            },
+        });
+
+        await tx.studentCourseStats.deleteMany({
+            where: {
+                studentId: { in: studentIds },
+                courseId: { in: courseIds },
+            },
+        });
+
+        // 3. Remover Matrículas
+        await tx.enrollment.deleteMany({
+            where: {
+                studentId: { in: studentIds },
+                courseId: { in: courseIds },
+            },
+        });
+
+        // 4. Update status se não tiver mais nenhuma disciplina no periodo
+        for (const studentId of studentIds) {
+            const enrollmentsCount = await tx.enrollment.count({
+                where: {
+                    studentId,
+                    course: { periodId: classGroup.periodId },
+                },
+            });
+            
+            if (enrollmentsCount === 0) {
+                await tx.studentPeriod.updateMany({
+                    where: { studentId, periodId: classGroup.periodId },
+                    data: { status: "WAITING" },
+                });
+            }
+        }
+
+        return { success: true };
+    });
+}

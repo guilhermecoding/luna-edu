@@ -1,0 +1,16 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_NAME_CORPORATION: ${NEXT_PUBLIC_NAME_CORPORATION}
+        NEXT_PUBLIC_LOGO_CORPORATION: ${NEXT_PUBLIC_LOGO_CORPORATION}
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+
+volumes:
+  pgdata:

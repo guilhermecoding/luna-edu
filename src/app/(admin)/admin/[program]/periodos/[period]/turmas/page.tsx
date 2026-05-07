@@ -1,0 +1,70 @@
+import Page from "@/components/page";
+import Section from "@/components/section";
+import TitlePage from "@/components/title-page";
+import { ButtonLink } from "@/components/ui/button-link";
+import { getPeriodByProgramAndSlug } from "@/services/periods/periods.service";
+import { getTeachers } from "@/services/schedules/schedules.service";
+import { IconCirclePlusFilled, IconSchool } from "@tabler/icons-react";
+import { Metadata } from "next";
+import { notFound } from "next/navigation";
+import ListClassGroups from "./_components/list-class-groups";
+import TeacherFilter from "./_components/teacher-filter";
+
+export const metadata: Metadata = {
+    title: "Gerenciar Classes",
+};
+
+export default async function ClassGroupsPage({
+    params,
+    searchParams,
+}: {
+    params: Promise<{ program: string; period: string }>;
+    searchParams: Promise<{ teacherId?: string }>;
+}) {
+    const { program, period } = await params;
+    const { teacherId } = await searchParams;
+
+    const [periodData, teachers] = await Promise.all([
+        getPeriodByProgramAndSlug(program, period),
+        getTeachers(),
+    ]);
+
+    if (!periodData) {
+        notFound();
+    }
+
+    return (
+        <Page>
+            <Section>
+                <div className="flex flex-row items-center gap-1 mb-3">
+                    <IconSchool className="size-4 text-muted-foreground" />
+                    <p className="text-muted-foreground font-bold">Turmas</p>
+                </div>
+                <div className="flex flex-col lg:flex-row gap-y-6">
+                    <div className="flex-1">
+                        <TitlePage
+                            title={`Turmas do ${periodData.name}`}
+                            description="Gerencie as turmas deste período letivo."
+                        />
+                    </div>
+                    <div className="flex flex-col sm:flex-row gap-4 items-end">
+                        <TeacherFilter teachers={teachers} currentTeacherId={teacherId} />
+                        <ButtonLink className="w-full sm:w-auto" href={`/admin/${program}/periodos/${period}/turmas/novo`}>
+                            <IconCirclePlusFilled className="size-5" />
+                            Criar Turma
+                        </ButtonLink>
+                    </div>
+                </div>
+            </Section>
+
+            <Section className="mt-18">
+                <ListClassGroups 
+                    periodId={periodData.id} 
+                    programSlug={program} 
+                    periodSlug={period} 
+                    teacherId={teacherId}
+                />
+            </Section>
+        </Page>
+    );
+}

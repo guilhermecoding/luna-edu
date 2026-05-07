@@ -1,0 +1,51 @@
+import BaseForm from "@/components/base-form";
+import Page from "@/components/page";
+import Section from "@/components/section";
+import { Suspense } from "react";
+import { EditSubjectForm } from "./_components/edit-subject-form";
+import { Metadata } from "next";
+import { getSubjectByCode } from "@/services/subjects/subjects.service";
+import { notFound } from "next/navigation";
+import { getDegreeBySlug } from "@/services/degrees/degrees.service";
+import SkeletonForm from "@/components/skeletons/skeleton-form";
+
+export const metadata: Metadata = {
+    title: "Editar Disciplina",
+};
+
+export default async function EditSubjectPage({
+    params,
+}: PageProps<"/admin/[program]/matrizes/[degree]/disciplinas/[subject]/editar">) {
+    const { program, degree, subject } = await params;
+
+    // Validar se dados existem (subject params contains code instead of ID)
+    const subjectData = await getSubjectByCode(subject);
+    const degreeData = await getDegreeBySlug(program, degree);
+
+    if (!subjectData || !degreeData) {
+        return notFound();
+    }
+
+    return (
+        <Page>
+            <Section>
+                <BaseForm
+                    title="Editar Disciplina"
+                    description={`Editando a matéria: ${subjectData.name} (${degreeData.name})`}
+                >
+                    <div className="mt-6">
+                        <Suspense fallback={<SkeletonForm />}>
+                            <EditSubjectForm
+                                programSlug={program}
+                                degreeSlug={degreeData.slug}
+                                degreeId={degreeData.id}
+                                subjectId={subjectData.id}
+                                initialData={subjectData}
+                            />
+                        </Suspense>
+                    </div>
+                </BaseForm>
+            </Section>
+        </Page>
+    );
+}

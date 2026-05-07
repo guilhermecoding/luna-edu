@@ -49,6 +49,7 @@ async function EditClassGroupContent({
                                 degreeName: classGroup.degree.name,
                                 basePeriod: classGroup.basePeriod,
                                 shift: classGroup.shift,
+                                groupLink: classGroup.groupLink || "",
                             }}
                         />
                     </div>

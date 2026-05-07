@@ -166,6 +166,7 @@ export async function createClassGroup(data: {
     degreeId: string;
     basePeriod: number;
     shift: Shift;
+    groupLink?: string;
 }): Promise<ClassGroup> {
     try {
         return await prisma.$transaction(async (tx) => {
@@ -178,6 +179,7 @@ export async function createClassGroup(data: {
                     degreeId: data.degreeId,
                     basePeriod: data.basePeriod,
                     shift: data.shift,
+                    groupLink: data.groupLink,
                 },
             });
 
@@ -227,6 +229,7 @@ export async function updateClassGroup(
     data: {
         name: string;
         shift: Shift;
+        groupLink?: string;
     },
 ): Promise<ClassGroup> {
     try {
@@ -236,6 +239,7 @@ export async function updateClassGroup(
                 data: {
                     name: data.name,
                     shift: data.shift,
+                    groupLink: data.groupLink,
                 },
             });
 

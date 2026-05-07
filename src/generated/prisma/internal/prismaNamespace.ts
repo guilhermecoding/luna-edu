@@ -2569,7 +2569,8 @@ export const ClassGroupScalarFieldEnum = {
   periodId: 'periodId',
   degreeId: 'degreeId',
   basePeriod: 'basePeriod',
-  shift: 'shift'
+  shift: 'shift',
+  groupLink: 'groupLink'
 } as const
 
 export type ClassGroupScalarFieldEnum = (typeof ClassGroupScalarFieldEnum)[keyof typeof ClassGroupScalarFieldEnum]

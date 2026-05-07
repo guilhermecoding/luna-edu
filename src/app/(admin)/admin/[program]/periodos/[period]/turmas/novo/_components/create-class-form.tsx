@@ -66,6 +66,7 @@ export function CreateClassForm({
             degreeId: "",
             basePeriod: undefined,
             shift: undefined,
+            groupLink: "",
         },
     });
 
@@ -343,6 +344,22 @@ export function CreateClassForm({
                     />
                     {errors.shift && (
                         <p className="text-sm text-red-600">{errors.shift.message}</p>
+                    )}
+                </div>
+
+                {/* Link Grupo */}
+                <div className="space-y-2 md:col-span-2">
+                    <Label htmlFor="groupLink">Link para grupo de comunicação</Label>
+                    <Input
+                        id="groupLink"
+                        placeholder="Ex: https://chat.whatsapp.com/..."
+                        {...register("groupLink")}
+                        disabled={isSubmitting}
+                        aria-invalid={errors.groupLink ? "true" : "false"}
+                        className="p-5 rounded-lg bg-background"
+                    />
+                    {errors.groupLink && (
+                        <p className="text-sm text-red-600">{errors.groupLink.message}</p>
                     )}
                 </div>
             </div>

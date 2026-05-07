@@ -43,6 +43,7 @@ export type ClassGroupMinAggregateOutputType = {
   degreeId: string | null
   basePeriod: number | null
   shift: $Enums.Shift | null
+  groupLink: string | null
 }
 
 export type ClassGroupMaxAggregateOutputType = {
@@ -54,6 +55,7 @@ export type ClassGroupMaxAggregateOutputType = {
   degreeId: string | null
   basePeriod: number | null
   shift: $Enums.Shift | null
+  groupLink: string | null
 }
 
 export type ClassGroupCountAggregateOutputType = {
@@ -65,6 +67,7 @@ export type ClassGroupCountAggregateOutputType = {
   degreeId: number
   basePeriod: number
   shift: number
+  groupLink: number
   _all: number
 }
 
@@ -86,6 +89,7 @@ export type ClassGroupMinAggregateInputType = {
   degreeId?: true
   basePeriod?: true
   shift?: true
+  groupLink?: true
 }
 
 export type ClassGroupMaxAggregateInputType = {
@@ -97,6 +101,7 @@ export type ClassGroupMaxAggregateInputType = {
   degreeId?: true
   basePeriod?: true
   shift?: true
+  groupLink?: true
 }
 
 export type ClassGroupCountAggregateInputType = {
@@ -108,6 +113,7 @@ export type ClassGroupCountAggregateInputType = {
   degreeId?: true
   basePeriod?: true
   shift?: true
+  groupLink?: true
   _all?: true
 }
 
@@ -206,6 +212,7 @@ export type ClassGroupGroupByOutputType = {
   degreeId: string
   basePeriod: number
   shift: $Enums.Shift
+  groupLink: string | null
   _count: ClassGroupCountAggregateOutputType | null
   _avg: ClassGroupAvgAggregateOutputType | null
   _sum: ClassGroupSumAggregateOutputType | null
@@ -240,6 +247,7 @@ export type ClassGroupWhereInput = {
   degreeId?: Prisma.UuidFilter<"ClassGroup"> | string
   basePeriod?: Prisma.IntFilter<"ClassGroup"> | number
   shift?: Prisma.EnumShiftFilter<"ClassGroup"> | $Enums.Shift
+  groupLink?: Prisma.StringNullableFilter<"ClassGroup"> | string | null
   period?: Prisma.XOR<Prisma.PeriodScalarRelationFilter, Prisma.PeriodWhereInput>
   degree?: Prisma.XOR<Prisma.DegreeScalarRelationFilter, Prisma.DegreeWhereInput>
   courses?: Prisma.CourseListRelationFilter
@@ -254,6 +262,7 @@ export type ClassGroupOrderByWithRelationInput = {
   degreeId?: Prisma.SortOrder
   basePeriod?: Prisma.SortOrder
   shift?: Prisma.SortOrder
+  groupLink?: Prisma.SortOrderInput | Prisma.SortOrder
   period?: Prisma.PeriodOrderByWithRelationInput
   degree?: Prisma.DegreeOrderByWithRelationInput
   courses?: Prisma.CourseOrderByRelationAggregateInput
@@ -272,6 +281,7 @@ export type ClassGroupWhereUniqueInput = Prisma.AtLeast<{
   degreeId?: Prisma.UuidFilter<"ClassGroup"> | string
   basePeriod?: Prisma.IntFilter<"ClassGroup"> | number
   shift?: Prisma.EnumShiftFilter<"ClassGroup"> | $Enums.Shift
+  groupLink?: Prisma.StringNullableFilter<"ClassGroup"> | string | null
   period?: Prisma.XOR<Prisma.PeriodScalarRelationFilter, Prisma.PeriodWhereInput>
   degree?: Prisma.XOR<Prisma.DegreeScalarRelationFilter, Prisma.DegreeWhereInput>
   courses?: Prisma.CourseListRelationFilter
@@ -286,6 +296,7 @@ export type ClassGroupOrderByWithAggregationInput = {
   degreeId?: Prisma.SortOrder
   basePeriod?: Prisma.SortOrder
   shift?: Prisma.SortOrder
+  groupLink?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.ClassGroupCountOrderByAggregateInput
   _avg?: Prisma.ClassGroupAvgOrderByAggregateInput
   _max?: Prisma.ClassGroupMaxOrderByAggregateInput
@@ -305,6 +316,7 @@ export type ClassGroupScalarWhereWithAggregatesInput = {
   degreeId?: Prisma.UuidWithAggregatesFilter<"ClassGroup"> | string
   basePeriod?: Prisma.IntWithAggregatesFilter<"ClassGroup"> | number
   shift?: Prisma.EnumShiftWithAggregatesFilter<"ClassGroup"> | $Enums.Shift
+  groupLink?: Prisma.StringNullableWithAggregatesFilter<"ClassGroup"> | string | null
 }
 
 export type ClassGroupCreateInput = {
@@ -314,6 +326,7 @@ export type ClassGroupCreateInput = {
   slug: string
   basePeriod: number
   shift: $Enums.Shift
+  groupLink?: string | null
   period: Prisma.PeriodCreateNestedOneWithoutClassGroupsInput
   degree: Prisma.DegreeCreateNestedOneWithoutClassGroupsInput
   courses?: Prisma.CourseCreateNestedManyWithoutClassGroupInput
@@ -328,6 +341,7 @@ export type ClassGroupUncheckedCreateInput = {
   degreeId: string
   basePeriod: number
   shift: $Enums.Shift
+  groupLink?: string | null
   courses?: Prisma.CourseUncheckedCreateNestedManyWithoutClassGroupInput
 }
 
@@ -338,6 +352,7 @@ export type ClassGroupUpdateInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   basePeriod?: Prisma.IntFieldUpdateOperationsInput | number
   shift?: Prisma.EnumShiftFieldUpdateOperationsInput | $Enums.Shift
+  groupLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   period?: Prisma.PeriodUpdateOneRequiredWithoutClassGroupsNestedInput
   degree?: Prisma.DegreeUpdateOneRequiredWithoutClassGroupsNestedInput
   courses?: Prisma.CourseUpdateManyWithoutClassGroupNestedInput
@@ -352,6 +367,7 @@ export type ClassGroupUncheckedUpdateInput = {
   degreeId?: Prisma.StringFieldUpdateOperationsInput | string
   basePeriod?: Prisma.IntFieldUpdateOperationsInput | number
   shift?: Prisma.EnumShiftFieldUpdateOperationsInput | $Enums.Shift
+  groupLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   courses?: Prisma.CourseUncheckedUpdateManyWithoutClassGroupNestedInput
 }
 
@@ -364,6 +380,7 @@ export type ClassGroupCreateManyInput = {
   degreeId: string
   basePeriod: number
   shift: $Enums.Shift
+  groupLink?: string | null
 }
 
 export type ClassGroupUpdateManyMutationInput = {
@@ -373,6 +390,7 @@ export type ClassGroupUpdateManyMutationInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   basePeriod?: Prisma.IntFieldUpdateOperationsInput | number
   shift?: Prisma.EnumShiftFieldUpdateOperationsInput | $Enums.Shift
+  groupLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type ClassGroupUncheckedUpdateManyInput = {
@@ -384,6 +402,7 @@ export type ClassGroupUncheckedUpdateManyInput = {
   degreeId?: Prisma.StringFieldUpdateOperationsInput | string
   basePeriod?: Prisma.IntFieldUpdateOperationsInput | number
   shift?: Prisma.EnumShiftFieldUpdateOperationsInput | $Enums.Shift
+  groupLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type ClassGroupListRelationFilter = {
@@ -410,6 +429,7 @@ export type ClassGroupCountOrderByAggregateInput = {
   degreeId?: Prisma.SortOrder
   basePeriod?: Prisma.SortOrder
   shift?: Prisma.SortOrder
+  groupLink?: Prisma.SortOrder
 }
 
 export type ClassGroupAvgOrderByAggregateInput = {
@@ -425,6 +445,7 @@ export type ClassGroupMaxOrderByAggregateInput = {
   degreeId?: Prisma.SortOrder
   basePeriod?: Prisma.SortOrder
   shift?: Prisma.SortOrder
+  groupLink?: Prisma.SortOrder
 }
 
 export type ClassGroupMinOrderByAggregateInput = {
@@ -436,6 +457,7 @@ export type ClassGroupMinOrderByAggregateInput = {
   degreeId?: Prisma.SortOrder
   basePeriod?: Prisma.SortOrder
   shift?: Prisma.SortOrder
+  groupLink?: Prisma.SortOrder
 }
 
 export type ClassGroupSumOrderByAggregateInput = {
@@ -558,6 +580,7 @@ export type ClassGroupCreateWithoutDegreeInput = {
   slug: string
   basePeriod: number
   shift: $Enums.Shift
+  groupLink?: string | null
   period: Prisma.PeriodCreateNestedOneWithoutClassGroupsInput
   courses?: Prisma.CourseCreateNestedManyWithoutClassGroupInput
 }
@@ -570,6 +593,7 @@ export type ClassGroupUncheckedCreateWithoutDegreeInput = {
   periodId: string
   basePeriod: number
   shift: $Enums.Shift
+  groupLink?: string | null
   courses?: Prisma.CourseUncheckedCreateNestedManyWithoutClassGroupInput
 }
 
@@ -611,6 +635,7 @@ export type ClassGroupScalarWhereInput = {
   degreeId?: Prisma.UuidFilter<"ClassGroup"> | string
   basePeriod?: Prisma.IntFilter<"ClassGroup"> | number
   shift?: Prisma.EnumShiftFilter<"ClassGroup"> | $Enums.Shift
+  groupLink?: Prisma.StringNullableFilter<"ClassGroup"> | string | null
 }
 
 export type ClassGroupCreateWithoutPeriodInput = {
@@ -620,6 +645,7 @@ export type ClassGroupCreateWithoutPeriodInput = {
   slug: string
   basePeriod: number
   shift: $Enums.Shift
+  groupLink?: string | null
   degree: Prisma.DegreeCreateNestedOneWithoutClassGroupsInput
   courses?: Prisma.CourseCreateNestedManyWithoutClassGroupInput
 }
@@ -632,6 +658,7 @@ export type ClassGroupUncheckedCreateWithoutPeriodInput = {
   degreeId: string
   basePeriod: number
   shift: $Enums.Shift
+  groupLink?: string | null
   courses?: Prisma.CourseUncheckedCreateNestedManyWithoutClassGroupInput
 }
 
@@ -668,6 +695,7 @@ export type ClassGroupCreateWithoutCoursesInput = {
   slug: string
   basePeriod: number
   shift: $Enums.Shift
+  groupLink?: string | null
   period: Prisma.PeriodCreateNestedOneWithoutClassGroupsInput
   degree: Prisma.DegreeCreateNestedOneWithoutClassGroupsInput
 }
@@ -681,6 +709,7 @@ export type ClassGroupUncheckedCreateWithoutCoursesInput = {
   degreeId: string
   basePeriod: number
   shift: $Enums.Shift
+  groupLink?: string | null
 }
 
 export type ClassGroupCreateOrConnectWithoutCoursesInput = {
@@ -706,6 +735,7 @@ export type ClassGroupUpdateWithoutCoursesInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   basePeriod?: Prisma.IntFieldUpdateOperationsInput | number
   shift?: Prisma.EnumShiftFieldUpdateOperationsInput | $Enums.Shift
+  groupLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   period?: Prisma.PeriodUpdateOneRequiredWithoutClassGroupsNestedInput
   degree?: Prisma.DegreeUpdateOneRequiredWithoutClassGroupsNestedInput
 }
@@ -719,6 +749,7 @@ export type ClassGroupUncheckedUpdateWithoutCoursesInput = {
   degreeId?: Prisma.StringFieldUpdateOperationsInput | string
   basePeriod?: Prisma.IntFieldUpdateOperationsInput | number
   shift?: Prisma.EnumShiftFieldUpdateOperationsInput | $Enums.Shift
+  groupLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type ClassGroupCreateManyDegreeInput = {
@@ -729,6 +760,7 @@ export type ClassGroupCreateManyDegreeInput = {
   periodId: string
   basePeriod: number
   shift: $Enums.Shift
+  groupLink?: string | null
 }
 
 export type ClassGroupUpdateWithoutDegreeInput = {
@@ -738,6 +770,7 @@ export type ClassGroupUpdateWithoutDegreeInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   basePeriod?: Prisma.IntFieldUpdateOperationsInput | number
   shift?: Prisma.EnumShiftFieldUpdateOperationsInput | $Enums.Shift
+  groupLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   period?: Prisma.PeriodUpdateOneRequiredWithoutClassGroupsNestedInput
   courses?: Prisma.CourseUpdateManyWithoutClassGroupNestedInput
 }
@@ -750,6 +783,7 @@ export type ClassGroupUncheckedUpdateWithoutDegreeInput = {
   periodId?: Prisma.StringFieldUpdateOperationsInput | string
   basePeriod?: Prisma.IntFieldUpdateOperationsInput | number
   shift?: Prisma.EnumShiftFieldUpdateOperationsInput | $Enums.Shift
+  groupLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   courses?: Prisma.CourseUncheckedUpdateManyWithoutClassGroupNestedInput
 }
 
@@ -761,6 +795,7 @@ export type ClassGroupUncheckedUpdateManyWithoutDegreeInput = {
   periodId?: Prisma.StringFieldUpdateOperationsInput | string
   basePeriod?: Prisma.IntFieldUpdateOperationsInput | number
   shift?: Prisma.EnumShiftFieldUpdateOperationsInput | $Enums.Shift
+  groupLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type ClassGroupCreateManyPeriodInput = {
@@ -771,6 +806,7 @@ export type ClassGroupCreateManyPeriodInput = {
   degreeId: string
   basePeriod: number
   shift: $Enums.Shift
+  groupLink?: string | null
 }
 
 export type ClassGroupUpdateWithoutPeriodInput = {
@@ -780,6 +816,7 @@ export type ClassGroupUpdateWithoutPeriodInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   basePeriod?: Prisma.IntFieldUpdateOperationsInput | number
   shift?: Prisma.EnumShiftFieldUpdateOperationsInput | $Enums.Shift
+  groupLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   degree?: Prisma.DegreeUpdateOneRequiredWithoutClassGroupsNestedInput
   courses?: Prisma.CourseUpdateManyWithoutClassGroupNestedInput
 }
@@ -792,6 +829,7 @@ export type ClassGroupUncheckedUpdateWithoutPeriodInput = {
   degreeId?: Prisma.StringFieldUpdateOperationsInput | string
   basePeriod?: Prisma.IntFieldUpdateOperationsInput | number
   shift?: Prisma.EnumShiftFieldUpdateOperationsInput | $Enums.Shift
+  groupLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   courses?: Prisma.CourseUncheckedUpdateManyWithoutClassGroupNestedInput
 }
 
@@ -803,6 +841,7 @@ export type ClassGroupUncheckedUpdateManyWithoutPeriodInput = {
   degreeId?: Prisma.StringFieldUpdateOperationsInput | string
   basePeriod?: Prisma.IntFieldUpdateOperationsInput | number
   shift?: Prisma.EnumShiftFieldUpdateOperationsInput | $Enums.Shift
+  groupLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 
@@ -845,6 +884,7 @@ export type ClassGroupSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   degreeId?: boolean
   basePeriod?: boolean
   shift?: boolean
+  groupLink?: boolean
   period?: boolean | Prisma.PeriodDefaultArgs<ExtArgs>
   degree?: boolean | Prisma.DegreeDefaultArgs<ExtArgs>
   courses?: boolean | Prisma.ClassGroup$coursesArgs<ExtArgs>
@@ -860,6 +900,7 @@ export type ClassGroupSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ex
   degreeId?: boolean
   basePeriod?: boolean
   shift?: boolean
+  groupLink?: boolean
   period?: boolean | Prisma.PeriodDefaultArgs<ExtArgs>
   degree?: boolean | Prisma.DegreeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["classGroup"]>
@@ -873,6 +914,7 @@ export type ClassGroupSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ex
   degreeId?: boolean
   basePeriod?: boolean
   shift?: boolean
+  groupLink?: boolean
   period?: boolean | Prisma.PeriodDefaultArgs<ExtArgs>
   degree?: boolean | Prisma.DegreeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["classGroup"]>
@@ -886,9 +928,10 @@ export type ClassGroupSelectScalar = {
   degreeId?: boolean
   basePeriod?: boolean
   shift?: boolean
+  groupLink?: boolean
 }
 
-export type ClassGroupOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "name" | "slug" | "periodId" | "degreeId" | "basePeriod" | "shift", ExtArgs["result"]["classGroup"]>
+export type ClassGroupOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "name" | "slug" | "periodId" | "degreeId" | "basePeriod" | "shift" | "groupLink", ExtArgs["result"]["classGroup"]>
 export type ClassGroupInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   period?: boolean | Prisma.PeriodDefaultArgs<ExtArgs>
   degree?: boolean | Prisma.DegreeDefaultArgs<ExtArgs>
@@ -920,6 +963,7 @@ export type $ClassGroupPayload<ExtArgs extends runtime.Types.Extensions.Internal
     degreeId: string
     basePeriod: number
     shift: $Enums.Shift
+    groupLink: string | null
   }, ExtArgs["result"]["classGroup"]>
   composites: {}
 }
@@ -1354,6 +1398,7 @@ export interface ClassGroupFieldRefs {
   readonly degreeId: Prisma.FieldRef<"ClassGroup", 'String'>
   readonly basePeriod: Prisma.FieldRef<"ClassGroup", 'Int'>
   readonly shift: Prisma.FieldRef<"ClassGroup", 'Shift'>
+  readonly groupLink: Prisma.FieldRef<"ClassGroup", 'String'>
 }
     
 

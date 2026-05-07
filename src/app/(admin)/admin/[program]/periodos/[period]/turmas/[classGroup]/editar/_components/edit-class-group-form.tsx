@@ -38,6 +38,7 @@ interface EditClassGroupFormProps {
         degreeName: string;
         basePeriod: number;
         shift: Shift;
+        groupLink: string;
     };
 }
 
@@ -61,6 +62,7 @@ export function EditClassGroupForm({
         defaultValues: {
             name: defaultValues.name,
             shift: defaultValues.shift,
+            groupLink: defaultValues.groupLink,
         },
     });
 
@@ -175,6 +177,18 @@ export function EditClassGroupForm({
                         )}
                     />
                     {errors.shift && <p className="text-sm text-red-600">{errors.shift.message}</p>}
+                </div>
+                
+                <div className="space-y-2 md:col-span-2">
+                    <Label htmlFor="groupLink">Link para grupo de comunicação</Label>
+                    <Input 
+                        id="groupLink" 
+                        placeholder="Ex: https://chat.whatsapp.com/..."
+                        {...register("groupLink")} 
+                        disabled={isSubmitting} 
+                        className="p-5 rounded-lg bg-background" 
+                    />
+                    {errors.groupLink && <p className="text-sm text-red-600">{errors.groupLink.message}</p>}
                 </div>
             </div>
             <div className="flex flex-col-reverse sm:flex-row gap-3 justify-end pt-4">

@@ -206,6 +206,7 @@ export async function updateClassGroupAction(
         await updateClassGroup(classGroup.id, { 
             name: validatedData.name, 
             shift: validatedData.shift,
+            groupLink: validatedData.groupLink,
         });
 
         updateTag(`period:${period.id}:class-groups`);

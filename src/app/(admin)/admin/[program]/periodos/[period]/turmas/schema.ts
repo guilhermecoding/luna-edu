@@ -78,7 +78,17 @@ export const classGroupSchema = z.object({
     shift: z.enum(SHIFTS, {
         message: "Selecione um turno",
     }),
+    groupLink: z.string().url("Link inválido").optional().or(z.literal("")),
+});
+
+export const classGroupEditSchema = z.object({
+    name: z.string().min(2, "O nome deve ter no mínimo 2 caracteres"),
+    shift: z.enum(SHIFTS, {
+        message: "Selecione um turno",
+    }),
+    groupLink: z.string().url("Link inválido").optional().or(z.literal("")),
 });
 
 export type ClassGroupInput = z.output<typeof classGroupSchema>;
+export type ClassGroupEditInput = z.output<typeof classGroupEditSchema>;
 

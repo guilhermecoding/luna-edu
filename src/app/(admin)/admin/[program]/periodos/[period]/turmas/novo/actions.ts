@@ -28,6 +28,7 @@ export async function createClassAction(
             degreeId: validatedData.degreeId,
             basePeriod: validatedData.basePeriod,
             shift: validatedData.shift as Shift,
+            groupLink: validatedData.groupLink,
         });
 
         updateTag(`period:${period.id}:class-groups`);

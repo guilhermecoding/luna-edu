@@ -17,6 +17,10 @@ export const auth = betterAuth({
         provider: "postgresql",
     }),
     trustedOrigins,
+    session: {
+        expiresIn: 60 * 60 * 24, // 1 dia
+        updateAge: 60 * 60 * 6, // Renova a cada 6 horas se estiver ativo
+    },
     emailAndPassword: {
         enabled: true,
     },

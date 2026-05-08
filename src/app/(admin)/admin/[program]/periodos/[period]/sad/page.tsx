@@ -7,6 +7,7 @@ import { notFound } from "next/navigation";
 import { SADAccessTable } from "./_components/sad-access-table";
 import { IconReportSearch, IconUsers, IconCheck, IconClock } from "@tabler/icons-react";
 import InfoBoxPeriod from "../_components/info-box-period";
+import { Metadata } from "next";
 
 export const metadata: Metadata = {
     title: "SAD - Acessos ao Portal",

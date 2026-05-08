@@ -87,6 +87,7 @@ Retornado quando o aluno possui ao menos uma matrícula em uma turma do período
     {
       "name": "1º Ano A",
       "shift": "MORNING",
+      "groupLink": "https://chat.whatsapp.com/EXEMPLO",
       "courses": [
         {
           "code": "MAT-1A-2025",
@@ -146,6 +147,7 @@ Retornado quando o aluno possui ao menos uma matrícula em uma turma do período
 | `classGroups` | `array` | Lista de turmas físicas nas quais o aluno está matriculado. |
 | `classGroups[].name` | `string` | Nome da turma (ex: "1º Ano A"). |
 | `classGroups[].shift` | `string` | Turno da turma: `MORNING`, `AFTERNOON` ou `EVENING`. |
+| `classGroups[].groupLink` | `string \| null` | Link do grupo da turma (ex.: WhatsApp/Telegram). `null` quando não configurado. |
 | `classGroups[].courses` | `array` | Disciplinas vinculadas à turma. |
 | `courses[].code` | `string` | Código identificador da disciplina. |
 | `courses[].name` | `string` | Nome da disciplina ofertada. |

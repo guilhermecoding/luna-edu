@@ -48,6 +48,7 @@ interface CourseItem {
 interface ClassGroupItem {
     name: string;
     shift: string;
+    groupLink: string | null;
     courses: CourseItem[];
 }
 
@@ -295,6 +296,7 @@ export async function POST(request: NextRequest): Promise<NextResponse<ApiRespon
             select: {
                 name: true,
                 shift: true,
+                groupLink: true,
                 courses: {
                     where: {
                         enrollments: {
@@ -371,6 +373,7 @@ export async function POST(request: NextRequest): Promise<NextResponse<ApiRespon
             classGroups: classGroups.map((cg) => ({
                 name: cg.name,
                 shift: cg.shift,
+                groupLink: cg.groupLink,
                 courses: cg.courses.map((course) => ({
                     code: course.code,
                     name: course.name,

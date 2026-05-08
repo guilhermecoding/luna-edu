@@ -8,6 +8,11 @@ import { SADAccessTable } from "./_components/sad-access-table";
 import { IconReportSearch, IconUsers, IconCheck, IconClock } from "@tabler/icons-react";
 import InfoBoxPeriod from "../_components/info-box-period";
 
+export const metadata: Metadata = {
+    title: "SAD - Acessos ao Portal",
+    description: "Monitore quem já visualizou o resultado no ciclo.",
+};
+
 interface SADPageProps {
     params: Promise<{
         program: string;
@@ -68,9 +73,9 @@ export default async function SADPage({ params, searchParams }: SADPageProps) {
             </Section>
 
             <Section className="mt-8">
-                <SADAccessTable 
-                    data={allStudents} 
-                    currentFilter={filter} 
+                <SADAccessTable
+                    data={allStudents}
+                    currentFilter={filter}
                 />
             </Section>
         </Page>

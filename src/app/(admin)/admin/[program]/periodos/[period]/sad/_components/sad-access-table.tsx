@@ -121,16 +121,19 @@ export function SADAccessTable({ data, currentFilter }: SADAccessTableProps) {
     const [isPending, startTransition] = useTransition();
     const [searchInput, setSearchInput] = useState("");
     const [globalFilter, setGlobalFilter] = useState("");
+    
+    // Estado local para o filtro de status (para resposta instantânea)
+    const [activeFilter, setActiveFilter] = useState<string | undefined>(currentFilter);
 
-    // Filtra por status (Viewed/Not Viewed) localmente antes de passar para a tabela
+    // Filtra por status localmente usando o estado interno (activeFilter)
     const statusFilteredData = useMemo(() => {
-        if (!currentFilter) return data;
+        if (!activeFilter) return data;
         return data.filter(item => {
-            if (currentFilter === "VIEWED") return item.accessedAt !== null;
-            if (currentFilter === "NOT_VIEWED") return item.accessedAt === null;
+            if (activeFilter === "VIEWED") return item.accessedAt !== null;
+            if (activeFilter === "NOT_VIEWED") return item.accessedAt === null;
             return true;
         });
-    }, [data, currentFilter]);
+    }, [data, activeFilter]);
 
     useEffect(() => {
         const timeout = setTimeout(() => {
@@ -165,6 +168,10 @@ export function SADAccessTable({ data, currentFilter }: SADAccessTableProps) {
     });
 
     const handleFilter = (filter?: string) => {
+        // 1. Atualiza o estado local IMEDIATAMENTE (Tabela e Botões respondem na hora)
+        setActiveFilter(filter);
+
+        // 2. Atualiza a URL em segundo plano (Sincronização)
         startTransition(() => {
             const params = new URLSearchParams(searchParams.toString());
             if (filter) {
@@ -193,7 +200,7 @@ export function SADAccessTable({ data, currentFilter }: SADAccessTableProps) {
 
                     <div className="flex items-center gap-1 p-0.5 bg-muted/50 rounded-full border border-surface-border self-start sm:self-auto">
                         <Button
-                            variant={!currentFilter ? "default" : "ghost"}
+                            variant={!activeFilter ? "default" : "ghost"}
                             size="sm"
                             onClick={() => handleFilter()}
                             className="rounded-full text-xs px-2 py-4"
@@ -201,7 +208,7 @@ export function SADAccessTable({ data, currentFilter }: SADAccessTableProps) {
                             Todos
                         </Button>
                         <Button
-                            variant={currentFilter === "VIEWED" ? "default" : "ghost"}
+                            variant={activeFilter === "VIEWED" ? "default" : "ghost"}
                             size="sm"
                             onClick={() => handleFilter("VIEWED")}
                             className="rounded-full text-xs px-2 py-4"
@@ -210,7 +217,7 @@ export function SADAccessTable({ data, currentFilter }: SADAccessTableProps) {
                             Visualizados
                         </Button>
                         <Button
-                            variant={currentFilter === "NOT_VIEWED" ? "default" : "ghost"}
+                            variant={activeFilter === "NOT_VIEWED" ? "default" : "ghost"}
                             size="sm"
                             onClick={() => handleFilter("NOT_VIEWED")}
                             className="rounded-full text-xs px-2 py-4"

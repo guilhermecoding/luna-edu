@@ -24,10 +24,6 @@ export async function getSubPeriodByPeriodIdAndSlug(
     periodId: string,
     slug: string,
 ) {
-    "use cache";
-    cacheLife("max");
-    cacheTag(`period:${periodId}:sub-period:${slug}`);
-
     return await prisma.subPeriod.findUnique({
         where: {
             periodId_slug: {

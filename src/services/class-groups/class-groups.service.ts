@@ -89,10 +89,6 @@ export async function getClassGroupByPeriodIdAndSlug(
     periodId: string,
     slug: string,
 ) {
-    "use cache";
-    cacheLife("max");
-    cacheTag(`period:${periodId}:class-group:${slug}`);
-
     return await prisma.classGroup.findUnique({
         where: {
             periodId_slug: {

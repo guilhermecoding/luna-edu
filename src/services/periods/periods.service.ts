@@ -158,10 +158,6 @@ export async function getPeriodByProgramAndSlug(
     programSlug: string,
     periodSlug: string,
 ): Promise<Period | null> {
-    "use cache";
-    cacheLife("weeks");
-    cacheTag(`period:${programSlug}:${periodSlug}`);
-
     const program = await prisma.program.findUnique({
         where: {
             slug: programSlug,

@@ -68,10 +68,6 @@ export async function createCampus(data: {
  * @returns Instituição encontrada ou `null` quando não existe.
  */
 export async function getCampusBySlug(slug: string): Promise<Campus | null> {
-    "use cache";
-    cacheLife("max");
-    cacheTag(`campus:${slug}`);
-
     return await prisma.campus.findUnique({
         where: {
             slug,

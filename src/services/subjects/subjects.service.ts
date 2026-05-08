@@ -87,10 +87,6 @@ export async function getSubjectsByDegreeAndBasePeriod(
  * @returns Disciplina encontrada ou null.
  */
 export async function getSubjectById(id: string): Promise<Subject | null> {
-    "use cache";
-    cacheLife("max");
-    cacheTag(`subject:${id}`);
-
     return await prisma.subject.findUnique({
         where: {
             id,
@@ -105,10 +101,6 @@ export async function getSubjectById(id: string): Promise<Subject | null> {
  * @returns Disciplina encontrada ou null.
  */
 export async function getSubjectByCode(code: string): Promise<Subject | null> {
-    "use cache";
-    cacheLife("max");
-    cacheTag(`subject:code:${code}`);
-
     return await prisma.subject.findUnique({
         where: {
             code,

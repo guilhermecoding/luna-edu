@@ -76,10 +76,6 @@ export async function getCoursesByClassGroupId(classGroupId: string) {
  * Busca uma turma específica pelo período e código.
  */
 export async function getCourseByPeriodIdAndCode(periodId: string, code: string): Promise<CourseWithRelations | null> {
-    "use cache";
-    cacheLife("max");
-    cacheTag(`period:${periodId}:course:${code}`);
-
     return await prisma.course.findUnique({
         where: {
             periodId_code: {

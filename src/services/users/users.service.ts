@@ -80,10 +80,6 @@ export async function getUsersList(query?: string) {
  * Busca um membro da equipe (admin ou professor) pelo ID.
  */
 export async function getUserById(id: string) {
-    "use cache";
-    cacheLife("minutes");
-    cacheTag(`user-${id}`);
-
     return await prisma.user.findUnique({
         where: { id },
     });

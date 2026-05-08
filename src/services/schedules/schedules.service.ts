@@ -38,10 +38,6 @@ export async function getTimeSlotsByProgramSlug(programSlug: string) {
  * @returns O TimeSlot encontrado ou null.
  */
 export async function getTimeSlotById(id: string): Promise<TimeSlot | null> {
-    "use cache";
-    cacheLife("max");
-    cacheTag(`time-slot:${id}`);
-
     return await prisma.timeSlot.findUnique({
         where: { id },
     });

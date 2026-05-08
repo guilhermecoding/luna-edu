@@ -31,10 +31,6 @@ export async function getDegreesByProgramId(programId: string): Promise<Degree[]
  * @returns A matriz encontrada ou null.
  */
 export async function getDegreeBySlug(programSlug: string, slug: string) {
-    "use cache";
-    cacheLife("max");
-    cacheTag(`degree:${programSlug}:${slug}`);
-
     return await prisma.degree.findFirst({
         where: {
             slug,

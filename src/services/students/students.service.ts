@@ -288,10 +288,6 @@ export async function getStudentsByPeriodList(periodId: string, query?: string) 
  * Retorna um aluno pelo ID
  */
 export async function getStudentById(id: string) {
-    "use cache";
-    cacheLife("minutes");
-    cacheTag(`student-${id}`);
-
     return await prisma.student.findUnique({
         where: { id },
     });

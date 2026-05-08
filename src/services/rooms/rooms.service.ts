@@ -51,10 +51,6 @@ export async function getRoomsByCampus(campusSlug: string): Promise<Room[]> {
  * Retorna uma sala pelo slug e slug do campus.
  */
 export async function getRoomBySlug(campusSlug: string, roomSlug: string): Promise<Room | null> {
-    "use cache";
-    cacheLife("max");
-    cacheTag(`campus:${campusSlug}:room:${roomSlug}`);
-
     return await prisma.room.findFirst({
         where: {
             slug: roomSlug,

@@ -29,8 +29,6 @@ export default async function SADPage({ params, searchParams }: SADPageProps) {
     }
 
     const allStudents = await getSADAccessList(period.id);
-    const students = filter ? await getSADAccessList(period.id, filter) : allStudents;
-
     const totalStudents = allStudents.length;
     const viewedCount = allStudents.filter(s => s.accessedAt !== null).length;
     const notViewedCount = totalStudents - viewedCount;
@@ -70,12 +68,11 @@ export default async function SADPage({ params, searchParams }: SADPageProps) {
             </Section>
 
             <Section className="mt-8">
-                <SADAccessTable
-                    data={students}
-                    currentFilter={filter}
+                <SADAccessTable 
+                    data={allStudents} 
+                    currentFilter={filter} 
                 />
             </Section>
         </Page>
     );
 }
-

@@ -17,7 +17,7 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
-import { useState } from "react";
+import { useEffect, useState, useTransition, useMemo } from "react";
 import { Input } from "@/components/ui/input";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { IconCheck, IconClock, IconSearch, IconX } from "@tabler/icons-react";
@@ -118,11 +118,30 @@ export function SADAccessTable({ data, currentFilter }: SADAccessTableProps) {
     const router = useRouter();
     const pathname = usePathname();
     const searchParams = useSearchParams();
+    const [isPending, startTransition] = useTransition();
+    const [searchInput, setSearchInput] = useState("");
     const [globalFilter, setGlobalFilter] = useState("");
+
+    // Filtra por status (Viewed/Not Viewed) localmente antes de passar para a tabela
+    const statusFilteredData = useMemo(() => {
+        if (!currentFilter) return data;
+        return data.filter(item => {
+            if (currentFilter === "VIEWED") return item.accessedAt !== null;
+            if (currentFilter === "NOT_VIEWED") return item.accessedAt === null;
+            return true;
+        });
+    }, [data, currentFilter]);
+
+    useEffect(() => {
+        const timeout = setTimeout(() => {
+            setGlobalFilter(searchInput);
+        }, 300);
+        return () => clearTimeout(timeout);
+    }, [searchInput]);
 
     // eslint-disable-next-line react-hooks/incompatible-library -- TanStack Table + React Compiler
     const table = useReactTable({
-        data,
+        data: statusFilteredData,
         columns,
         getCoreRowModel: getCoreRowModel(),
         getPaginationRowModel: getPaginationRowModel(),
@@ -146,13 +165,15 @@ export function SADAccessTable({ data, currentFilter }: SADAccessTableProps) {
     });
 
     const handleFilter = (filter?: string) => {
-        const params = new URLSearchParams(searchParams.toString());
-        if (filter) {
-            params.set("filter", filter);
-        } else {
-            params.delete("filter");
-        }
-        router.push(`${pathname}?${params.toString()}`);
+        startTransition(() => {
+            const params = new URLSearchParams(searchParams.toString());
+            if (filter) {
+                params.set("filter", filter);
+            } else {
+                params.delete("filter");
+            }
+            router.push(`${pathname}?${params.toString()}`, { scroll: false });
+        });
     };
 
     return (
@@ -164,8 +185,8 @@ export function SADAccessTable({ data, currentFilter }: SADAccessTableProps) {
                         <IconSearch className="size-4 shrink-0 text-muted-foreground" />
                         <Input
                             placeholder="Pesquisar..."
-                            value={globalFilter}
-                            onChange={(e) => setGlobalFilter(e.target.value)}
+                            value={searchInput}
+                            onChange={(e) => setSearchInput(e.target.value)}
                             className="border-none bg-transparent shadow-none outline-none focus-visible:border-transparent focus-visible:ring-0 focus-visible:ring-offset-0 text-sm"
                         />
                     </div>

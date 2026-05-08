@@ -11,7 +11,6 @@ import { useEffect } from "react";
 import { createProgramAction } from "../actions";
 import { createProgramSchema } from "../schema";
 import { IconLoader2 } from "@tabler/icons-react";
-import { isRedirectError } from "@/lib/is-redirect-error";
 import autoSlug from "@/lib/auto-slug";
 
 type FormInput = z.input<typeof createProgramSchema>;
@@ -76,11 +75,15 @@ export function CreateProgramForm() {
 
                 return;
             }
-        } catch (error) {
-            if (isRedirectError(error)) {
-                throw error;
-            }
 
+            const fallbackParams = new URLSearchParams({
+                toast: "success",
+                message: "Programa criado com sucesso",
+            });
+            router.push(result?.redirectTo ?? `/admin/programas?${fallbackParams.toString()}`);
+            router.refresh();
+            return;
+        } catch (error) {
             const params = new URLSearchParams(searchParams.toString());
             params.set("toast", "error");
             params.set("message", "Erro ao criar programa");

@@ -23,7 +23,6 @@ import { editProgramSchema } from "../schema";
 import { IconAlertTriangle, IconLoader2 } from "@tabler/icons-react";
 import Image from "next/image";
 import imgGibbyDuvida from "@/assets/images/logo-gibby-duvida.svg";
-import { isRedirectError } from "@/lib/is-redirect-error";
 
 type FormInput = z.input<typeof editProgramSchema>;
 type FormOutput = z.output<typeof editProgramSchema>;
@@ -92,11 +91,12 @@ export function EditProgramForm({ slug, name, description }: EditProgramFormProp
                     message: result.error || "Erro ao atualizar programa",
                 });
             }
-        } catch (error) {
-            if (isRedirectError(error)) {
-                throw error;
-            }
 
+            if (result?.success && result.redirectTo) {
+                router.push(result.redirectTo);
+                return;
+            }
+        } catch (error) {
             const params = new URLSearchParams(searchParams.toString());
             params.set("toast", "error");
             params.set("message", "Erro ao atualizar programa");
@@ -123,11 +123,12 @@ export function EditProgramForm({ slug, name, description }: EditProgramFormProp
 
                 setDeleteError(result.error || "Erro ao apagar programa");
             }
-        } catch (error) {
-            if (isRedirectError(error)) {
-                throw error;
-            }
 
+            if (result?.success && result.redirectTo) {
+                router.push(result.redirectTo);
+                return;
+            }
+        } catch (error) {
             const params = new URLSearchParams(searchParams.toString());
             params.set("toast", "error");
             params.set("message", "Erro ao apagar programa");

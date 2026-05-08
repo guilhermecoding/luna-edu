@@ -1,7 +1,6 @@
 "use server";
 
 import { revalidatePath, updateTag } from "next/cache";
-import { redirect } from "next/navigation";
 import { ZodError, z } from "zod";
 import { deleteProgram, getProgramBySlug, updateProgram } from "@/services/programs/programs.service";
 import { editProgramSchema, type EditProgramInput } from "./schema";
@@ -45,7 +44,10 @@ export async function editProgramAction(slug: string, data: EditProgramInput) {
         message: "Programa atualizado com sucesso",
     });
 
-    redirect(`/admin/programas?${params.toString()}`);
+    return {
+        success: true,
+        redirectTo: `/admin/programas?${params.toString()}`,
+    };
 }
 
 export async function deleteProgramAction(slug: string, confirmationName: string) {
@@ -99,5 +101,8 @@ export async function deleteProgramAction(slug: string, confirmationName: string
         message: "Programa apagado com sucesso",
     });
 
-    redirect(`/admin/programas?${params.toString()}`);
+    return {
+        success: true,
+        redirectTo: `/admin/programas?${params.toString()}`,
+    };
 }

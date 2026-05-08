@@ -4,7 +4,6 @@ import { createProgram } from "@/services/programs/programs.service";
 import { ZodError } from "zod";
 import { createProgramSchema, type CreateProgramInput } from "./schema";
 import { revalidatePath, updateTag } from "next/cache";
-import { redirect } from "next/navigation";
 
 export async function createProgramAction(data: CreateProgramInput) {
     try {
@@ -39,5 +38,8 @@ export async function createProgramAction(data: CreateProgramInput) {
         message: "Programa criado com sucesso",
     });
 
-    redirect(`/admin/programas?${params.toString()}`);
+    return {
+        success: true,
+        redirectTo: `/admin/programas?${params.toString()}`,
+    };
 }

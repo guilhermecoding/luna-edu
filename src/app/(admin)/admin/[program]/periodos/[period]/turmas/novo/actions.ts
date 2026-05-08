@@ -5,7 +5,6 @@ import { getPeriodByProgramAndSlug } from "@/services/periods/periods.service";
 import { ZodError } from "zod";
 import { classGroupSchema, type ClassGroupInput } from "../schema";
 import { revalidatePath, updateTag } from "next/cache";
-import { redirect } from "next/navigation";
 import { Shift } from "@/generated/prisma/client";
 
 export async function createClassAction(
@@ -49,5 +48,8 @@ export async function createClassAction(
         message: "Classe criada com sucesso! As disciplinas foram geradas automaticamente.",
     });
 
-    redirect(`/admin/${programSlug}/periodos/${periodSlug}/turmas?${params.toString()}`);
+    return {
+        success: true,
+        redirectTo: `/admin/${programSlug}/periodos/${periodSlug}/turmas?${params.toString()}`,
+    };
 }

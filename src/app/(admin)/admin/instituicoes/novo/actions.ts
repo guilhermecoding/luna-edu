@@ -4,7 +4,6 @@ import { createCampus } from "@/services/campuses/campuses.service";
 import { ZodError } from "zod";
 import { createCampusSchema, type CreateCampusInput } from "./schema";
 import { revalidatePath, updateTag } from "next/cache";
-import { redirect } from "next/navigation";
 
 export async function createCampusAction(data: CreateCampusInput) {
     try {
@@ -39,5 +38,8 @@ export async function createCampusAction(data: CreateCampusInput) {
         message: "Instituição criada com sucesso",
     });
 
-    redirect(`/admin/instituicoes?${params.toString()}`);
+    return {
+        success: true,
+        redirectTo: `/admin/instituicoes?${params.toString()}`,
+    };
 }

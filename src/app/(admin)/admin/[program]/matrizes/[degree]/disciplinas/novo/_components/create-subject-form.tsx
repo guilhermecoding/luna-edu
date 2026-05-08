@@ -13,7 +13,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { createSubjectAction } from "../actions";
 import { createSubjectSchema } from "../schema";
 import { IconLoader2 } from "@tabler/icons-react";
-import { isRedirectError } from "@/lib/is-redirect-error";
 
 type FormInput = z.input<typeof createSubjectSchema>;
 type FormOutput = z.output<typeof createSubjectSchema>;
@@ -80,11 +79,13 @@ export function CreateSubjectForm({ programSlug, degreeSlug }: Props) {
                 });
                 return;
             }
-        } catch (error) {
-            if (isRedirectError(error)) {
-                throw error;
-            }
 
+            if (result?.success && result.redirectTo) {
+                router.push(result.redirectTo);
+                router.refresh();
+                return;
+            }
+        } catch (error) {
             const params = new URLSearchParams(searchParams.toString());
             params.set("toast", "error");
             params.set("message", "Erro fatal ao criar disciplina");

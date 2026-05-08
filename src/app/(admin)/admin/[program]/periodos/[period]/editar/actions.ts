@@ -1,7 +1,6 @@
 "use server";
 
 import { revalidatePath, updateTag } from "next/cache";
-import { redirect } from "next/navigation";
 import { ZodError, z } from "zod";
 import {
     deletePeriod,
@@ -54,7 +53,10 @@ export async function editPeriodAction(
         message: "Período atualizado com sucesso",
     });
 
-    redirect(`/admin/${programSlug}/periodos?${params.toString()}`);
+    return {
+        success: true,
+        redirectTo: `/admin/${programSlug}/periodos?${params.toString()}`,
+    };
 }
 
 export async function deletePeriodAction(
@@ -113,5 +115,8 @@ export async function deletePeriodAction(
         message: "Período apagado com sucesso",
     });
 
-    redirect(`/admin/${programSlug}/periodos?${params.toString()}`);
+    return {
+        success: true,
+        redirectTo: `/admin/${programSlug}/periodos?${params.toString()}`,
+    };
 }

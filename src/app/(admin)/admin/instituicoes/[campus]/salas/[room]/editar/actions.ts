@@ -4,7 +4,6 @@ import { updateRoom, deleteRoom, getRoomSlugById, getRoomUsageCacheRefs } from "
 import { ZodError } from "zod";
 import { roomUpdateSchema, type RoomUpdateInput } from "../../schema";
 import { revalidatePath, updateTag } from "next/cache";
-import { redirect } from "next/navigation";
 import { RoomType } from "@/generated/prisma/client";
 
 export async function updateRoomAction(campusSlug: string, roomId: string, data: RoomUpdateInput) {
@@ -52,7 +51,10 @@ export async function updateRoomAction(campusSlug: string, roomId: string, data:
         message: "Sala atualizada com sucesso",
     });
 
-    redirect(`/admin/instituicoes/${campusSlug}/salas?${params.toString()}`);
+    return {
+        success: true,
+        redirectTo: `/admin/instituicoes/${campusSlug}/salas?${params.toString()}`,
+    };
 }
 
 export async function deleteRoomAction(campusSlug: string, roomId: string) {
@@ -86,5 +88,8 @@ export async function deleteRoomAction(campusSlug: string, roomId: string) {
         message: "Sala excluída com sucesso",
     });
 
-    redirect(`/admin/instituicoes/${campusSlug}/salas?${params.toString()}`);
+    return {
+        success: true,
+        redirectTo: `/admin/instituicoes/${campusSlug}/salas?${params.toString()}`,
+    };
 }

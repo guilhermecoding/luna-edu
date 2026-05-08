@@ -10,7 +10,6 @@ import imgGibbyDuvida from "@/assets/images/logo-gibby-duvida.svg";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { isRedirectError } from "@/lib/is-redirect-error";
 import { Shift } from "@/generated/prisma/enums";
 import { shiftLabels } from "../../../schema";
 import { updateClassGroupAction, deleteClassGroupAction } from "../actions";
@@ -87,9 +86,15 @@ export function EditClassGroupForm({
                 params.set("message", result.error || "Erro ao atualizar turma");
                 router.replace(`${pathname}?${params.toString()}`, { scroll: false });
                 setError("root", { type: "server", message: result.error || "Erro ao atualizar turma" });
+                return;
+            }
+
+            if (result?.success && result.redirectTo) {
+                router.push(result.redirectTo);
+                router.refresh();
+                return;
             }
         } catch (error) {
-            if (isRedirectError(error)) throw error;
             setError("root", { type: "server", message: "Erro fatal ao atualizar turma" });
         }
     };
@@ -107,12 +112,15 @@ export function EditClassGroupForm({
                 router.replace(`${pathname}?${params.toString()}`, { scroll: false });
 
                 setDeleteError(result.error || "Erro ao apagar turma");
-            }
-        } catch (error) {
-            if (isRedirectError(error)) {
-                throw error;
+                return;
             }
 
+            if (result?.success && result.redirectTo) {
+                router.push(result.redirectTo);
+                router.refresh();
+                return;
+            }
+        } catch (error) {
             const params = new URLSearchParams(searchParams.toString());
             params.set("toast", "error");
             params.set("message", "Erro ao apagar turma");

@@ -21,7 +21,6 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 import { Shift } from "@/generated/prisma/client";
-import { isRedirectError } from "@/lib/is-redirect-error";
 import { createClassGroupSubjectAction } from "../actions";
 import {
     createClassGroupSubjectSchema,
@@ -176,11 +175,13 @@ export function CreateClassGroupSubjectForm({
                 });
                 return;
             }
-        } catch (error) {
-            if (isRedirectError(error)) {
-                throw error;
-            }
 
+            if (result?.success && result.redirectTo) {
+                router.push(result.redirectTo);
+                router.refresh();
+                return;
+            }
+        } catch (error) {
             const params = new URLSearchParams(searchParams.toString());
             params.set("toast", "error");
             params.set("message", "Erro fatal ao adicionar disciplina");

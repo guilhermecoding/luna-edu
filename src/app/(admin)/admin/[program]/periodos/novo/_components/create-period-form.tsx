@@ -1,6 +1,5 @@
 "use client";
 
-import { isRedirectError } from "@/lib/is-redirect-error";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { IconLoader2 } from "@tabler/icons-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
@@ -91,11 +90,13 @@ export function CreatePeriodForm({ programSlug }: CreatePeriodFormProps) {
 
                 return;
             }
-        } catch (error) {
-            if (isRedirectError(error)) {
-                throw error;
-            }
 
+            if (result?.success && result.redirectTo) {
+                router.push(result.redirectTo);
+                router.refresh();
+                return;
+            }
+        } catch (error) {
             const params = new URLSearchParams(searchParams.toString());
             params.set("toast", "error");
             params.set("message", "Erro ao criar período");

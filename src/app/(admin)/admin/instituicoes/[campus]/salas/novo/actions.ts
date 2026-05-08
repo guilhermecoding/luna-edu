@@ -5,7 +5,6 @@ import { getCampusBySlug } from "@/services/campuses/campuses.service";
 import { ZodError } from "zod";
 import { roomSchema, type RoomInput } from "../schema";
 import { revalidatePath, updateTag } from "next/cache";
-import { redirect } from "next/navigation";
 import { RoomType } from "@/generated/prisma/client";
 
 export async function createRoomAction(campusSlug: string, data: RoomInput) {
@@ -44,5 +43,8 @@ export async function createRoomAction(campusSlug: string, data: RoomInput) {
         message: "Sala criada com sucesso",
     });
 
-    redirect(`/admin/instituicoes/${campusSlug}/salas?${params.toString()}`);
+    return {
+        success: true,
+        redirectTo: `/admin/instituicoes/${campusSlug}/salas?${params.toString()}`,
+    };
 }

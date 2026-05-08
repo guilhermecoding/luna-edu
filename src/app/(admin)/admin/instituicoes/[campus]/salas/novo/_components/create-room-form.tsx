@@ -17,7 +17,6 @@ import { useEffect } from "react";
 import { createRoomAction } from "../actions";
 import { roomSchema, type RoomInput, ROOM_TYPES, roomTypeLabels } from "../../schema";
 import { IconArrowsShuffle, IconLoader2 } from "@tabler/icons-react";
-import { isRedirectError } from "@/lib/is-redirect-error";
 import autoSlug from "@/lib/auto-slug";
 
 interface CreateRoomFormProps {
@@ -79,11 +78,13 @@ export function CreateRoomForm({ campusSlug }: CreateRoomFormProps) {
                 });
                 return;
             }
-        } catch (error) {
-            if (isRedirectError(error)) {
-                throw error;
-            }
 
+            if (result?.success && result.redirectTo) {
+                router.push(result.redirectTo);
+                router.refresh();
+                return;
+            }
+        } catch (error) {
             const params = new URLSearchParams(searchParams.toString());
             params.set("toast", "error");
             params.set("message", "Erro fatal ao criar sala");

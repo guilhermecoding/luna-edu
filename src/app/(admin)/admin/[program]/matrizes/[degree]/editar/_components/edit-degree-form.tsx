@@ -22,7 +22,6 @@ import { createDegreeSchema } from "../../../novo/schema";
 import { IconAlertTriangle, IconLoader2 } from "@tabler/icons-react";
 import Image from "next/image";
 import imgGibbyDuvida from "@/assets/images/logo-gibby-duvida.svg";
-import { isRedirectError } from "@/lib/is-redirect-error";
 import { Degree } from "@/generated/prisma/client";
 
 // Omitimos o programId na edição do form client pois não alteramos os vínculos base lá
@@ -92,11 +91,13 @@ export function EditDegreeForm({ programSlug, degreeId, degreeSlug, initialData 
                 });
                 return;
             }
-        } catch (error) {
-            if (isRedirectError(error)) {
-                throw error;
-            }
 
+            if (result?.success && result.redirectTo) {
+                router.push(result.redirectTo);
+                router.refresh();
+                return;
+            }
+        } catch (error) {
             const params = new URLSearchParams(searchParams.toString());
             params.set("toast", "error");
             params.set("message", "Erro fatal ao editar matriz");
@@ -122,12 +123,15 @@ export function EditDegreeForm({ programSlug, degreeId, degreeSlug, initialData 
                 router.replace(`${pathname}?${params.toString()}`, { scroll: false });
 
                 setDeleteError(result.error || "Erro ao excluir matriz");
-            }
-        } catch (error) {
-            if (isRedirectError(error)) {
-                throw error;
+                return;
             }
 
+            if (result?.success && result.redirectTo) {
+                router.push(result.redirectTo);
+                router.refresh();
+                return;
+            }
+        } catch (error) {
             setDeleteError("Erro crítico ao excluir matriz.");
         } finally {
             setIsDeleting(false);

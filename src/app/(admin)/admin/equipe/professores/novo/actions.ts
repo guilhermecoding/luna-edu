@@ -2,7 +2,6 @@
 
 import { createTeacher, promoteUserToTeacher } from "@/services/users/teachers.service";
 import { revalidatePath, updateTag } from "next/cache";
-import { redirect } from "next/navigation";
 import { ZodError } from "zod";
 import { Prisma } from "@/generated/prisma/client";
 import { createTeacherSchema, promoteAdminSchema, type CreateTeacherInput, type PromoteAdminInput } from "./schema";
@@ -61,7 +60,10 @@ export async function createTeacherAction(data: CreateTeacherInput) {
         message: "Professor criado com sucesso",
     });
 
-    redirect(`/admin/equipe/professores?${params.toString()}`);
+    return {
+        success: true,
+        redirectTo: `/admin/equipe/professores?${params.toString()}`,
+    };
 }
 
 export async function promoteAdminAction(data: PromoteAdminInput) {
@@ -110,5 +112,8 @@ export async function promoteAdminAction(data: PromoteAdminInput) {
         message: "Administrador adicionado como professor com sucesso",
     });
 
-    redirect(`/admin/equipe/professores?${params.toString()}`);
+    return {
+        success: true,
+        redirectTo: `/admin/equipe/professores?${params.toString()}`,
+    };
 }

@@ -61,6 +61,12 @@ export function CreateTimeSlotForm({ programSlug }: CreateTimeSlotFormProps) {
 
         if (result?.success === false) {
             setError(result.error);
+            return;
+        }
+
+        if (result?.success && result.redirectTo) {
+            router.push(result.redirectTo);
+            router.refresh();
         }
     };
 

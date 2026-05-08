@@ -23,7 +23,6 @@ import { editSubjectSchema } from "../schema";
 import { IconAlertTriangle, IconLoader2 } from "@tabler/icons-react";
 import Image from "next/image";
 import imgGibbyDuvida from "@/assets/images/logo-gibby-duvida.svg";
-import { isRedirectError } from "@/lib/is-redirect-error";
 import { Subject } from "@/generated/prisma/client";
 
 type FormInput = z.input<typeof editSubjectSchema>;
@@ -91,11 +90,13 @@ export function EditSubjectForm({ programSlug, degreeSlug, degreeId, subjectId, 
                 });
                 return;
             }
-        } catch (error) {
-            if (isRedirectError(error)) {
-                throw error;
-            }
 
+            if (result?.success && result.redirectTo) {
+                router.push(result.redirectTo);
+                router.refresh();
+                return;
+            }
+        } catch (error) {
             const params = new URLSearchParams(searchParams.toString());
             params.set("toast", "error");
             params.set("message", "Erro fatal ao editar disciplina");
@@ -121,12 +122,15 @@ export function EditSubjectForm({ programSlug, degreeSlug, degreeId, subjectId, 
                 router.replace(`${pathname}?${params.toString()}`, { scroll: false });
 
                 setDeleteError(result.error || "Erro ao excluir disciplina");
-            }
-        } catch (error) {
-            if (isRedirectError(error)) {
-                throw error;
+                return;
             }
 
+            if (result?.success && result.redirectTo) {
+                router.push(result.redirectTo);
+                router.refresh();
+                return;
+            }
+        } catch (error) {
             setDeleteError("Erro crítico ao excluir disciplina.");
         } finally {
             setIsDeleting(false);

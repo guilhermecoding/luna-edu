@@ -8,7 +8,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { IconAlertTriangle, IconCircleCheckFilled, IconCircleDashed, IconLoader2 } from "@tabler/icons-react";
 import z from "zod";
 import imgGibbyDuvida from "@/assets/images/logo-gibby-duvida.svg";
-import { isRedirectError } from "@/lib/is-redirect-error";
 import { Button } from "@/components/ui/button";
 import {
     Dialog,
@@ -112,11 +111,13 @@ export function EditPeriodForm({
 
                 return;
             }
-        } catch (error) {
-            if (isRedirectError(error)) {
-                throw error;
-            }
 
+            if (result?.success && result.redirectTo) {
+                router.push(result.redirectTo);
+                router.refresh();
+                return;
+            }
+        } catch (error) {
             setError("root", {
                 type: "server",
                 message: "Erro ao atualizar período",
@@ -132,12 +133,15 @@ export function EditPeriodForm({
             const result = await deletePeriodAction(programSlug, periodSlug, deleteConfirmationName);
             if (result?.success === false) {
                 setDeleteError(result.error || "Erro ao apagar período");
-            }
-        } catch (error) {
-            if (isRedirectError(error)) {
-                throw error;
+                return;
             }
 
+            if (result?.success && result.redirectTo) {
+                router.push(result.redirectTo);
+                router.refresh();
+                return;
+            }
+        } catch (error) {
             setDeleteError("Erro ao apagar período");
         } finally {
             setIsDeleting(false);

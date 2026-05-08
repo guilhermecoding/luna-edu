@@ -4,7 +4,6 @@ import { createSubject } from "@/services/subjects/subjects.service";
 import { ZodError } from "zod";
 import { createSubjectSchema, type CreateSubjectInput } from "./schema";
 import { revalidatePath, updateTag } from "next/cache";
-import { redirect } from "next/navigation";
 import { getDegreeBySlug } from "@/services/degrees/degrees.service";
 
 export async function createSubjectAction(programSlug: string, degreeSlug: string, data: CreateSubjectInput) {
@@ -53,5 +52,8 @@ export async function createSubjectAction(programSlug: string, degreeSlug: strin
         message: "Disciplina adicionada com sucesso",
     });
 
-    redirect(`/admin/${programSlug}/matrizes/${degreeSlug}?${params.toString()}`);
+    return {
+        success: true,
+        redirectTo: `/admin/${programSlug}/matrizes/${degreeSlug}?${params.toString()}`,
+    };
 }

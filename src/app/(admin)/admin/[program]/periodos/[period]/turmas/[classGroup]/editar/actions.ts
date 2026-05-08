@@ -7,7 +7,6 @@ import { getClassGroupByPeriodIdAndSlug, getClassGroupSlugsByIds, updateClassGro
 import { ZodError, z } from "zod";
 import { courseUpdateSchema, type CourseUpdateInput } from "../../schema";
 import { revalidatePath, updateTag } from "next/cache";
-import { redirect } from "next/navigation";
 import { DayOfWeek, Shift } from "@/generated/prisma/enums";
 import { editClassGroupSchema, type EditClassGroupInput } from "./schema";
 
@@ -119,12 +118,16 @@ export async function updateCourseAction(
     const [targetClassGroupSlug] = await getClassGroupSlugsByIds([redirectClassGroupId || ""]);
 
     if (targetClassGroupSlug) {
-        redirect(
-            `/admin/${programSlug}/periodos/${periodSlug}/turmas/${targetClassGroupSlug}/disciplinas?${params.toString()}`,
-        );
+        return {
+            success: true,
+            redirectTo: `/admin/${programSlug}/periodos/${periodSlug}/turmas/${targetClassGroupSlug}/disciplinas?${params.toString()}`,
+        };
     }
 
-    redirect(`/admin/${programSlug}/periodos/${periodSlug}/turmas?${params.toString()}`);
+    return {
+        success: true,
+        redirectTo: `/admin/${programSlug}/periodos/${periodSlug}/turmas?${params.toString()}`,
+    };
 }
 
 export async function deleteCourseAction(
@@ -177,12 +180,16 @@ export async function deleteCourseAction(
     const [targetClassGroupSlug] = await getClassGroupSlugsByIds([redirectClassGroupId || ""]);
 
     if (targetClassGroupSlug) {
-        redirect(
-            `/admin/${programSlug}/periodos/${periodSlug}/turmas/${targetClassGroupSlug}/disciplinas?${params.toString()}`,
-        );
+        return {
+            success: true,
+            redirectTo: `/admin/${programSlug}/periodos/${periodSlug}/turmas/${targetClassGroupSlug}/disciplinas?${params.toString()}`,
+        };
     }
 
-    redirect(`/admin/${programSlug}/periodos/${periodSlug}/turmas?${params.toString()}`);
+    return {
+        success: true,
+        redirectTo: `/admin/${programSlug}/periodos/${periodSlug}/turmas?${params.toString()}`,
+    };
 }
 
 export async function updateClassGroupAction(
@@ -228,7 +235,10 @@ export async function updateClassGroupAction(
         toast: "success",
         message: "Turma atualizada com sucesso",
     });
-    redirect(`/admin/${programSlug}/periodos/${periodSlug}/turmas/${classGroupSlug}?${params.toString()}`);
+    return {
+        success: true,
+        redirectTo: `/admin/${programSlug}/periodos/${periodSlug}/turmas/${classGroupSlug}?${params.toString()}`,
+    };
 }
 
 export async function deleteClassGroupAction(
@@ -273,5 +283,8 @@ export async function deleteClassGroupAction(
         message: "Turma apagada com sucesso",
     });
 
-    redirect(`/admin/${programSlug}/periodos/${periodSlug}/turmas?${params.toString()}`);
+    return {
+        success: true,
+        redirectTo: `/admin/${programSlug}/periodos/${periodSlug}/turmas?${params.toString()}`,
+    };
 }

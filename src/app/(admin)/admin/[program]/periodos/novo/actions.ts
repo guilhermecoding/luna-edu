@@ -2,7 +2,6 @@
 
 import { createPeriod } from "@/services/periods/periods.service";
 import { revalidatePath, updateTag } from "next/cache";
-import { redirect } from "next/navigation";
 import { ZodError } from "zod";
 import { createPeriodSchema, type CreatePeriodInput } from "./schema";
 
@@ -40,5 +39,8 @@ export async function createPeriodAction(programSlug: string, data: CreatePeriod
         message: "Período criado com sucesso",
     });
 
-    redirect(`/admin/${programSlug}/periodos?${params.toString()}`);
+    return {
+        success: true,
+        redirectTo: `/admin/${programSlug}/periodos?${params.toString()}`,
+    };
 }

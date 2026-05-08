@@ -28,7 +28,6 @@ import { roomUpdateSchema, type RoomUpdateInput, ROOM_TYPES, roomTypeLabels } fr
 import { IconAlertTriangle, IconLoader2, IconTrash } from "@tabler/icons-react";
 import Image from "next/image";
 import imgGibbyDuvida from "@/assets/images/logo-gibby-duvida.svg";
-import { isRedirectError } from "@/lib/is-redirect-error";
 import { Room } from "@/generated/prisma/client";
 
 interface EditRoomFormProps {
@@ -92,11 +91,13 @@ export function EditRoomForm({ campusSlug, initialData }: EditRoomFormProps) {
                 });
                 return;
             }
-        } catch (error) {
-            if (isRedirectError(error)) {
-                throw error;
-            }
 
+            if (result?.success && result.redirectTo) {
+                router.push(result.redirectTo);
+                router.refresh();
+                return;
+            }
+        } catch (error) {
             const params = new URLSearchParams(searchParams.toString());
             params.set("toast", "error");
             params.set("message", "Erro fatal ao salvar sala");
@@ -122,9 +123,15 @@ export function EditRoomForm({ campusSlug, initialData }: EditRoomFormProps) {
                 router.replace(`${pathname}?${params.toString()}`, { scroll: false });
 
                 setDeleteError(result.error || "Erro ao excluir sala");
+                return;
+            }
+
+            if (result?.success && result.redirectTo) {
+                router.push(result.redirectTo);
+                router.refresh();
+                return;
             }
         } catch (error) {
-            if (isRedirectError(error)) throw error;
             setDeleteError("Erro fatal ao excluir sala");
         } finally {
             setIsDeleting(false);

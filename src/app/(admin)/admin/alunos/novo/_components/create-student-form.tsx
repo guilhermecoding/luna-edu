@@ -74,7 +74,10 @@ export default function CreateStudentForm({
             setError("root", { type: "server", message: result.error });
         } else if (result?.success) {
             toast.success("Aluno criado com sucesso!");
-            if (redirectPath === "none") {
+            if (result.redirectTo) {
+                router.push(result.redirectTo);
+                router.refresh();
+            } else if (redirectPath === "none") {
                 router.refresh();
             }
             if (onSuccess) onSuccess();

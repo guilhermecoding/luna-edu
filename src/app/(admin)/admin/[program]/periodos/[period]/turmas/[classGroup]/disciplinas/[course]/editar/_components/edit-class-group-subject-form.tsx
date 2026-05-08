@@ -30,7 +30,6 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 import { Shift } from "@/generated/prisma/client";
-import { isRedirectError } from "@/lib/is-redirect-error";
 import Image from "next/image";
 import imgGibbyDuvida from "@/assets/images/logo-gibby-duvida.svg";
 import { DAYS_OF_WEEK, dayOfWeekLabels, shiftLabels } from "../../../../../schema";
@@ -191,12 +190,15 @@ export function EditClassGroupSubjectForm({
                     type: "server",
                     message: result.error || "Erro ao atualizar disciplina",
                 });
-            }
-        } catch (error) {
-            if (isRedirectError(error)) {
-                throw error;
+                return;
             }
 
+            if (result?.success && result.redirectTo) {
+                router.push(result.redirectTo);
+                router.refresh();
+                return;
+            }
+        } catch (error) {
             const params = new URLSearchParams(searchParams.toString());
             params.set("toast", "error");
             params.set("message", "Erro ao atualizar disciplina");
@@ -228,12 +230,15 @@ export function EditClassGroupSubjectForm({
                 params.set("message", result.error || "Erro ao apagar disciplina");
                 router.replace(`${pathname}?${params.toString()}`, { scroll: false });
                 setDeleteError(result.error || "Erro ao apagar disciplina");
-            }
-        } catch (error) {
-            if (isRedirectError(error)) {
-                throw error;
+                return;
             }
 
+            if (result?.success && result.redirectTo) {
+                router.push(result.redirectTo);
+                router.refresh();
+                return;
+            }
+        } catch (error) {
             const params = new URLSearchParams(searchParams.toString());
             params.set("toast", "error");
             params.set("message", "Erro ao apagar disciplina");

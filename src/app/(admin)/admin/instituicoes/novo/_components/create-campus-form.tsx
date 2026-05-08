@@ -10,7 +10,6 @@ import { useEffect } from "react";
 import { createCampusAction } from "../actions";
 import { createCampusSchema, type CreateCampusInput } from "../schema";
 import { IconLoader2 } from "@tabler/icons-react";
-import { isRedirectError } from "@/lib/is-redirect-error";
 import autoSlug from "@/lib/auto-slug";
 
 export function CreateCampusForm() {
@@ -64,11 +63,13 @@ export function CreateCampusForm() {
                 });
                 return;
             }
-        } catch (error) {
-            if (isRedirectError(error)) {
-                throw error;
-            }
 
+            if (result?.success && result.redirectTo) {
+                router.push(result.redirectTo);
+                router.refresh();
+                return;
+            }
+        } catch (error) {
             const params = new URLSearchParams(searchParams.toString());
             params.set("toast", "error");
             params.set("message", "Erro fatal ao criar instituição");

@@ -5,7 +5,6 @@ import { getProgramBySlug } from "@/services/programs/programs.service";
 import { ZodError } from "zod";
 import { timeSlotSchema, type TimeSlotInput } from "./schema";
 import { revalidatePath, updateTag } from "next/cache";
-import { redirect } from "next/navigation";
 import { Prisma } from "@/generated/prisma/client";
 
 export async function createTimeSlotAction(
@@ -44,7 +43,10 @@ export async function createTimeSlotAction(
         return { success: false, error: "Erro ao criar horário" };
     }
 
-    redirect(`/admin/${programSlug}/horarios?toast=success&message=${encodeURIComponent("Horário criado com sucesso")}`);
+    return {
+        success: true,
+        redirectTo: `/admin/${programSlug}/horarios?toast=success&message=${encodeURIComponent("Horário criado com sucesso")}`,
+    };
 }
 
 export async function editTimeSlotAction(
@@ -71,7 +73,10 @@ export async function editTimeSlotAction(
         return { success: false, error: "Erro ao atualizar horário" };
     }
 
-    redirect(`/admin/${programSlug}/horarios?toast=success&message=${encodeURIComponent("Horário atualizado com sucesso")}`);
+    return {
+        success: true,
+        redirectTo: `/admin/${programSlug}/horarios?toast=success&message=${encodeURIComponent("Horário atualizado com sucesso")}`,
+    };
 }
 
 export async function deleteTimeSlotAction(
@@ -90,5 +95,8 @@ export async function deleteTimeSlotAction(
         return { success: false, error: "Erro ao excluir horário" };
     }
 
-    redirect(`/admin/${programSlug}/horarios?toast=success&message=${encodeURIComponent("Horário excluído com sucesso")}`);
+    return {
+        success: true,
+        redirectTo: `/admin/${programSlug}/horarios?toast=success&message=${encodeURIComponent("Horário excluído com sucesso")}`,
+    };
 }

@@ -4,7 +4,6 @@ import { createDegree } from "@/services/degrees/degrees.service";
 import { ZodError } from "zod";
 import { createDegreeSchema, type CreateDegreeInput } from "./schema";
 import { revalidatePath, updateTag } from "next/cache";
-import { redirect } from "next/navigation";
 import { getProgramBySlug } from "@/services/programs/programs.service";
 
 export async function createDegreeAction(programSlug: string, data: CreateDegreeInput) {
@@ -53,5 +52,8 @@ export async function createDegreeAction(programSlug: string, data: CreateDegree
         message: "Matriz curricular criada com sucesso",
     });
 
-    redirect(`/admin/${programSlug}/matrizes?${params.toString()}`);
+    return {
+        success: true,
+        redirectTo: `/admin/${programSlug}/matrizes?${params.toString()}`,
+    };
 }

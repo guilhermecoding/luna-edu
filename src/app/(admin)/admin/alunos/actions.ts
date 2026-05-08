@@ -6,8 +6,6 @@ import { createStudent, updateStudent } from "@/services/students/students.servi
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { Genre, Prisma } from "@/generated/prisma/client";
-import { isRedirectError } from "next/dist/client/components/redirect-error";
-import { redirect } from "next/navigation";
 import prisma from "@/lib/prisma";
 
 export async function createStudentAction(data: CreateStudentData, periodId?: string, redirectPath: string = "/admin/alunos") {
@@ -55,13 +53,11 @@ export async function createStudentAction(data: CreateStudentData, periodId?: st
                 return { success: false, error: "Conflito de dados: Um aluno com estes dados já existe." };
             }
         }
-        if (isRedirectError(error)) throw error;
-        
         console.error("Erro ao criar aluno:", error);
         return { success: false, error: "Ocorreu um erro inesperado ao criar o aluno." };
     }
     if (redirectPath !== "none") {
-        redirect(redirectPath);
+        return { success: true, redirectTo: redirectPath };
     }
 
     return { success: true };
@@ -111,13 +107,11 @@ export async function editStudentAction(id: string, data: EditStudentData) {
                 return { success: false, error: "Conflito de dados: Outro aluno já possui estas informações." };
             }
         }
-        if (isRedirectError(error)) throw error;
-        
         console.error("Erro ao editar aluno:", error);
         return { success: false, error: "Ocorreu um erro inesperado ao atualizar o aluno." };
     }
 
-    redirect("/admin/alunos");
+    return { success: true, redirectTo: "/admin/alunos" };
 }
 
 export async function deleteStudentAction(studentId: string, adminPasswordConfirm: string) {
@@ -157,7 +151,6 @@ export async function deleteStudentAction(studentId: string, adminPasswordConfir
 
         return { success: true };
     } catch (error) {
-        if (isRedirectError(error)) throw error;
         console.error("Erro fatal ao excluir aluno:", error);
         return { success: false, error: "Erro fatal ao excluir aluno." };
     }
@@ -292,7 +285,6 @@ export async function importStudentsAction(formData: FormData): Promise<ImportRe
             dbErrors: result.errors,
         };
     } catch (error) {
-        if (isRedirectError(error)) throw error;
         console.error("Erro na importação em massa:", error);
         return { success: false, error: "Erro inesperado durante a importação." };
     }

@@ -3,7 +3,6 @@
 import { deleteSubject, getSubjectById, updateSubject } from "@/services/subjects/subjects.service";
 import { ZodError } from "zod";
 import { revalidatePath, updateTag } from "next/cache";
-import { redirect } from "next/navigation";
 import { editSubjectSchema, type EditSubjectInput } from "./schema";
 
 export async function editSubjectAction(subjectId: string, programSlug: string, degreeSlug: string, degreeId: string, data: EditSubjectInput) {
@@ -55,7 +54,10 @@ export async function editSubjectAction(subjectId: string, programSlug: string, 
         message: "Disciplina atualizada com sucesso",
     });
 
-    redirect(`/admin/${programSlug}/matrizes/${degreeSlug}?${params.toString()}`);
+    return {
+        success: true,
+        redirectTo: `/admin/${programSlug}/matrizes/${degreeSlug}?${params.toString()}`,
+    };
 }
 
 export async function deleteSubjectAction(subjectId: string, programSlug: string, degreeSlug: string, degreeId: string) {
@@ -84,5 +86,8 @@ export async function deleteSubjectAction(subjectId: string, programSlug: string
         message: "Disciplina excluída com sucesso",
     });
 
-    redirect(`/admin/${programSlug}/matrizes/${degreeSlug}?${params.toString()}`);
+    return {
+        success: true,
+        redirectTo: `/admin/${programSlug}/matrizes/${degreeSlug}?${params.toString()}`,
+    };
 }

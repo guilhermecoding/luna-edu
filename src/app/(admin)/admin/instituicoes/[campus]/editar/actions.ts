@@ -4,7 +4,6 @@ import { updateCampus, deleteCampus, getCampusSlugById } from "@/services/campus
 import { ZodError } from "zod";
 import { editCampusSchema, type EditCampusInput } from "./schema";
 import { revalidatePath, updateTag } from "next/cache";
-import { redirect } from "next/navigation";
 
 export async function editCampusAction(id: string, data: EditCampusInput) {
     try {
@@ -43,7 +42,10 @@ export async function editCampusAction(id: string, data: EditCampusInput) {
         message: "Instituição atualizada com sucesso",
     });
 
-    redirect(`/admin/instituicoes?${params.toString()}`);
+    return {
+        success: true,
+        redirectTo: `/admin/instituicoes?${params.toString()}`,
+    };
 }
 
 export async function deleteCampusAction(id: string) {
@@ -71,5 +73,8 @@ export async function deleteCampusAction(id: string) {
         message: "Instituição excluída com sucesso",
     });
 
-    redirect(`/admin/instituicoes?${params.toString()}`);
+    return {
+        success: true,
+        redirectTo: `/admin/instituicoes?${params.toString()}`,
+    };
 }

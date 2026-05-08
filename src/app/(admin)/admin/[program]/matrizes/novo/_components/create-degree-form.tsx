@@ -11,7 +11,6 @@ import { useEffect } from "react";
 import { createDegreeAction } from "../actions";
 import { createDegreeSchema } from "../schema";
 import { IconLoader2 } from "@tabler/icons-react";
-import { isRedirectError } from "@/lib/is-redirect-error";
 import autoSlug from "@/lib/auto-slug";
 
 type FormInput = z.input<typeof createDegreeSchema>;
@@ -86,11 +85,13 @@ export function CreateDegreeForm({ programSlug }: Props) {
 
                 return;
             }
-        } catch (error) {
-            if (isRedirectError(error)) {
-                throw error;
-            }
 
+            if (result?.success && result.redirectTo) {
+                router.push(result.redirectTo);
+                router.refresh();
+                return;
+            }
+        } catch (error) {
             const params = new URLSearchParams(searchParams.toString());
             params.set("toast", "error");
             params.set("message", "Erro ao criar matriz curricular");

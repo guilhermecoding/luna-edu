@@ -86,6 +86,12 @@ export default function CreateTeacherForm({ admins }: { admins: AdminOption[] })
         if (result && !result.success) {
             toast.error(result.error);
             setErrorNew("root", { type: "server", message: result.error });
+            return;
+        }
+
+        if (result?.success && result.redirectTo) {
+            router.push(result.redirectTo);
+            router.refresh();
         }
     };
 
@@ -96,6 +102,12 @@ export default function CreateTeacherForm({ admins }: { admins: AdminOption[] })
         if (result && !result.success) {
             toast.error(result.error);
             setErrorExisting("root", { type: "server", message: result.error });
+            return;
+        }
+
+        if (result?.success && result.redirectTo) {
+            router.push(result.redirectTo);
+            router.refresh();
         }
     };
 

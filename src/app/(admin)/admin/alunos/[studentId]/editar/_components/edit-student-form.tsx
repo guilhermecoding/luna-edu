@@ -82,6 +82,10 @@ export default function EditStudentForm({ student }: { student: Student }) {
             setError("root", { type: "server", message: result.error });
         } else {
             toast.success("Aluno atualizado com sucesso!");
+            if (result?.redirectTo) {
+                router.push(result.redirectTo);
+                router.refresh();
+            }
         }
     };
 

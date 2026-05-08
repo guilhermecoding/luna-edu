@@ -10,7 +10,6 @@ import { useEffect } from "react";
 import { createSubPeriodAction } from "../actions";
 import { subPeriodSchema, type SubPeriodInput } from "../../schema";
 import { IconLoader2, IconArrowsShuffle } from "@tabler/icons-react";
-import { isRedirectError } from "@/lib/is-redirect-error";
 import autoSlug from "@/lib/auto-slug";
 
 interface CreateSubPeriodFormProps {
@@ -73,11 +72,13 @@ export function CreateSubPeriodForm({ programSlug, periodSlug }: CreateSubPeriod
                 });
                 return;
             }
-        } catch (error) {
-            if (isRedirectError(error)) {
-                throw error;
-            }
 
+            if (result?.success && result.redirectTo) {
+                router.push(result.redirectTo);
+                router.refresh();
+                return;
+            }
+        } catch (error) {
             const params = new URLSearchParams(searchParams.toString());
             params.set("toast", "error");
             params.set("message", "Erro fatal ao criar etapa");

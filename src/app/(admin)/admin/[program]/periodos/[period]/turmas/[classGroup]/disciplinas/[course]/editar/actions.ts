@@ -1,7 +1,6 @@
 "use server";
 
 import { revalidatePath, updateTag } from "next/cache";
-import { redirect } from "next/navigation";
 import { DayOfWeek, Shift } from "@/generated/prisma/client";
 import { getClassGroupByPeriodIdAndSlug } from "@/services/class-groups/class-groups.service";
 import { deleteCourse, getCourseByPeriodIdAndCode, updateCourse } from "@/services/courses/courses.service";
@@ -101,7 +100,10 @@ export async function editClassGroupCourseAction(
         toast: "success",
         message: "Disciplina atualizada com sucesso",
     });
-    redirect(`/admin/${programSlug}/periodos/${periodSlug}/turmas/${classGroupSlug}/disciplinas?${params.toString()}`);
+    return {
+        success: true,
+        redirectTo: `/admin/${programSlug}/periodos/${periodSlug}/turmas/${classGroupSlug}/disciplinas?${params.toString()}`,
+    };
 }
 
 export async function deleteClassGroupCourseAction(
@@ -160,5 +162,8 @@ export async function deleteClassGroupCourseAction(
         toast: "success",
         message: "Disciplina apagada com sucesso",
     });
-    redirect(`/admin/${programSlug}/periodos/${periodSlug}/turmas/${classGroupSlug}/disciplinas?${params.toString()}`);
+    return {
+        success: true,
+        redirectTo: `/admin/${programSlug}/periodos/${periodSlug}/turmas/${classGroupSlug}/disciplinas?${params.toString()}`,
+    };
 }

@@ -4,7 +4,6 @@ import { deleteDegree, updateDegree } from "@/services/degrees/degrees.service";
 import { ZodError } from "zod";
 import { type CreateDegreeInput } from "../../novo/schema";
 import { revalidatePath, updateTag } from "next/cache";
-import { redirect } from "next/navigation";
 
 // Reaproveitamos o input tirando o slug (pois a acao usa ID para update e preserva slug)
 export type EditDegreeInput = Omit<CreateDegreeInput, "slug" | "programId">;
@@ -50,7 +49,10 @@ export async function editDegreeAction(id: string, programSlug: string, degreeSl
         message: "Matriz curricular atualizada com sucesso",
     });
 
-    redirect(`/admin/${programSlug}/matrizes?${params.toString()}`);
+    return {
+        success: true,
+        redirectTo: `/admin/${programSlug}/matrizes?${params.toString()}`,
+    };
 }
 
 export async function deleteDegreeAction(id: string, programSlug: string) {
@@ -78,5 +80,8 @@ export async function deleteDegreeAction(id: string, programSlug: string) {
         message: "Matriz curricular excluída com sucesso",
     });
 
-    redirect(`/admin/${programSlug}/matrizes?${params.toString()}`);
+    return {
+        success: true,
+        redirectTo: `/admin/${programSlug}/matrizes?${params.toString()}`,
+    };
 }

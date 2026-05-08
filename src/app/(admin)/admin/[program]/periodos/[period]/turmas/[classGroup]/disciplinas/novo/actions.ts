@@ -1,7 +1,6 @@
 "use server";
 
 import { revalidatePath, updateTag } from "next/cache";
-import { redirect } from "next/navigation";
 import { ZodError } from "zod";
 import { DayOfWeek } from "@/generated/prisma/client";
 import { createCourse, getCourseByPeriodIdAndCode, getCoursesByClassGroupId } from "@/services/courses/courses.service";
@@ -91,5 +90,8 @@ export async function createClassGroupSubjectAction(
         message: "Disciplina adicionada com sucesso",
     });
 
-    redirect(`/admin/${programSlug}/periodos/${periodSlug}/turmas/${classGroupSlug}/disciplinas?${params.toString()}`);
+    return {
+        success: true,
+        redirectTo: `/admin/${programSlug}/periodos/${periodSlug}/turmas/${classGroupSlug}/disciplinas?${params.toString()}`,
+    };
 }

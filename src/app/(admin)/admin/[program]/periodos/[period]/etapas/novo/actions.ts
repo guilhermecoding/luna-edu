@@ -5,7 +5,6 @@ import { getPeriodByProgramAndSlug } from "@/services/periods/periods.service";
 import { ZodError } from "zod";
 import { subPeriodSchema, type SubPeriodInput } from "../schema";
 import { revalidatePath, updateTag } from "next/cache";
-import { redirect } from "next/navigation";
 
 export async function createSubPeriodAction(
     programSlug: string,
@@ -48,5 +47,8 @@ export async function createSubPeriodAction(
         message: "Etapa criada com sucesso",
     });
 
-    redirect(`/admin/${programSlug}/periodos/${periodSlug}/etapas?${params.toString()}`);
+    return {
+        success: true,
+        redirectTo: `/admin/${programSlug}/periodos/${periodSlug}/etapas?${params.toString()}`,
+    };
 }

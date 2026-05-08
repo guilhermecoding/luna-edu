@@ -12,7 +12,6 @@ import { editCampusSchema, type EditCampusInput } from "../schema";
 import { IconAlertTriangle, IconLoader2 } from "@tabler/icons-react";
 import Image from "next/image";
 import imgGibbyDuvida from "@/assets/images/logo-gibby-duvida.svg";
-import { isRedirectError } from "@/lib/is-redirect-error";
 import { Campus } from "@/generated/prisma/client";
 import {
     Dialog,
@@ -79,11 +78,13 @@ export function EditCampusForm({ initialData }: EditCampusFormProps) {
                 });
                 return;
             }
-        } catch (error) {
-            if (isRedirectError(error)) {
-                throw error;
-            }
 
+            if (result?.success && result.redirectTo) {
+                router.push(result.redirectTo);
+                router.refresh();
+                return;
+            }
+        } catch (error) {
             const params = new URLSearchParams(searchParams.toString());
             params.set("toast", "error");
             params.set("message", "Erro fatal ao editar instituição");
@@ -108,12 +109,15 @@ export function EditCampusForm({ initialData }: EditCampusFormProps) {
                 router.replace(`${pathname}?${params.toString()}`, { scroll: false });
 
                 setDeleteError(result.error || "Erro ao excluir instituição");
-            }
-        } catch (error) {
-            if (isRedirectError(error)) {
-                throw error;
+                return;
             }
 
+            if (result?.success && result.redirectTo) {
+                router.push(result.redirectTo);
+                router.refresh();
+                return;
+            }
+        } catch (error) {
             const params = new URLSearchParams(searchParams.toString());
             params.set("toast", "error");
             params.set("message", "Erro fatal ao excluir instituição");

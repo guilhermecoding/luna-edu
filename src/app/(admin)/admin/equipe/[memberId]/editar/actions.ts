@@ -2,7 +2,6 @@
 
 import { updateUser } from "@/services/users/users.service";
 import { revalidatePath, updateTag } from "next/cache";
-import { redirect } from "next/navigation";
 import { headers } from "next/headers";
 import { ZodError } from "zod";
 import { Prisma } from "@/generated/prisma/client";
@@ -11,7 +10,6 @@ import { unmask } from "@/lib/masks";
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { hashPassword } from "better-auth/crypto";
-import { isRedirectError } from "next/dist/client/components/redirect-error";
 
 export async function editMemberAction(memberId: string, data: EditMemberInput) {
     try {
@@ -99,16 +97,8 @@ export async function editMemberAction(memberId: string, data: EditMemberInput) 
         });
         const redirectUrl = `/admin/equipe?${params.toString()}`;
 
-        if (actorId === memberId) {
-            return { success: true as const, redirectTo: redirectUrl };
-        }
-
-        redirect(redirectUrl);
+        return { success: true as const, redirectTo: redirectUrl };
     } catch (error) {
-        if (isRedirectError(error)) {
-            throw error;
-        }
-
         if (error instanceof ZodError) {
             return {
                 success: false,
@@ -249,7 +239,6 @@ export async function deleteMemberAction(memberId: string, adminPasswordConfirm:
 
         return { success: true };
     } catch (error) {
-        if (isRedirectError(error)) throw error;
         return { success: false, error: "Erro fatal ao excluir membro." };
     }
 }

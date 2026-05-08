@@ -467,6 +467,7 @@ model StudentPeriod {
   studentId String   @map("student_id") @db.Uuid
   periodId  String   @map("period_id") @db.Uuid
   status    String   @default("WAITING")
+  accessedAt DateTime? @map("accessed_at") @db.Timestamptz
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
 
   student Student @relation(fields: [studentId], references: [id], onDelete: Cascade)

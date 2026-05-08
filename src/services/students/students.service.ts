@@ -562,3 +562,51 @@ export async function unlinkStudentsFromPeriod(studentIds: string[], periodId: s
         });
     });
 }
+
+/**
+ * Retorna a lista de alunos matriculados em um período com seu status de acesso ao SAD.
+ * Filtra apenas alunos que possuem ao menos um vínculo com turma.
+ */
+export async function getSADAccessList(periodId: string, filter?: "VIEWED" | "NOT_VIEWED") {
+    "use cache";
+    cacheLife("minutes");
+    cacheTag(`period:${periodId}:sad-access`);
+
+    return await prisma.studentPeriod.findMany({
+        where: {
+            periodId: periodId,
+            // Apenas alunos matriculados (vínculo com turma)
+            student: {
+                enrollments: {
+                    some: {
+                        course: {
+                            periodId: periodId,
+                            classGroupId: { not: null },
+                        },
+                    },
+                },
+            },
+            // Filtro de visualização
+            ...(filter === "VIEWED" ? { accessedAt: { not: null } } : {}),
+            ...(filter === "NOT_VIEWED" ? { accessedAt: null } : {}),
+        },
+        select: {
+            accessedAt: true,
+            student: {
+                select: {
+                    id: true,
+                    name: true,
+                    cpf: true,
+                    email: true,
+                    genre: true,
+                    birthDate: true,
+                },
+            },
+        },
+        orderBy: {
+            student: {
+                name: "asc",
+            },
+        },
+    });
+}

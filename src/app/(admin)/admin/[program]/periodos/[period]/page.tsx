@@ -1,7 +1,7 @@
 import Page from "@/components/page";
 import Section from "@/components/section";
 import TitlePage from "@/components/title-page";
-import { IconCalendarFilled, IconSchool, IconCircleCheck, IconUsers, IconProgress, IconPencil } from "@tabler/icons-react";
+import { IconCalendarFilled, IconSchool, IconCircleCheck, IconUsers, IconProgress, IconPencil, IconReportSearch } from "@tabler/icons-react";
 import { ButtonLink } from "@/components/ui/button-link";
 import { getPeriodByProgramAndSlug, getPeriodStats } from "@/services/periods/periods.service";
 import { getSubPeriodsByPeriodId } from "@/services/sub-periods/sub-periods.service";
@@ -53,6 +53,10 @@ export default async function PeriodPage({
                         />
                     </div>
                     <div className="flex flex-col sm:flex-row gap-3 items-start lg:items-end lg:justify-end">
+                        <ButtonLink className="w-full sm:w-auto bg-transparent border-2 border-dashed border-primary hover:bg-primary text-primary hover:text-background hover:border-solid h-11" href={`/admin/${program}/periodos/${period}/sad`}>
+                            <IconReportSearch className="size-5 mr-2" />
+                            SAD
+                        </ButtonLink>
                         <ButtonLink className="w-full sm:w-auto bg-transparent border-2 border-dashed border-primary hover:bg-primary text-primary hover:text-background hover:border-solid h-11" href={`/admin/${program}/periodos/${period}/alunos`}>
                             <IconSchool className="size-5 mr-2" />
                             Alunos

@@ -233,6 +233,17 @@ export async function POST(request: NextRequest): Promise<NextResponse<ApiRespon
             );
         }
 
+        // 8. Registrar/Atualizar horário de acesso
+        await prisma.studentPeriod.update({
+            where: {
+                studentId_periodId: {
+                    studentId: student.id,
+                    periodId: period.id,
+                },
+            },
+            data: { accessedAt: new Date() },
+        });
+
         // 8. Verificar se o aluno possui ao menos uma matrícula em turma deste período
         const enrollmentCount = await prisma.enrollment.count({
             where: {

@@ -350,6 +350,7 @@ export const StudentPeriodScalarFieldEnum = {
   studentId: 'studentId',
   periodId: 'periodId',
   status: 'status',
+  accessedAt: 'accessedAt',
   createdAt: 'createdAt'
 } as const
 

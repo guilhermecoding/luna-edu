@@ -60,7 +60,7 @@ export function CreateTimeSlotForm({ programSlug }: CreateTimeSlotFormProps) {
         const result = await createTimeSlotAction(programSlug, data);
 
         if (result?.success === false) {
-            setError(result.error);
+            setError(result.error ?? null);
             return;
         }
 

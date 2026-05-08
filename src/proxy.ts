@@ -1,23 +1,15 @@
-import { NextResponse, type NextRequest } from "next/server";
-
-type Session = {
-    user: {
-        isAdmin: boolean;
-        isTeacher: boolean;
-        systemRole: string;
-    };
-};
+import { NextRequest, NextResponse } from "next/server";
+import { headers } from "next/headers";
+import { auth } from "@/lib/auth";
 
 export async function proxy(request: NextRequest) {
-    const sessionResponse = await fetch(new URL("/api/auth/get-session", request.url), {
-        headers: {
-            cookie: request.headers.get("cookie") || "",
-        },
-        cache: "no-store",
+    // Chama o banco diretamente via Better Auth (sem round-trip HTTP)
+    // Lê o cookie de sessão a partir dos headers da requisição
+    const session = await auth.api.getSession({
+        headers: await headers(),
     });
 
-    const session: Session | null = sessionResponse.ok ? await sessionResponse.json() : null;
-
+    // Sem sessão válida → redireciona para login
     if (!session) {
         return NextResponse.redirect(new URL("/entrar", request.url));
     }
@@ -25,16 +17,13 @@ export async function proxy(request: NextRequest) {
     const { user } = session;
     const path = request.nextUrl.pathname;
 
-    const isAdminRoute = path.startsWith("/admin");
-    const isTeacherRoute = path.startsWith("/prof");
-
-    // Proteção para rotas de admin
-    if (isAdminRoute && !user.isAdmin && user.systemRole !== "FULL_ACCESS") {
+    // Rotas /admin: exige isAdmin ou systemRole FULL_ACCESS
+    if (path.startsWith("/admin") && !user.isAdmin && user.systemRole !== "FULL_ACCESS") {
         return NextResponse.redirect(new URL("/entrar", request.url));
     }
 
-    // Área /prof: exclusiva de quem tem vínculo de professor (isTeacher). Admin ou FULL_ACCESS sem docência não entra.
-    if (isTeacherRoute && !user.isTeacher) {
+    // Rotas /prof: exclusivo para professores
+    if (path.startsWith("/prof") && !user.isTeacher) {
         return NextResponse.redirect(new URL("/entrar", request.url));
     }
 

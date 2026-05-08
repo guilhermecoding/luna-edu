@@ -69,7 +69,6 @@ const columns: ColumnDef<SADAccessItem>[] = [
         cell: ({ row }) => (
             <div>
                 <p className="font-bold text-sm">{row.original.student.name}</p>
-                <p className="text-[10px] text-muted-foreground md:hidden">{maskCPF(row.original.student.cpf)}</p>
             </div>
         ),
     },
@@ -78,7 +77,7 @@ const columns: ColumnDef<SADAccessItem>[] = [
         accessorFn: (row) => row.student.cpf,
         header: "CPF",
         cell: ({ row }) => (
-            <span className="text-sm font-mono text-muted-foreground hidden md:block">
+            <span className="text-sm font-mono text-muted-foreground">
                 {maskCPF(row.original.student.cpf)}
             </span>
         ),
@@ -88,7 +87,7 @@ const columns: ColumnDef<SADAccessItem>[] = [
         accessorFn: (row) => row.student.email,
         header: "E-mail",
         cell: ({ row }) => (
-            <span className="text-sm text-muted-foreground hidden lg:block">
+            <span className="text-sm text-muted-foreground">
                 {row.original.student.email}
             </span>
         ),

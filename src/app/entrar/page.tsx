@@ -13,7 +13,6 @@ import thumb06 from "@/assets/images/thumbs-login-page/Imagem_06.webp";
 import thumb07 from "@/assets/images/thumbs-login-page/Imagem_07.webp";
 import thumb08 from "@/assets/images/thumbs-login-page/Imagem_08.webp";
 import thumb09 from "@/assets/images/thumbs-login-page/Imagem_09.webp";
-import { connection } from "next/server";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
@@ -37,7 +36,6 @@ export default async function LoginPage() {
     }
 
     const logoCorporation = process.env.NEXT_PUBLIC_LOGO_CORPORATION;
-    await connection();
     const randomThumb = loginThumbs[randomInt(loginThumbs.length)];
 
     return (

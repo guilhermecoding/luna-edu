@@ -1,10 +1,10 @@
 import { getCampuses } from "@/services/campuses/campuses.service";
 import { IconBuildingCommunity, IconEdit, IconChevronRight, IconUnlink, IconMapPin, IconDoor } from "@tabler/icons-react";
 import Link from "next/link";
+import { headers } from "next/headers";
 import { Suspense } from "react";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
-import { connection } from "next/server";
 
 function ListCampusesSkeleton() {
     return (
@@ -72,8 +72,7 @@ function EmptyCampusesList() {
 }
 
 async function ListCampusesContent() {
-    await connection(); // Sinaliza ao Next.js que este componente depende de uma requisição real (necessário pois cacheLife usa Date.now() internamente)
-
+    await headers();
     const campuses = await getCampuses();
 
     if (campuses.length === 0) {

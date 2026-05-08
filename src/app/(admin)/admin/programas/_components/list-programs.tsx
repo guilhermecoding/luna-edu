@@ -4,7 +4,7 @@ import { Program } from "@/generated/prisma/client";
 import { getPrograms } from "@/services/programs/programs.service";
 import { IconBlocks, IconExternalLinkFilled, IconPencilFilled } from "@tabler/icons-react";
 import Link from "next/link";
-import { connection } from "next/server";
+import { headers } from "next/headers";
 import { Suspense } from "react";
 
 function ListProgramsSkeleton() {
@@ -66,7 +66,7 @@ function ProgramItem({
 }
 
 export async function ListProgramsContent() {
-    await connection();
+    await headers();
     const programs = await getPrograms();
 
     if (programs.length === 0) {

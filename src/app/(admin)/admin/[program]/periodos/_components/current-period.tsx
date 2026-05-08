@@ -3,7 +3,7 @@ import TooltipText from "@/components/tooltip-text";
 import { ButtonLink } from "@/components/ui/button-link";
 import { Progress } from "@/components/ui/progress";
 import { IconFileTextFilled, IconHelpHexagonFilled, IconPencilFilled } from "@tabler/icons-react";
-import { connection } from "next/server";
+import { headers } from "next/headers";
 import { Suspense } from "react";
 import getPeriodStatus, { isPeriodActiveByDay } from "@/lib/get-period-status";
 import { PeriodListItem } from "@/services/periods/periods.type";
@@ -51,8 +51,7 @@ async function CurrentPeriodContent({
     periodsPromise: Promise<PeriodListItem[]>;
     programSlug: string;
 }) {
-    await connection();
-
+    await headers();
     const periods = await periodsPromise;
     const today = new Date();
 

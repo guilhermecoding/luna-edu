@@ -3,19 +3,25 @@
 
     WORKDIR /app
     
-    RUN npm install -g pnpm prisma
+    # pnpm + prisma globais
+    RUN npm install -g pnpm@9.15.9 prisma
     
     # ---------- DEPS ----------
     FROM base AS deps
     
+    # Necessário para permitir scripts no Docker
+    ENV CI=true
+    ENV PNPM_IGNORE_SCRIPTS=false
+    ENV PNPM_ALLOWED_SCRIPTS=*
+    
     COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
     
-    # Prisma precisa existir antes do pnpm install
-    # pois o postinstall executa prisma generate
+    # Prisma precisa existir antes do install
     COPY prisma ./prisma
     COPY prisma.config.ts ./
     
-    RUN pnpm install --frozen-lockfile --config.ignore-builds=false
+    # Instala dependências
+    RUN pnpm install --frozen-lockfile --unsafe-perm
     
     # ---------- PRISMA ----------
     FROM base AS prisma
@@ -24,6 +30,7 @@
     
     COPY . .
     
+    # Gera Prisma Client
     RUN npx prisma generate
     
     # ---------- BUILDER ----------
@@ -52,6 +59,7 @@
     ENV DATABASE_URL=$DATABASE_URL
     ENV NEXT_PUBLIC_BUILD_MODE=$NEXT_PUBLIC_BUILD_MODE
     
+    # Build do Next
     RUN pnpm build:local
     
     # ---------- RUNNER ----------
@@ -64,7 +72,7 @@
     ENV HOSTNAME=0.0.0.0
     ENV PORT=3000
     
-    # Prisma no runtime
+    # Prisma runtime
     RUN npm install -g prisma && \
         npm install @prisma/client
     

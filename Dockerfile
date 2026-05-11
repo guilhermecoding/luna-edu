@@ -10,6 +10,11 @@
     
     COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
     
+    # Prisma precisa existir antes do pnpm install
+    # pois o postinstall executa prisma generate
+    COPY prisma ./prisma
+    COPY prisma.config.ts ./
+    
     RUN pnpm install --frozen-lockfile
     
     # ---------- PRISMA ----------
@@ -59,11 +64,11 @@
     ENV HOSTNAME=0.0.0.0
     ENV PORT=3000
     
-    # Prisma instalado diretamente no runner
+    # Prisma no runtime
     RUN npm install -g prisma && \
         npm install @prisma/client
     
-    # Standalone
+    # Standalone do Next
     COPY --from=builder /app/public ./public
     COPY --from=builder /app/.next/standalone ./
     COPY --from=builder /app/.next/static ./.next/static

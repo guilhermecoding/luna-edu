@@ -1,16 +1,22 @@
 # ── Stage 1: Base ────────────────────────────────────────────
 FROM node:22-alpine AS base
+
 RUN corepack enable && corepack prepare pnpm@latest --activate
+
 WORKDIR /app
 
 # ── Stage 2: Dependencies ────────────────────────────────────
 FROM base AS deps
+
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+
 RUN pnpm install --frozen-lockfile --ignore-scripts
 
 # ── Stage 3: Prisma Generate ────────────────────────────────
 FROM base AS prisma
+
 COPY --from=deps /app/node_modules ./node_modules
+
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 COPY prisma ./prisma
 COPY prisma.config.ts ./
@@ -55,11 +61,11 @@ WORKDIR /app
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 
-# Usuário não-root para segurança
+# Usuário não-root
 RUN addgroup --system --gid 1001 nodejs && \
     adduser --system --uid 1001 nextjs
 
-# Artefatos standalone do Next
+# Standalone do Next
 COPY --from=builder /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
@@ -72,16 +78,15 @@ COPY --from=builder /app/package.json ./
 # Prisma Client gerado
 COPY --from=prisma /app/src/generated ./src/generated
 
-# Prisma runtime + CLI
-COPY --from=prisma /app/node_modules/@prisma ./node_modules/@prisma
-COPY --from=prisma /app/node_modules/prisma ./node_modules/prisma
-COPY --from=prisma /app/node_modules/.bin ./node_modules/.bin
+# Node_modules completo (necessário para Prisma + pnpm)
+COPY --from=prisma /app/node_modules ./node_modules
 
 # Entrypoint
 COPY docker-entrypoint.sh ./
 
 RUN chmod +x docker-entrypoint.sh
 
+# Permissões
 RUN chown -R nextjs:nodejs /app
 
 USER nextjs

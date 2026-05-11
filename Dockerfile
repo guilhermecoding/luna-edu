@@ -82,6 +82,8 @@ COPY docker-entrypoint.sh ./
 
 RUN chmod +x docker-entrypoint.sh
 
+RUN chown -R nextjs:nodejs /app
+
 USER nextjs
 
 EXPOSE 3000

@@ -14,17 +14,18 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 COPY prisma ./prisma
 COPY prisma.config.ts ./
+
 RUN pnpm exec prisma generate
 
 # ── Stage 4: Build ───────────────────────────────────────────
 FROM base AS builder
+
 COPY --from=deps /app/node_modules ./node_modules
 COPY --from=prisma /app/src/generated ./src/generated
+
 COPY . .
 
-# O Next.js coleta variáveis NEXT_PUBLIC_* em build time.
-# Para que o Dokploy injete elas corretamente, declaramos ARGs
-# que podem ser passadas via --build-arg no deploy.
+# Build args
 ARG NEXT_PUBLIC_NAME_CORPORATION
 ARG NEXT_PUBLIC_LOGO_CORPORATION
 ARG BETTER_AUTH_TRUSTED_ORIGINS
@@ -33,6 +34,7 @@ ARG BETTER_AUTH_URL
 ARG DATABASE_URL
 ARG NEXT_PUBLIC_BUILD_MODE
 
+# Build envs
 ENV NEXT_PUBLIC_NAME_CORPORATION=$NEXT_PUBLIC_NAME_CORPORATION
 ENV NEXT_PUBLIC_LOGO_CORPORATION=$NEXT_PUBLIC_LOGO_CORPORATION
 ENV BETTER_AUTH_TRUSTED_ORIGINS=$BETTER_AUTH_TRUSTED_ORIGINS
@@ -45,7 +47,9 @@ RUN pnpm build:local
 
 # ── Stage 5: Production ─────────────────────────────────────
 FROM node:22-alpine AS runner
+
 RUN corepack enable && corepack prepare pnpm@latest --activate
+
 WORKDIR /app
 
 ENV NODE_ENV=production
@@ -55,28 +59,33 @@ ENV NEXT_TELEMETRY_DISABLED=1
 RUN addgroup --system --gid 1001 nodejs && \
     adduser --system --uid 1001 nextjs
 
-# Copiar artefatos do standalone
+# Artefatos standalone do Next
 COPY --from=builder /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
-# Copiar Prisma (schema + migrations) para rodar migrate no entrypoint
+# Prisma
 COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/prisma.config.ts ./
 COPY --from=builder /app/package.json ./
 
-# Copiar o client gerado do Prisma para o runtime
+# Prisma Client gerado
 COPY --from=prisma /app/src/generated ./src/generated
+
+# Prisma runtime + CLI
 COPY --from=prisma /app/node_modules/@prisma ./node_modules/@prisma
 COPY --from=prisma /app/node_modules/prisma ./node_modules/prisma
+COPY --from=prisma /app/node_modules/.bin ./node_modules/.bin
 
-# Entrypoint script
+# Entrypoint
 COPY docker-entrypoint.sh ./
+
 RUN chmod +x docker-entrypoint.sh
 
 USER nextjs
 
 EXPOSE 3000
+
 ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
 

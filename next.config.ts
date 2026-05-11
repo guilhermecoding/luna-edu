@@ -23,6 +23,9 @@ const nextConfig: NextConfig = {
     images: {
         remotePatterns,
     },
+    ...(process.env.NEXT_PUBLIC_BUILD_MODE === "production" && {
+        output: "standalone",
+    }),
 };
 
 export default nextConfig;

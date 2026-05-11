@@ -60,40 +60,36 @@ WORKDIR /app
 
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
+ENV PORT=3000
+ENV HOSTNAME="0.0.0.0"
 
 # Usuário não-root
 RUN addgroup --system --gid 1001 nodejs && \
     adduser --system --uid 1001 nextjs
 
 # Standalone do Next
-COPY --from=builder /app/public ./public
+COPY --from=builder --chown=nextjs:nodejs /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
 # Prisma
-COPY --from=builder /app/prisma ./prisma
-COPY --from=builder /app/prisma.config.ts ./
-COPY --from=builder /app/package.json ./
+COPY --from=builder --chown=nextjs:nodejs /app/prisma ./prisma
+COPY --from=builder --chown=nextjs:nodejs /app/prisma.config.ts ./
+COPY --from=builder --chown=nextjs:nodejs /app/package.json ./
 
 # Prisma Client gerado
-COPY --from=prisma /app/src/generated ./src/generated
+COPY --from=prisma --chown=nextjs:nodejs /app/src/generated ./src/generated
 
-# Node_modules completo (necessário para Prisma + pnpm)
-COPY --from=prisma /app/node_modules ./node_modules
+# node_modules completo (necessário para Prisma + pnpm)
+COPY --from=prisma --chown=nextjs:nodejs /app/node_modules ./node_modules
 
 # Entrypoint
-COPY docker-entrypoint.sh ./
+COPY --chown=nextjs:nodejs docker-entrypoint.sh ./
 
 RUN chmod +x docker-entrypoint.sh
-
-# Permissões
-RUN chown -R nextjs:nodejs /app
 
 USER nextjs
 
 EXPOSE 3000
-
-ENV PORT=3000
-ENV HOSTNAME="0.0.0.0"
 
 ENTRYPOINT ["./docker-entrypoint.sh"]

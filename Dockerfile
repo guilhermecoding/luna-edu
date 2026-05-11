@@ -22,19 +22,24 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY --from=prisma /app/src/generated ./src/generated
 COPY . .
 
-# Variável dummy para evitar erro de conexão do Prisma durante o build (prerender)
-ENV DATABASE_URL="postgresql://dummy:dummy@localhost:5432/dummy"
-
 # O Next.js coleta variáveis NEXT_PUBLIC_* em build time.
 # Para que o Dokploy injete elas corretamente, declaramos ARGs
 # que podem ser passadas via --build-arg no deploy.
 ARG NEXT_PUBLIC_NAME_CORPORATION
 ARG NEXT_PUBLIC_LOGO_CORPORATION
+ARG BETTER_AUTH_TRUSTED_ORIGINS
+ARG BETTER_AUTH_SECRET
+ARG BETTER_AUTH_URL
+ARG DATABASE_URL
 
 ENV NEXT_PUBLIC_NAME_CORPORATION=$NEXT_PUBLIC_NAME_CORPORATION
 ENV NEXT_PUBLIC_LOGO_CORPORATION=$NEXT_PUBLIC_LOGO_CORPORATION
+ENV BETTER_AUTH_TRUSTED_ORIGINS=$BETTER_AUTH_TRUSTED_ORIGINS
+ENV BETTER_AUTH_SECRET=$BETTER_AUTH_SECRET
+ENV BETTER_AUTH_URL=$BETTER_AUTH_URL
+ENV DATABASE_URL=$DATABASE_URL
 
-RUN pnpm build
+RUN pnpm build:local
 
 # ── Stage 5: Production ─────────────────────────────────────
 FROM node:22-alpine AS runner

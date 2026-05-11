@@ -2,7 +2,7 @@
 
 echo "🔄 Aplicando migrações do Prisma..."
 
-npx --no-install prisma migrate deploy
+npx prisma migrate deploy
 
 echo "🚀 Iniciando aplicação..."
 

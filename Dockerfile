@@ -63,26 +63,26 @@
     # Usuário
     RUN addgroup -S nodejs && adduser -S nextjs -G nodejs
     
-    # Standalone
-    COPY --from=builder /app/.next/standalone ./
-    COPY --from=builder /app/.next/static ./.next/static
-    COPY --from=builder /app/public ./public
+    # Standalone (ownership no copy — evita chown -R lento em node_modules)
+    COPY --chown=nextjs:nodejs --from=builder /app/.next/standalone ./
+    COPY --chown=nextjs:nodejs --from=builder /app/.next/static ./.next/static
+    COPY --chown=nextjs:nodejs --from=builder /app/public ./public
     
     # Prisma
-    COPY --from=builder /app/prisma ./prisma
-    COPY --from=builder /app/prisma.config.ts ./prisma.config.ts
+    COPY --chown=nextjs:nodejs --from=builder /app/prisma ./prisma
+    COPY --chown=nextjs:nodejs --from=builder /app/prisma.config.ts ./prisma.config.ts
     
     # Prisma generated
-    COPY --from=builder /app/src/generated ./src/generated
+    COPY --chown=nextjs:nodejs --from=builder /app/src/generated ./src/generated
     
     # package.json
-    COPY --from=builder /app/package.json ./package.json
+    COPY --chown=nextjs:nodejs --from=builder /app/package.json ./package.json
     
     # node_modules necessários
-    COPY --from=builder /app/node_modules ./node_modules
+    COPY --chown=nextjs:nodejs --from=builder /app/node_modules ./node_modules
     
     # Entrypoint
-    COPY docker-entrypoint.sh ./docker-entrypoint.sh
+    COPY --chown=nextjs:nodejs docker-entrypoint.sh ./docker-entrypoint.sh
     
     RUN chmod +x docker-entrypoint.sh
     

@@ -227,7 +227,8 @@ export async function getTotalStudentsCountByPeriodId(periodId: string): Promise
 }
 
 /**
- * Retorna a lista de alunos de um período específico no mesmo formato da lista principal.
+ * Retorna a lista de alunos de um período específico no mesmo formato da lista principal,
+ * com turmas físicas (class groups) em que o aluno possui matrícula naquele período.
  */
 export async function getStudentsByPeriodList(periodId: string, query?: string) {
     "use cache";
@@ -272,6 +273,27 @@ export async function getStudentsByPeriodList(periodId: string, query?: string) 
                     birthDate: true,
                     genre: true,
                     school: true,
+                    enrollments: {
+                        where: {
+                            course: {
+                                periodId,
+                                classGroupId: { not: null },
+                            },
+                        },
+                        select: {
+                            course: {
+                                select: {
+                                    classGroup: {
+                                        select: {
+                                            id: true,
+                                            name: true,
+                                            slug: true,
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
                 },
             },
         },
@@ -282,8 +304,21 @@ export async function getStudentsByPeriodList(periodId: string, query?: string) 
         },
     });
 
-    return studentsPeriods.map(sp => sp.student);
+    return studentsPeriods.map((sp) => {
+        const { enrollments, ...student } = sp.student;
+        const byId = new Map<string, { id: string; name: string; slug: string }>();
+        for (const e of enrollments) {
+            const cg = e.course.classGroup;
+            if (cg) {
+                byId.set(cg.id, cg);
+            }
+        }
+        const classGroups = [...byId.values()].sort((a, b) => a.name.localeCompare(b.name, "pt-BR"));
+        return { ...student, classGroups };
+    });
 }
+
+export type StudentPeriodListItem = Awaited<ReturnType<typeof getStudentsByPeriodList>>[number];
 /**
  * Retorna um aluno pelo ID
  */

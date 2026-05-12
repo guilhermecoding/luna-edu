@@ -12,7 +12,7 @@ import ListDisciplines from "../_components/list-disciplines";
 import { Metadata } from "next";
 import { Shift } from "@/generated/prisma/enums";
 import { DataTableClassStudents } from "./_components/data-table-class-students";
-import { columns } from "../../alunos/_components/columns-period";
+import { classGroupStudentsColumns } from "../../alunos/_components/columns-period";
 import { AddStudentsToClassSheet } from "./_components/add-students-to-class-sheet";
 
 export const metadata: Metadata = {
@@ -126,7 +126,7 @@ export default async function ClassPage({
                 </div>
 
                 <DataTableClassStudents
-                    columns={columns}
+                    columns={classGroupStudentsColumns}
                     data={studentsList}
                     periodId={periodData.id}
                     classGroupId={classGroupData.id}

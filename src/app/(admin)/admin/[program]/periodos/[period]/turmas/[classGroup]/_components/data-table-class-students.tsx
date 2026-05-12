@@ -211,7 +211,7 @@ export function DataTableClassStudents<TData, TValue>({
                 </DialogContent>
             </Dialog>
 
-            <div className="rounded-md border border-surface-border overflow-hidden bg-background">
+            <div className="rounded-4xl border border-surface-border overflow-hidden bg-background">
                 <Table>
                     <TableHeader className="bg-surface">
                         {table.getHeaderGroups().map((headerGroup) => (

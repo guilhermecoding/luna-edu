@@ -7,7 +7,6 @@ import { getPeriodByProgramAndSlug } from "@/services/periods/periods.service";
 import { getClassGroupsByPeriodId } from "@/services/class-groups/class-groups.service";
 import InfoBoxStudents from "@/app/(admin)/admin/alunos/_components/info-box-students";
 import { DataTablePeriodStudents } from "./_components/data-table-period-students";
-import { columns } from "./_components/columns-period";
 import { Metadata } from "next";
 import { ButtonLink } from "@/components/ui/button-link";
 import { notFound } from "next/navigation";
@@ -84,9 +83,10 @@ export default async function PeriodStudentsPage({
             <Section className="mt-8">
                 <div className="bg-surface border border-surface-border p-6 rounded-3xl">
                     <DataTablePeriodStudents
-                        columns={columns}
                         data={studentsList}
                         periodId={periodData.id}
+                        programSlug={program}
+                        periodSlug={period}
                         classGroups={classGroups}
                         title={
                             <h2 className="text-xl flex flex-row items-center gap-2 font-bold text-foreground">

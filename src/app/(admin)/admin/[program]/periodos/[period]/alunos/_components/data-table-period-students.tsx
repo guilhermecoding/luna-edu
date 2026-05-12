@@ -15,7 +15,7 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
-import { useEffect, useMemo, useState, useTransition } from "react";
+import { useEffect, useLayoutEffect, useMemo, useState, useTransition } from "react";
 import { Input } from "@/components/ui/input";
 import { useRouter, useSearchParams } from "next/navigation";
 import { IconSearch, IconUserMinus, IconLoader2, IconAlertTriangle, IconUserPlus, IconSchool, IconChevronRight } from "@tabler/icons-react";
@@ -103,14 +103,12 @@ export function DataTablePeriodStudents({
         return () => clearTimeout(timeout);
     }, [query, router, searchParams]);
 
-    useEffect(() => {
-        const onPageShow = (e: PageTransitionEvent) => {
-            if (e.persisted) {
-                setTurmasSheetStudent(null);
-            }
+    // Com cacheComponents, a rota fica oculta (Activity) em vez de desmontar; o estado do sheet seria preservado.
+    // Fechamos ao ocultar, como em https://nextjs.org/docs/app/guides/preserving-ui-state
+    useLayoutEffect(() => {
+        return () => {
+            setTurmasSheetStudent(null);
         };
-        window.addEventListener("pageshow", onPageShow);
-        return () => window.removeEventListener("pageshow", onPageShow);
     }, []);
 
     const selectedRows = table.getFilteredSelectedRowModel().rows;
@@ -193,6 +191,7 @@ export function DataTablePeriodStudents({
                                     <li key={cg.id}>
                                         <Link
                                             href={`/admin/${programSlug}/periodos/${periodSlug}/turmas/${cg.slug}`}
+                                            onNavigate={() => setTurmasSheetStudent(null)}
                                             className="flex items-center justify-between gap-3 rounded-xl border border-surface-border bg-background px-4 py-3 text-sm font-medium transition-colors hover:bg-muted/50"
                                         >
                                             <span className="min-w-0 truncate">{cg.name}</span>

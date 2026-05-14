@@ -9,27 +9,27 @@ datasource db {
 }
 
 model User {
-  id               String                     @id
+  id               String            @id
   name             String
-  email            String                     @unique
-  emailVerified    Boolean                    @default(false) @map("email_verified")
+  email            String            @unique
+  emailVerified    Boolean           @default(false) @map("email_verified")
   image            String?
-  createdAt        DateTime                   @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt        DateTime                   @updatedAt @map("updated_at") @db.Timestamptz(6)
-  cpf              String                     @unique
+  createdAt        DateTime          @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt        DateTime          @updatedAt @map("updated_at") @db.Timestamptz(6)
+  cpf              String            @unique
   phone            String
-  birthDate        DateTime                   @map("birth_date") @db.Date
+  birthDate        DateTime          @map("birth_date") @db.Date
   bio              String?
-  system_role      Unsupported("system_role") @default(dbgenerated("'FULL_ACCESS'::auth.system_role"))
-  isAdmin          Boolean                    @default(false) @map("is_admin")
-  isTeacher        Boolean                    @default(false) @map("is_teacher")
-  isActive         Boolean                    @default(true) @map("is_active")
-  genre            Unsupported("user_genre")  @default(dbgenerated("'PREFER_NOT_TO_SAY'::auth.user_genre"))
-  lunaId           String?                    @unique @map("luna_id")
+  isAdmin          Boolean           @default(false) @map("is_admin")
+  isTeacher        Boolean           @default(false) @map("is_teacher")
+  isActive         Boolean           @default(true) @map("is_active")
+  lunaId           String?           @unique @map("luna_id")
   banExpires       DateTime?
   banReason        String?
-  banned           Boolean?                   @default(false)
+  banned           Boolean?          @default(false)
   role             String?
+  systemRole       SystemRole        @default(FULL_ACCESS) @map("system_role")
+  genre            UserGenre         @default(PREFER_NOT_TO_SAY)
   accounts         Account[]
   sessions         Session[]
   courseAssistants CourseAssistant[]
@@ -477,24 +477,6 @@ model CourseAssistant {
   @@schema("public")
 }
 
-enum SystemRole {
-  FULL_ACCESS
-  READ_ONLY
-
-  @@map("system_role")
-  @@schema("public")
-}
-
-enum UserGenre {
-  MALE
-  FEMALE
-  NON_BINARY
-  PREFER_NOT_TO_SAY
-
-  @@map("user_genre")
-  @@schema("public")
-}
-
 enum Genre {
   MALE
   FEMALE
@@ -564,4 +546,22 @@ enum DayOfWeek {
 
   @@map("day_of_week")
   @@schema("public")
+}
+
+enum SystemRole {
+  FULL_ACCESS
+  READ_ONLY
+
+  @@map("system_role")
+  @@schema("better_auth")
+}
+
+enum UserGenre {
+  MALE
+  FEMALE
+  NON_BINARY
+  PREFER_NOT_TO_SAY
+
+  @@map("user_genre")
+  @@schema("better_auth")
 }

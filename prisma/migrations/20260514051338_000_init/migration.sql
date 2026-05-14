@@ -1,15 +1,6 @@
 -- CreateSchema
 CREATE SCHEMA IF NOT EXISTS "better_auth";
 
--- CreateSchema
-CREATE SCHEMA IF NOT EXISTS "public";
-
--- CreateEnum
-CREATE TYPE "system_role" AS ENUM ('FULL_ACCESS', 'READ_ONLY');
-
--- CreateEnum
-CREATE TYPE "user_genre" AS ENUM ('MALE', 'FEMALE', 'NON_BINARY', 'PREFER_NOT_TO_SAY');
-
 -- CreateEnum
 CREATE TYPE "genre" AS ENUM ('MALE', 'FEMALE', 'NON_BINARY', 'PREFER_NOT_TO_SAY');
 
@@ -31,6 +22,12 @@ CREATE TYPE "notification_type" AS ENUM ('INFO', 'WARNING', 'ALERT');
 -- CreateEnum
 CREATE TYPE "day_of_week" AS ENUM ('MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY');
 
+-- CreateEnum
+CREATE TYPE "better_auth"."system_role" AS ENUM ('FULL_ACCESS', 'READ_ONLY');
+
+-- CreateEnum
+CREATE TYPE "better_auth"."user_genre" AS ENUM ('MALE', 'FEMALE', 'NON_BINARY', 'PREFER_NOT_TO_SAY');
+
 -- CreateTable
 CREATE TABLE "better_auth"."user" (
     "id" TEXT NOT NULL,
@@ -44,11 +41,9 @@ CREATE TABLE "better_auth"."user" (
     "phone" TEXT NOT NULL,
     "birth_date" DATE NOT NULL,
     "bio" TEXT,
-    "system_role" system_role NOT NULL DEFAULT 'FULL_ACCESS'::auth.system_role,
     "is_admin" BOOLEAN NOT NULL DEFAULT false,
     "is_teacher" BOOLEAN NOT NULL DEFAULT false,
     "is_active" BOOLEAN NOT NULL DEFAULT true,
-    "genre" user_genre NOT NULL DEFAULT 'PREFER_NOT_TO_SAY'::auth.user_genre,
     "luna_id" TEXT,
     "banExpires" TIMESTAMP(3),
     "banReason" TEXT,

@@ -76,6 +76,20 @@ export type BoolNullableFilter<$PrismaModel = never> = {
   not?: Prisma.NestedBoolNullableFilter<$PrismaModel> | boolean | null
 }
 
+export type EnumUserGenreFilter<$PrismaModel = never> = {
+  equals?: $Enums.UserGenre | Prisma.EnumUserGenreFieldRefInput<$PrismaModel>
+  in?: $Enums.UserGenre[] | Prisma.ListEnumUserGenreFieldRefInput<$PrismaModel>
+  notIn?: $Enums.UserGenre[] | Prisma.ListEnumUserGenreFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumUserGenreFilter<$PrismaModel> | $Enums.UserGenre
+}
+
+export type EnumSystemRoleFilter<$PrismaModel = never> = {
+  equals?: $Enums.SystemRole | Prisma.EnumSystemRoleFieldRefInput<$PrismaModel>
+  in?: $Enums.SystemRole[] | Prisma.ListEnumSystemRoleFieldRefInput<$PrismaModel>
+  notIn?: $Enums.SystemRole[] | Prisma.ListEnumSystemRoleFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumSystemRoleFilter<$PrismaModel> | $Enums.SystemRole
+}
+
 export type SortOrderInput = {
   sort: Prisma.SortOrder
   nulls?: Prisma.NullsOrder
@@ -159,6 +173,26 @@ export type BoolNullableWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
   _min?: Prisma.NestedBoolNullableFilter<$PrismaModel>
   _max?: Prisma.NestedBoolNullableFilter<$PrismaModel>
+}
+
+export type EnumUserGenreWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.UserGenre | Prisma.EnumUserGenreFieldRefInput<$PrismaModel>
+  in?: $Enums.UserGenre[] | Prisma.ListEnumUserGenreFieldRefInput<$PrismaModel>
+  notIn?: $Enums.UserGenre[] | Prisma.ListEnumUserGenreFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumUserGenreWithAggregatesFilter<$PrismaModel> | $Enums.UserGenre
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumUserGenreFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumUserGenreFilter<$PrismaModel>
+}
+
+export type EnumSystemRoleWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.SystemRole | Prisma.EnumSystemRoleFieldRefInput<$PrismaModel>
+  in?: $Enums.SystemRole[] | Prisma.ListEnumSystemRoleFieldRefInput<$PrismaModel>
+  notIn?: $Enums.SystemRole[] | Prisma.ListEnumSystemRoleFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumSystemRoleWithAggregatesFilter<$PrismaModel> | $Enums.SystemRole
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumSystemRoleFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumSystemRoleFilter<$PrismaModel>
 }
 
 export type UuidFilter<$PrismaModel = never> = {
@@ -580,6 +614,20 @@ export type NestedBoolNullableFilter<$PrismaModel = never> = {
   not?: Prisma.NestedBoolNullableFilter<$PrismaModel> | boolean | null
 }
 
+export type NestedEnumUserGenreFilter<$PrismaModel = never> = {
+  equals?: $Enums.UserGenre | Prisma.EnumUserGenreFieldRefInput<$PrismaModel>
+  in?: $Enums.UserGenre[] | Prisma.ListEnumUserGenreFieldRefInput<$PrismaModel>
+  notIn?: $Enums.UserGenre[] | Prisma.ListEnumUserGenreFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumUserGenreFilter<$PrismaModel> | $Enums.UserGenre
+}
+
+export type NestedEnumSystemRoleFilter<$PrismaModel = never> = {
+  equals?: $Enums.SystemRole | Prisma.EnumSystemRoleFieldRefInput<$PrismaModel>
+  in?: $Enums.SystemRole[] | Prisma.ListEnumSystemRoleFieldRefInput<$PrismaModel>
+  notIn?: $Enums.SystemRole[] | Prisma.ListEnumSystemRoleFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumSystemRoleFilter<$PrismaModel> | $Enums.SystemRole
+}
+
 export type NestedStringWithAggregatesFilter<$PrismaModel = never> = {
   equals?: string | Prisma.StringFieldRefInput<$PrismaModel>
   in?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
@@ -678,6 +726,26 @@ export type NestedBoolNullableWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
   _min?: Prisma.NestedBoolNullableFilter<$PrismaModel>
   _max?: Prisma.NestedBoolNullableFilter<$PrismaModel>
+}
+
+export type NestedEnumUserGenreWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.UserGenre | Prisma.EnumUserGenreFieldRefInput<$PrismaModel>
+  in?: $Enums.UserGenre[] | Prisma.ListEnumUserGenreFieldRefInput<$PrismaModel>
+  notIn?: $Enums.UserGenre[] | Prisma.ListEnumUserGenreFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumUserGenreWithAggregatesFilter<$PrismaModel> | $Enums.UserGenre
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumUserGenreFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumUserGenreFilter<$PrismaModel>
+}
+
+export type NestedEnumSystemRoleWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.SystemRole | Prisma.EnumSystemRoleFieldRefInput<$PrismaModel>
+  in?: $Enums.SystemRole[] | Prisma.ListEnumSystemRoleFieldRefInput<$PrismaModel>
+  notIn?: $Enums.SystemRole[] | Prisma.ListEnumSystemRoleFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumSystemRoleWithAggregatesFilter<$PrismaModel> | $Enums.SystemRole
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumSystemRoleFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumSystemRoleFilter<$PrismaModel>
 }
 
 export type NestedUuidFilter<$PrismaModel = never> = {

@@ -44,8 +44,8 @@ export type UserMinAggregateOutputType = {
   banReason: string | null
   banned: boolean | null
   role: string | null
-  systemRole: string | null
-  genre: string | null
+  genre: $Enums.UserGenre | null
+  systemRole: $Enums.SystemRole | null
 }
 
 export type UserMaxAggregateOutputType = {
@@ -68,8 +68,8 @@ export type UserMaxAggregateOutputType = {
   banReason: string | null
   banned: boolean | null
   role: string | null
-  systemRole: string | null
-  genre: string | null
+  genre: $Enums.UserGenre | null
+  systemRole: $Enums.SystemRole | null
 }
 
 export type UserCountAggregateOutputType = {
@@ -92,8 +92,8 @@ export type UserCountAggregateOutputType = {
   banReason: number
   banned: number
   role: number
-  systemRole: number
   genre: number
+  systemRole: number
   _all: number
 }
 
@@ -118,8 +118,8 @@ export type UserMinAggregateInputType = {
   banReason?: true
   banned?: true
   role?: true
-  systemRole?: true
   genre?: true
+  systemRole?: true
 }
 
 export type UserMaxAggregateInputType = {
@@ -142,8 +142,8 @@ export type UserMaxAggregateInputType = {
   banReason?: true
   banned?: true
   role?: true
-  systemRole?: true
   genre?: true
+  systemRole?: true
 }
 
 export type UserCountAggregateInputType = {
@@ -166,8 +166,8 @@ export type UserCountAggregateInputType = {
   banReason?: true
   banned?: true
   role?: true
-  systemRole?: true
   genre?: true
+  systemRole?: true
   _all?: true
 }
 
@@ -263,8 +263,8 @@ export type UserGroupByOutputType = {
   banReason: string | null
   banned: boolean | null
   role: string | null
-  systemRole: string
-  genre: string
+  genre: $Enums.UserGenre
+  systemRole: $Enums.SystemRole
   _count: UserCountAggregateOutputType | null
   _min: UserMinAggregateOutputType | null
   _max: UserMaxAggregateOutputType | null
@@ -308,8 +308,8 @@ export type UserWhereInput = {
   banReason?: Prisma.StringNullableFilter<"User"> | string | null
   banned?: Prisma.BoolNullableFilter<"User"> | boolean | null
   role?: Prisma.StringNullableFilter<"User"> | string | null
-  systemRole?: Prisma.StringFilter<"User"> | string
-  genre?: Prisma.StringFilter<"User"> | string
+  genre?: Prisma.EnumUserGenreFilter<"User"> | $Enums.UserGenre
+  systemRole?: Prisma.EnumSystemRoleFilter<"User"> | $Enums.SystemRole
   accounts?: Prisma.AccountListRelationFilter
   sessions?: Prisma.SessionListRelationFilter
   courseAssistants?: Prisma.CourseAssistantListRelationFilter
@@ -338,8 +338,8 @@ export type UserOrderByWithRelationInput = {
   banReason?: Prisma.SortOrderInput | Prisma.SortOrder
   banned?: Prisma.SortOrderInput | Prisma.SortOrder
   role?: Prisma.SortOrderInput | Prisma.SortOrder
-  systemRole?: Prisma.SortOrder
   genre?: Prisma.SortOrder
+  systemRole?: Prisma.SortOrder
   accounts?: Prisma.AccountOrderByRelationAggregateInput
   sessions?: Prisma.SessionOrderByRelationAggregateInput
   courseAssistants?: Prisma.CourseAssistantOrderByRelationAggregateInput
@@ -371,8 +371,8 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   banReason?: Prisma.StringNullableFilter<"User"> | string | null
   banned?: Prisma.BoolNullableFilter<"User"> | boolean | null
   role?: Prisma.StringNullableFilter<"User"> | string | null
-  systemRole?: Prisma.StringFilter<"User"> | string
-  genre?: Prisma.StringFilter<"User"> | string
+  genre?: Prisma.EnumUserGenreFilter<"User"> | $Enums.UserGenre
+  systemRole?: Prisma.EnumSystemRoleFilter<"User"> | $Enums.SystemRole
   accounts?: Prisma.AccountListRelationFilter
   sessions?: Prisma.SessionListRelationFilter
   courseAssistants?: Prisma.CourseAssistantListRelationFilter
@@ -401,8 +401,8 @@ export type UserOrderByWithAggregationInput = {
   banReason?: Prisma.SortOrderInput | Prisma.SortOrder
   banned?: Prisma.SortOrderInput | Prisma.SortOrder
   role?: Prisma.SortOrderInput | Prisma.SortOrder
-  systemRole?: Prisma.SortOrder
   genre?: Prisma.SortOrder
+  systemRole?: Prisma.SortOrder
   _count?: Prisma.UserCountOrderByAggregateInput
   _max?: Prisma.UserMaxOrderByAggregateInput
   _min?: Prisma.UserMinOrderByAggregateInput
@@ -431,8 +431,8 @@ export type UserScalarWhereWithAggregatesInput = {
   banReason?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   banned?: Prisma.BoolNullableWithAggregatesFilter<"User"> | boolean | null
   role?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
-  systemRole?: Prisma.StringWithAggregatesFilter<"User"> | string
-  genre?: Prisma.StringWithAggregatesFilter<"User"> | string
+  genre?: Prisma.EnumUserGenreWithAggregatesFilter<"User"> | $Enums.UserGenre
+  systemRole?: Prisma.EnumSystemRoleWithAggregatesFilter<"User"> | $Enums.SystemRole
 }
 
 export type UserCreateInput = {
@@ -455,8 +455,8 @@ export type UserCreateInput = {
   banReason?: string | null
   banned?: boolean | null
   role?: string | null
-  systemRole: string
-  genre: string
+  genre?: $Enums.UserGenre
+  systemRole?: $Enums.SystemRole
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   courseAssistants?: Prisma.CourseAssistantCreateNestedManyWithoutAssistantInput
@@ -485,8 +485,8 @@ export type UserUncheckedCreateInput = {
   banReason?: string | null
   banned?: boolean | null
   role?: string | null
-  systemRole: string
-  genre: string
+  genre?: $Enums.UserGenre
+  systemRole?: $Enums.SystemRole
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   courseAssistants?: Prisma.CourseAssistantUncheckedCreateNestedManyWithoutAssistantInput
@@ -515,8 +515,8 @@ export type UserUpdateInput = {
   banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   banned?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  systemRole?: Prisma.StringFieldUpdateOperationsInput | string
-  genre?: Prisma.StringFieldUpdateOperationsInput | string
+  genre?: Prisma.EnumUserGenreFieldUpdateOperationsInput | $Enums.UserGenre
+  systemRole?: Prisma.EnumSystemRoleFieldUpdateOperationsInput | $Enums.SystemRole
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   courseAssistants?: Prisma.CourseAssistantUpdateManyWithoutAssistantNestedInput
@@ -545,8 +545,8 @@ export type UserUncheckedUpdateInput = {
   banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   banned?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  systemRole?: Prisma.StringFieldUpdateOperationsInput | string
-  genre?: Prisma.StringFieldUpdateOperationsInput | string
+  genre?: Prisma.EnumUserGenreFieldUpdateOperationsInput | $Enums.UserGenre
+  systemRole?: Prisma.EnumSystemRoleFieldUpdateOperationsInput | $Enums.SystemRole
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   courseAssistants?: Prisma.CourseAssistantUncheckedUpdateManyWithoutAssistantNestedInput
@@ -575,8 +575,8 @@ export type UserCreateManyInput = {
   banReason?: string | null
   banned?: boolean | null
   role?: string | null
-  systemRole: string
-  genre: string
+  genre?: $Enums.UserGenre
+  systemRole?: $Enums.SystemRole
 }
 
 export type UserUpdateManyMutationInput = {
@@ -599,8 +599,8 @@ export type UserUpdateManyMutationInput = {
   banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   banned?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  systemRole?: Prisma.StringFieldUpdateOperationsInput | string
-  genre?: Prisma.StringFieldUpdateOperationsInput | string
+  genre?: Prisma.EnumUserGenreFieldUpdateOperationsInput | $Enums.UserGenre
+  systemRole?: Prisma.EnumSystemRoleFieldUpdateOperationsInput | $Enums.SystemRole
 }
 
 export type UserUncheckedUpdateManyInput = {
@@ -623,8 +623,8 @@ export type UserUncheckedUpdateManyInput = {
   banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   banned?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  systemRole?: Prisma.StringFieldUpdateOperationsInput | string
-  genre?: Prisma.StringFieldUpdateOperationsInput | string
+  genre?: Prisma.EnumUserGenreFieldUpdateOperationsInput | $Enums.UserGenre
+  systemRole?: Prisma.EnumSystemRoleFieldUpdateOperationsInput | $Enums.SystemRole
 }
 
 export type UserCountOrderByAggregateInput = {
@@ -647,8 +647,8 @@ export type UserCountOrderByAggregateInput = {
   banReason?: Prisma.SortOrder
   banned?: Prisma.SortOrder
   role?: Prisma.SortOrder
-  systemRole?: Prisma.SortOrder
   genre?: Prisma.SortOrder
+  systemRole?: Prisma.SortOrder
 }
 
 export type UserMaxOrderByAggregateInput = {
@@ -671,8 +671,8 @@ export type UserMaxOrderByAggregateInput = {
   banReason?: Prisma.SortOrder
   banned?: Prisma.SortOrder
   role?: Prisma.SortOrder
-  systemRole?: Prisma.SortOrder
   genre?: Prisma.SortOrder
+  systemRole?: Prisma.SortOrder
 }
 
 export type UserMinOrderByAggregateInput = {
@@ -695,8 +695,8 @@ export type UserMinOrderByAggregateInput = {
   banReason?: Prisma.SortOrder
   banned?: Prisma.SortOrder
   role?: Prisma.SortOrder
-  systemRole?: Prisma.SortOrder
   genre?: Prisma.SortOrder
+  systemRole?: Prisma.SortOrder
 }
 
 export type UserScalarRelationFilter = {
@@ -731,6 +731,14 @@ export type NullableDateTimeFieldUpdateOperationsInput = {
 
 export type NullableBoolFieldUpdateOperationsInput = {
   set?: boolean | null
+}
+
+export type EnumUserGenreFieldUpdateOperationsInput = {
+  set?: $Enums.UserGenre
+}
+
+export type EnumSystemRoleFieldUpdateOperationsInput = {
+  set?: $Enums.SystemRole
 }
 
 export type UserCreateNestedOneWithoutSessionsInput = {
@@ -843,8 +851,8 @@ export type UserCreateWithoutSessionsInput = {
   banReason?: string | null
   banned?: boolean | null
   role?: string | null
-  systemRole: string
-  genre: string
+  genre?: $Enums.UserGenre
+  systemRole?: $Enums.SystemRole
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   courseAssistants?: Prisma.CourseAssistantCreateNestedManyWithoutAssistantInput
   lessons?: Prisma.LessonCreateNestedManyWithoutTeacherInput
@@ -872,8 +880,8 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   banReason?: string | null
   banned?: boolean | null
   role?: string | null
-  systemRole: string
-  genre: string
+  genre?: $Enums.UserGenre
+  systemRole?: $Enums.SystemRole
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   courseAssistants?: Prisma.CourseAssistantUncheckedCreateNestedManyWithoutAssistantInput
   lessons?: Prisma.LessonUncheckedCreateNestedManyWithoutTeacherInput
@@ -917,8 +925,8 @@ export type UserUpdateWithoutSessionsInput = {
   banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   banned?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  systemRole?: Prisma.StringFieldUpdateOperationsInput | string
-  genre?: Prisma.StringFieldUpdateOperationsInput | string
+  genre?: Prisma.EnumUserGenreFieldUpdateOperationsInput | $Enums.UserGenre
+  systemRole?: Prisma.EnumSystemRoleFieldUpdateOperationsInput | $Enums.SystemRole
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   courseAssistants?: Prisma.CourseAssistantUpdateManyWithoutAssistantNestedInput
   lessons?: Prisma.LessonUpdateManyWithoutTeacherNestedInput
@@ -946,8 +954,8 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   banned?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  systemRole?: Prisma.StringFieldUpdateOperationsInput | string
-  genre?: Prisma.StringFieldUpdateOperationsInput | string
+  genre?: Prisma.EnumUserGenreFieldUpdateOperationsInput | $Enums.UserGenre
+  systemRole?: Prisma.EnumSystemRoleFieldUpdateOperationsInput | $Enums.SystemRole
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   courseAssistants?: Prisma.CourseAssistantUncheckedUpdateManyWithoutAssistantNestedInput
   lessons?: Prisma.LessonUncheckedUpdateManyWithoutTeacherNestedInput
@@ -975,8 +983,8 @@ export type UserCreateWithoutAccountsInput = {
   banReason?: string | null
   banned?: boolean | null
   role?: string | null
-  systemRole: string
-  genre: string
+  genre?: $Enums.UserGenre
+  systemRole?: $Enums.SystemRole
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   courseAssistants?: Prisma.CourseAssistantCreateNestedManyWithoutAssistantInput
   lessons?: Prisma.LessonCreateNestedManyWithoutTeacherInput
@@ -1004,8 +1012,8 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   banReason?: string | null
   banned?: boolean | null
   role?: string | null
-  systemRole: string
-  genre: string
+  genre?: $Enums.UserGenre
+  systemRole?: $Enums.SystemRole
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   courseAssistants?: Prisma.CourseAssistantUncheckedCreateNestedManyWithoutAssistantInput
   lessons?: Prisma.LessonUncheckedCreateNestedManyWithoutTeacherInput
@@ -1049,8 +1057,8 @@ export type UserUpdateWithoutAccountsInput = {
   banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   banned?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  systemRole?: Prisma.StringFieldUpdateOperationsInput | string
-  genre?: Prisma.StringFieldUpdateOperationsInput | string
+  genre?: Prisma.EnumUserGenreFieldUpdateOperationsInput | $Enums.UserGenre
+  systemRole?: Prisma.EnumSystemRoleFieldUpdateOperationsInput | $Enums.SystemRole
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   courseAssistants?: Prisma.CourseAssistantUpdateManyWithoutAssistantNestedInput
   lessons?: Prisma.LessonUpdateManyWithoutTeacherNestedInput
@@ -1078,8 +1086,8 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   banned?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  systemRole?: Prisma.StringFieldUpdateOperationsInput | string
-  genre?: Prisma.StringFieldUpdateOperationsInput | string
+  genre?: Prisma.EnumUserGenreFieldUpdateOperationsInput | $Enums.UserGenre
+  systemRole?: Prisma.EnumSystemRoleFieldUpdateOperationsInput | $Enums.SystemRole
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   courseAssistants?: Prisma.CourseAssistantUncheckedUpdateManyWithoutAssistantNestedInput
   lessons?: Prisma.LessonUncheckedUpdateManyWithoutTeacherNestedInput
@@ -1107,8 +1115,8 @@ export type UserCreateWithoutSchedulesInput = {
   banReason?: string | null
   banned?: boolean | null
   role?: string | null
-  systemRole: string
-  genre: string
+  genre?: $Enums.UserGenre
+  systemRole?: $Enums.SystemRole
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   courseAssistants?: Prisma.CourseAssistantCreateNestedManyWithoutAssistantInput
@@ -1136,8 +1144,8 @@ export type UserUncheckedCreateWithoutSchedulesInput = {
   banReason?: string | null
   banned?: boolean | null
   role?: string | null
-  systemRole: string
-  genre: string
+  genre?: $Enums.UserGenre
+  systemRole?: $Enums.SystemRole
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   courseAssistants?: Prisma.CourseAssistantUncheckedCreateNestedManyWithoutAssistantInput
@@ -1181,8 +1189,8 @@ export type UserUpdateWithoutSchedulesInput = {
   banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   banned?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  systemRole?: Prisma.StringFieldUpdateOperationsInput | string
-  genre?: Prisma.StringFieldUpdateOperationsInput | string
+  genre?: Prisma.EnumUserGenreFieldUpdateOperationsInput | $Enums.UserGenre
+  systemRole?: Prisma.EnumSystemRoleFieldUpdateOperationsInput | $Enums.SystemRole
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   courseAssistants?: Prisma.CourseAssistantUpdateManyWithoutAssistantNestedInput
@@ -1210,8 +1218,8 @@ export type UserUncheckedUpdateWithoutSchedulesInput = {
   banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   banned?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  systemRole?: Prisma.StringFieldUpdateOperationsInput | string
-  genre?: Prisma.StringFieldUpdateOperationsInput | string
+  genre?: Prisma.EnumUserGenreFieldUpdateOperationsInput | $Enums.UserGenre
+  systemRole?: Prisma.EnumSystemRoleFieldUpdateOperationsInput | $Enums.SystemRole
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   courseAssistants?: Prisma.CourseAssistantUncheckedUpdateManyWithoutAssistantNestedInput
@@ -1239,8 +1247,8 @@ export type UserCreateWithoutLessonsInput = {
   banReason?: string | null
   banned?: boolean | null
   role?: string | null
-  systemRole: string
-  genre: string
+  genre?: $Enums.UserGenre
+  systemRole?: $Enums.SystemRole
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   courseAssistants?: Prisma.CourseAssistantCreateNestedManyWithoutAssistantInput
@@ -1268,8 +1276,8 @@ export type UserUncheckedCreateWithoutLessonsInput = {
   banReason?: string | null
   banned?: boolean | null
   role?: string | null
-  systemRole: string
-  genre: string
+  genre?: $Enums.UserGenre
+  systemRole?: $Enums.SystemRole
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   courseAssistants?: Prisma.CourseAssistantUncheckedCreateNestedManyWithoutAssistantInput
@@ -1313,8 +1321,8 @@ export type UserUpdateWithoutLessonsInput = {
   banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   banned?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  systemRole?: Prisma.StringFieldUpdateOperationsInput | string
-  genre?: Prisma.StringFieldUpdateOperationsInput | string
+  genre?: Prisma.EnumUserGenreFieldUpdateOperationsInput | $Enums.UserGenre
+  systemRole?: Prisma.EnumSystemRoleFieldUpdateOperationsInput | $Enums.SystemRole
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   courseAssistants?: Prisma.CourseAssistantUpdateManyWithoutAssistantNestedInput
@@ -1342,8 +1350,8 @@ export type UserUncheckedUpdateWithoutLessonsInput = {
   banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   banned?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  systemRole?: Prisma.StringFieldUpdateOperationsInput | string
-  genre?: Prisma.StringFieldUpdateOperationsInput | string
+  genre?: Prisma.EnumUserGenreFieldUpdateOperationsInput | $Enums.UserGenre
+  systemRole?: Prisma.EnumSystemRoleFieldUpdateOperationsInput | $Enums.SystemRole
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   courseAssistants?: Prisma.CourseAssistantUncheckedUpdateManyWithoutAssistantNestedInput
@@ -1371,8 +1379,8 @@ export type UserCreateWithoutNotificationsInput = {
   banReason?: string | null
   banned?: boolean | null
   role?: string | null
-  systemRole: string
-  genre: string
+  genre?: $Enums.UserGenre
+  systemRole?: $Enums.SystemRole
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   courseAssistants?: Prisma.CourseAssistantCreateNestedManyWithoutAssistantInput
@@ -1400,8 +1408,8 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   banReason?: string | null
   banned?: boolean | null
   role?: string | null
-  systemRole: string
-  genre: string
+  genre?: $Enums.UserGenre
+  systemRole?: $Enums.SystemRole
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   courseAssistants?: Prisma.CourseAssistantUncheckedCreateNestedManyWithoutAssistantInput
@@ -1445,8 +1453,8 @@ export type UserUpdateWithoutNotificationsInput = {
   banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   banned?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  systemRole?: Prisma.StringFieldUpdateOperationsInput | string
-  genre?: Prisma.StringFieldUpdateOperationsInput | string
+  genre?: Prisma.EnumUserGenreFieldUpdateOperationsInput | $Enums.UserGenre
+  systemRole?: Prisma.EnumSystemRoleFieldUpdateOperationsInput | $Enums.SystemRole
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   courseAssistants?: Prisma.CourseAssistantUpdateManyWithoutAssistantNestedInput
@@ -1474,8 +1482,8 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   banned?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  systemRole?: Prisma.StringFieldUpdateOperationsInput | string
-  genre?: Prisma.StringFieldUpdateOperationsInput | string
+  genre?: Prisma.EnumUserGenreFieldUpdateOperationsInput | $Enums.UserGenre
+  systemRole?: Prisma.EnumSystemRoleFieldUpdateOperationsInput | $Enums.SystemRole
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   courseAssistants?: Prisma.CourseAssistantUncheckedUpdateManyWithoutAssistantNestedInput
@@ -1503,8 +1511,8 @@ export type UserCreateWithoutCourseAssistantsInput = {
   banReason?: string | null
   banned?: boolean | null
   role?: string | null
-  systemRole: string
-  genre: string
+  genre?: $Enums.UserGenre
+  systemRole?: $Enums.SystemRole
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   lessons?: Prisma.LessonCreateNestedManyWithoutTeacherInput
@@ -1532,8 +1540,8 @@ export type UserUncheckedCreateWithoutCourseAssistantsInput = {
   banReason?: string | null
   banned?: boolean | null
   role?: string | null
-  systemRole: string
-  genre: string
+  genre?: $Enums.UserGenre
+  systemRole?: $Enums.SystemRole
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   lessons?: Prisma.LessonUncheckedCreateNestedManyWithoutTeacherInput
@@ -1577,8 +1585,8 @@ export type UserUpdateWithoutCourseAssistantsInput = {
   banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   banned?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  systemRole?: Prisma.StringFieldUpdateOperationsInput | string
-  genre?: Prisma.StringFieldUpdateOperationsInput | string
+  genre?: Prisma.EnumUserGenreFieldUpdateOperationsInput | $Enums.UserGenre
+  systemRole?: Prisma.EnumSystemRoleFieldUpdateOperationsInput | $Enums.SystemRole
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   lessons?: Prisma.LessonUpdateManyWithoutTeacherNestedInput
@@ -1606,8 +1614,8 @@ export type UserUncheckedUpdateWithoutCourseAssistantsInput = {
   banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   banned?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  systemRole?: Prisma.StringFieldUpdateOperationsInput | string
-  genre?: Prisma.StringFieldUpdateOperationsInput | string
+  genre?: Prisma.EnumUserGenreFieldUpdateOperationsInput | $Enums.UserGenre
+  systemRole?: Prisma.EnumSystemRoleFieldUpdateOperationsInput | $Enums.SystemRole
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   lessons?: Prisma.LessonUncheckedUpdateManyWithoutTeacherNestedInput
@@ -1711,8 +1719,8 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   banReason?: boolean
   banned?: boolean
   role?: boolean
-  systemRole?: boolean
   genre?: boolean
+  systemRole?: boolean
   accounts?: boolean | Prisma.User$accountsArgs<ExtArgs>
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
   courseAssistants?: boolean | Prisma.User$courseAssistantsArgs<ExtArgs>
@@ -1742,8 +1750,8 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   banReason?: boolean
   banned?: boolean
   role?: boolean
-  systemRole?: boolean
   genre?: boolean
+  systemRole?: boolean
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1766,8 +1774,8 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   banReason?: boolean
   banned?: boolean
   role?: boolean
-  systemRole?: boolean
   genre?: boolean
+  systemRole?: boolean
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectScalar = {
@@ -1790,11 +1798,11 @@ export type UserSelectScalar = {
   banReason?: boolean
   banned?: boolean
   role?: boolean
-  systemRole?: boolean
   genre?: boolean
+  systemRole?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "email" | "emailVerified" | "image" | "createdAt" | "updatedAt" | "cpf" | "phone" | "birthDate" | "bio" | "isAdmin" | "isTeacher" | "isActive" | "lunaId" | "banExpires" | "banReason" | "banned" | "role" | "systemRole" | "genre", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "email" | "emailVerified" | "image" | "createdAt" | "updatedAt" | "cpf" | "phone" | "birthDate" | "bio" | "isAdmin" | "isTeacher" | "isActive" | "lunaId" | "banExpires" | "banReason" | "banned" | "role" | "genre" | "systemRole", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   accounts?: boolean | Prisma.User$accountsArgs<ExtArgs>
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
@@ -1837,8 +1845,8 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     banReason: string | null
     banned: boolean | null
     role: string | null
-    systemRole: string
-    genre: string
+    genre: $Enums.UserGenre
+    systemRole: $Enums.SystemRole
   }, ExtArgs["result"]["user"]>
   composites: {}
 }
@@ -2287,8 +2295,8 @@ export interface UserFieldRefs {
   readonly banReason: Prisma.FieldRef<"User", 'String'>
   readonly banned: Prisma.FieldRef<"User", 'Boolean'>
   readonly role: Prisma.FieldRef<"User", 'String'>
-  readonly systemRole: Prisma.FieldRef<"User", 'String'>
-  readonly genre: Prisma.FieldRef<"User", 'String'>
+  readonly genre: Prisma.FieldRef<"User", 'UserGenre'>
+  readonly systemRole: Prisma.FieldRef<"User", 'SystemRole'>
 }
     
 

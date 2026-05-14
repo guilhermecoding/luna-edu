@@ -2412,8 +2412,8 @@ export const UserScalarFieldEnum = {
   banReason: 'banReason',
   banned: 'banned',
   role: 'role',
-  systemRole: 'systemRole',
-  genre: 'genre'
+  genre: 'genre',
+  systemRole: 'systemRole'
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -2839,6 +2839,34 @@ export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel
  * Reference to a field of type 'DateTime[]'
  */
 export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
+    
+
+
+/**
+ * Reference to a field of type 'UserGenre'
+ */
+export type EnumUserGenreFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'UserGenre'>
+    
+
+
+/**
+ * Reference to a field of type 'UserGenre[]'
+ */
+export type ListEnumUserGenreFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'UserGenre[]'>
+    
+
+
+/**
+ * Reference to a field of type 'SystemRole'
+ */
+export type EnumSystemRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SystemRole'>
+    
+
+
+/**
+ * Reference to a field of type 'SystemRole[]'
+ */
+export type ListEnumSystemRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SystemRole[]'>
     
 
 

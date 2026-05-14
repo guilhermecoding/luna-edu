@@ -190,9 +190,9 @@ export type TimeSlotWhereInput = {
   endTime?: Prisma.StringFilter<"TimeSlot"> | string
   shift?: Prisma.EnumShiftFilter<"TimeSlot"> | $Enums.Shift
   programId?: Prisma.UuidFilter<"TimeSlot"> | string
-  program?: Prisma.XOR<Prisma.ProgramScalarRelationFilter, Prisma.ProgramWhereInput>
-  schedules?: Prisma.ScheduleListRelationFilter
   lessons?: Prisma.LessonListRelationFilter
+  schedules?: Prisma.ScheduleListRelationFilter
+  program?: Prisma.XOR<Prisma.ProgramScalarRelationFilter, Prisma.ProgramWhereInput>
 }
 
 export type TimeSlotOrderByWithRelationInput = {
@@ -202,9 +202,9 @@ export type TimeSlotOrderByWithRelationInput = {
   endTime?: Prisma.SortOrder
   shift?: Prisma.SortOrder
   programId?: Prisma.SortOrder
-  program?: Prisma.ProgramOrderByWithRelationInput
-  schedules?: Prisma.ScheduleOrderByRelationAggregateInput
   lessons?: Prisma.LessonOrderByRelationAggregateInput
+  schedules?: Prisma.ScheduleOrderByRelationAggregateInput
+  program?: Prisma.ProgramOrderByWithRelationInput
 }
 
 export type TimeSlotWhereUniqueInput = Prisma.AtLeast<{
@@ -218,9 +218,9 @@ export type TimeSlotWhereUniqueInput = Prisma.AtLeast<{
   endTime?: Prisma.StringFilter<"TimeSlot"> | string
   shift?: Prisma.EnumShiftFilter<"TimeSlot"> | $Enums.Shift
   programId?: Prisma.UuidFilter<"TimeSlot"> | string
-  program?: Prisma.XOR<Prisma.ProgramScalarRelationFilter, Prisma.ProgramWhereInput>
-  schedules?: Prisma.ScheduleListRelationFilter
   lessons?: Prisma.LessonListRelationFilter
+  schedules?: Prisma.ScheduleListRelationFilter
+  program?: Prisma.XOR<Prisma.ProgramScalarRelationFilter, Prisma.ProgramWhereInput>
 }, "id" | "programId_startTime">
 
 export type TimeSlotOrderByWithAggregationInput = {
@@ -253,9 +253,9 @@ export type TimeSlotCreateInput = {
   startTime: string
   endTime: string
   shift: $Enums.Shift
-  program: Prisma.ProgramCreateNestedOneWithoutTimeSlotsInput
-  schedules?: Prisma.ScheduleCreateNestedManyWithoutTimeSlotInput
   lessons?: Prisma.LessonCreateNestedManyWithoutTimeSlotInput
+  schedules?: Prisma.ScheduleCreateNestedManyWithoutTimeSlotInput
+  program: Prisma.ProgramCreateNestedOneWithoutTimeSlotsInput
 }
 
 export type TimeSlotUncheckedCreateInput = {
@@ -265,8 +265,8 @@ export type TimeSlotUncheckedCreateInput = {
   endTime: string
   shift: $Enums.Shift
   programId: string
-  schedules?: Prisma.ScheduleUncheckedCreateNestedManyWithoutTimeSlotInput
   lessons?: Prisma.LessonUncheckedCreateNestedManyWithoutTimeSlotInput
+  schedules?: Prisma.ScheduleUncheckedCreateNestedManyWithoutTimeSlotInput
 }
 
 export type TimeSlotUpdateInput = {
@@ -275,9 +275,9 @@ export type TimeSlotUpdateInput = {
   startTime?: Prisma.StringFieldUpdateOperationsInput | string
   endTime?: Prisma.StringFieldUpdateOperationsInput | string
   shift?: Prisma.EnumShiftFieldUpdateOperationsInput | $Enums.Shift
-  program?: Prisma.ProgramUpdateOneRequiredWithoutTimeSlotsNestedInput
-  schedules?: Prisma.ScheduleUpdateManyWithoutTimeSlotNestedInput
   lessons?: Prisma.LessonUpdateManyWithoutTimeSlotNestedInput
+  schedules?: Prisma.ScheduleUpdateManyWithoutTimeSlotNestedInput
+  program?: Prisma.ProgramUpdateOneRequiredWithoutTimeSlotsNestedInput
 }
 
 export type TimeSlotUncheckedUpdateInput = {
@@ -287,8 +287,8 @@ export type TimeSlotUncheckedUpdateInput = {
   endTime?: Prisma.StringFieldUpdateOperationsInput | string
   shift?: Prisma.EnumShiftFieldUpdateOperationsInput | $Enums.Shift
   programId?: Prisma.StringFieldUpdateOperationsInput | string
-  schedules?: Prisma.ScheduleUncheckedUpdateManyWithoutTimeSlotNestedInput
   lessons?: Prisma.LessonUncheckedUpdateManyWithoutTimeSlotNestedInput
+  schedules?: Prisma.ScheduleUncheckedUpdateManyWithoutTimeSlotNestedInput
 }
 
 export type TimeSlotCreateManyInput = {
@@ -447,8 +447,8 @@ export type TimeSlotCreateWithoutProgramInput = {
   startTime: string
   endTime: string
   shift: $Enums.Shift
-  schedules?: Prisma.ScheduleCreateNestedManyWithoutTimeSlotInput
   lessons?: Prisma.LessonCreateNestedManyWithoutTimeSlotInput
+  schedules?: Prisma.ScheduleCreateNestedManyWithoutTimeSlotInput
 }
 
 export type TimeSlotUncheckedCreateWithoutProgramInput = {
@@ -457,8 +457,8 @@ export type TimeSlotUncheckedCreateWithoutProgramInput = {
   startTime: string
   endTime: string
   shift: $Enums.Shift
-  schedules?: Prisma.ScheduleUncheckedCreateNestedManyWithoutTimeSlotInput
   lessons?: Prisma.LessonUncheckedCreateNestedManyWithoutTimeSlotInput
+  schedules?: Prisma.ScheduleUncheckedCreateNestedManyWithoutTimeSlotInput
 }
 
 export type TimeSlotCreateOrConnectWithoutProgramInput = {
@@ -505,8 +505,8 @@ export type TimeSlotCreateWithoutSchedulesInput = {
   startTime: string
   endTime: string
   shift: $Enums.Shift
-  program: Prisma.ProgramCreateNestedOneWithoutTimeSlotsInput
   lessons?: Prisma.LessonCreateNestedManyWithoutTimeSlotInput
+  program: Prisma.ProgramCreateNestedOneWithoutTimeSlotsInput
 }
 
 export type TimeSlotUncheckedCreateWithoutSchedulesInput = {
@@ -541,8 +541,8 @@ export type TimeSlotUpdateWithoutSchedulesInput = {
   startTime?: Prisma.StringFieldUpdateOperationsInput | string
   endTime?: Prisma.StringFieldUpdateOperationsInput | string
   shift?: Prisma.EnumShiftFieldUpdateOperationsInput | $Enums.Shift
-  program?: Prisma.ProgramUpdateOneRequiredWithoutTimeSlotsNestedInput
   lessons?: Prisma.LessonUpdateManyWithoutTimeSlotNestedInput
+  program?: Prisma.ProgramUpdateOneRequiredWithoutTimeSlotsNestedInput
 }
 
 export type TimeSlotUncheckedUpdateWithoutSchedulesInput = {
@@ -561,8 +561,8 @@ export type TimeSlotCreateWithoutLessonsInput = {
   startTime: string
   endTime: string
   shift: $Enums.Shift
-  program: Prisma.ProgramCreateNestedOneWithoutTimeSlotsInput
   schedules?: Prisma.ScheduleCreateNestedManyWithoutTimeSlotInput
+  program: Prisma.ProgramCreateNestedOneWithoutTimeSlotsInput
 }
 
 export type TimeSlotUncheckedCreateWithoutLessonsInput = {
@@ -597,8 +597,8 @@ export type TimeSlotUpdateWithoutLessonsInput = {
   startTime?: Prisma.StringFieldUpdateOperationsInput | string
   endTime?: Prisma.StringFieldUpdateOperationsInput | string
   shift?: Prisma.EnumShiftFieldUpdateOperationsInput | $Enums.Shift
-  program?: Prisma.ProgramUpdateOneRequiredWithoutTimeSlotsNestedInput
   schedules?: Prisma.ScheduleUpdateManyWithoutTimeSlotNestedInput
+  program?: Prisma.ProgramUpdateOneRequiredWithoutTimeSlotsNestedInput
 }
 
 export type TimeSlotUncheckedUpdateWithoutLessonsInput = {
@@ -625,8 +625,8 @@ export type TimeSlotUpdateWithoutProgramInput = {
   startTime?: Prisma.StringFieldUpdateOperationsInput | string
   endTime?: Prisma.StringFieldUpdateOperationsInput | string
   shift?: Prisma.EnumShiftFieldUpdateOperationsInput | $Enums.Shift
-  schedules?: Prisma.ScheduleUpdateManyWithoutTimeSlotNestedInput
   lessons?: Prisma.LessonUpdateManyWithoutTimeSlotNestedInput
+  schedules?: Prisma.ScheduleUpdateManyWithoutTimeSlotNestedInput
 }
 
 export type TimeSlotUncheckedUpdateWithoutProgramInput = {
@@ -635,8 +635,8 @@ export type TimeSlotUncheckedUpdateWithoutProgramInput = {
   startTime?: Prisma.StringFieldUpdateOperationsInput | string
   endTime?: Prisma.StringFieldUpdateOperationsInput | string
   shift?: Prisma.EnumShiftFieldUpdateOperationsInput | $Enums.Shift
-  schedules?: Prisma.ScheduleUncheckedUpdateManyWithoutTimeSlotNestedInput
   lessons?: Prisma.LessonUncheckedUpdateManyWithoutTimeSlotNestedInput
+  schedules?: Prisma.ScheduleUncheckedUpdateManyWithoutTimeSlotNestedInput
 }
 
 export type TimeSlotUncheckedUpdateManyWithoutProgramInput = {
@@ -653,13 +653,13 @@ export type TimeSlotUncheckedUpdateManyWithoutProgramInput = {
  */
 
 export type TimeSlotCountOutputType = {
-  schedules: number
   lessons: number
+  schedules: number
 }
 
 export type TimeSlotCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  schedules?: boolean | TimeSlotCountOutputTypeCountSchedulesArgs
   lessons?: boolean | TimeSlotCountOutputTypeCountLessonsArgs
+  schedules?: boolean | TimeSlotCountOutputTypeCountSchedulesArgs
 }
 
 /**
@@ -675,15 +675,15 @@ export type TimeSlotCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Ext
 /**
  * TimeSlotCountOutputType without action
  */
-export type TimeSlotCountOutputTypeCountSchedulesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.ScheduleWhereInput
+export type TimeSlotCountOutputTypeCountLessonsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.LessonWhereInput
 }
 
 /**
  * TimeSlotCountOutputType without action
  */
-export type TimeSlotCountOutputTypeCountLessonsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.LessonWhereInput
+export type TimeSlotCountOutputTypeCountSchedulesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ScheduleWhereInput
 }
 
 
@@ -694,9 +694,9 @@ export type TimeSlotSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   endTime?: boolean
   shift?: boolean
   programId?: boolean
-  program?: boolean | Prisma.ProgramDefaultArgs<ExtArgs>
-  schedules?: boolean | Prisma.TimeSlot$schedulesArgs<ExtArgs>
   lessons?: boolean | Prisma.TimeSlot$lessonsArgs<ExtArgs>
+  schedules?: boolean | Prisma.TimeSlot$schedulesArgs<ExtArgs>
+  program?: boolean | Prisma.ProgramDefaultArgs<ExtArgs>
   _count?: boolean | Prisma.TimeSlotCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["timeSlot"]>
 
@@ -731,9 +731,9 @@ export type TimeSlotSelectScalar = {
 
 export type TimeSlotOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "startTime" | "endTime" | "shift" | "programId", ExtArgs["result"]["timeSlot"]>
 export type TimeSlotInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  program?: boolean | Prisma.ProgramDefaultArgs<ExtArgs>
-  schedules?: boolean | Prisma.TimeSlot$schedulesArgs<ExtArgs>
   lessons?: boolean | Prisma.TimeSlot$lessonsArgs<ExtArgs>
+  schedules?: boolean | Prisma.TimeSlot$schedulesArgs<ExtArgs>
+  program?: boolean | Prisma.ProgramDefaultArgs<ExtArgs>
   _count?: boolean | Prisma.TimeSlotCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type TimeSlotIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -746,9 +746,9 @@ export type TimeSlotIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Ext
 export type $TimeSlotPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "TimeSlot"
   objects: {
-    program: Prisma.$ProgramPayload<ExtArgs>
-    schedules: Prisma.$SchedulePayload<ExtArgs>[]
     lessons: Prisma.$LessonPayload<ExtArgs>[]
+    schedules: Prisma.$SchedulePayload<ExtArgs>[]
+    program: Prisma.$ProgramPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1151,9 +1151,9 @@ readonly fields: TimeSlotFieldRefs;
  */
 export interface Prisma__TimeSlotClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  program<T extends Prisma.ProgramDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ProgramDefaultArgs<ExtArgs>>): Prisma.Prisma__ProgramClient<runtime.Types.Result.GetResult<Prisma.$ProgramPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  schedules<T extends Prisma.TimeSlot$schedulesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TimeSlot$schedulesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SchedulePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   lessons<T extends Prisma.TimeSlot$lessonsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TimeSlot$lessonsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LessonPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  schedules<T extends Prisma.TimeSlot$schedulesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TimeSlot$schedulesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SchedulePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  program<T extends Prisma.ProgramDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ProgramDefaultArgs<ExtArgs>>): Prisma.Prisma__ProgramClient<runtime.Types.Result.GetResult<Prisma.$ProgramPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1590,30 +1590,6 @@ export type TimeSlotDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Inte
 }
 
 /**
- * TimeSlot.schedules
- */
-export type TimeSlot$schedulesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Schedule
-   */
-  select?: Prisma.ScheduleSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the Schedule
-   */
-  omit?: Prisma.ScheduleOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ScheduleInclude<ExtArgs> | null
-  where?: Prisma.ScheduleWhereInput
-  orderBy?: Prisma.ScheduleOrderByWithRelationInput | Prisma.ScheduleOrderByWithRelationInput[]
-  cursor?: Prisma.ScheduleWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.ScheduleScalarFieldEnum | Prisma.ScheduleScalarFieldEnum[]
-}
-
-/**
  * TimeSlot.lessons
  */
 export type TimeSlot$lessonsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1635,6 +1611,30 @@ export type TimeSlot$lessonsArgs<ExtArgs extends runtime.Types.Extensions.Intern
   take?: number
   skip?: number
   distinct?: Prisma.LessonScalarFieldEnum | Prisma.LessonScalarFieldEnum[]
+}
+
+/**
+ * TimeSlot.schedules
+ */
+export type TimeSlot$schedulesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Schedule
+   */
+  select?: Prisma.ScheduleSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Schedule
+   */
+  omit?: Prisma.ScheduleOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ScheduleInclude<ExtArgs> | null
+  where?: Prisma.ScheduleWhereInput
+  orderBy?: Prisma.ScheduleOrderByWithRelationInput | Prisma.ScheduleOrderByWithRelationInput[]
+  cursor?: Prisma.ScheduleWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ScheduleScalarFieldEnum | Prisma.ScheduleScalarFieldEnum[]
 }
 
 /**

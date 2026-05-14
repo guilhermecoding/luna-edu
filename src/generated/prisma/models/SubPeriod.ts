@@ -260,8 +260,8 @@ export type SubPeriodWhereInput = {
   weight?: Prisma.FloatFilter<"SubPeriod"> | number
   closedAt?: Prisma.DateTimeNullableFilter<"SubPeriod"> | Date | string | null
   periodId?: Prisma.UuidFilter<"SubPeriod"> | string
-  period?: Prisma.XOR<Prisma.PeriodScalarRelationFilter, Prisma.PeriodWhereInput>
   activities?: Prisma.ActivityListRelationFilter
+  period?: Prisma.XOR<Prisma.PeriodScalarRelationFilter, Prisma.PeriodWhereInput>
 }
 
 export type SubPeriodOrderByWithRelationInput = {
@@ -275,8 +275,8 @@ export type SubPeriodOrderByWithRelationInput = {
   weight?: Prisma.SortOrder
   closedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   periodId?: Prisma.SortOrder
-  period?: Prisma.PeriodOrderByWithRelationInput
   activities?: Prisma.ActivityOrderByRelationAggregateInput
+  period?: Prisma.PeriodOrderByWithRelationInput
 }
 
 export type SubPeriodWhereUniqueInput = Prisma.AtLeast<{
@@ -295,8 +295,8 @@ export type SubPeriodWhereUniqueInput = Prisma.AtLeast<{
   weight?: Prisma.FloatFilter<"SubPeriod"> | number
   closedAt?: Prisma.DateTimeNullableFilter<"SubPeriod"> | Date | string | null
   periodId?: Prisma.UuidFilter<"SubPeriod"> | string
-  period?: Prisma.XOR<Prisma.PeriodScalarRelationFilter, Prisma.PeriodWhereInput>
   activities?: Prisma.ActivityListRelationFilter
+  period?: Prisma.XOR<Prisma.PeriodScalarRelationFilter, Prisma.PeriodWhereInput>
 }, "id" | "periodId_slug" | "periodId_order">
 
 export type SubPeriodOrderByWithAggregationInput = {
@@ -343,8 +343,8 @@ export type SubPeriodCreateInput = {
   endDate: Date | string
   weight?: number
   closedAt?: Date | string | null
-  period: Prisma.PeriodCreateNestedOneWithoutSubPeriodsInput
   activities?: Prisma.ActivityCreateNestedManyWithoutSubPeriodInput
+  period: Prisma.PeriodCreateNestedOneWithoutSubPeriodsInput
 }
 
 export type SubPeriodUncheckedCreateInput = {
@@ -371,8 +371,8 @@ export type SubPeriodUpdateInput = {
   endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   weight?: Prisma.FloatFieldUpdateOperationsInput | number
   closedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  period?: Prisma.PeriodUpdateOneRequiredWithoutSubPeriodsNestedInput
   activities?: Prisma.ActivityUpdateManyWithoutSubPeriodNestedInput
+  period?: Prisma.PeriodUpdateOneRequiredWithoutSubPeriodsNestedInput
 }
 
 export type SubPeriodUncheckedUpdateInput = {
@@ -803,8 +803,8 @@ export type SubPeriodSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   weight?: boolean
   closedAt?: boolean
   periodId?: boolean
-  period?: boolean | Prisma.PeriodDefaultArgs<ExtArgs>
   activities?: boolean | Prisma.SubPeriod$activitiesArgs<ExtArgs>
+  period?: boolean | Prisma.PeriodDefaultArgs<ExtArgs>
   _count?: boolean | Prisma.SubPeriodCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["subPeriod"]>
 
@@ -851,8 +851,8 @@ export type SubPeriodSelectScalar = {
 
 export type SubPeriodOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "name" | "slug" | "order" | "startDate" | "endDate" | "weight" | "closedAt" | "periodId", ExtArgs["result"]["subPeriod"]>
 export type SubPeriodInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  period?: boolean | Prisma.PeriodDefaultArgs<ExtArgs>
   activities?: boolean | Prisma.SubPeriod$activitiesArgs<ExtArgs>
+  period?: boolean | Prisma.PeriodDefaultArgs<ExtArgs>
   _count?: boolean | Prisma.SubPeriodCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type SubPeriodIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -865,8 +865,8 @@ export type SubPeriodIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Ex
 export type $SubPeriodPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "SubPeriod"
   objects: {
-    period: Prisma.$PeriodPayload<ExtArgs>
     activities: Prisma.$ActivityPayload<ExtArgs>[]
+    period: Prisma.$PeriodPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1273,8 +1273,8 @@ readonly fields: SubPeriodFieldRefs;
  */
 export interface Prisma__SubPeriodClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  period<T extends Prisma.PeriodDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.PeriodDefaultArgs<ExtArgs>>): Prisma.Prisma__PeriodClient<runtime.Types.Result.GetResult<Prisma.$PeriodPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   activities<T extends Prisma.SubPeriod$activitiesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.SubPeriod$activitiesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ActivityPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  period<T extends Prisma.PeriodDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.PeriodDefaultArgs<ExtArgs>>): Prisma.Prisma__PeriodClient<runtime.Types.Result.GetResult<Prisma.$PeriodPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.

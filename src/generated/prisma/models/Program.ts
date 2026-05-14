@@ -182,8 +182,8 @@ export type ProgramWhereInput = {
   name?: Prisma.StringFilter<"Program"> | string
   description?: Prisma.StringNullableFilter<"Program"> | string | null
   slug?: Prisma.StringFilter<"Program"> | string
-  periods?: Prisma.PeriodListRelationFilter
   degrees?: Prisma.DegreeListRelationFilter
+  periods?: Prisma.PeriodListRelationFilter
   timeSlots?: Prisma.TimeSlotListRelationFilter
 }
 
@@ -193,8 +193,8 @@ export type ProgramOrderByWithRelationInput = {
   name?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   slug?: Prisma.SortOrder
-  periods?: Prisma.PeriodOrderByRelationAggregateInput
   degrees?: Prisma.DegreeOrderByRelationAggregateInput
+  periods?: Prisma.PeriodOrderByRelationAggregateInput
   timeSlots?: Prisma.TimeSlotOrderByRelationAggregateInput
 }
 
@@ -207,8 +207,8 @@ export type ProgramWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"Program"> | Date | string
   name?: Prisma.StringFilter<"Program"> | string
   description?: Prisma.StringNullableFilter<"Program"> | string | null
-  periods?: Prisma.PeriodListRelationFilter
   degrees?: Prisma.DegreeListRelationFilter
+  periods?: Prisma.PeriodListRelationFilter
   timeSlots?: Prisma.TimeSlotListRelationFilter
 }, "id" | "slug">
 
@@ -240,8 +240,8 @@ export type ProgramCreateInput = {
   name: string
   description?: string | null
   slug: string
-  periods?: Prisma.PeriodCreateNestedManyWithoutProgramInput
   degrees?: Prisma.DegreeCreateNestedManyWithoutProgramInput
+  periods?: Prisma.PeriodCreateNestedManyWithoutProgramInput
   timeSlots?: Prisma.TimeSlotCreateNestedManyWithoutProgramInput
 }
 
@@ -251,8 +251,8 @@ export type ProgramUncheckedCreateInput = {
   name: string
   description?: string | null
   slug: string
-  periods?: Prisma.PeriodUncheckedCreateNestedManyWithoutProgramInput
   degrees?: Prisma.DegreeUncheckedCreateNestedManyWithoutProgramInput
+  periods?: Prisma.PeriodUncheckedCreateNestedManyWithoutProgramInput
   timeSlots?: Prisma.TimeSlotUncheckedCreateNestedManyWithoutProgramInput
 }
 
@@ -262,8 +262,8 @@ export type ProgramUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   slug?: Prisma.StringFieldUpdateOperationsInput | string
-  periods?: Prisma.PeriodUpdateManyWithoutProgramNestedInput
   degrees?: Prisma.DegreeUpdateManyWithoutProgramNestedInput
+  periods?: Prisma.PeriodUpdateManyWithoutProgramNestedInput
   timeSlots?: Prisma.TimeSlotUpdateManyWithoutProgramNestedInput
 }
 
@@ -273,8 +273,8 @@ export type ProgramUncheckedUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   slug?: Prisma.StringFieldUpdateOperationsInput | string
-  periods?: Prisma.PeriodUncheckedUpdateManyWithoutProgramNestedInput
   degrees?: Prisma.DegreeUncheckedUpdateManyWithoutProgramNestedInput
+  periods?: Prisma.PeriodUncheckedUpdateManyWithoutProgramNestedInput
   timeSlots?: Prisma.TimeSlotUncheckedUpdateManyWithoutProgramNestedInput
 }
 
@@ -491,8 +491,8 @@ export type ProgramCreateWithoutTimeSlotsInput = {
   name: string
   description?: string | null
   slug: string
-  periods?: Prisma.PeriodCreateNestedManyWithoutProgramInput
   degrees?: Prisma.DegreeCreateNestedManyWithoutProgramInput
+  periods?: Prisma.PeriodCreateNestedManyWithoutProgramInput
 }
 
 export type ProgramUncheckedCreateWithoutTimeSlotsInput = {
@@ -501,8 +501,8 @@ export type ProgramUncheckedCreateWithoutTimeSlotsInput = {
   name: string
   description?: string | null
   slug: string
-  periods?: Prisma.PeriodUncheckedCreateNestedManyWithoutProgramInput
   degrees?: Prisma.DegreeUncheckedCreateNestedManyWithoutProgramInput
+  periods?: Prisma.PeriodUncheckedCreateNestedManyWithoutProgramInput
 }
 
 export type ProgramCreateOrConnectWithoutTimeSlotsInput = {
@@ -527,8 +527,8 @@ export type ProgramUpdateWithoutTimeSlotsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   slug?: Prisma.StringFieldUpdateOperationsInput | string
-  periods?: Prisma.PeriodUpdateManyWithoutProgramNestedInput
   degrees?: Prisma.DegreeUpdateManyWithoutProgramNestedInput
+  periods?: Prisma.PeriodUpdateManyWithoutProgramNestedInput
 }
 
 export type ProgramUncheckedUpdateWithoutTimeSlotsInput = {
@@ -537,8 +537,8 @@ export type ProgramUncheckedUpdateWithoutTimeSlotsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   slug?: Prisma.StringFieldUpdateOperationsInput | string
-  periods?: Prisma.PeriodUncheckedUpdateManyWithoutProgramNestedInput
   degrees?: Prisma.DegreeUncheckedUpdateManyWithoutProgramNestedInput
+  periods?: Prisma.PeriodUncheckedUpdateManyWithoutProgramNestedInput
 }
 
 
@@ -547,14 +547,14 @@ export type ProgramUncheckedUpdateWithoutTimeSlotsInput = {
  */
 
 export type ProgramCountOutputType = {
-  periods: number
   degrees: number
+  periods: number
   timeSlots: number
 }
 
 export type ProgramCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  periods?: boolean | ProgramCountOutputTypeCountPeriodsArgs
   degrees?: boolean | ProgramCountOutputTypeCountDegreesArgs
+  periods?: boolean | ProgramCountOutputTypeCountPeriodsArgs
   timeSlots?: boolean | ProgramCountOutputTypeCountTimeSlotsArgs
 }
 
@@ -571,15 +571,15 @@ export type ProgramCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Exte
 /**
  * ProgramCountOutputType without action
  */
-export type ProgramCountOutputTypeCountPeriodsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.PeriodWhereInput
+export type ProgramCountOutputTypeCountDegreesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.DegreeWhereInput
 }
 
 /**
  * ProgramCountOutputType without action
  */
-export type ProgramCountOutputTypeCountDegreesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.DegreeWhereInput
+export type ProgramCountOutputTypeCountPeriodsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PeriodWhereInput
 }
 
 /**
@@ -596,8 +596,8 @@ export type ProgramSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   name?: boolean
   description?: boolean
   slug?: boolean
-  periods?: boolean | Prisma.Program$periodsArgs<ExtArgs>
   degrees?: boolean | Prisma.Program$degreesArgs<ExtArgs>
+  periods?: boolean | Prisma.Program$periodsArgs<ExtArgs>
   timeSlots?: boolean | Prisma.Program$timeSlotsArgs<ExtArgs>
   _count?: boolean | Prisma.ProgramCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["program"]>
@@ -628,8 +628,8 @@ export type ProgramSelectScalar = {
 
 export type ProgramOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "name" | "description" | "slug", ExtArgs["result"]["program"]>
 export type ProgramInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  periods?: boolean | Prisma.Program$periodsArgs<ExtArgs>
   degrees?: boolean | Prisma.Program$degreesArgs<ExtArgs>
+  periods?: boolean | Prisma.Program$periodsArgs<ExtArgs>
   timeSlots?: boolean | Prisma.Program$timeSlotsArgs<ExtArgs>
   _count?: boolean | Prisma.ProgramCountOutputTypeDefaultArgs<ExtArgs>
 }
@@ -639,8 +639,8 @@ export type ProgramIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
 export type $ProgramPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Program"
   objects: {
-    periods: Prisma.$PeriodPayload<ExtArgs>[]
     degrees: Prisma.$DegreePayload<ExtArgs>[]
+    periods: Prisma.$PeriodPayload<ExtArgs>[]
     timeSlots: Prisma.$TimeSlotPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -1043,8 +1043,8 @@ readonly fields: ProgramFieldRefs;
  */
 export interface Prisma__ProgramClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  periods<T extends Prisma.Program$periodsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Program$periodsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PeriodPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   degrees<T extends Prisma.Program$degreesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Program$degreesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DegreePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  periods<T extends Prisma.Program$periodsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Program$periodsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PeriodPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   timeSlots<T extends Prisma.Program$timeSlotsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Program$timeSlotsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TimeSlotPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -1473,30 +1473,6 @@ export type ProgramDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Inter
 }
 
 /**
- * Program.periods
- */
-export type Program$periodsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Period
-   */
-  select?: Prisma.PeriodSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the Period
-   */
-  omit?: Prisma.PeriodOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.PeriodInclude<ExtArgs> | null
-  where?: Prisma.PeriodWhereInput
-  orderBy?: Prisma.PeriodOrderByWithRelationInput | Prisma.PeriodOrderByWithRelationInput[]
-  cursor?: Prisma.PeriodWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.PeriodScalarFieldEnum | Prisma.PeriodScalarFieldEnum[]
-}
-
-/**
  * Program.degrees
  */
 export type Program$degreesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1518,6 +1494,30 @@ export type Program$degreesArgs<ExtArgs extends runtime.Types.Extensions.Interna
   take?: number
   skip?: number
   distinct?: Prisma.DegreeScalarFieldEnum | Prisma.DegreeScalarFieldEnum[]
+}
+
+/**
+ * Program.periods
+ */
+export type Program$periodsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Period
+   */
+  select?: Prisma.PeriodSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Period
+   */
+  omit?: Prisma.PeriodOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PeriodInclude<ExtArgs> | null
+  where?: Prisma.PeriodWhereInput
+  orderBy?: Prisma.PeriodOrderByWithRelationInput | Prisma.PeriodOrderByWithRelationInput[]
+  cursor?: Prisma.PeriodWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PeriodScalarFieldEnum | Prisma.PeriodScalarFieldEnum[]
 }
 
 /**

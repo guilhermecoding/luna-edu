@@ -1,3 +1,4 @@
+
 generator client {
   provider = "prisma-client"
   output   = "../src/generated/prisma"
@@ -34,6 +35,9 @@ model User {
   lessons          Lesson[]
   notifications    Notification[]
   schedules        Schedule[]
+
+  systemRole String
+  genre      String
 
   @@map("user")
   @@schema("better_auth")

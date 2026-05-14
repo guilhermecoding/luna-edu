@@ -9,24 +9,6 @@
 * 🟢 You can import this file directly.
 */
 
-export const SystemRole = {
-  FULL_ACCESS: 'FULL_ACCESS',
-  READ_ONLY: 'READ_ONLY'
-} as const
-
-export type SystemRole = (typeof SystemRole)[keyof typeof SystemRole]
-
-
-export const UserGenre = {
-  MALE: 'MALE',
-  FEMALE: 'FEMALE',
-  NON_BINARY: 'NON_BINARY',
-  PREFER_NOT_TO_SAY: 'PREFER_NOT_TO_SAY'
-} as const
-
-export type UserGenre = (typeof UserGenre)[keyof typeof UserGenre]
-
-
 export const Genre = {
   MALE: 'MALE',
   FEMALE: 'FEMALE',

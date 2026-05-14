@@ -1,3 +1,4 @@
+import { Prisma } from "@/generated/prisma/client";
 import prisma from "@/lib/prisma";
 import { cacheLife, cacheTag } from "next/cache";
 
@@ -438,16 +439,20 @@ export async function bulkUpsertStudents(students: BulkStudentInput[], periodId?
     };
 
     const normalizeDbError = (error: unknown) => {
-        let message = error instanceof Error ? error.message : "Erro desconhecido";
-        if (
-            error !== null &&
-            typeof error === "object" &&
-            "code" in error &&
-            (error as { code: string }).code === "P2002"
-        ) {
-            message = "Conflito de dados: O e-mail informado já pertence a outro CPF.";
+        if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2002") {
+            const target = (error.meta?.target as string[]) || [];
+            if (target.includes("cpf")) {
+                return "Conflito: Já existe um aluno cadastrado com este CPF.";
+            }
+            if (target.includes("luna_id") || target.includes("lunaId")) {
+                return "Conflito: Esta Matrícula (LUNA ID) já está em uso.";
+            }
+            if (target.includes("email")) {
+                return "Conflito: Este e-mail já está em uso por outro aluno.";
+            }
+            return "Conflito de dados: Um registro com estas informações já existe.";
         }
-        return message;
+        return error instanceof Error ? error.message : "Erro desconhecido";
     };
 
     const studentsWithRow = students.map((student, index) => ({

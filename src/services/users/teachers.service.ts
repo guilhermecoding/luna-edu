@@ -3,6 +3,7 @@ import { cacheLife, cacheTag } from "next/cache";
 import { Prisma, SystemRole, UserGenre } from "@/generated/prisma/client";
 import { generateLunaId } from "@/lib/generate-luna-id";
 import { auth } from "@/lib/auth";
+import { sendWelcomeEmail } from "@/lib/mail";
 
 type CreateTeacherPayload = Pick<
     Prisma.UserCreateInput,
@@ -76,6 +77,14 @@ export async function createTeacher(data: CreateTeacherPayload) {
 
     if (!res) throw new Error("AUTH_SIGNUP_FAILED_EMPTY_RESPONSE");
     if (!res.user) throw new Error("AUTH_SIGNUP_FAILED_NO_USER");
+
+    // Envia as credenciais para o e-mail (só ocorre na criação do usuário)
+    await sendWelcomeEmail({
+        email: data.email as string,
+        name: data.name as string,
+        password: randomPassword,
+        roleName: "Professor",
+    });
 
     return res.user;
 }

@@ -366,7 +366,7 @@ export const LessonScalarFieldEnum = {
   scheduleId: 'scheduleId',
   timeSlotId: 'timeSlotId',
   teacherId: 'teacherId',
-  isDone: 'isDone'
+  attendanceUpdatedAt: 'attendanceUpdatedAt'
 } as const
 
 export type LessonScalarFieldEnum = (typeof LessonScalarFieldEnum)[keyof typeof LessonScalarFieldEnum]

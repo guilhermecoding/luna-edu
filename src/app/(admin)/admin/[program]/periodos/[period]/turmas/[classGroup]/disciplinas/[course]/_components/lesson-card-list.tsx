@@ -91,11 +91,11 @@ export default function LessonCardList({ lessons, upcomingLessons, basePath }: L
 
     const pendingItems = items.filter(item => {
         if (item.type === "upcoming") return true;
-        return !item.data.isDone;
+        return !item.data.attendanceUpdatedAt;
     });
 
     const realizedItems = items.filter(item => {
-        if (item.type === "lesson") return item.data.isDone;
+        if (item.type === "lesson") return !!item.data.attendanceUpdatedAt;
         return false;
     });
 
@@ -103,7 +103,7 @@ export default function LessonCardList({ lessons, upcomingLessons, basePath }: L
         if (item.type === "lesson") {
             const lesson = item.data;
             const attendanceCount = lesson._count.attendances;
-            const isLate = !lesson.isDone && new Date(lesson.date).getTime() < today.getTime();
+            const isLate = !lesson.attendanceUpdatedAt && new Date(lesson.date).getTime() < today.getTime();
 
             return (
                 <Link
@@ -153,13 +153,13 @@ export default function LessonCardList({ lessons, upcomingLessons, basePath }: L
 
                         <div className={`
                             flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium shrink-0
-                            ${lesson.isDone 
+                            ${lesson.attendanceUpdatedAt 
                                 ? "bg-emerald-50 dark:bg-emerald-950/30 text-emerald-700 dark:text-emerald-400" 
                                 : "bg-muted text-muted-foreground"
                             }
                         `}>
-                            {lesson.isDone ? <IconUsers className="size-3.5" /> : <IconCalendarDue className="size-3.5" />}
-                            {lesson.isDone ? attendanceCount : "Pendente"}
+                            {lesson.attendanceUpdatedAt ? <IconUsers className="size-3.5" /> : <IconCalendarDue className="size-3.5" />}
+                            {lesson.attendanceUpdatedAt ? attendanceCount : "Pendente"}
                         </div>
                     </div>
                 </Link>

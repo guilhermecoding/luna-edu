@@ -217,7 +217,7 @@ export async function bulkUpdateAttendance(
 
         await tx.lesson.update({
             where: { id: lessonId },
-            data: { isDone: true },
+            data: { attendanceUpdatedAt: new Date() },
         });
     });
 }

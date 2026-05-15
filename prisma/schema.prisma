@@ -357,9 +357,9 @@ model Lesson {
   topic       String
   scheduleId  String?      @map("schedule_id") @db.Uuid
   timeSlotId  String?      @map("time_slot_id") @db.Uuid
-  teacherId   String?      @map("teacher_id")
-  isDone      Boolean      @default(false) @map("is_done")
-  attendances Attendance[]
+  teacherId           String?      @map("teacher_id")
+  attendanceUpdatedAt DateTime?    @map("attendance_updated_at")
+  attendances         Attendance[]
   course      Course       @relation(fields: [courseId], references: [id])
   schedule    Schedule?    @relation(fields: [scheduleId], references: [id])
   teacher     User?        @relation(fields: [teacherId], references: [id])

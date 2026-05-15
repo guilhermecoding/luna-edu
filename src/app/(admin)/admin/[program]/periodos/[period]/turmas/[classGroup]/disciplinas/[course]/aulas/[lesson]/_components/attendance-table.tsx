@@ -9,7 +9,6 @@ import { bulkUpdateAttendanceAction } from "../../../actions";
 import type { AttendanceWithStudent } from "@/services/lessons/lessons.service";
 import AvatarUsers from "@/components/avatar-users";
 import { calculateAge } from "@/lib/date-utils";
-import { maskCPF } from "@/lib/masks";
 
 interface AttendanceTableProps {
     attendances: AttendanceWithStudent[];

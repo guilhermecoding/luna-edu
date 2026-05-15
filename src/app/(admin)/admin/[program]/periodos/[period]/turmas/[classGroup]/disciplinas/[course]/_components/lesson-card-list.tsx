@@ -1,7 +1,6 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { IconCalendarEvent, IconClock, IconPencil, IconUsers, IconCalendarDue } from "@tabler/icons-react";
+import { IconCalendarEvent, IconClock, IconPencil } from "@tabler/icons-react";
 import type { LessonListItem } from "@/services/lessons/lessons.service";
 import { EditLessonSheet, type ScheduleOption } from "./edit-lesson-dialog";
 import Link from "next/link";
@@ -76,7 +75,6 @@ function mergeAndSort(lessons: LessonListItem[], upcoming: UpcomingLesson[]): Me
 export default function LessonCardList({
     lessons, upcomingLessons, basePath, programSlug, periodSlug, classGroupSlug, courseCode, schedules,
 }: LessonCardListProps) {
-    const router = useRouter();
     const items = mergeAndSort(lessons, upcomingLessons);
 
     if (items.length === 0) {

@@ -251,6 +251,11 @@ export default async function CoursePage({
                     lessons={lessons}
                     upcomingLessons={upcomingLessons}
                     basePath={basePath}
+                    programSlug={program}
+                    periodSlug={period}
+                    classGroupSlug={classGroupSlug}
+                    courseCode={courseCode}
+                    schedules={scheduleOptions}
                 />
             </Section>
         </Page>

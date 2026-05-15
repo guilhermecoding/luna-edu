@@ -166,6 +166,7 @@ export async function updateLesson(
         topic?: string;
         teacherId?: string | null;
         timeSlotId?: string | null;
+        scheduleId?: string | null;
     },
 ) {
     return await prisma.lesson.update({

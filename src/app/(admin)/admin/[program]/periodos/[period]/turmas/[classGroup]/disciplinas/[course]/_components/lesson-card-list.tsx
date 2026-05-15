@@ -1,6 +1,10 @@
-import Link from "next/link";
-import { IconCalendarEvent, IconClock } from "@tabler/icons-react";
+"use client";
+
+import { useRouter } from "next/navigation";
+import { IconCalendarEvent, IconClock, IconPencil, IconUsers, IconCalendarDue } from "@tabler/icons-react";
 import type { LessonListItem } from "@/services/lessons/lessons.service";
+import { EditLessonSheet, type ScheduleOption } from "./edit-lesson-dialog";
+import Link from "next/link";
 
 interface UpcomingLesson {
     date: string; // YYYY-MM-DD
@@ -16,6 +20,11 @@ interface LessonCardListProps {
     lessons: LessonListItem[];
     upcomingLessons: UpcomingLesson[];
     basePath: string;
+    programSlug: string;
+    periodSlug: string;
+    classGroupSlug: string;
+    courseCode: string;
+    schedules: ScheduleOption[];
 }
 
 function formatDate(date: Date | string) {
@@ -64,7 +73,10 @@ function mergeAndSort(lessons: LessonListItem[], upcoming: UpcomingLesson[]): Me
     return items;
 }
 
-export default function LessonCardList({ lessons, upcomingLessons, basePath }: LessonCardListProps) {
+export default function LessonCardList({
+    lessons, upcomingLessons, basePath, programSlug, periodSlug, classGroupSlug, courseCode, schedules,
+}: LessonCardListProps) {
+    const router = useRouter();
     const items = mergeAndSort(lessons, upcomingLessons);
 
     if (items.length === 0) {
@@ -102,33 +114,32 @@ export default function LessonCardList({ lessons, upcomingLessons, basePath }: L
             const month = (lessonDate.getMonth() + 1).toString().padStart(2, "0");
 
             return (
-                <Link
-                    key={lesson.id}
-                    href={`${basePath}/aulas/${lesson.id}`}
-                    className="group block"
-                >
-                    <div className={`
-                        flex items-center gap-4 p-4 sm:p-5 border rounded-2xl transition-all duration-200 group-hover:shadow-sm
-                        ${isLate
-                            ? "bg-amber-50/50 border-amber-200 hover:border-amber-400 hover:bg-amber-50 dark:bg-amber-950/20 dark:border-amber-900/50"
-                            : "bg-surface border-surface-border hover:border-primary/40 hover:bg-primary/2"
-                        }
-                    `}>
+                <div key={lesson.id} className="group relative">
+                    <Link
+                        href={`${basePath}/aulas/${lesson.id}`}
+                        className={`
+                            flex items-center gap-4 p-4 sm:p-5 border rounded-2xl transition-all duration-200
+                            ${isLate
+                                ? "bg-amber-50/50 border-amber-200 hover:border-amber-400 hover:bg-amber-50 dark:bg-amber-950/20 dark:border-amber-900/50"
+                                : "bg-surface border-surface-border hover:border-primary/40 hover:bg-primary/2"
+                            }
+                        `}
+                    >
                         <div className={`
-                            flex items-center justify-center size-16 sm:size-14 rounded-xl font-bold shrink-0 transition-transform group-hover:scale-105 text-sm sm:text-base
+                            flex items-center justify-center size-16 rounded-xl font-bold shrink-0 transition-transform group-hover:scale-105 text-sm sm:text-base
                             ${isLate ? "bg-amber-100 text-amber-700 dark:bg-amber-900 dark:text-amber-400" : "bg-primary/10 text-primary"}
                         `}>
                             {day}/{month}
                         </div>
 
-                        <div className="flex-1 flex flex-col min-w-0">
-                            {isLate && (
-                                <span className="flex w-max items-center px-2 py-0.5 rounded text-[10px] bg-amber-200 text-amber-800 dark:bg-amber-900 dark:text-amber-300 uppercase tracking-wider font-black">
-                                    Chamada Pendente
-                                </span>
-                            )}
+                        <div className="flex-1 min-w-0 pr-24 sm:pr-32">
                             <h3 className="font-bold text-foreground text-sm sm:text-base truncate">
                                 {lesson.topic}
+                                {isLate && (
+                                    <span className="ml-2 inline-flex items-center px-2 py-0.5 rounded text-[10px] bg-amber-200 text-amber-800 dark:bg-amber-900 dark:text-amber-300 uppercase tracking-wider font-black">
+                                        Chamada Pendente
+                                    </span>
+                                )}
                             </h3>
                             <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mt-1.5 overflow-hidden">
                                 <span className="flex items-center gap-1.5 text-[10px] sm:text-sm text-muted-foreground whitespace-nowrap">
@@ -146,8 +157,30 @@ export default function LessonCardList({ lessons, upcomingLessons, basePath }: L
                                 )}
                             </div>
                         </div>
+                    </Link>
+
+                    <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-2 pointer-events-auto">
+                        <EditLessonSheet
+                            programSlug={programSlug}
+                            periodSlug={periodSlug}
+                            classGroupSlug={classGroupSlug}
+                            courseCode={courseCode}
+                            schedules={schedules}
+                            lesson={{
+                                id: lesson.id,
+                                date: lesson.date,
+                                topic: lesson.topic,
+                                scheduleId: lesson.scheduleId,
+                            }}
+                        >
+                            <button
+                                className="p-2 rounded-full text-muted-foreground hover:text-primary transition-colors focus:outline-none sm:bg-transparent"
+                            >
+                                <IconPencil className="size-4" />
+                            </button>
+                        </EditLessonSheet>
                     </div>
-                </Link>
+                </div>
             );
         }
 
@@ -160,29 +193,54 @@ export default function LessonCardList({ lessons, upcomingLessons, basePath }: L
         return (
             <div
                 key={`upcoming-${upcoming.date}-${upcoming.scheduleId}-${index}`}
-                className="flex items-center gap-4 p-4 sm:p-5 bg-surface/50 border border-dashed border-surface-border rounded-2xl opacity-60"
+                className="group relative"
             >
-                <div className="flex items-center justify-center size-16 sm:size-14 rounded-xl bg-muted text-muted-foreground font-bold shrink-0 text-sm sm:text-base">
-                    {uDay}/{uMonth}
+                <div className="flex items-center gap-4 p-4 sm:p-5 bg-surface/50 border border-dashed border-surface-border rounded-2xl opacity-60">
+                    <div className="flex items-center justify-center size-16 rounded-xl bg-muted text-muted-foreground font-bold shrink-0 text-sm sm:text-base">
+                        {uDay}/{uMonth}
+                    </div>
+
+                    <div className="flex-1 min-w-0 pr-12">
+                        <h3 className="font-medium text-muted-foreground text-sm sm:text-base truncate">
+                            Aula prevista
+                        </h3>
+                        <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mt-1.5 overflow-hidden">
+                            <span className="flex items-center gap-1.5 text-[10px] sm:text-sm text-muted-foreground whitespace-nowrap">
+                                <IconCalendarEvent className="size-3 sm:size-3.5 shrink-0" />
+                                <span className="capitalize">{formatWeekDay(upcoming.date + "T00:00:00Z")}</span>
+                                <span>•</span>
+                                <span>{formatDate(upcoming.date + "T00:00:00Z")}</span>
+                            </span>
+
+                            <span className="flex items-center gap-1.5 text-[10px] sm:text-sm text-muted-foreground whitespace-nowrap">
+                                <IconClock className="size-3 sm:size-3.5 shrink-0" />
+                                {upcoming.startTime} - {upcoming.endTime}
+                            </span>
+                        </div>
+                    </div>
                 </div>
 
-                <div className="flex-1 min-w-0">
-                    <h3 className="font-medium text-muted-foreground text-sm sm:text-base truncate">
-                        Aula prevista
-                    </h3>
-                    <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mt-1.5 overflow-hidden">
-                        <span className="flex items-center gap-1.5 text-[10px] sm:text-sm text-muted-foreground whitespace-nowrap">
-                            <IconCalendarEvent className="size-3 sm:size-3.5 shrink-0" />
-                            <span className="capitalize">{formatWeekDay(upcoming.date + "T00:00:00Z")}</span>
-                            <span>•</span>
-                            <span>{formatDate(upcoming.date + "T00:00:00Z")}</span>
-                        </span>
-
-                        <span className="flex items-center gap-1.5 text-[10px] sm:text-sm text-muted-foreground whitespace-nowrap">
-                            <IconClock className="size-3 sm:size-3.5 shrink-0" />
-                            {upcoming.startTime} - {upcoming.endTime}
-                        </span>
-                    </div>
+                <div className="absolute right-4 top-1/2 -translate-y-1/2">
+                    <EditLessonSheet
+                        programSlug={programSlug}
+                        periodSlug={periodSlug}
+                        classGroupSlug={classGroupSlug}
+                        courseCode={courseCode}
+                        schedules={schedules}
+                        lesson={{
+                            id: "", // Empty ID signifies creation from upcoming
+                            date: upcoming.date,
+                            topic: "Aula prevista",
+                            scheduleId: upcoming.scheduleId,
+                        }}
+                    >
+                        <button
+                            className="p-2 rounded-full hover:bg-primary/10 text-muted-foreground hover:text-primary transition-colors focus:outline-none bg-surface/50 sm:bg-transparent"
+                            title="Registrar esta aula"
+                        >
+                            <IconPencil className="size-4" />
+                        </button>
+                    </EditLessonSheet>
                 </div>
             </div>
         );

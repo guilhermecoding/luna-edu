@@ -10,12 +10,15 @@ import { getCourseByPeriodIdAndCode } from "@/services/courses/courses.service";
 import {
     createLesson,
     deleteLesson,
+    updateLesson,
     bulkUpdateAttendance,
 } from "@/services/lessons/lessons.service";
 import {
     createLessonSchema,
+    updateLessonSchema,
     bulkUpdateAttendanceSchema,
     type CreateLessonInput,
+    type UpdateLessonInput,
     type BulkUpdateAttendanceInput,
 } from "./schema";
 import { ZodError } from "zod";
@@ -85,6 +88,60 @@ export async function createLessonAction(
         }
         console.error("Erro ao criar aula:", error);
         return { success: false, error: "Erro ao criar aula." };
+    }
+}
+
+export async function updateLessonAction(
+    programSlug: string,
+    periodSlug: string,
+    classGroupSlug: string,
+    courseCode: string,
+    data: UpdateLessonInput,
+) {
+    try {
+        const session = await auth.api.getSession({ headers: await headers() });
+        if (!session?.user?.id) return { success: false, error: "Não autorizado" };
+
+        const validated = updateLessonSchema.parse(data);
+
+        const resolved = await resolveCourseBySlugs(programSlug, periodSlug, classGroupSlug, courseCode);
+        if ("error" in resolved) return { success: false, error: resolved.error };
+
+        const { course } = resolved;
+        const lessonDate = new Date(validated.date + "T00:00:00");
+
+        // Validar colisão: mesma disciplina + mesma data + mesmo timeSlot, mas ignorando a própria aula
+        if (validated.timeSlotId) {
+            const existing = await prisma.lesson.findFirst({
+                where: {
+                    courseId: course.id,
+                    date: lessonDate,
+                    timeSlotId: validated.timeSlotId,
+                    id: { not: validated.lessonId },
+                },
+            });
+            if (existing) {
+                return { success: false, error: "Já existe outra aula nesta data e horário." };
+            }
+        }
+
+        await updateLesson(validated.lessonId, {
+            date: lessonDate,
+            topic: validated.topic,
+            teacherId: validated.teacherId || null,
+            timeSlotId: validated.timeSlotId || null,
+            scheduleId: validated.scheduleId || null,
+        });
+
+        updateTag(`course:${course.id}:lessons`);
+        
+        return { success: true };
+    } catch (error) {
+        if (error instanceof ZodError) {
+            return { success: false, error: error.issues[0]?.message || "Erro de validação" };
+        }
+        console.error("Erro ao atualizar aula:", error);
+        return { success: false, error: "Erro ao atualizar aula." };
     }
 }
 

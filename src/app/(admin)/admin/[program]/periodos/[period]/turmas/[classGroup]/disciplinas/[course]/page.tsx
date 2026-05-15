@@ -17,10 +17,10 @@ import {
     IconUser,
 } from "@tabler/icons-react";
 import { notFound } from "next/navigation";
-import { Shift } from "@/generated/prisma/enums";
+import { Shift, DayOfWeek } from "@/generated/prisma/enums";
 import { Metadata } from "next";
 import LessonCardList from "./_components/lesson-card-list";
-import { CreateLessonDialog } from "./_components/create-lesson-dialog";
+import { CreateLessonSheet } from "./_components/create-lesson-dialog";
 
 export const metadata: Metadata = {
     title: "Detalhes da Disciplina",
@@ -31,6 +31,90 @@ const shiftMap: Record<Shift, string> = {
     AFTERNOON: "VESPERTINO",
     EVENING: "NOTURNO",
 };
+
+// Mapeia DayOfWeek do Prisma para o número JS de getDay() (0=Dom, 1=Seg, ..., 6=Sáb)
+const dayOfWeekToJs: Record<DayOfWeek, number> = {
+    SUNDAY: 0,
+    MONDAY: 1,
+    TUESDAY: 2,
+    WEDNESDAY: 3,
+    THURSDAY: 4,
+    FRIDAY: 5,
+    SATURDAY: 6,
+};
+
+/**
+ * Gera as datas de aulas futuras (a partir de hoje) com base nos schedules
+ * da disciplina dentro do intervalo do período.
+ */
+function generateUpcomingLessons(
+    schedules: {
+        id: string;
+        dayOfWeek: DayOfWeek;
+        timeSlotId: string;
+        timeSlot: { id: string; name: string; startTime: string; endTime: string };
+        teacher: { id: string; name: string } | null;
+    }[],
+    periodStart: Date,
+    periodEnd: Date,
+    existingLessons: { date: Date; timeSlotId: string | null }[],
+) {
+    if (schedules.length === 0) return [];
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const start = new Date(Math.max(periodStart.getTime(), today.getTime()));
+    const end = new Date(periodEnd);
+
+    // Criar um Set de chaves já ocupadas: "YYYY-MM-DD_timeSlotId"
+    const occupiedKeys = new Set(
+        existingLessons
+            .filter((l) => l.timeSlotId)
+            .map((l) => {
+                const d = new Date(l.date).toISOString().split("T")[0];
+                return `${d}_${l.timeSlotId}`;
+            }),
+    );
+
+    const upcoming: {
+        date: string;
+        dayOfWeek: string;
+        scheduleId: string;
+        timeSlotName: string;
+        startTime: string;
+        endTime: string;
+        teacherName: string | null;
+    }[] = [];
+
+    // Iterar dia a dia do start ao end
+    const cursor = new Date(start);
+    while (cursor <= end) {
+        const jsDay = cursor.getUTCDay();
+        const dateStr = cursor.toISOString().split("T")[0];
+
+        for (const schedule of schedules) {
+            if (dayOfWeekToJs[schedule.dayOfWeek] === jsDay) {
+                const key = `${dateStr}_${schedule.timeSlotId}`;
+                if (!occupiedKeys.has(key)) {
+                    upcoming.push({
+                        date: dateStr,
+                        dayOfWeek: schedule.dayOfWeek,
+                        scheduleId: schedule.id,
+                        timeSlotName: schedule.timeSlot.name,
+                        startTime: schedule.timeSlot.startTime,
+                        endTime: schedule.timeSlot.endTime,
+                        teacherName: schedule.teacher?.name || null,
+                    });
+                }
+            }
+        }
+
+        cursor.setUTCDate(cursor.getUTCDate() + 1);
+    }
+
+    return upcoming;
+}
 
 export default async function CoursePage({
     params,
@@ -56,6 +140,35 @@ export default async function CoursePage({
 
     const teacher = courseData.schedules.find((s) => s.teacher)?.teacher?.name || "Não atribuído";
     const basePath = `/admin/${program}/periodos/${period}/turmas/${classGroupSlug}/disciplinas/${courseCode}`;
+
+    // Gerar aulas futuras com base na grade de horários
+    const schedulesWithTimeSlot = courseData.schedules.filter((s) => s.timeSlot);
+    const upcomingLessons = generateUpcomingLessons(
+        schedulesWithTimeSlot.map((s) => ({
+            id: s.id,
+            dayOfWeek: s.dayOfWeek as DayOfWeek,
+            timeSlotId: s.timeSlotId,
+            timeSlot: s.timeSlot,
+            teacher: s.teacher,
+        })),
+        courseData.period.startDate,
+        courseData.period.endDate,
+        lessons.map((l) => ({ date: l.date, timeSlotId: l.timeSlotId })),
+    );
+
+    // Preparar schedules para o Sheet de criação
+    const scheduleOptions = courseData.schedules
+        .filter((s) => s.timeSlot)
+        .map((s) => ({
+            id: s.id,
+            dayOfWeek: s.dayOfWeek,
+            timeSlotId: s.timeSlotId,
+            timeSlotName: s.timeSlot.name,
+            startTime: s.timeSlot.startTime,
+            endTime: s.timeSlot.endTime,
+            teacherId: s.teacherId,
+            teacherName: s.teacher?.name || null,
+        }));
 
     return (
         <Page>
@@ -116,18 +229,27 @@ export default async function CoursePage({
                         <div className="bg-primary/10 p-2 rounded-lg">
                             <IconCalendarEvent className="size-5 text-primary" />
                         </div>
-                        <h2 className="text-xl font-bold text-foreground">Diário de Aulas</h2>
+                        <div>
+                            <h2 className="text-xl font-bold text-foreground">Diário de Aulas</h2>
+                            {upcomingLessons.length > 0 && (
+                                <p className="text-xs text-muted-foreground mt-0.5">
+                                    {lessonsCount} registrada{lessonsCount !== 1 ? "s" : ""} • {upcomingLessons.length} prevista{upcomingLessons.length !== 1 ? "s" : ""}
+                                </p>
+                            )}
+                        </div>
                     </div>
-                    <CreateLessonDialog
+                    <CreateLessonSheet
                         programSlug={program}
                         periodSlug={period}
                         classGroupSlug={classGroupSlug}
                         courseCode={courseCode}
+                        schedules={scheduleOptions}
                     />
                 </div>
 
                 <LessonCardList
                     lessons={lessons}
+                    upcomingLessons={upcomingLessons}
                     basePath={basePath}
                 />
             </Section>

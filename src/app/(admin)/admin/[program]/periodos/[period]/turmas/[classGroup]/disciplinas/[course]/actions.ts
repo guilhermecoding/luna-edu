@@ -3,6 +3,7 @@
 import { updateTag } from "next/cache";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
+import prisma from "@/lib/prisma";
 import { getPeriodByProgramAndSlug } from "@/services/periods/periods.service";
 import { getClassGroupByPeriodIdAndSlug } from "@/services/class-groups/class-groups.service";
 import { getCourseByPeriodIdAndCode } from "@/services/courses/courses.service";
@@ -49,13 +50,29 @@ export async function createLessonAction(
         if ("error" in resolved) return { success: false, error: resolved.error };
 
         const { course } = resolved;
+        const lessonDate = new Date(validated.date + "T00:00:00");
+
+        // Validar colisão: mesma disciplina + mesma data + mesmo timeSlot
+        if (validated.timeSlotId) {
+            const existing = await prisma.lesson.findFirst({
+                where: {
+                    courseId: course.id,
+                    date: lessonDate,
+                    timeSlotId: validated.timeSlotId,
+                },
+            });
+            if (existing) {
+                return { success: false, error: "Já existe uma aula nesta data e horário." };
+            }
+        }
 
         const lesson = await createLesson({
             courseId: course.id,
-            date: new Date(validated.date + "T00:00:00"),
+            date: lessonDate,
             topic: validated.topic,
             teacherId: validated.teacherId || null,
             timeSlotId: validated.timeSlotId || null,
+            scheduleId: validated.scheduleId || null,
         });
 
         updateTag(`course:${course.id}:lessons`);

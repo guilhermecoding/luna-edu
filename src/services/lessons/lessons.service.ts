@@ -119,6 +119,7 @@ export async function createLesson(data: {
     topic: string;
     teacherId?: string | null;
     timeSlotId?: string | null;
+    scheduleId?: string | null;
 }) {
     return await prisma.$transaction(async (tx) => {
         const lesson = await tx.lesson.create({
@@ -128,6 +129,7 @@ export async function createLesson(data: {
                 topic: data.topic,
                 teacherId: data.teacherId || null,
                 timeSlotId: data.timeSlotId || null,
+                scheduleId: data.scheduleId || null,
             },
         });
 

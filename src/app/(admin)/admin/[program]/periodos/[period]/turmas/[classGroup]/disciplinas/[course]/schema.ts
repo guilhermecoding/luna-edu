@@ -5,6 +5,7 @@ export const createLessonSchema = z.object({
     topic: z.string().min(2, "O assunto deve ter no mínimo 2 caracteres").max(500, "Assunto muito longo"),
     teacherId: z.string().optional().or(z.literal("")),
     timeSlotId: z.string().optional().or(z.literal("")),
+    scheduleId: z.string().optional().or(z.literal("")),
 });
 
 export type CreateLessonInput = z.infer<typeof createLessonSchema>;

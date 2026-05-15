@@ -1,8 +1,14 @@
 import { Resend } from "resend";
 import WelcomeMemberEmail from "@/emails/welcome-member";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-const fromEmail = process.env.EMAIL_FROM || "Gibby - Luna Academy <gibby@luna.guilhermecoding.com>";
+// Instancia o Resend apenas se a chave estiver presente, evitando quebra no build
+const getResend = () => {
+    const key = process.env.RESEND_API_KEY;
+    if (!key) return null;
+    return new Resend(key);
+};
+
+const fromEmail = process.env.EMAIL_FROM || "Gibby - Luna Edu <noreply@luna.edu.br>";
 const systemUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
 
 interface SendWelcomeEmailParams {
@@ -18,9 +24,10 @@ export async function sendWelcomeEmail({
     password,
     roleName,
 }: SendWelcomeEmailParams) {
-    // Evita crashar o sistema se esquecer de colocar a chave de API no .env
-    if (!process.env.RESEND_API_KEY) {
-        console.warn(`[Mail] Variável de ambiente não configurada. E-mail de boas-vindas não enviado para ${email}.`);
+    const resend = getResend();
+
+    if (!resend) {
+        console.warn(`[Mail] RESEND_API_KEY não configurada. E-mail de boas-vindas não enviado para ${email}.`);
         return { success: false, error: "API Key missing" };
     }
 

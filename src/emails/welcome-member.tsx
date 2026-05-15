@@ -86,7 +86,7 @@ export const WelcomeMemberEmail = ({
                             Se você não sabe do que se trata ou acredita que isso é um erro, basta ignorar este e-mail.
                             <br />
                             Abraços, <br />
-                            <strong>Gibby 🐾</strong>
+                            <strong>Gibby 👾</strong>
                         </Text>
                     </Container>
                 </Body>

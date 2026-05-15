@@ -158,10 +158,9 @@ export function AttendanceTable({ attendances: initialAttendances, courseId, les
                 <table className="w-full text-left border-collapse text-sm block">
                     <thead className="bg-primary/5 text-muted-foreground uppercase text-[10px] sm:text-xs block w-full">
                         <tr className="flex w-full items-center">
-                            <th className="px-4 sm:px-6 py-3 font-medium w-20 text-center shrink-0"></th>
+                            <th className="px-4 sm:px-6 py-3 font-medium w-12 ml-2 text-center shrink-0"></th>
                             <th className="px-4 sm:px-6 py-3 font-medium flex-1">Aluno</th>
-                            <th className="px-4 sm:px-6 py-3 font-medium text-center w-32 shrink-0">Matrícula</th>
-                            <th className="px-4 sm:px-6 py-3 font-medium text-center w-36 shrink-0">Presença</th>
+                            <th className="px-4 sm:px-6 py-3 font-medium text-end w-40 shrink-0">Presença</th>
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-surface-border block w-full overflow-hidden">
@@ -196,18 +195,25 @@ export function AttendanceTable({ attendances: initialAttendances, courseId, les
                                         </div>
 
                                         <motion.div
-                                            className="flex w-full items-center cursor-grab active:cursor-grabbing bg-surface hover:bg-muted transition-colors relative z-10"
+                                            className={`flex w-full items-center cursor-grab active:cursor-grabbing transition-colors relative z-10 
+                                                ${attendance.isPresent
+                                                    ? "bg-emerald-50 dark:bg-[#0a2016] hover:bg-emerald-100 dark:hover:bg-[#102a1e]"
+                                                    : "bg-red-50 dark:bg-[#200a0a] hover:bg-red-100 dark:hover:bg-[#2a1010]"
+                                                }`}
                                             drag="x"
                                             dragConstraints={{ left: 0, right: 0 }}
                                             dragElastic={{ left: 0, right: 0.8 }}
                                             onDragEnd={(e, info) => {
                                                 if (info.offset.x > 80) {
-                                                    togglePresence(attendance.id, attendance.isPresent);
+                                                    // Aguarda o snap-back terminar para mudar a cor
+                                                    setTimeout(() => {
+                                                        togglePresence(attendance.id, attendance.isPresent);
+                                                    }, 400);
                                                 }
                                             }}
                                         >
                                             {/* Colunas simuladas dentro do motion.div */}
-                                            <div className="px-4 sm:px-6 py-3 w-20 shrink-0 flex justify-center pointer-events-none">
+                                            <div className="px-4 ml-2 sm:px-6 py-3 w-12 shrink-0 flex justify-center pointer-events-none">
                                                 <AvatarUsers
                                                     genre={attendance.student.genre}
                                                     age={calculateAge(attendance.student.birthDate)}
@@ -219,21 +225,19 @@ export function AttendanceTable({ attendances: initialAttendances, courseId, les
                                                     <span className="font-semibold text-foreground">
                                                         {attendance.student.name}
                                                     </span>
+                                                    <span className="text-[10px] font-mono text-muted-foreground uppercase tracking-wider">
+                                                        Matrícula: {attendance.student.lunaId || "—"}
+                                                    </span>
                                                 </div>
                                             </div>
-                                            <div className="px-4 sm:px-6 py-3 text-center w-32 shrink-0 pointer-events-none">
-                                                <span className="text-xs font-mono text-muted-foreground">
-                                                    {attendance.student.lunaId || "—"}
-                                                </span>
-                                            </div>
-                                            <div className="px-4 sm:px-6 py-3 text-center w-36 shrink-0 flex justify-center">
+                                            <div className="px-4 sm:px-6 py-3 text-center w-auto shrink-0 flex justify-end sm:justify-center">
                                                 <button
                                                     type="button"
                                                     onClick={() =>
                                                         togglePresence(attendance.id, attendance.isPresent)
                                                     }
                                                     className={`
-                                                        inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold
+                                                        inline-flex items-center gap-1.5 px-3 py-3 rounded-full text-xs font-semibold
                                                         transition-all duration-150 cursor-pointer select-none
                                                         ${attendance.isPresent
                                                             ? "bg-emerald-300 text-emerald-700 hover:bg-emerald-200 dark:bg-emerald-900/40 dark:text-emerald-400 dark:hover:bg-emerald-900/60"
@@ -242,15 +246,9 @@ export function AttendanceTable({ attendances: initialAttendances, courseId, les
                                                     `}
                                                 >
                                                     {attendance.isPresent ? (
-                                                        <>
-                                                            <IconCheck className="size-3.5" />
-                                                            Presente
-                                                        </>
+                                                        <IconCheck className="size-3.5" />
                                                     ) : (
-                                                        <>
-                                                            <IconX className="size-3.5" />
-                                                            Ausente
-                                                        </>
+                                                        <IconX className="size-3.5" />
                                                     )}
                                                 </button>
                                             </div>

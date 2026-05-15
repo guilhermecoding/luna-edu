@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/sidebar";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 interface AppSidebarProps extends React.ComponentProps<typeof Sidebar> {
     sideBarHeader?: React.ReactNode;
@@ -18,10 +19,15 @@ interface AppSidebarProps extends React.ComponentProps<typeof Sidebar> {
 }
 
 export function AppSidebar({ sideBarHeader, sideBarContent, sideBarFooter, ...props }: AppSidebarProps) {
+    const pathname = usePathname();
+    
+    // Define a Home dinâmica baseada na rota atual
+    const homeUrl = pathname.startsWith("/admin") ? "/admin" : pathname.startsWith("/prof") ? "/prof" : "/";
+
     return (
         <Sidebar variant="inset" {...props}>
             <SidebarHeader>
-                <Link href="/" className="flex justify-center items-center gap-2 my-4">
+                <Link href={homeUrl} className="flex justify-center items-center gap-2 my-4">
                     <Image
                         src="/gibby-normal-icon.svg"
                         alt="Logo"

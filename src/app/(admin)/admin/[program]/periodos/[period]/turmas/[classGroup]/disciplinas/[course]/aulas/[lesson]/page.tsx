@@ -13,7 +13,7 @@ import {
 import {
     IconCheck,
     IconUsers,
-    IconUserX,
+    IconX,
     IconNotebook,
 } from "@tabler/icons-react";
 import { notFound } from "next/navigation";
@@ -91,6 +91,12 @@ export default async function LessonPage({
 
             <Section className="mt-12 grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <InfoBoxPeriod
+                    label="TOTAL DE ALUNOS"
+                    value={stats.total}
+                    color="indigo"
+                    icon={<IconUsers className="size-full" />}
+                />
+                <InfoBoxPeriod
                     label="PRESENTES"
                     value={stats.present}
                     color="emerald"
@@ -100,13 +106,7 @@ export default async function LessonPage({
                     label="AUSENTES"
                     value={stats.absent}
                     color="rose"
-                    icon={<IconUserX className="size-full" />}
-                />
-                <InfoBoxPeriod
-                    label="TOTAL DE ALUNOS"
-                    value={stats.total}
-                    color="indigo"
-                    icon={<IconUsers className="size-full" />}
+                    icon={<IconX className="size-full" />}
                 />
             </Section>
 

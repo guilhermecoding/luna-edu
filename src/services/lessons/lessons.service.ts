@@ -201,17 +201,23 @@ export async function updateAttendance(
  * Atualiza a presença em lote para uma aula inteira.
  */
 export async function bulkUpdateAttendance(
+    lessonId: string,
     updates: { id: string; isPresent: boolean; observation?: string | null }[],
 ) {
-    return await prisma.$transaction(
-        updates.map((u) =>
-            prisma.attendance.update({
+    return await prisma.$transaction(async (tx) => {
+        for (const u of updates) {
+            await tx.attendance.update({
                 where: { id: u.id },
                 data: {
                     isPresent: u.isPresent,
                     observation: u.observation ?? undefined,
                 },
-            }),
-        ),
-    );
+            });
+        }
+
+        await tx.lesson.update({
+            where: { id: lessonId },
+            data: { isDone: true },
+        });
+    });
 }

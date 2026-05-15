@@ -129,6 +129,7 @@ export async function bulkUpdateAttendanceAction(
         const validated = bulkUpdateAttendanceSchema.parse(data);
 
         await bulkUpdateAttendance(
+            lessonId,
             validated.updates.map((u) => ({
                 id: u.id,
                 isPresent: u.isPresent,

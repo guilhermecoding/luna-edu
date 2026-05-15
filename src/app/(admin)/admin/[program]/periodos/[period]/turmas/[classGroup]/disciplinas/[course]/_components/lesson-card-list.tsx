@@ -86,107 +86,148 @@ export default function LessonCardList({ lessons, upcomingLessons, basePath }: L
         );
     }
 
-    let lessonCounter = 0;
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
 
-    return (
-        <div className="space-y-3">
-            {items.map((item, index) => {
-                if (item.type === "lesson") {
-                    lessonCounter++;
-                    const lesson = item.data;
-                    const attendanceCount = lesson._count.attendances;
+    const pendingItems = items.filter(item => {
+        if (item.type === "upcoming") return true;
+        return !item.data.isDone;
+    });
 
-                    return (
-                        <Link
-                            key={lesson.id}
-                            href={`${basePath}/aulas/${lesson.id}`}
-                            className="group block"
-                        >
-                            <div className="flex items-center gap-4 p-4 sm:p-5 bg-surface border border-surface-border rounded-2xl hover:border-primary/40 hover:bg-primary/2 transition-all duration-200 group-hover:shadow-sm">
-                                <div className="flex items-center justify-center size-10 sm:size-12 rounded-xl bg-primary/10 text-primary font-bold text-sm sm:text-base shrink-0 transition-transform group-hover:scale-105">
-                                    {lessonCounter}
-                                </div>
+    const realizedItems = items.filter(item => {
+        if (item.type === "lesson") return item.data.isDone;
+        return false;
+    });
 
-                                <div className="flex-1 min-w-0">
-                                    <h3 className="font-bold text-foreground text-sm sm:text-base truncate">
-                                        {lesson.topic}
-                                    </h3>
-                                    <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mt-1.5">
-                                        <span className="flex items-center gap-1.5 text-xs sm:text-sm text-muted-foreground">
-                                            <IconCalendarEvent className="size-3.5 shrink-0" />
-                                            <span className="capitalize">{formatWeekDay(lesson.date)}</span>
-                                            <span>•</span>
-                                            <span>{formatDate(lesson.date)}</span>
-                                        </span>
+    const renderItem = (item: MergedItem, index: number, counter?: number) => {
+        if (item.type === "lesson") {
+            const lesson = item.data;
+            const attendanceCount = lesson._count.attendances;
+            const isLate = !lesson.isDone && new Date(lesson.date).getTime() < today.getTime();
 
-                                        {lesson.teacher && (
-                                            <span className="flex items-center gap-1.5 text-xs sm:text-sm text-muted-foreground">
-                                                <IconUser className="size-3.5 shrink-0" />
-                                                {lesson.teacher.name}
-                                            </span>
-                                        )}
-
-                                        {lesson.timeSlot && (
-                                            <span className="flex items-center gap-1.5 text-xs sm:text-sm text-muted-foreground">
-                                                <IconClock className="size-3.5 shrink-0" />
-                                                {lesson.timeSlot.startTime} - {lesson.timeSlot.endTime}
-                                            </span>
-                                        )}
-                                    </div>
-                                </div>
-
-                                <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-50 dark:bg-emerald-950/30 text-emerald-700 dark:text-emerald-400 text-xs font-medium shrink-0">
-                                    <IconUsers className="size-3.5" />
-                                    {attendanceCount}
-                                </div>
-                            </div>
-                        </Link>
-                    );
-                }
-
-                // Upcoming (scheduled but not yet created)
-                const upcoming = item.data;
-                return (
-                    <div
-                        key={`upcoming-${upcoming.date}-${upcoming.scheduleId}-${index}`}
-                        className="flex items-center gap-4 p-4 sm:p-5 bg-surface/50 border border-dashed border-surface-border rounded-2xl opacity-60"
-                    >
-                        <div className="flex items-center justify-center size-10 sm:size-12 rounded-xl bg-muted text-muted-foreground font-bold text-sm shrink-0">
-                            <IconCalendarDue className="size-5" />
+            return (
+                <Link
+                    key={lesson.id}
+                    href={`${basePath}/aulas/${lesson.id}`}
+                    className="group block"
+                >
+                    <div className={`
+                        flex items-center gap-4 p-4 sm:p-5 border rounded-2xl transition-all duration-200 group-hover:shadow-sm
+                        ${isLate 
+                            ? "bg-amber-50/50 border-amber-200 hover:border-amber-400 hover:bg-amber-50 dark:bg-amber-950/20 dark:border-amber-900/50" 
+                            : "bg-surface border-surface-border hover:border-primary/40 hover:bg-primary/2"
+                        }
+                    `}>
+                        <div className={`
+                            flex items-center justify-center size-10 sm:size-12 rounded-xl font-bold text-sm sm:text-base shrink-0 transition-transform group-hover:scale-105
+                            ${isLate ? "bg-amber-100 text-amber-700 dark:bg-amber-900 dark:text-amber-400" : "bg-primary/10 text-primary"}
+                        `}>
+                            {counter || "•"}
                         </div>
 
                         <div className="flex-1 min-w-0">
-                            <h3 className="font-medium text-muted-foreground text-sm sm:text-base truncate">
-                                Aula prevista
+                            <h3 className="font-bold text-foreground text-sm sm:text-base truncate">
+                                {lesson.topic}
+                                {isLate && (
+                                    <span className="ml-2 inline-flex items-center px-2 py-0.5 rounded text-[10px] bg-amber-200 text-amber-800 dark:bg-amber-900 dark:text-amber-300 uppercase tracking-wider font-black">
+                                        Chamada Pendente
+                                    </span>
+                                )}
                             </h3>
                             <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mt-1.5">
                                 <span className="flex items-center gap-1.5 text-xs sm:text-sm text-muted-foreground">
                                     <IconCalendarEvent className="size-3.5 shrink-0" />
-                                    <span className="capitalize">{formatWeekDay(upcoming.date + "T00:00:00Z")}</span>
+                                    <span className="capitalize">{formatWeekDay(lesson.date)}</span>
                                     <span>•</span>
-                                    <span>{formatDate(upcoming.date + "T00:00:00Z")}</span>
+                                    <span>{formatDate(lesson.date)}</span>
                                 </span>
 
-                                <span className="flex items-center gap-1.5 text-xs sm:text-sm text-muted-foreground">
-                                    <IconClock className="size-3.5 shrink-0" />
-                                    {upcoming.startTime} - {upcoming.endTime}
-                                </span>
-
-                                {upcoming.teacherName && (
+                                {lesson.timeSlot && (
                                     <span className="flex items-center gap-1.5 text-xs sm:text-sm text-muted-foreground">
-                                        <IconUser className="size-3.5 shrink-0" />
-                                        {upcoming.teacherName}
+                                        <IconClock className="size-3.5 shrink-0" />
+                                        {lesson.timeSlot.startTime} - {lesson.timeSlot.endTime}
                                     </span>
                                 )}
                             </div>
                         </div>
 
-                        <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-muted text-muted-foreground text-xs font-medium shrink-0">
-                            Pendente
+                        <div className={`
+                            flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium shrink-0
+                            ${lesson.isDone 
+                                ? "bg-emerald-50 dark:bg-emerald-950/30 text-emerald-700 dark:text-emerald-400" 
+                                : "bg-muted text-muted-foreground"
+                            }
+                        `}>
+                            {lesson.isDone ? <IconUsers className="size-3.5" /> : <IconCalendarDue className="size-3.5" />}
+                            {lesson.isDone ? attendanceCount : "Pendente"}
                         </div>
                     </div>
-                );
-            })}
+                </Link>
+            );
+        }
+
+        // Upcoming
+        const upcoming = item.data;
+        return (
+            <div
+                key={`upcoming-${upcoming.date}-${upcoming.scheduleId}-${index}`}
+                className="flex items-center gap-4 p-4 sm:p-5 bg-surface/50 border border-dashed border-surface-border rounded-2xl opacity-60"
+            >
+                <div className="flex items-center justify-center size-10 sm:size-12 rounded-xl bg-muted text-muted-foreground font-bold text-sm shrink-0">
+                    <IconCalendarDue className="size-5" />
+                </div>
+
+                <div className="flex-1 min-w-0">
+                    <h3 className="font-medium text-muted-foreground text-sm sm:text-base truncate">
+                        Aula prevista
+                    </h3>
+                    <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mt-1.5">
+                        <span className="flex items-center gap-1.5 text-xs sm:text-sm text-muted-foreground">
+                            <IconCalendarEvent className="size-3.5 shrink-0" />
+                            <span className="capitalize">{formatWeekDay(upcoming.date + "T00:00:00Z")}</span>
+                            <span>•</span>
+                            <span>{formatDate(upcoming.date + "T00:00:00Z")}</span>
+                        </span>
+
+                        <span className="flex items-center gap-1.5 text-xs sm:text-sm text-muted-foreground">
+                            <IconClock className="size-3.5 shrink-0" />
+                            {upcoming.startTime} - {upcoming.endTime}
+                        </span>
+                    </div>
+                </div>
+
+                <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-muted text-muted-foreground text-xs font-medium shrink-0">
+                    Pendente
+                </div>
+            </div>
+        );
+    };
+
+    return (
+        <div className="space-y-8">
+            {pendingItems.length > 0 && (
+                <div className="space-y-4">
+                    <h2 className="text-sm font-bold text-muted-foreground uppercase tracking-widest px-1 flex items-center gap-2">
+                        <span className="size-1.5 rounded-full bg-amber-500 animate-pulse" />
+                        Próximas Aulas e Pendências
+                    </h2>
+                    <div className="space-y-3">
+                        {pendingItems.map((item, index) => renderItem(item, index))}
+                    </div>
+                </div>
+            )}
+
+            {realizedItems.length > 0 && (
+                <div className="space-y-4">
+                    <h2 className="text-sm font-bold text-muted-foreground uppercase tracking-widest px-1 flex items-center gap-2">
+                        <span className="size-1.5 rounded-full bg-emerald-500" />
+                        Aulas Realizadas
+                    </h2>
+                    <div className="space-y-3">
+                        {realizedItems.map((item, index) => renderItem(item, index, realizedItems.length - index))}
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

@@ -107,16 +107,16 @@ export const UserScalarFieldEnum = {
   phone: 'phone',
   birthDate: 'birthDate',
   bio: 'bio',
-  systemRole: 'systemRole',
   isAdmin: 'isAdmin',
   isTeacher: 'isTeacher',
   isActive: 'isActive',
-  genre: 'genre',
   lunaId: 'lunaId',
-  role: 'role',
-  banned: 'banned',
+  banExpires: 'banExpires',
   banReason: 'banReason',
-  banExpires: 'banExpires'
+  banned: 'banned',
+  role: 'role',
+  systemRole: 'systemRole',
+  genre: 'genre'
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -350,8 +350,8 @@ export const StudentPeriodScalarFieldEnum = {
   studentId: 'studentId',
   periodId: 'periodId',
   status: 'status',
-  accessedAt: 'accessedAt',
-  createdAt: 'createdAt'
+  createdAt: 'createdAt',
+  accessedAt: 'accessedAt'
 } as const
 
 export type StudentPeriodScalarFieldEnum = (typeof StudentPeriodScalarFieldEnum)[keyof typeof StudentPeriodScalarFieldEnum]
@@ -365,7 +365,8 @@ export const LessonScalarFieldEnum = {
   topic: 'topic',
   scheduleId: 'scheduleId',
   timeSlotId: 'timeSlotId',
-  teacherId: 'teacherId'
+  teacherId: 'teacherId',
+  attendanceUpdatedAt: 'attendanceUpdatedAt'
 } as const
 
 export type LessonScalarFieldEnum = (typeof LessonScalarFieldEnum)[keyof typeof LessonScalarFieldEnum]

@@ -40,14 +40,16 @@ export async function createStudentAction(data: CreateStudentData, periodId?: st
     } catch (error) {
         if (error instanceof Prisma.PrismaClientKnownRequestError) {
             if (error.code === "P2002") {
-                const target = JSON.stringify(error.meta?.target || "").toLowerCase();
-                const message = error.message.toLowerCase();
+                const target = (error.meta?.target as string[]) || [];
 
-                if (target.includes("email") || message.includes("email")) {
+                if (target.includes("cpf")) {
+                    return { success: false, error: "Este CPF já está em uso por outro aluno." };
+                }
+                if (target.includes("email")) {
                     return { success: false, error: "Este e-mail já está em uso por outro aluno." };
                 }
-                if (target.includes("cpf") || message.includes("cpf")) {
-                    return { success: false, error: "Este CPF já está em uso por outro aluno." };
+                if (target.includes("luna_id") || target.includes("lunaId")) {
+                    return { success: false, error: "Esta Matrícula (LUNA ID) já está em uso." };
                 }
                 
                 return { success: false, error: "Conflito de dados: Um aluno com estes dados já existe." };
@@ -91,17 +93,16 @@ export async function editStudentAction(id: string, data: EditStudentData) {
     } catch (error) {
         if (error instanceof Prisma.PrismaClientKnownRequestError) {
             if (error.code === "P2002") {
-                const target = JSON.stringify(error.meta?.target || "").toLowerCase();
-                const message = error.message.toLowerCase();
+                const target = (error.meta?.target as string[]) || [];
 
-                if (target.includes("email") || message.includes("email")) {
-                    return { success: false, error: "Este e-mail já está em uso por outro aluno." };
-                }
-                if (target.includes("cpf") || message.includes("cpf")) {
+                if (target.includes("cpf")) {
                     return { success: false, error: "Este CPF já está em uso por outro aluno." };
                 }
-                if (target.includes("luna_id") || target.includes("lunaid") || message.includes("luna_id")) {
-                    return { success: false, error: "Esta Matrícula já está em uso por outro aluno." };
+                if (target.includes("email")) {
+                    return { success: false, error: "Este e-mail já está em uso por outro aluno." };
+                }
+                if (target.includes("luna_id") || target.includes("lunaId")) {
+                    return { success: false, error: "Esta Matrícula (LUNA ID) já está em uso." };
                 }
 
                 return { success: false, error: "Conflito de dados: Outro aluno já possui estas informações." };

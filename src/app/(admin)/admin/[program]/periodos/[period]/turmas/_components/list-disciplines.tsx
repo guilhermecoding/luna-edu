@@ -4,6 +4,7 @@ import { Shift } from "@/generated/prisma/enums";
 import { CourseActions } from "./course-actions";
 import { getAvatarColor, getInitials, hashString } from "@/lib/avatar-utils";
 import { CourseWithRelations } from "@/services/courses/courses.type";
+import Link from "next/link";
 
 const OCCUPANCY_COLORS = [
     { bar: "bg-green-500", text: "text-green-700 dark:text-green-400" },
@@ -158,9 +159,9 @@ function ListDisciplinesContent({
                                             {getInitials(course.subject.name)}
                                         </span>
                                         <div className="flex flex-col">
-                                            <span className="font-bold text-sm sm:text-base text-foreground" title={course.name}>
+                                            <Link href={`/admin/${programSlug}/periodos/${periodSlug}/turmas/${classGroupSlug}/disciplinas/${course.code}`} className="font-bold text-sm sm:text-base text-foreground underline-none hover:underline" title={course.name}>
                                                 {course.name}
-                                            </span>
+                                            </Link>
                                             <div className="shrink-0 text-muted-foreground font-medium mt-1 flex items-start gap-1">
                                                 <IconCodeAsterisk className="size-4 shrink-0" />
                                                 <span className="text-xs">{course.code}</span>

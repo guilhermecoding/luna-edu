@@ -8,6 +8,7 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
+  BreadcrumbEllipsis,
 } from "@/components/ui/breadcrumb";
 import React from "react";
 
@@ -22,26 +23,63 @@ export function DynamicBreadcrumb() {
   return (
     <Breadcrumb>
       <BreadcrumbList>
-        {segments.map((segment, index) => {
-          const isLast = index === segments.length - 1;
-          const href = "/" + segments.slice(0, index + 1).join("/");
+        {segments.length > 4 ? (
+          <>
+            {/* Primeiro item */}
+            <BreadcrumbItem className="capitalize">
+              <BreadcrumbLink href={"/" + segments[0]}>
+                {segments[0].replace(/-/g, " ")}
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
 
-          // Format the segment: capitalize first letter and replace dashes with spaces
-          const title = segment.replace(/-/g, " ");
+            {/* Ellipsis no meio */}
+            <BreadcrumbItem>
+              <BreadcrumbEllipsis />
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
 
-          return (
-            <React.Fragment key={href}>
-              <BreadcrumbItem className="capitalize">
-                {isLast ? (
-                  <BreadcrumbPage>{title}</BreadcrumbPage>
-                ) : (
-                  <BreadcrumbLink href={href}>{title}</BreadcrumbLink>
-                )}
-              </BreadcrumbItem>
-              {!isLast && <BreadcrumbSeparator />}
-            </React.Fragment>
-          );
-        })}
+            {/* Últimos dois itens */}
+            {segments.slice(-2).map((segment, idx) => {
+              const originalIndex = segments.length - 2 + idx;
+              const isLast = originalIndex === segments.length - 1;
+              const href = "/" + segments.slice(0, originalIndex + 1).join("/");
+              const title = segment.replace(/-/g, " ");
+
+              return (
+                <React.Fragment key={href}>
+                  <BreadcrumbItem className="capitalize">
+                    {isLast ? (
+                      <BreadcrumbPage>{title}</BreadcrumbPage>
+                    ) : (
+                      <BreadcrumbLink href={href}>{title}</BreadcrumbLink>
+                    )}
+                  </BreadcrumbItem>
+                  {!isLast && <BreadcrumbSeparator />}
+                </React.Fragment>
+              );
+            })}
+          </>
+        ) : (
+          segments.map((segment, index) => {
+            const isLast = index === segments.length - 1;
+            const href = "/" + segments.slice(0, index + 1).join("/");
+            const title = segment.replace(/-/g, " ");
+
+            return (
+              <React.Fragment key={href}>
+                <BreadcrumbItem className="capitalize">
+                  {isLast ? (
+                    <BreadcrumbPage>{title}</BreadcrumbPage>
+                  ) : (
+                    <BreadcrumbLink href={href}>{title}</BreadcrumbLink>
+                  )}
+                </BreadcrumbItem>
+                {!isLast && <BreadcrumbSeparator />}
+              </React.Fragment>
+            );
+          })
+        )}
       </BreadcrumbList>
     </Breadcrumb>
   );

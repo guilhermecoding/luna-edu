@@ -1,7 +1,6 @@
 "use client";
 
 import {
-    ColumnDef,
     flexRender,
     getCoreRowModel,
     getPaginationRowModel,
@@ -16,32 +15,38 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
-import { useEffect, useState, useTransition } from "react";
+import { useEffect, useLayoutEffect, useMemo, useState, useTransition } from "react";
 import { Input } from "@/components/ui/input";
 import { useRouter, useSearchParams } from "next/navigation";
-import { IconSearch, IconUserMinus, IconLoader2, IconAlertTriangle, IconUserPlus } from "@tabler/icons-react";
+import { IconSearch, IconUserMinus, IconLoader2, IconAlertTriangle, IconUserPlus, IconSchool, IconChevronRight } from "@tabler/icons-react";
 import { toast } from "sonner";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { enrollStudentsInClassGroupAction, unlinkStudentsFromPeriodAction } from "@/app/(admin)/admin/alunos/actions";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { ClassGroup } from "@/generated/prisma/client";
+import { StudentPeriodListItem } from "@/services/students/students.service";
+import { createPeriodStudentColumns } from "./columns-period";
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import Link from "next/link";
 
-interface DataTableProps<TData, TValue> {
-    columns: ColumnDef<TData, TValue>[];
-    data: TData[];
+interface DataTableProps {
+    data: StudentPeriodListItem[];
     title?: React.ReactNode;
     periodId: string;
+    programSlug: string;
+    periodSlug: string;
     classGroups?: ClassGroup[];
 }
 
-export function DataTablePeriodStudents<TData, TValue>({
-    columns,
+export function DataTablePeriodStudents({
     data,
     title,
     periodId,
+    programSlug,
+    periodSlug,
     classGroups = [],
-}: DataTableProps<TData, TValue>) {
+}: DataTableProps) {
     const [rowSelection, setRowSelection] = useState({});
     const [isPending, startTransition] = useTransition();
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -51,10 +56,19 @@ export function DataTablePeriodStudents<TData, TValue>({
     const [isEnrollModalOpen, setIsEnrollModalOpen] = useState(false);
     const [selectedClassGroupId, setSelectedClassGroupId] = useState("");
     const [enrollError, setEnrollError] = useState<string | null>(null);
+    const [turmasSheetStudent, setTurmasSheetStudent] = useState<StudentPeriodListItem | null>(null);
 
     const router = useRouter();
     const searchParams = useSearchParams();
     const [query, setQuery] = useState(searchParams.get("q") || "");
+
+    const columns = useMemo(
+        () =>
+            createPeriodStudentColumns({
+                onTurmasClick: setTurmasSheetStudent,
+            }),
+        [],
+    );
 
     // eslint-disable-next-line react-hooks/incompatible-library -- TanStack Table + React Compiler
     const table = useReactTable({
@@ -88,6 +102,14 @@ export function DataTablePeriodStudents<TData, TValue>({
 
         return () => clearTimeout(timeout);
     }, [query, router, searchParams]);
+
+    // Com cacheComponents, a rota fica oculta (Activity) em vez de desmontar; o estado do sheet seria preservado.
+    // Fechamos ao ocultar, como em https://nextjs.org/docs/app/guides/preserving-ui-state
+    useLayoutEffect(() => {
+        return () => {
+            setTurmasSheetStudent(null);
+        };
+    }, []);
 
     const selectedRows = table.getFilteredSelectedRowModel().rows;
     const hasSelection = selectedRows.length > 0;
@@ -134,6 +156,55 @@ export function DataTablePeriodStudents<TData, TValue>({
 
     return (
         <div className="space-y-4">
+            <Sheet
+                open={turmasSheetStudent !== null}
+                onOpenChange={(open) => {
+                    if (!open) {
+                        setTurmasSheetStudent(null);
+                    }
+                }}
+            >
+                <SheetContent
+                    side="right"
+                    className="data-[side=right]:w-full data-[side=right]:sm:max-w-md flex flex-col gap-0 border-l-surface-border bg-surface p-0"
+                >
+                    <SheetHeader className="p-6 border-b border-surface-border shrink-0 text-left space-y-2">
+                        <SheetTitle className="text-xl font-bold flex items-center gap-2">
+                            <IconSchool className="size-6" />
+                            Turmas do Aluno
+                        </SheetTitle>
+                        <SheetDescription>
+                            {turmasSheetStudent ? (
+                                <span className="text-foreground font-medium">{turmasSheetStudent.name}</span>
+                            ) : null}
+                        </SheetDescription>
+                    </SheetHeader>
+                    <div className="flex-1 overflow-y-auto p-6">
+                        {turmasSheetStudent && turmasSheetStudent.classGroups.length === 0 && (
+                            <p className="text-sm text-muted-foreground">
+                                Este aluno não está em nenhuma turma neste período.
+                            </p>
+                        )}
+                        {turmasSheetStudent && turmasSheetStudent.classGroups.length > 0 && (
+                            <ul className="flex flex-col gap-2">
+                                {turmasSheetStudent.classGroups.map((cg) => (
+                                    <li key={cg.id}>
+                                        <Link
+                                            href={`/admin/${programSlug}/periodos/${periodSlug}/turmas/${cg.slug}`}
+                                            onNavigate={() => setTurmasSheetStudent(null)}
+                                            className="flex items-center justify-between gap-3 rounded-xl border border-surface-border bg-background px-4 py-3 text-sm font-medium transition-colors hover:bg-muted/50"
+                                        >
+                                            <span className="min-w-0 truncate">{cg.name}</span>
+                                            <IconChevronRight className="size-4 shrink-0 text-muted-foreground" />
+                                        </Link>
+                                    </li>
+                                ))}
+                            </ul>
+                        )}
+                    </div>
+                </SheetContent>
+            </Sheet>
+
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 {title && (
                     <div className="flex-1 w-full">

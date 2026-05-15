@@ -174,8 +174,8 @@ export type CourseAssistantWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"CourseAssistant"> | Date | string
   courseId?: Prisma.UuidFilter<"CourseAssistant"> | string
   assistantId?: Prisma.StringFilter<"CourseAssistant"> | string
-  course?: Prisma.XOR<Prisma.CourseScalarRelationFilter, Prisma.CourseWhereInput>
   assistant?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  course?: Prisma.XOR<Prisma.CourseScalarRelationFilter, Prisma.CourseWhereInput>
 }
 
 export type CourseAssistantOrderByWithRelationInput = {
@@ -183,8 +183,8 @@ export type CourseAssistantOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   courseId?: Prisma.SortOrder
   assistantId?: Prisma.SortOrder
-  course?: Prisma.CourseOrderByWithRelationInput
   assistant?: Prisma.UserOrderByWithRelationInput
+  course?: Prisma.CourseOrderByWithRelationInput
 }
 
 export type CourseAssistantWhereUniqueInput = Prisma.AtLeast<{
@@ -195,8 +195,8 @@ export type CourseAssistantWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"CourseAssistant"> | Date | string
   courseId?: Prisma.UuidFilter<"CourseAssistant"> | string
   assistantId?: Prisma.StringFilter<"CourseAssistant"> | string
-  course?: Prisma.XOR<Prisma.CourseScalarRelationFilter, Prisma.CourseWhereInput>
   assistant?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  course?: Prisma.XOR<Prisma.CourseScalarRelationFilter, Prisma.CourseWhereInput>
 }, "id">
 
 export type CourseAssistantOrderByWithAggregationInput = {
@@ -222,8 +222,8 @@ export type CourseAssistantScalarWhereWithAggregatesInput = {
 export type CourseAssistantCreateInput = {
   id?: string
   createdAt?: Date | string
-  course: Prisma.CourseCreateNestedOneWithoutCourseAssistantsInput
   assistant: Prisma.UserCreateNestedOneWithoutCourseAssistantsInput
+  course: Prisma.CourseCreateNestedOneWithoutCourseAssistantsInput
 }
 
 export type CourseAssistantUncheckedCreateInput = {
@@ -236,8 +236,8 @@ export type CourseAssistantUncheckedCreateInput = {
 export type CourseAssistantUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  course?: Prisma.CourseUpdateOneRequiredWithoutCourseAssistantsNestedInput
   assistant?: Prisma.UserUpdateOneRequiredWithoutCourseAssistantsNestedInput
+  course?: Prisma.CourseUpdateOneRequiredWithoutCourseAssistantsNestedInput
 }
 
 export type CourseAssistantUncheckedUpdateInput = {
@@ -522,8 +522,8 @@ export type CourseAssistantSelect<ExtArgs extends runtime.Types.Extensions.Inter
   createdAt?: boolean
   courseId?: boolean
   assistantId?: boolean
-  course?: boolean | Prisma.CourseDefaultArgs<ExtArgs>
   assistant?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  course?: boolean | Prisma.CourseDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["courseAssistant"]>
 
 export type CourseAssistantSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -531,8 +531,8 @@ export type CourseAssistantSelectCreateManyAndReturn<ExtArgs extends runtime.Typ
   createdAt?: boolean
   courseId?: boolean
   assistantId?: boolean
-  course?: boolean | Prisma.CourseDefaultArgs<ExtArgs>
   assistant?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  course?: boolean | Prisma.CourseDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["courseAssistant"]>
 
 export type CourseAssistantSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -540,8 +540,8 @@ export type CourseAssistantSelectUpdateManyAndReturn<ExtArgs extends runtime.Typ
   createdAt?: boolean
   courseId?: boolean
   assistantId?: boolean
-  course?: boolean | Prisma.CourseDefaultArgs<ExtArgs>
   assistant?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  course?: boolean | Prisma.CourseDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["courseAssistant"]>
 
 export type CourseAssistantSelectScalar = {
@@ -553,23 +553,23 @@ export type CourseAssistantSelectScalar = {
 
 export type CourseAssistantOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "courseId" | "assistantId", ExtArgs["result"]["courseAssistant"]>
 export type CourseAssistantInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  course?: boolean | Prisma.CourseDefaultArgs<ExtArgs>
   assistant?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  course?: boolean | Prisma.CourseDefaultArgs<ExtArgs>
 }
 export type CourseAssistantIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  course?: boolean | Prisma.CourseDefaultArgs<ExtArgs>
   assistant?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  course?: boolean | Prisma.CourseDefaultArgs<ExtArgs>
 }
 export type CourseAssistantIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  course?: boolean | Prisma.CourseDefaultArgs<ExtArgs>
   assistant?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  course?: boolean | Prisma.CourseDefaultArgs<ExtArgs>
 }
 
 export type $CourseAssistantPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "CourseAssistant"
   objects: {
-    course: Prisma.$CoursePayload<ExtArgs>
     assistant: Prisma.$UserPayload<ExtArgs>
+    course: Prisma.$CoursePayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -970,8 +970,8 @@ readonly fields: CourseAssistantFieldRefs;
  */
 export interface Prisma__CourseAssistantClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  course<T extends Prisma.CourseDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CourseDefaultArgs<ExtArgs>>): Prisma.Prisma__CourseClient<runtime.Types.Result.GetResult<Prisma.$CoursePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   assistant<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  course<T extends Prisma.CourseDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CourseDefaultArgs<ExtArgs>>): Prisma.Prisma__CourseClient<runtime.Types.Result.GetResult<Prisma.$CoursePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.

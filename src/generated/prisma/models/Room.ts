@@ -240,8 +240,8 @@ export type RoomWhereInput = {
   type?: Prisma.EnumRoomTypeFilter<"Room"> | $Enums.RoomType
   campusId?: Prisma.UuidFilter<"Room"> | string
   slug?: Prisma.StringFilter<"Room"> | string
-  campus?: Prisma.XOR<Prisma.CampusScalarRelationFilter, Prisma.CampusWhereInput>
   courses?: Prisma.CourseListRelationFilter
+  campus?: Prisma.XOR<Prisma.CampusScalarRelationFilter, Prisma.CampusWhereInput>
   schedules?: Prisma.ScheduleListRelationFilter
 }
 
@@ -254,8 +254,8 @@ export type RoomOrderByWithRelationInput = {
   type?: Prisma.SortOrder
   campusId?: Prisma.SortOrder
   slug?: Prisma.SortOrder
-  campus?: Prisma.CampusOrderByWithRelationInput
   courses?: Prisma.CourseOrderByRelationAggregateInput
+  campus?: Prisma.CampusOrderByWithRelationInput
   schedules?: Prisma.ScheduleOrderByRelationAggregateInput
 }
 
@@ -272,8 +272,8 @@ export type RoomWhereUniqueInput = Prisma.AtLeast<{
   type?: Prisma.EnumRoomTypeFilter<"Room"> | $Enums.RoomType
   campusId?: Prisma.UuidFilter<"Room"> | string
   slug?: Prisma.StringFilter<"Room"> | string
-  campus?: Prisma.XOR<Prisma.CampusScalarRelationFilter, Prisma.CampusWhereInput>
   courses?: Prisma.CourseListRelationFilter
+  campus?: Prisma.XOR<Prisma.CampusScalarRelationFilter, Prisma.CampusWhereInput>
   schedules?: Prisma.ScheduleListRelationFilter
 }, "id" | "campusId_slug">
 
@@ -315,8 +315,8 @@ export type RoomCreateInput = {
   block?: string | null
   type?: $Enums.RoomType
   slug: string
-  campus: Prisma.CampusCreateNestedOneWithoutRoomsInput
   courses?: Prisma.CourseCreateNestedManyWithoutRoomInput
+  campus: Prisma.CampusCreateNestedOneWithoutRoomsInput
   schedules?: Prisma.ScheduleCreateNestedManyWithoutRoomInput
 }
 
@@ -341,8 +341,8 @@ export type RoomUpdateInput = {
   block?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   type?: Prisma.EnumRoomTypeFieldUpdateOperationsInput | $Enums.RoomType
   slug?: Prisma.StringFieldUpdateOperationsInput | string
-  campus?: Prisma.CampusUpdateOneRequiredWithoutRoomsNestedInput
   courses?: Prisma.CourseUpdateManyWithoutRoomNestedInput
+  campus?: Prisma.CampusUpdateOneRequiredWithoutRoomsNestedInput
   schedules?: Prisma.ScheduleUpdateManyWithoutRoomNestedInput
 }
 
@@ -610,8 +610,8 @@ export type RoomCreateWithoutSchedulesInput = {
   block?: string | null
   type?: $Enums.RoomType
   slug: string
-  campus: Prisma.CampusCreateNestedOneWithoutRoomsInput
   courses?: Prisma.CourseCreateNestedManyWithoutRoomInput
+  campus: Prisma.CampusCreateNestedOneWithoutRoomsInput
 }
 
 export type RoomUncheckedCreateWithoutSchedulesInput = {
@@ -650,8 +650,8 @@ export type RoomUpdateWithoutSchedulesInput = {
   block?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   type?: Prisma.EnumRoomTypeFieldUpdateOperationsInput | $Enums.RoomType
   slug?: Prisma.StringFieldUpdateOperationsInput | string
-  campus?: Prisma.CampusUpdateOneRequiredWithoutRoomsNestedInput
   courses?: Prisma.CourseUpdateManyWithoutRoomNestedInput
+  campus?: Prisma.CampusUpdateOneRequiredWithoutRoomsNestedInput
 }
 
 export type RoomUncheckedUpdateWithoutSchedulesInput = {
@@ -823,8 +823,8 @@ export type RoomSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   type?: boolean
   campusId?: boolean
   slug?: boolean
-  campus?: boolean | Prisma.CampusDefaultArgs<ExtArgs>
   courses?: boolean | Prisma.Room$coursesArgs<ExtArgs>
+  campus?: boolean | Prisma.CampusDefaultArgs<ExtArgs>
   schedules?: boolean | Prisma.Room$schedulesArgs<ExtArgs>
   _count?: boolean | Prisma.RoomCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["room"]>
@@ -866,8 +866,8 @@ export type RoomSelectScalar = {
 
 export type RoomOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "name" | "capacity" | "block" | "type" | "campusId" | "slug", ExtArgs["result"]["room"]>
 export type RoomInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  campus?: boolean | Prisma.CampusDefaultArgs<ExtArgs>
   courses?: boolean | Prisma.Room$coursesArgs<ExtArgs>
+  campus?: boolean | Prisma.CampusDefaultArgs<ExtArgs>
   schedules?: boolean | Prisma.Room$schedulesArgs<ExtArgs>
   _count?: boolean | Prisma.RoomCountOutputTypeDefaultArgs<ExtArgs>
 }
@@ -881,8 +881,8 @@ export type RoomIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
 export type $RoomPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Room"
   objects: {
-    campus: Prisma.$CampusPayload<ExtArgs>
     courses: Prisma.$CoursePayload<ExtArgs>[]
+    campus: Prisma.$CampusPayload<ExtArgs>
     schedules: Prisma.$SchedulePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -1288,8 +1288,8 @@ readonly fields: RoomFieldRefs;
  */
 export interface Prisma__RoomClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  campus<T extends Prisma.CampusDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CampusDefaultArgs<ExtArgs>>): Prisma.Prisma__CampusClient<runtime.Types.Result.GetResult<Prisma.$CampusPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   courses<T extends Prisma.Room$coursesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Room$coursesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CoursePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  campus<T extends Prisma.CampusDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CampusDefaultArgs<ExtArgs>>): Prisma.Prisma__CampusClient<runtime.Types.Result.GetResult<Prisma.$CampusPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   schedules<T extends Prisma.Room$schedulesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Room$schedulesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SchedulePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.

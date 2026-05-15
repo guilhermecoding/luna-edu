@@ -139,3 +139,57 @@ export async function deleteProgram(slug: string): Promise<Program> {
         throw error;
     }
 }
+
+/**
+ * Busca os programas e períodos ativos em que um professor específico possui horários alocados.
+ * Um período é considerado ativo se `completedAt` for nulo.
+ * 
+ * @param teacherId ID do professor
+ * @returns Lista de programas contendo os períodos ativos associados ao professor.
+ */
+export async function getActiveProgramsAndPeriodsForTeacher(teacherId: string) {
+    "use cache";
+    cacheLife("minutes");
+    cacheTag(`teacher-programs-${teacherId}`);
+
+    return await prisma.program.findMany({
+        where: {
+            periods: {
+                some: {
+                    completedAt: null,
+                    courses: {
+                        some: {
+                            schedules: {
+                                some: {
+                                    teacherId: teacherId,
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        },
+        include: {
+            periods: {
+                where: {
+                    completedAt: null,
+                    courses: {
+                        some: {
+                            schedules: {
+                                some: {
+                                    teacherId: teacherId,
+                                },
+                            },
+                        },
+                    },
+                },
+                orderBy: {
+                    startDate: "desc",
+                },
+            },
+        },
+        orderBy: {
+            name: "asc",
+        },
+    });
+}

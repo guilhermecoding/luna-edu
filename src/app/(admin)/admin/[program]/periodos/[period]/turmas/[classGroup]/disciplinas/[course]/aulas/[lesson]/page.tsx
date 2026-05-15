@@ -11,7 +11,6 @@ import {
     getAttendanceStatsByLessonId,
 } from "@/services/lessons/lessons.service";
 import {
-    IconCalendarEvent,
     IconCheck,
     IconUsers,
     IconUserX,
@@ -20,7 +19,6 @@ import {
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
 import { AttendanceTable } from "./_components/attendance-table";
-import { ButtonLink } from "@/components/ui/button-link";
 
 export const metadata: Metadata = {
     title: "Registro de Presença",

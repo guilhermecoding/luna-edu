@@ -139,12 +139,13 @@ export async function createLesson(data: {
             select: { studentId: true },
         });
 
-        // Criar registros de presença para todos (isPresent = true por default no DB)
+        // Criar registros de presença para todos (isPresent = true por default no DB, mas garantimos explicitamente)
         if (enrollments.length > 0) {
             await tx.attendance.createMany({
                 data: enrollments.map((e) => ({
                     lessonId: lesson.id,
                     studentId: e.studentId,
+                    isPresent: true,
                 })),
             });
         }

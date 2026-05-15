@@ -100,16 +100,16 @@ export function AttendanceTable({ attendances: initialAttendances, courseId, les
         <div className="space-y-4">
             {/* Barra superior: busca + ações em lote */}
             <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center justify-between">
-                <div className="relative flex-1 max-w-md">
+                <div className="relative flex-1 w-full sm:max-w-md">
                     <IconSearch className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
                     <Input
                         placeholder="Buscar aluno..."
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
-                        className="pl-9 rounded-lg"
+                        className="pl-9"
                     />
                 </div>
-                <div className="flex gap-2">
+                <div className="flex flex-col sm:flex-row gap-2">
                     <Button
                         type="button"
                         variant="outline"
@@ -135,6 +135,9 @@ export function AttendanceTable({ attendances: initialAttendances, courseId, les
 
             {/* Resumo */}
             <div className="flex gap-4 text-sm">
+                <span className="text-muted-foreground">
+                    Total: <span className="font-bold text-foreground">{attendances.length}</span>
+                </span>
                 <span className="flex items-center gap-1.5">
                     <span className="size-2.5 rounded-full bg-emerald-500" />
                     <span className="text-muted-foreground">Presentes:</span>
@@ -144,9 +147,6 @@ export function AttendanceTable({ attendances: initialAttendances, courseId, les
                     <span className="size-2.5 rounded-full bg-red-500" />
                     <span className="text-muted-foreground">Ausentes:</span>
                     <span className="font-bold text-red-600">{absentCount}</span>
-                </span>
-                <span className="text-muted-foreground">
-                    Total: <span className="font-bold text-foreground">{attendances.length}</span>
                 </span>
             </div>
 
@@ -237,7 +237,7 @@ export function AttendanceTable({ attendances: initialAttendances, courseId, les
                         type="button"
                         onClick={saveChanges}
                         disabled={isPending}
-                        className="h-12 px-8 rounded-full shadow-lg shadow-primary/20 text-base font-semibold"
+                        className="h-12 px-8 w-full sm:w-auto rounded-full shadow-lg shadow-primary/20 text-base font-semibold"
                     >
                         {isPending ? (
                             <IconLoader2 className="size-5 animate-spin mr-2" />

@@ -88,16 +88,6 @@ export default async function LessonPage({
                             description={`${formatWeekDay(lesson.date)} • ${formatDate(lesson.date)} — ${courseData.name}`}
                         />
                     </div>
-                    <div className="flex flex-col sm:flex-row flex-1 gap-3 justify-end items-end">
-                        <ButtonLink
-                            variant="outline"
-                            className="w-full sm:w-auto"
-                            href={coursePath}
-                        >
-                            <IconCalendarEvent className="size-5" />
-                            Voltar à Disciplina
-                        </ButtonLink>
-                    </div>
                 </div>
             </Section>
 

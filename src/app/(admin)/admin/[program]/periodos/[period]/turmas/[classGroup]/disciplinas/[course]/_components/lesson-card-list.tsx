@@ -102,7 +102,7 @@ export default function LessonCardList({ lessons, upcomingLessons, basePath }: L
                             href={`${basePath}/aulas/${lesson.id}`}
                             className="group block"
                         >
-                            <div className="flex items-center gap-4 p-4 sm:p-5 bg-surface border border-surface-border rounded-2xl hover:border-primary/40 hover:bg-primary/[0.02] transition-all duration-200 group-hover:shadow-sm">
+                            <div className="flex items-center gap-4 p-4 sm:p-5 bg-surface border border-surface-border rounded-2xl hover:border-primary/40 hover:bg-primary/2 transition-all duration-200 group-hover:shadow-sm">
                                 <div className="flex items-center justify-center size-10 sm:size-12 rounded-xl bg-primary/10 text-primary font-bold text-sm sm:text-base shrink-0 transition-transform group-hover:scale-105">
                                     {lessonCounter}
                                 </div>

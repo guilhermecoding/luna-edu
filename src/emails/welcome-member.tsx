@@ -5,7 +5,9 @@ import {
     Head,
     Heading,
     Hr,
-    Html, Preview,
+    Img,
+    Html,
+    Preview,
     Section,
     Text,
     Tailwind,
@@ -35,14 +37,20 @@ export const WelcomeMemberEmail = ({
             <Tailwind>
                 <Body className="bg-white my-auto mx-auto font-sans px-2">
                     <Container className="border border-solid border-[#eaeaea] rounded my-10 mx-auto p-5 max-w-116.25">
-                        <Section className="mt-8">
-                            <Text className="text-2xl font-bold text-center">Luna Academy</Text>
+                        <Section className="mt-8 text-center">
+                            <Img
+                                src={`${systemUrl}/logo_completa.png`}
+                                width="180"
+                                height="auto"
+                                alt="Luna Academy"
+                                className="mx-auto"
+                            />
                         </Section>
                         <Heading className="text-black text-[24px] font-normal text-center p-0 my-7.5 mx-0">
                             Bem-vindo(a) ao time, <strong>{userName}</strong>!
                         </Heading>
                         <Text className="text-black text-[14px] leading-6">
-                            Olá! Eu sou o <strong>Gibby</strong>, o mascote do Luna Academy! 🐾
+                            Olá! Eu sou o <strong>Gibby</strong>, o mascote do Luna Academy! 🌙
                         </Text>
                         <Text className="text-black text-[14px] leading-6">
                             Estou passando aqui para avisar que um dos nossos administradores acabou de cadastrar você no sistema com o perfil de <strong>{roleName}</strong>.

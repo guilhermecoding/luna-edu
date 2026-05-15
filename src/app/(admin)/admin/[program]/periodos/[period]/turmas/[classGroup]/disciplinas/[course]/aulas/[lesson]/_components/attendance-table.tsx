@@ -7,6 +7,9 @@ import { IconCheck, IconDeviceFloppy, IconLoader2, IconSearch, IconX } from "@ta
 import { toast } from "sonner";
 import { bulkUpdateAttendanceAction } from "../../../actions";
 import type { AttendanceWithStudent } from "@/services/lessons/lessons.service";
+import AvatarUsers from "@/components/avatar-users";
+import { calculateAge } from "@/lib/date-utils";
+import { maskCPF } from "@/lib/masks";
 
 interface AttendanceTableProps {
     attendances: AttendanceWithStudent[];
@@ -155,7 +158,7 @@ export function AttendanceTable({ attendances: initialAttendances, courseId, les
                 <table className="w-full text-left border-collapse text-sm">
                     <thead className="bg-primary/5 text-muted-foreground uppercase text-[10px] sm:text-xs">
                         <tr>
-                            <th className="px-4 sm:px-6 py-3 font-medium w-12 text-center">#</th>
+                            <th className="px-4 sm:px-6 py-3 font-medium w-12 text-center"></th>
                             <th className="px-4 sm:px-6 py-3 font-medium">Aluno</th>
                             <th className="px-4 sm:px-6 py-3 font-medium text-center">Matrícula</th>
                             <th className="px-4 sm:px-6 py-3 font-medium text-center w-32">Presença</th>
@@ -174,8 +177,14 @@ export function AttendanceTable({ attendances: initialAttendances, courseId, les
                                     key={attendance.id}
                                     className="hover:bg-muted/30 transition-colors"
                                 >
-                                    <td className="px-4 sm:px-6 py-3 text-center text-muted-foreground text-xs">
-                                        {index + 1}
+                                    <td className="px-4 sm:px-6 py-3">
+                                        <div className="flex justify-center">
+                                            <AvatarUsers
+                                                genre={attendance.student.genre}
+                                                age={calculateAge(attendance.student.birthDate)}
+                                                className="size-10"
+                                            />
+                                        </div>
                                     </td>
                                     <td className="px-4 sm:px-6 py-3">
                                         <div className="flex flex-col">
@@ -183,10 +192,7 @@ export function AttendanceTable({ attendances: initialAttendances, courseId, les
                                                 {attendance.student.name}
                                             </span>
                                             <span className="text-xs text-muted-foreground">
-                                                {attendance.student.cpf.replace(
-                                                    /(\d{3})(\d{3})(\d{3})(\d{2})/,
-                                                    "$1.$2.$3-$4",
-                                                )}
+                                                {maskCPF(attendance.student.cpf)}
                                             </span>
                                         </div>
                                     </td>
@@ -237,7 +243,7 @@ export function AttendanceTable({ attendances: initialAttendances, courseId, les
                         type="button"
                         onClick={saveChanges}
                         disabled={isPending}
-                        className="h-12 px-8 w-full sm:w-auto rounded-full shadow-lg shadow-primary/20 text-base font-semibold"
+                        className="h-12 px-8 w-full sm:w-auto rounded-full shadow-lg shadow-primary/20 dark:shadow-black/20 text-base font-semibold"
                     >
                         {isPending ? (
                             <IconLoader2 className="size-5 animate-spin mr-2" />

@@ -84,6 +84,8 @@ export async function getAttendancesByLessonId(lessonId: string) {
                     cpf: true,
                     lunaId: true,
                     email: true,
+                    genre: true,
+                    birthDate: true,
                 },
             },
         },

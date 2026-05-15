@@ -248,8 +248,8 @@ export type ClassGroupWhereInput = {
   basePeriod?: Prisma.IntFilter<"ClassGroup"> | number
   shift?: Prisma.EnumShiftFilter<"ClassGroup"> | $Enums.Shift
   groupLink?: Prisma.StringNullableFilter<"ClassGroup"> | string | null
-  period?: Prisma.XOR<Prisma.PeriodScalarRelationFilter, Prisma.PeriodWhereInput>
   degree?: Prisma.XOR<Prisma.DegreeScalarRelationFilter, Prisma.DegreeWhereInput>
+  period?: Prisma.XOR<Prisma.PeriodScalarRelationFilter, Prisma.PeriodWhereInput>
   courses?: Prisma.CourseListRelationFilter
 }
 
@@ -263,8 +263,8 @@ export type ClassGroupOrderByWithRelationInput = {
   basePeriod?: Prisma.SortOrder
   shift?: Prisma.SortOrder
   groupLink?: Prisma.SortOrderInput | Prisma.SortOrder
-  period?: Prisma.PeriodOrderByWithRelationInput
   degree?: Prisma.DegreeOrderByWithRelationInput
+  period?: Prisma.PeriodOrderByWithRelationInput
   courses?: Prisma.CourseOrderByRelationAggregateInput
 }
 
@@ -282,8 +282,8 @@ export type ClassGroupWhereUniqueInput = Prisma.AtLeast<{
   basePeriod?: Prisma.IntFilter<"ClassGroup"> | number
   shift?: Prisma.EnumShiftFilter<"ClassGroup"> | $Enums.Shift
   groupLink?: Prisma.StringNullableFilter<"ClassGroup"> | string | null
-  period?: Prisma.XOR<Prisma.PeriodScalarRelationFilter, Prisma.PeriodWhereInput>
   degree?: Prisma.XOR<Prisma.DegreeScalarRelationFilter, Prisma.DegreeWhereInput>
+  period?: Prisma.XOR<Prisma.PeriodScalarRelationFilter, Prisma.PeriodWhereInput>
   courses?: Prisma.CourseListRelationFilter
 }, "id" | "periodId_slug">
 
@@ -327,8 +327,8 @@ export type ClassGroupCreateInput = {
   basePeriod: number
   shift: $Enums.Shift
   groupLink?: string | null
-  period: Prisma.PeriodCreateNestedOneWithoutClassGroupsInput
   degree: Prisma.DegreeCreateNestedOneWithoutClassGroupsInput
+  period: Prisma.PeriodCreateNestedOneWithoutClassGroupsInput
   courses?: Prisma.CourseCreateNestedManyWithoutClassGroupInput
 }
 
@@ -353,8 +353,8 @@ export type ClassGroupUpdateInput = {
   basePeriod?: Prisma.IntFieldUpdateOperationsInput | number
   shift?: Prisma.EnumShiftFieldUpdateOperationsInput | $Enums.Shift
   groupLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  period?: Prisma.PeriodUpdateOneRequiredWithoutClassGroupsNestedInput
   degree?: Prisma.DegreeUpdateOneRequiredWithoutClassGroupsNestedInput
+  period?: Prisma.PeriodUpdateOneRequiredWithoutClassGroupsNestedInput
   courses?: Prisma.CourseUpdateManyWithoutClassGroupNestedInput
 }
 
@@ -696,8 +696,8 @@ export type ClassGroupCreateWithoutCoursesInput = {
   basePeriod: number
   shift: $Enums.Shift
   groupLink?: string | null
-  period: Prisma.PeriodCreateNestedOneWithoutClassGroupsInput
   degree: Prisma.DegreeCreateNestedOneWithoutClassGroupsInput
+  period: Prisma.PeriodCreateNestedOneWithoutClassGroupsInput
 }
 
 export type ClassGroupUncheckedCreateWithoutCoursesInput = {
@@ -736,8 +736,8 @@ export type ClassGroupUpdateWithoutCoursesInput = {
   basePeriod?: Prisma.IntFieldUpdateOperationsInput | number
   shift?: Prisma.EnumShiftFieldUpdateOperationsInput | $Enums.Shift
   groupLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  period?: Prisma.PeriodUpdateOneRequiredWithoutClassGroupsNestedInput
   degree?: Prisma.DegreeUpdateOneRequiredWithoutClassGroupsNestedInput
+  period?: Prisma.PeriodUpdateOneRequiredWithoutClassGroupsNestedInput
 }
 
 export type ClassGroupUncheckedUpdateWithoutCoursesInput = {
@@ -885,8 +885,8 @@ export type ClassGroupSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   basePeriod?: boolean
   shift?: boolean
   groupLink?: boolean
-  period?: boolean | Prisma.PeriodDefaultArgs<ExtArgs>
   degree?: boolean | Prisma.DegreeDefaultArgs<ExtArgs>
+  period?: boolean | Prisma.PeriodDefaultArgs<ExtArgs>
   courses?: boolean | Prisma.ClassGroup$coursesArgs<ExtArgs>
   _count?: boolean | Prisma.ClassGroupCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["classGroup"]>
@@ -901,8 +901,8 @@ export type ClassGroupSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ex
   basePeriod?: boolean
   shift?: boolean
   groupLink?: boolean
-  period?: boolean | Prisma.PeriodDefaultArgs<ExtArgs>
   degree?: boolean | Prisma.DegreeDefaultArgs<ExtArgs>
+  period?: boolean | Prisma.PeriodDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["classGroup"]>
 
 export type ClassGroupSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -915,8 +915,8 @@ export type ClassGroupSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ex
   basePeriod?: boolean
   shift?: boolean
   groupLink?: boolean
-  period?: boolean | Prisma.PeriodDefaultArgs<ExtArgs>
   degree?: boolean | Prisma.DegreeDefaultArgs<ExtArgs>
+  period?: boolean | Prisma.PeriodDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["classGroup"]>
 
 export type ClassGroupSelectScalar = {
@@ -933,25 +933,25 @@ export type ClassGroupSelectScalar = {
 
 export type ClassGroupOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "name" | "slug" | "periodId" | "degreeId" | "basePeriod" | "shift" | "groupLink", ExtArgs["result"]["classGroup"]>
 export type ClassGroupInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  period?: boolean | Prisma.PeriodDefaultArgs<ExtArgs>
   degree?: boolean | Prisma.DegreeDefaultArgs<ExtArgs>
+  period?: boolean | Prisma.PeriodDefaultArgs<ExtArgs>
   courses?: boolean | Prisma.ClassGroup$coursesArgs<ExtArgs>
   _count?: boolean | Prisma.ClassGroupCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type ClassGroupIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  period?: boolean | Prisma.PeriodDefaultArgs<ExtArgs>
   degree?: boolean | Prisma.DegreeDefaultArgs<ExtArgs>
+  period?: boolean | Prisma.PeriodDefaultArgs<ExtArgs>
 }
 export type ClassGroupIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  period?: boolean | Prisma.PeriodDefaultArgs<ExtArgs>
   degree?: boolean | Prisma.DegreeDefaultArgs<ExtArgs>
+  period?: boolean | Prisma.PeriodDefaultArgs<ExtArgs>
 }
 
 export type $ClassGroupPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "ClassGroup"
   objects: {
-    period: Prisma.$PeriodPayload<ExtArgs>
     degree: Prisma.$DegreePayload<ExtArgs>
+    period: Prisma.$PeriodPayload<ExtArgs>
     courses: Prisma.$CoursePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -1358,8 +1358,8 @@ readonly fields: ClassGroupFieldRefs;
  */
 export interface Prisma__ClassGroupClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  period<T extends Prisma.PeriodDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.PeriodDefaultArgs<ExtArgs>>): Prisma.Prisma__PeriodClient<runtime.Types.Result.GetResult<Prisma.$PeriodPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   degree<T extends Prisma.DegreeDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.DegreeDefaultArgs<ExtArgs>>): Prisma.Prisma__DegreeClient<runtime.Types.Result.GetResult<Prisma.$DegreePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  period<T extends Prisma.PeriodDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.PeriodDefaultArgs<ExtArgs>>): Prisma.Prisma__PeriodClient<runtime.Types.Result.GetResult<Prisma.$PeriodPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   courses<T extends Prisma.ClassGroup$coursesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ClassGroup$coursesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CoursePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.

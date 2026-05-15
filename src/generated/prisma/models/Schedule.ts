@@ -198,11 +198,11 @@ export type ScheduleWhereInput = {
   timeSlotId?: Prisma.UuidFilter<"Schedule"> | string
   teacherId?: Prisma.StringNullableFilter<"Schedule"> | string | null
   roomId?: Prisma.UuidNullableFilter<"Schedule"> | string | null
-  course?: Prisma.XOR<Prisma.CourseScalarRelationFilter, Prisma.CourseWhereInput>
-  timeSlot?: Prisma.XOR<Prisma.TimeSlotScalarRelationFilter, Prisma.TimeSlotWhereInput>
-  teacher?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
-  room?: Prisma.XOR<Prisma.RoomNullableScalarRelationFilter, Prisma.RoomWhereInput> | null
   lessons?: Prisma.LessonListRelationFilter
+  course?: Prisma.XOR<Prisma.CourseScalarRelationFilter, Prisma.CourseWhereInput>
+  room?: Prisma.XOR<Prisma.RoomNullableScalarRelationFilter, Prisma.RoomWhereInput> | null
+  teacher?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
+  timeSlot?: Prisma.XOR<Prisma.TimeSlotScalarRelationFilter, Prisma.TimeSlotWhereInput>
 }
 
 export type ScheduleOrderByWithRelationInput = {
@@ -213,11 +213,11 @@ export type ScheduleOrderByWithRelationInput = {
   timeSlotId?: Prisma.SortOrder
   teacherId?: Prisma.SortOrderInput | Prisma.SortOrder
   roomId?: Prisma.SortOrderInput | Prisma.SortOrder
-  course?: Prisma.CourseOrderByWithRelationInput
-  timeSlot?: Prisma.TimeSlotOrderByWithRelationInput
-  teacher?: Prisma.UserOrderByWithRelationInput
-  room?: Prisma.RoomOrderByWithRelationInput
   lessons?: Prisma.LessonOrderByRelationAggregateInput
+  course?: Prisma.CourseOrderByWithRelationInput
+  room?: Prisma.RoomOrderByWithRelationInput
+  teacher?: Prisma.UserOrderByWithRelationInput
+  timeSlot?: Prisma.TimeSlotOrderByWithRelationInput
 }
 
 export type ScheduleWhereUniqueInput = Prisma.AtLeast<{
@@ -234,11 +234,11 @@ export type ScheduleWhereUniqueInput = Prisma.AtLeast<{
   timeSlotId?: Prisma.UuidFilter<"Schedule"> | string
   teacherId?: Prisma.StringNullableFilter<"Schedule"> | string | null
   roomId?: Prisma.UuidNullableFilter<"Schedule"> | string | null
-  course?: Prisma.XOR<Prisma.CourseScalarRelationFilter, Prisma.CourseWhereInput>
-  timeSlot?: Prisma.XOR<Prisma.TimeSlotScalarRelationFilter, Prisma.TimeSlotWhereInput>
-  teacher?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
-  room?: Prisma.XOR<Prisma.RoomNullableScalarRelationFilter, Prisma.RoomWhereInput> | null
   lessons?: Prisma.LessonListRelationFilter
+  course?: Prisma.XOR<Prisma.CourseScalarRelationFilter, Prisma.CourseWhereInput>
+  room?: Prisma.XOR<Prisma.RoomNullableScalarRelationFilter, Prisma.RoomWhereInput> | null
+  teacher?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
+  timeSlot?: Prisma.XOR<Prisma.TimeSlotScalarRelationFilter, Prisma.TimeSlotWhereInput>
 }, "id" | "courseId_dayOfWeek_timeSlotId" | "teacherId_dayOfWeek_timeSlotId" | "roomId_dayOfWeek_timeSlotId">
 
 export type ScheduleOrderByWithAggregationInput = {
@@ -271,11 +271,11 @@ export type ScheduleCreateInput = {
   id?: string
   createdAt?: Date | string
   dayOfWeek: $Enums.DayOfWeek
-  course: Prisma.CourseCreateNestedOneWithoutSchedulesInput
-  timeSlot: Prisma.TimeSlotCreateNestedOneWithoutSchedulesInput
-  teacher?: Prisma.UserCreateNestedOneWithoutSchedulesInput
-  room?: Prisma.RoomCreateNestedOneWithoutSchedulesInput
   lessons?: Prisma.LessonCreateNestedManyWithoutScheduleInput
+  course: Prisma.CourseCreateNestedOneWithoutSchedulesInput
+  room?: Prisma.RoomCreateNestedOneWithoutSchedulesInput
+  teacher?: Prisma.UserCreateNestedOneWithoutSchedulesInput
+  timeSlot: Prisma.TimeSlotCreateNestedOneWithoutSchedulesInput
 }
 
 export type ScheduleUncheckedCreateInput = {
@@ -293,11 +293,11 @@ export type ScheduleUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dayOfWeek?: Prisma.EnumDayOfWeekFieldUpdateOperationsInput | $Enums.DayOfWeek
-  course?: Prisma.CourseUpdateOneRequiredWithoutSchedulesNestedInput
-  timeSlot?: Prisma.TimeSlotUpdateOneRequiredWithoutSchedulesNestedInput
-  teacher?: Prisma.UserUpdateOneWithoutSchedulesNestedInput
-  room?: Prisma.RoomUpdateOneWithoutSchedulesNestedInput
   lessons?: Prisma.LessonUpdateManyWithoutScheduleNestedInput
+  course?: Prisma.CourseUpdateOneRequiredWithoutSchedulesNestedInput
+  room?: Prisma.RoomUpdateOneWithoutSchedulesNestedInput
+  teacher?: Prisma.UserUpdateOneWithoutSchedulesNestedInput
+  timeSlot?: Prisma.TimeSlotUpdateOneRequiredWithoutSchedulesNestedInput
 }
 
 export type ScheduleUncheckedUpdateInput = {
@@ -592,10 +592,10 @@ export type ScheduleCreateWithoutTeacherInput = {
   id?: string
   createdAt?: Date | string
   dayOfWeek: $Enums.DayOfWeek
-  course: Prisma.CourseCreateNestedOneWithoutSchedulesInput
-  timeSlot: Prisma.TimeSlotCreateNestedOneWithoutSchedulesInput
-  room?: Prisma.RoomCreateNestedOneWithoutSchedulesInput
   lessons?: Prisma.LessonCreateNestedManyWithoutScheduleInput
+  course: Prisma.CourseCreateNestedOneWithoutSchedulesInput
+  room?: Prisma.RoomCreateNestedOneWithoutSchedulesInput
+  timeSlot: Prisma.TimeSlotCreateNestedOneWithoutSchedulesInput
 }
 
 export type ScheduleUncheckedCreateWithoutTeacherInput = {
@@ -651,10 +651,10 @@ export type ScheduleCreateWithoutRoomInput = {
   id?: string
   createdAt?: Date | string
   dayOfWeek: $Enums.DayOfWeek
-  course: Prisma.CourseCreateNestedOneWithoutSchedulesInput
-  timeSlot: Prisma.TimeSlotCreateNestedOneWithoutSchedulesInput
-  teacher?: Prisma.UserCreateNestedOneWithoutSchedulesInput
   lessons?: Prisma.LessonCreateNestedManyWithoutScheduleInput
+  course: Prisma.CourseCreateNestedOneWithoutSchedulesInput
+  teacher?: Prisma.UserCreateNestedOneWithoutSchedulesInput
+  timeSlot: Prisma.TimeSlotCreateNestedOneWithoutSchedulesInput
 }
 
 export type ScheduleUncheckedCreateWithoutRoomInput = {
@@ -697,10 +697,10 @@ export type ScheduleCreateWithoutTimeSlotInput = {
   id?: string
   createdAt?: Date | string
   dayOfWeek: $Enums.DayOfWeek
-  course: Prisma.CourseCreateNestedOneWithoutSchedulesInput
-  teacher?: Prisma.UserCreateNestedOneWithoutSchedulesInput
-  room?: Prisma.RoomCreateNestedOneWithoutSchedulesInput
   lessons?: Prisma.LessonCreateNestedManyWithoutScheduleInput
+  course: Prisma.CourseCreateNestedOneWithoutSchedulesInput
+  room?: Prisma.RoomCreateNestedOneWithoutSchedulesInput
+  teacher?: Prisma.UserCreateNestedOneWithoutSchedulesInput
 }
 
 export type ScheduleUncheckedCreateWithoutTimeSlotInput = {
@@ -743,10 +743,10 @@ export type ScheduleCreateWithoutCourseInput = {
   id?: string
   createdAt?: Date | string
   dayOfWeek: $Enums.DayOfWeek
-  timeSlot: Prisma.TimeSlotCreateNestedOneWithoutSchedulesInput
-  teacher?: Prisma.UserCreateNestedOneWithoutSchedulesInput
-  room?: Prisma.RoomCreateNestedOneWithoutSchedulesInput
   lessons?: Prisma.LessonCreateNestedManyWithoutScheduleInput
+  room?: Prisma.RoomCreateNestedOneWithoutSchedulesInput
+  teacher?: Prisma.UserCreateNestedOneWithoutSchedulesInput
+  timeSlot: Prisma.TimeSlotCreateNestedOneWithoutSchedulesInput
 }
 
 export type ScheduleUncheckedCreateWithoutCourseInput = {
@@ -790,9 +790,9 @@ export type ScheduleCreateWithoutLessonsInput = {
   createdAt?: Date | string
   dayOfWeek: $Enums.DayOfWeek
   course: Prisma.CourseCreateNestedOneWithoutSchedulesInput
-  timeSlot: Prisma.TimeSlotCreateNestedOneWithoutSchedulesInput
-  teacher?: Prisma.UserCreateNestedOneWithoutSchedulesInput
   room?: Prisma.RoomCreateNestedOneWithoutSchedulesInput
+  teacher?: Prisma.UserCreateNestedOneWithoutSchedulesInput
+  timeSlot: Prisma.TimeSlotCreateNestedOneWithoutSchedulesInput
 }
 
 export type ScheduleUncheckedCreateWithoutLessonsInput = {
@@ -826,9 +826,9 @@ export type ScheduleUpdateWithoutLessonsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dayOfWeek?: Prisma.EnumDayOfWeekFieldUpdateOperationsInput | $Enums.DayOfWeek
   course?: Prisma.CourseUpdateOneRequiredWithoutSchedulesNestedInput
-  timeSlot?: Prisma.TimeSlotUpdateOneRequiredWithoutSchedulesNestedInput
-  teacher?: Prisma.UserUpdateOneWithoutSchedulesNestedInput
   room?: Prisma.RoomUpdateOneWithoutSchedulesNestedInput
+  teacher?: Prisma.UserUpdateOneWithoutSchedulesNestedInput
+  timeSlot?: Prisma.TimeSlotUpdateOneRequiredWithoutSchedulesNestedInput
 }
 
 export type ScheduleUncheckedUpdateWithoutLessonsInput = {
@@ -854,10 +854,10 @@ export type ScheduleUpdateWithoutTeacherInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dayOfWeek?: Prisma.EnumDayOfWeekFieldUpdateOperationsInput | $Enums.DayOfWeek
-  course?: Prisma.CourseUpdateOneRequiredWithoutSchedulesNestedInput
-  timeSlot?: Prisma.TimeSlotUpdateOneRequiredWithoutSchedulesNestedInput
-  room?: Prisma.RoomUpdateOneWithoutSchedulesNestedInput
   lessons?: Prisma.LessonUpdateManyWithoutScheduleNestedInput
+  course?: Prisma.CourseUpdateOneRequiredWithoutSchedulesNestedInput
+  room?: Prisma.RoomUpdateOneWithoutSchedulesNestedInput
+  timeSlot?: Prisma.TimeSlotUpdateOneRequiredWithoutSchedulesNestedInput
 }
 
 export type ScheduleUncheckedUpdateWithoutTeacherInput = {
@@ -892,10 +892,10 @@ export type ScheduleUpdateWithoutRoomInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dayOfWeek?: Prisma.EnumDayOfWeekFieldUpdateOperationsInput | $Enums.DayOfWeek
-  course?: Prisma.CourseUpdateOneRequiredWithoutSchedulesNestedInput
-  timeSlot?: Prisma.TimeSlotUpdateOneRequiredWithoutSchedulesNestedInput
-  teacher?: Prisma.UserUpdateOneWithoutSchedulesNestedInput
   lessons?: Prisma.LessonUpdateManyWithoutScheduleNestedInput
+  course?: Prisma.CourseUpdateOneRequiredWithoutSchedulesNestedInput
+  teacher?: Prisma.UserUpdateOneWithoutSchedulesNestedInput
+  timeSlot?: Prisma.TimeSlotUpdateOneRequiredWithoutSchedulesNestedInput
 }
 
 export type ScheduleUncheckedUpdateWithoutRoomInput = {
@@ -930,10 +930,10 @@ export type ScheduleUpdateWithoutTimeSlotInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dayOfWeek?: Prisma.EnumDayOfWeekFieldUpdateOperationsInput | $Enums.DayOfWeek
-  course?: Prisma.CourseUpdateOneRequiredWithoutSchedulesNestedInput
-  teacher?: Prisma.UserUpdateOneWithoutSchedulesNestedInput
-  room?: Prisma.RoomUpdateOneWithoutSchedulesNestedInput
   lessons?: Prisma.LessonUpdateManyWithoutScheduleNestedInput
+  course?: Prisma.CourseUpdateOneRequiredWithoutSchedulesNestedInput
+  room?: Prisma.RoomUpdateOneWithoutSchedulesNestedInput
+  teacher?: Prisma.UserUpdateOneWithoutSchedulesNestedInput
 }
 
 export type ScheduleUncheckedUpdateWithoutTimeSlotInput = {
@@ -968,10 +968,10 @@ export type ScheduleUpdateWithoutCourseInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dayOfWeek?: Prisma.EnumDayOfWeekFieldUpdateOperationsInput | $Enums.DayOfWeek
-  timeSlot?: Prisma.TimeSlotUpdateOneRequiredWithoutSchedulesNestedInput
-  teacher?: Prisma.UserUpdateOneWithoutSchedulesNestedInput
-  room?: Prisma.RoomUpdateOneWithoutSchedulesNestedInput
   lessons?: Prisma.LessonUpdateManyWithoutScheduleNestedInput
+  room?: Prisma.RoomUpdateOneWithoutSchedulesNestedInput
+  teacher?: Prisma.UserUpdateOneWithoutSchedulesNestedInput
+  timeSlot?: Prisma.TimeSlotUpdateOneRequiredWithoutSchedulesNestedInput
 }
 
 export type ScheduleUncheckedUpdateWithoutCourseInput = {
@@ -1032,11 +1032,11 @@ export type ScheduleSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   timeSlotId?: boolean
   teacherId?: boolean
   roomId?: boolean
-  course?: boolean | Prisma.CourseDefaultArgs<ExtArgs>
-  timeSlot?: boolean | Prisma.TimeSlotDefaultArgs<ExtArgs>
-  teacher?: boolean | Prisma.Schedule$teacherArgs<ExtArgs>
-  room?: boolean | Prisma.Schedule$roomArgs<ExtArgs>
   lessons?: boolean | Prisma.Schedule$lessonsArgs<ExtArgs>
+  course?: boolean | Prisma.CourseDefaultArgs<ExtArgs>
+  room?: boolean | Prisma.Schedule$roomArgs<ExtArgs>
+  teacher?: boolean | Prisma.Schedule$teacherArgs<ExtArgs>
+  timeSlot?: boolean | Prisma.TimeSlotDefaultArgs<ExtArgs>
   _count?: boolean | Prisma.ScheduleCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["schedule"]>
 
@@ -1049,9 +1049,9 @@ export type ScheduleSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   teacherId?: boolean
   roomId?: boolean
   course?: boolean | Prisma.CourseDefaultArgs<ExtArgs>
-  timeSlot?: boolean | Prisma.TimeSlotDefaultArgs<ExtArgs>
-  teacher?: boolean | Prisma.Schedule$teacherArgs<ExtArgs>
   room?: boolean | Prisma.Schedule$roomArgs<ExtArgs>
+  teacher?: boolean | Prisma.Schedule$teacherArgs<ExtArgs>
+  timeSlot?: boolean | Prisma.TimeSlotDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["schedule"]>
 
 export type ScheduleSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1063,9 +1063,9 @@ export type ScheduleSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   teacherId?: boolean
   roomId?: boolean
   course?: boolean | Prisma.CourseDefaultArgs<ExtArgs>
-  timeSlot?: boolean | Prisma.TimeSlotDefaultArgs<ExtArgs>
-  teacher?: boolean | Prisma.Schedule$teacherArgs<ExtArgs>
   room?: boolean | Prisma.Schedule$roomArgs<ExtArgs>
+  teacher?: boolean | Prisma.Schedule$teacherArgs<ExtArgs>
+  timeSlot?: boolean | Prisma.TimeSlotDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["schedule"]>
 
 export type ScheduleSelectScalar = {
@@ -1080,34 +1080,34 @@ export type ScheduleSelectScalar = {
 
 export type ScheduleOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "courseId" | "dayOfWeek" | "timeSlotId" | "teacherId" | "roomId", ExtArgs["result"]["schedule"]>
 export type ScheduleInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  course?: boolean | Prisma.CourseDefaultArgs<ExtArgs>
-  timeSlot?: boolean | Prisma.TimeSlotDefaultArgs<ExtArgs>
-  teacher?: boolean | Prisma.Schedule$teacherArgs<ExtArgs>
-  room?: boolean | Prisma.Schedule$roomArgs<ExtArgs>
   lessons?: boolean | Prisma.Schedule$lessonsArgs<ExtArgs>
+  course?: boolean | Prisma.CourseDefaultArgs<ExtArgs>
+  room?: boolean | Prisma.Schedule$roomArgs<ExtArgs>
+  teacher?: boolean | Prisma.Schedule$teacherArgs<ExtArgs>
+  timeSlot?: boolean | Prisma.TimeSlotDefaultArgs<ExtArgs>
   _count?: boolean | Prisma.ScheduleCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type ScheduleIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   course?: boolean | Prisma.CourseDefaultArgs<ExtArgs>
-  timeSlot?: boolean | Prisma.TimeSlotDefaultArgs<ExtArgs>
-  teacher?: boolean | Prisma.Schedule$teacherArgs<ExtArgs>
   room?: boolean | Prisma.Schedule$roomArgs<ExtArgs>
+  teacher?: boolean | Prisma.Schedule$teacherArgs<ExtArgs>
+  timeSlot?: boolean | Prisma.TimeSlotDefaultArgs<ExtArgs>
 }
 export type ScheduleIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   course?: boolean | Prisma.CourseDefaultArgs<ExtArgs>
-  timeSlot?: boolean | Prisma.TimeSlotDefaultArgs<ExtArgs>
-  teacher?: boolean | Prisma.Schedule$teacherArgs<ExtArgs>
   room?: boolean | Prisma.Schedule$roomArgs<ExtArgs>
+  teacher?: boolean | Prisma.Schedule$teacherArgs<ExtArgs>
+  timeSlot?: boolean | Prisma.TimeSlotDefaultArgs<ExtArgs>
 }
 
 export type $SchedulePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Schedule"
   objects: {
-    course: Prisma.$CoursePayload<ExtArgs>
-    timeSlot: Prisma.$TimeSlotPayload<ExtArgs>
-    teacher: Prisma.$UserPayload<ExtArgs> | null
-    room: Prisma.$RoomPayload<ExtArgs> | null
     lessons: Prisma.$LessonPayload<ExtArgs>[]
+    course: Prisma.$CoursePayload<ExtArgs>
+    room: Prisma.$RoomPayload<ExtArgs> | null
+    teacher: Prisma.$UserPayload<ExtArgs> | null
+    timeSlot: Prisma.$TimeSlotPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1511,11 +1511,11 @@ readonly fields: ScheduleFieldRefs;
  */
 export interface Prisma__ScheduleClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  course<T extends Prisma.CourseDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CourseDefaultArgs<ExtArgs>>): Prisma.Prisma__CourseClient<runtime.Types.Result.GetResult<Prisma.$CoursePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  timeSlot<T extends Prisma.TimeSlotDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TimeSlotDefaultArgs<ExtArgs>>): Prisma.Prisma__TimeSlotClient<runtime.Types.Result.GetResult<Prisma.$TimeSlotPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  teacher<T extends Prisma.Schedule$teacherArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Schedule$teacherArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-  room<T extends Prisma.Schedule$roomArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Schedule$roomArgs<ExtArgs>>): Prisma.Prisma__RoomClient<runtime.Types.Result.GetResult<Prisma.$RoomPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   lessons<T extends Prisma.Schedule$lessonsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Schedule$lessonsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LessonPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  course<T extends Prisma.CourseDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CourseDefaultArgs<ExtArgs>>): Prisma.Prisma__CourseClient<runtime.Types.Result.GetResult<Prisma.$CoursePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  room<T extends Prisma.Schedule$roomArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Schedule$roomArgs<ExtArgs>>): Prisma.Prisma__RoomClient<runtime.Types.Result.GetResult<Prisma.$RoomPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  teacher<T extends Prisma.Schedule$teacherArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Schedule$teacherArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  timeSlot<T extends Prisma.TimeSlotDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TimeSlotDefaultArgs<ExtArgs>>): Prisma.Prisma__TimeSlotClient<runtime.Types.Result.GetResult<Prisma.$TimeSlotPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1953,22 +1953,27 @@ export type ScheduleDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Inte
 }
 
 /**
- * Schedule.teacher
+ * Schedule.lessons
  */
-export type Schedule$teacherArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type Schedule$lessonsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the User
+   * Select specific fields to fetch from the Lesson
    */
-  select?: Prisma.UserSelect<ExtArgs> | null
+  select?: Prisma.LessonSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the User
+   * Omit specific fields from the Lesson
    */
-  omit?: Prisma.UserOmit<ExtArgs> | null
+  omit?: Prisma.LessonOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.UserInclude<ExtArgs> | null
-  where?: Prisma.UserWhereInput
+  include?: Prisma.LessonInclude<ExtArgs> | null
+  where?: Prisma.LessonWhereInput
+  orderBy?: Prisma.LessonOrderByWithRelationInput | Prisma.LessonOrderByWithRelationInput[]
+  cursor?: Prisma.LessonWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.LessonScalarFieldEnum | Prisma.LessonScalarFieldEnum[]
 }
 
 /**
@@ -1991,27 +1996,22 @@ export type Schedule$roomArgs<ExtArgs extends runtime.Types.Extensions.InternalA
 }
 
 /**
- * Schedule.lessons
+ * Schedule.teacher
  */
-export type Schedule$lessonsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type Schedule$teacherArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the Lesson
+   * Select specific fields to fetch from the User
    */
-  select?: Prisma.LessonSelect<ExtArgs> | null
+  select?: Prisma.UserSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the Lesson
+   * Omit specific fields from the User
    */
-  omit?: Prisma.LessonOmit<ExtArgs> | null
+  omit?: Prisma.UserOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.LessonInclude<ExtArgs> | null
-  where?: Prisma.LessonWhereInput
-  orderBy?: Prisma.LessonOrderByWithRelationInput | Prisma.LessonOrderByWithRelationInput[]
-  cursor?: Prisma.LessonWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.LessonScalarFieldEnum | Prisma.LessonScalarFieldEnum[]
+  include?: Prisma.UserInclude<ExtArgs> | null
+  where?: Prisma.UserWhereInput
 }
 
 /**

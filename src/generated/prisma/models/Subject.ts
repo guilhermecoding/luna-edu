@@ -236,8 +236,8 @@ export type SubjectWhereInput = {
   workload?: Prisma.IntNullableFilter<"Subject"> | number | null
   basePeriod?: Prisma.IntNullableFilter<"Subject"> | number | null
   degreeId?: Prisma.UuidFilter<"Subject"> | string
-  degree?: Prisma.XOR<Prisma.DegreeScalarRelationFilter, Prisma.DegreeWhereInput>
   courses?: Prisma.CourseListRelationFilter
+  degree?: Prisma.XOR<Prisma.DegreeScalarRelationFilter, Prisma.DegreeWhereInput>
 }
 
 export type SubjectOrderByWithRelationInput = {
@@ -248,8 +248,8 @@ export type SubjectOrderByWithRelationInput = {
   workload?: Prisma.SortOrderInput | Prisma.SortOrder
   basePeriod?: Prisma.SortOrderInput | Prisma.SortOrder
   degreeId?: Prisma.SortOrder
-  degree?: Prisma.DegreeOrderByWithRelationInput
   courses?: Prisma.CourseOrderByRelationAggregateInput
+  degree?: Prisma.DegreeOrderByWithRelationInput
 }
 
 export type SubjectWhereUniqueInput = Prisma.AtLeast<{
@@ -263,8 +263,8 @@ export type SubjectWhereUniqueInput = Prisma.AtLeast<{
   workload?: Prisma.IntNullableFilter<"Subject"> | number | null
   basePeriod?: Prisma.IntNullableFilter<"Subject"> | number | null
   degreeId?: Prisma.UuidFilter<"Subject"> | string
-  degree?: Prisma.XOR<Prisma.DegreeScalarRelationFilter, Prisma.DegreeWhereInput>
   courses?: Prisma.CourseListRelationFilter
+  degree?: Prisma.XOR<Prisma.DegreeScalarRelationFilter, Prisma.DegreeWhereInput>
 }, "id" | "code">
 
 export type SubjectOrderByWithAggregationInput = {
@@ -302,8 +302,8 @@ export type SubjectCreateInput = {
   code: string
   workload?: number | null
   basePeriod?: number | null
-  degree: Prisma.DegreeCreateNestedOneWithoutSubjectsInput
   courses?: Prisma.CourseCreateNestedManyWithoutSubjectInput
+  degree: Prisma.DegreeCreateNestedOneWithoutSubjectsInput
 }
 
 export type SubjectUncheckedCreateInput = {
@@ -324,8 +324,8 @@ export type SubjectUpdateInput = {
   code?: Prisma.StringFieldUpdateOperationsInput | string
   workload?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   basePeriod?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  degree?: Prisma.DegreeUpdateOneRequiredWithoutSubjectsNestedInput
   courses?: Prisma.CourseUpdateManyWithoutSubjectNestedInput
+  degree?: Prisma.DegreeUpdateOneRequiredWithoutSubjectsNestedInput
 }
 
 export type SubjectUncheckedUpdateInput = {
@@ -671,8 +671,8 @@ export type SubjectSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   workload?: boolean
   basePeriod?: boolean
   degreeId?: boolean
-  degree?: boolean | Prisma.DegreeDefaultArgs<ExtArgs>
   courses?: boolean | Prisma.Subject$coursesArgs<ExtArgs>
+  degree?: boolean | Prisma.DegreeDefaultArgs<ExtArgs>
   _count?: boolean | Prisma.SubjectCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["subject"]>
 
@@ -710,8 +710,8 @@ export type SubjectSelectScalar = {
 
 export type SubjectOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "name" | "code" | "workload" | "basePeriod" | "degreeId", ExtArgs["result"]["subject"]>
 export type SubjectInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  degree?: boolean | Prisma.DegreeDefaultArgs<ExtArgs>
   courses?: boolean | Prisma.Subject$coursesArgs<ExtArgs>
+  degree?: boolean | Prisma.DegreeDefaultArgs<ExtArgs>
   _count?: boolean | Prisma.SubjectCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type SubjectIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -724,8 +724,8 @@ export type SubjectIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
 export type $SubjectPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Subject"
   objects: {
-    degree: Prisma.$DegreePayload<ExtArgs>
     courses: Prisma.$CoursePayload<ExtArgs>[]
+    degree: Prisma.$DegreePayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1129,8 +1129,8 @@ readonly fields: SubjectFieldRefs;
  */
 export interface Prisma__SubjectClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  degree<T extends Prisma.DegreeDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.DegreeDefaultArgs<ExtArgs>>): Prisma.Prisma__DegreeClient<runtime.Types.Result.GetResult<Prisma.$DegreePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   courses<T extends Prisma.Subject$coursesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Subject$coursesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CoursePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  degree<T extends Prisma.DegreeDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.DegreeDefaultArgs<ExtArgs>>): Prisma.Prisma__DegreeClient<runtime.Types.Result.GetResult<Prisma.$DegreePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.

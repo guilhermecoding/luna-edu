@@ -4,6 +4,7 @@ import { Prisma } from "@/generated/prisma/client";
 import { SystemRole, UserGenre } from "@/generated/prisma/client";
 import { generateLunaId } from "@/lib/generate-luna-id";
 import { auth } from "@/lib/auth";
+import { sendWelcomeEmail } from "@/lib/mail";
 
 type CreateAdminPayload = Pick<
     Prisma.UserCreateInput,
@@ -116,6 +117,14 @@ export async function createAdmin(data: CreateAdminPayload) {
     if (!res.user) {
         throw new Error("AUTH_SIGNUP_FAILED_NO_USER");
     }
+
+    // Envia as credenciais para o e-mail (só ocorre na criação do usuário)
+    await sendWelcomeEmail({
+        email: data.email as string,
+        name: data.name as string,
+        password: randomPassword,
+        roleName: "Administrador",
+    });
 
     return res.user;
 }

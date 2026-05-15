@@ -9,6 +9,7 @@ import { bulkUpdateAttendanceAction } from "../../../actions";
 import type { AttendanceWithStudent } from "@/services/lessons/lessons.service";
 import AvatarUsers from "@/components/avatar-users";
 import { calculateAge } from "@/lib/date-utils";
+import { motion } from "motion/react";
 
 interface AttendanceTableProps {
     attendances: AttendanceWithStudent[];
@@ -154,19 +155,19 @@ export function AttendanceTable({ attendances: initialAttendances, courseId, les
 
             {/* Tabela */}
             <div className="overflow-x-auto rounded-2xl border border-surface-border bg-surface">
-                <table className="w-full text-left border-collapse text-sm">
-                    <thead className="bg-primary/5 text-muted-foreground uppercase text-[10px] sm:text-xs">
-                        <tr>
-                            <th className="px-4 sm:px-6 py-3 font-medium w-12 text-center"></th>
-                            <th className="px-4 sm:px-6 py-3 font-medium">Aluno</th>
-                            <th className="px-4 sm:px-6 py-3 font-medium text-center">Matrícula</th>
-                            <th className="px-4 sm:px-6 py-3 font-medium text-center w-32">Presença</th>
+                <table className="w-full text-left border-collapse text-sm block">
+                    <thead className="bg-primary/5 text-muted-foreground uppercase text-[10px] sm:text-xs block w-full">
+                        <tr className="flex w-full items-center">
+                            <th className="px-4 sm:px-6 py-3 font-medium w-20 text-center shrink-0"></th>
+                            <th className="px-4 sm:px-6 py-3 font-medium flex-1">Aluno</th>
+                            <th className="px-4 sm:px-6 py-3 font-medium text-center w-32 shrink-0">Matrícula</th>
+                            <th className="px-4 sm:px-6 py-3 font-medium text-center w-36 shrink-0">Presença</th>
                         </tr>
                     </thead>
-                    <tbody className="divide-y divide-surface-border">
+                    <tbody className="divide-y divide-surface-border block w-full overflow-hidden">
                         {filtered.length === 0 ? (
-                            <tr>
-                                <td colSpan={4} className="px-6 py-8 text-center text-muted-foreground">
+                            <tr className="flex w-full">
+                                <td className="px-6 py-8 text-center text-muted-foreground w-full">
                                     {search ? "Nenhum aluno encontrado." : "Nenhum aluno matriculado."}
                                 </td>
                             </tr>
@@ -174,56 +175,86 @@ export function AttendanceTable({ attendances: initialAttendances, courseId, les
                             filtered.map((attendance) => (
                                 <tr
                                     key={attendance.id}
-                                    className="hover:bg-muted/30 transition-colors"
+                                    className="relative bg-surface flex w-full items-center border-b border-surface-border last:border-0 overflow-hidden"
                                 >
-                                    <td className="px-4 sm:px-6 py-3">
-                                        <div className="flex justify-center">
-                                            <AvatarUsers
-                                                genre={attendance.student.genre}
-                                                age={calculateAge(attendance.student.birthDate)}
-                                                className="size-10"
-                                            />
+                                    <td className="w-full relative">
+                                        {/* Status que aparece ao deslizar (Background Reveal) */}
+                                        <div className={`absolute inset-0 flex items-center px-10 font-bold text-sm text-white pointer-events-none transition-colors ${attendance.isPresent ? "bg-red-500" : "bg-emerald-500"}`}>
+                                            <div className="flex items-center gap-2">
+                                                {attendance.isPresent ? (
+                                                    <>
+                                                        <IconX className="size-5" />
+                                                        Ausente
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        <IconCheck className="size-5" />
+                                                        Presente
+                                                    </>
+                                                )}
+                                            </div>
                                         </div>
-                                    </td>
-                                    <td className="px-4 sm:px-6 py-3">
-                                        <div className="flex flex-col">
-                                            <span className="font-semibold text-foreground">
-                                                {attendance.student.name}
-                                            </span>
-                                        </div>
-                                    </td>
-                                    <td className="px-4 sm:px-6 py-3 text-center">
-                                        <span className="text-xs font-mono text-muted-foreground">
-                                            {attendance.student.lunaId || "—"}
-                                        </span>
-                                    </td>
-                                    <td className="px-4 sm:px-6 py-3 text-center">
-                                        <button
-                                            type="button"
-                                            onClick={() =>
-                                                togglePresence(attendance.id, attendance.isPresent)
-                                            }
-                                            className={`
-                                                inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold
-                                                transition-all duration-150 cursor-pointer select-none
-                                                ${attendance.isPresent
-                                                    ? "bg-emerald-100 text-emerald-700 hover:bg-emerald-200 dark:bg-emerald-900/40 dark:text-emerald-400 dark:hover:bg-emerald-900/60"
-                                                    : "bg-red-100 text-red-700 hover:bg-red-200 dark:bg-red-900/40 dark:text-red-400 dark:hover:bg-red-900/60"
+
+                                        <motion.div
+                                            className="flex w-full items-center cursor-grab active:cursor-grabbing bg-surface hover:bg-muted transition-colors relative z-10"
+                                            drag="x"
+                                            dragConstraints={{ left: 0, right: 0 }}
+                                            dragElastic={{ left: 0, right: 0.8 }}
+                                            onDragEnd={(e, info) => {
+                                                if (info.offset.x > 80) {
+                                                    togglePresence(attendance.id, attendance.isPresent);
                                                 }
-                                            `}
+                                            }}
                                         >
-                                            {attendance.isPresent ? (
-                                                <>
-                                                    <IconCheck className="size-3.5" />
-                                                    Presente
-                                                </>
-                                            ) : (
-                                                <>
-                                                    <IconX className="size-3.5" />
-                                                    Ausente
-                                                </>
-                                            )}
-                                        </button>
+                                            {/* Colunas simuladas dentro do motion.div */}
+                                            <div className="px-4 sm:px-6 py-3 w-20 shrink-0 flex justify-center pointer-events-none">
+                                                <AvatarUsers
+                                                    genre={attendance.student.genre}
+                                                    age={calculateAge(attendance.student.birthDate)}
+                                                    className="size-10"
+                                                />
+                                            </div>
+                                            <div className="px-4 sm:px-6 py-3 flex-1 pointer-events-none">
+                                                <div className="flex flex-col">
+                                                    <span className="font-semibold text-foreground">
+                                                        {attendance.student.name}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div className="px-4 sm:px-6 py-3 text-center w-32 shrink-0 pointer-events-none">
+                                                <span className="text-xs font-mono text-muted-foreground">
+                                                    {attendance.student.lunaId || "—"}
+                                                </span>
+                                            </div>
+                                            <div className="px-4 sm:px-6 py-3 text-center w-36 shrink-0 flex justify-center">
+                                                <button
+                                                    type="button"
+                                                    onClick={() =>
+                                                        togglePresence(attendance.id, attendance.isPresent)
+                                                    }
+                                                    className={`
+                                                        inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold
+                                                        transition-all duration-150 cursor-pointer select-none
+                                                        ${attendance.isPresent
+                                                            ? "bg-emerald-300 text-emerald-700 hover:bg-emerald-200 dark:bg-emerald-900/40 dark:text-emerald-400 dark:hover:bg-emerald-900/60"
+                                                            : "bg-red-300 text-red-700 hover:bg-red-200 dark:bg-red-900/40 dark:text-red-400 dark:hover:bg-red-900/60"
+                                                        }
+                                                    `}
+                                                >
+                                                    {attendance.isPresent ? (
+                                                        <>
+                                                            <IconCheck className="size-3.5" />
+                                                            Presente
+                                                        </>
+                                                    ) : (
+                                                        <>
+                                                            <IconX className="size-3.5" />
+                                                            Ausente
+                                                        </>
+                                                    )}
+                                                </button>
+                                            </div>
+                                        </motion.div>
                                     </td>
                                 </tr>
                             ))
@@ -234,7 +265,7 @@ export function AttendanceTable({ attendances: initialAttendances, courseId, les
 
             {/* Botão Salvar fixo */}
             {hasChanges && (
-                <div className="sticky bottom-6 flex justify-end animate-in slide-in-from-bottom-4 fade-in duration-300">
+                <div className="sticky bottom-6 flex justify-end animate-in slide-in-from-bottom-4 fade-in duration-300 z-50">
                     <Button
                         type="button"
                         onClick={saveChanges}

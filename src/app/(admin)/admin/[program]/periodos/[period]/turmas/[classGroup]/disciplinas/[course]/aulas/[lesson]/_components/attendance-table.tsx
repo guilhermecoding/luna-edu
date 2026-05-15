@@ -172,7 +172,7 @@ export function AttendanceTable({ attendances: initialAttendances, courseId, les
                                 </td>
                             </tr>
                         ) : (
-                            filtered.map((attendance, index) => (
+                            filtered.map((attendance) => (
                                 <tr
                                     key={attendance.id}
                                     className="hover:bg-muted/30 transition-colors"
@@ -190,9 +190,6 @@ export function AttendanceTable({ attendances: initialAttendances, courseId, les
                                         <div className="flex flex-col">
                                             <span className="font-semibold text-foreground">
                                                 {attendance.student.name}
-                                            </span>
-                                            <span className="text-xs text-muted-foreground">
-                                                {maskCPF(attendance.student.cpf)}
                                             </span>
                                         </div>
                                     </td>

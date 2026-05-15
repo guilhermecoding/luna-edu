@@ -10,7 +10,7 @@ import { toast } from "sonner";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createAdminSchema, promoteTeacherSchema, type CreateAdminData, type CreateAdminInput, type PromoteTeacherInput } from "../schema";
-import { IconLoader2, IconPlus } from "@tabler/icons-react";
+import { IconLoader2, IconPlus, IconInfoCircle } from "@tabler/icons-react";
 import type { SystemRole, UserGenre } from "@/generated/prisma/client";
 import { useRouter } from "next/navigation";
 import { ButtonLink } from "@/components/ui/button-link";
@@ -266,6 +266,14 @@ export default function CreateAdminForm({ teachers }: { teachers: TeacherOption[
                             {errorsNew.systemRole && <p className="text-sm text-red-600">{errorsNew.systemRole.message}</p>}
                         </div>
                     </div>
+
+                    <div className="border-t border-surface-border pt-6 mt-2 flex flex-row">
+                        <IconInfoCircle className="size-4 mr-2 mt-0.5 shrink-0 text-muted-foreground" />
+                        <p className="text-sm text-muted-foreground">
+                            Um e-mail com as credenciais de acesso será enviado automaticamente para o endereço informado acima. Por favor, verifique se o e-mail está correto antes de prosseguir.
+                        </p>
+                    </div>
+
                     <div className="flex flex-col-reverse justify-end gap-3 pt-4 sm:flex-row mt-4">
                         <Button
                             type="button"

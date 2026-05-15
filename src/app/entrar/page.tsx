@@ -16,6 +16,11 @@ import thumb09 from "@/assets/images/thumbs-login-page/Imagem_09.webp";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+    title: "Entrar",
+};
 
 const loginThumbs = [thumb01, thumb02, thumb03, thumb04, thumb05, thumb06, thumb07, thumb08, thumb09];
 

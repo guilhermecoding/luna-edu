@@ -65,6 +65,15 @@ async function CurrentPeriodContent({
     const { statusLabel, statusVariant } = getPeriodStatus(current, today);
     const isCurrentPeriodActive = isPeriodActiveByDay(current, today);
 
+    let progress = 0;
+    if (today > current.endDate) {
+        progress = 100;
+    } else if (today > current.startDate) {
+        const totalDuration = current.endDate.getTime() - current.startDate.getTime();
+        const elapsed = today.getTime() - current.startDate.getTime();
+        progress = Math.round((elapsed / totalDuration) * 100);
+    }
+
     return (
         <div className="w-full border border-surface-border bg-surface p-8 rounded-4xl">
             {/* Primeira linha */}
@@ -109,11 +118,11 @@ async function CurrentPeriodContent({
                         Progresso do período
                     </span>
                     <span className="font-bold text-primary-theme">
-                        65%
+                        {progress}%
                     </span>
                 </div>
                 {/* Barra de progresso */}
-                <Progress value={65} className="mt-2 bg-mauve-300" indicatorClassName="bg-primary-theme rounded-full" />
+                <Progress value={progress} className="mt-2 bg-mauve-300" indicatorClassName="bg-primary-theme rounded-full" />
 
                 {/* Linha do link */}
                 <div className="flex flex-col-reverse sm:flex-row justify-end items-center mt-6 gap-4">

@@ -25,9 +25,9 @@ const ACTIVE_PROGRAM_STORAGE_KEY = "active_program_slug";
 const ACTIVE_PROGRAM_COOKIE_NAME = "active_program_slug";
 const ACTIVE_PROGRAM_COOKIE_MAX_AGE = 60 * 60 * 24 * 365;
 
-function getProgramSlugFromPath(pathname: string) {
-    const [, adminSegment, possibleSlug] = pathname.split("/");
-    if (adminSegment !== "admin" || !possibleSlug || possibleSlug === "programas") {
+function getProgramSlugFromPath(pathname: string, baseSegment: string) {
+    const [, segment, possibleSlug] = pathname.split("/");
+    if (segment !== baseSegment || !possibleSlug || possibleSlug === "programas") {
         return null;
     }
 
@@ -36,9 +36,15 @@ function getProgramSlugFromPath(pathname: string) {
 
 export function ProgramSwitcher({
     programs,
+    baseUrl = "/admin",
+    showCreateOption = true,
 }: {
     programs: Pick<Program, "name" | "slug">[]
+    baseUrl?: string;
+    showCreateOption?: boolean;
 }) {
+    // Extrai o segmento base (ex: "admin" de "/admin", "prof" de "/prof")
+    const baseSegment = baseUrl.replace(/^\//, "").split("/")[0];
     const { isMobile, setOpenMobile } = useSidebar();
     const pathname = usePathname();
     const [activeProgram, setActiveProgram] = React.useState(programs[0]);
@@ -57,7 +63,7 @@ export function ProgramSwitcher({
             return;
         }
 
-        const slugFromPath = getProgramSlugFromPath(pathname);
+        const slugFromPath = getProgramSlugFromPath(pathname, baseSegment);
         const programFromPath = slugFromPath
             ? programs.find((program) => program.slug === slugFromPath)
             : undefined;
@@ -131,7 +137,7 @@ export function ProgramSwitcher({
                                 }}
                                 className="gap-2 p-2"
                             >
-                                <Link href={`/admin/${program.slug}/periodos`} className="flex flex-row gap-2 w-full">
+                                <Link href={`${baseUrl}/${program.slug}/periodos`} className="flex flex-row gap-2 w-full">
                                     <div className="flex size-6 shrink-0 items-center justify-center rounded-md border">
                                         {program.name.charAt(0)}
                                     </div>
@@ -141,22 +147,26 @@ export function ProgramSwitcher({
                                 </Link>
                             </DropdownMenuItem>
                         ))}
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem
-                            className="gap-2 p-2"
-                            onClick={() => {
-                                if (isMobile) {
-                                    setOpenMobile(false);
-                                }
-                            }}
-                        >
-                            <Link href="/admin/programas/novo" className="font-medium text-muted-foreground w-full flex flex-row items-center gap-2">
-                                <div className="flex size-6 items-center justify-center rounded-md border bg-transparent">
-                                    <IconPlus className="size-4" />
-                                </div>
-                                Adicionar programa
-                            </Link>
-                        </DropdownMenuItem>
+                        {showCreateOption && (
+                            <>
+                                <DropdownMenuSeparator />
+                                <DropdownMenuItem
+                                    className="gap-2 p-2"
+                                    onClick={() => {
+                                        if (isMobile) {
+                                            setOpenMobile(false);
+                                        }
+                                    }}
+                                >
+                                    <Link href={`${baseUrl}/programas/novo`} className="font-medium text-muted-foreground w-full flex flex-row items-center gap-2">
+                                        <div className="flex size-6 items-center justify-center rounded-md border bg-transparent">
+                                            <IconPlus className="size-4" />
+                                        </div>
+                                        Adicionar programa
+                                    </Link>
+                                </DropdownMenuItem>
+                            </>
+                        )}
                     </DropdownMenuContent>
                 </DropdownMenu>
             </SidebarMenuItem>
